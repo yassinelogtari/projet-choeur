@@ -8,6 +8,6 @@ mongoose
 
 const app = express();
 app.use(express.json());
-console.log("test");
+console.log("tests");
 
 module.exports = app;
