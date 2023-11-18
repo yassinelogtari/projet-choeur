@@ -15,7 +15,7 @@ const fetshCandidats = async (req, res) => {
         });
       });
     }
-    res.json(filteredCandidates);
+    res.status(200).json(filteredCandidates);
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
