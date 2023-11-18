@@ -1,13 +1,18 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const candidatRoute = require("./routes/candidatRoute");
+
+dotenv.config();
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/choeur-project")
+  .connect(process.env.MONGO_URL+"choeurProjectBD")
   .then(console.log("connected to mongodb"))
   .catch((err) => console.log(err));
 
 const app = express();
 app.use(express.json());
-console.log("tests");
+
+app.use("/api/candidats", candidatRoute);
 
 module.exports = app;
