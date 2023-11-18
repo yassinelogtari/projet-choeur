@@ -5,7 +5,6 @@ const auditionSchema = new mongoose.Schema(
     candidat: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "condidat",
-      required: true,
     },
 
     DateAud: {
@@ -13,15 +12,16 @@ const auditionSchema = new mongoose.Schema(
       required: true,
     },
     HeureDeb: {
-      type: String,
+      type: Date,
       required: true,
     },
     HeureFin: {
-      type: String,
+      type: Date,
       required: true,
     },
-    duree: {
-      type: String,
+    booked: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }
