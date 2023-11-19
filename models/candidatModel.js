@@ -10,18 +10,14 @@ const condidatSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    email: {
-      type: String,
-      required: true,
-    },
     tlph: {
       type: Number,
       required: true,
     },
-    verified:
-    {
-      type:Boolean,
-      default:false}
+    email: {
+      type: String,
+      required: true,
+    },
   },
   
   { timestamps: true }
