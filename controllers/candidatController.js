@@ -25,7 +25,7 @@ const fetshCandidats = async (req, res) => {
   }
 };
 
-const addCandidat = async (req, res) => {
+const addEmailCandidat = async (req, res) => {
   try {
     let condidat = await CandidatsVerif.findOne({ email: req.body.email });
     if (condidat) {
@@ -86,12 +86,20 @@ const rempForm = async (req, res) => {
       return res.status(401).send({ message: "Email not verified yet" });
     }
 
-    const { nom, prenom, tlph } = req.body;
+    const { nom, prenom,sexe,CIN,telephone,nationalite,dateNaissance,activite,connaisanceMusical,situationPerso} = req.body;
     const newCondidat = await new Candidats({ 
       nom,
       prenom,
-      tlph,
-      email: condidat.email, }).save();
+      email: condidat.email,
+      sexe,
+      CIN,
+      telephone,
+      nationalite,
+      dateNaissance,
+      activite,
+      connaisanceMusical,
+      situationPerso
+       }).save();
 
     res.status(201).send({ message: "Formulaire rempli avec succès", data: newCondidat });
   } catch (error) {
@@ -105,7 +113,7 @@ const rempForm = async (req, res) => {
 
 module.exports = {
   fetshCandidats,
-  addCandidat,
+  addEmailCandidat,
   getToken,
   rempForm
 };

@@ -2,7 +2,7 @@ const router = require("express").Router();
 const candidatController = require("../controllers/candidatController");
 
 
-router.post("/verif",candidatController.addCandidat)
+router.post("/verif",candidatController.addEmailCandidat)
 router.get("/:id/verify/:token/", candidatController.getToken)
 router.post("/form/:id",candidatController.rempForm)
 
