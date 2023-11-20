@@ -1,3 +1,4 @@
+const { boolean } = require("joi");
 const mongoose = require("mongoose");
 
 const condidatSchema = new mongoose.Schema(
@@ -14,17 +15,43 @@ const condidatSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    tlph: {
-      type: Number,
+    sexe: {
+      type: String,
+      enum: ["Homme", "Femme"],
       required: true,
     },
-    verified:
-    {
-      type:Boolean,
-      default:false}
+    CIN: {
+      type: String,
+      required: true,
+    },
+    telephone: {
+      type: String,
+      required: true,
+    },
+    nationalite:{
+      type: String,
+      required: true,
+    },
+    dateNaissance:{
+      type: String,
+      required: true,
+    },
+    activite:{
+      type: Boolean,
+      required: true,
+    },
+    connaisanceMusical:{
+      type: Boolean,
+      required: true,
+    },
+    situationPerso:{
+      type: String,
+      required: true,
+    },
+    
   },
   
   { timestamps: true }
 );
 
-module.exports = mongoose.model("condidat", condidatSchema);
+module.exports = mongoose.model("candidat", condidatSchema);
