@@ -23,4 +23,4 @@ const condidatSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("condidat", condidatSchema);
+module.exports = mongoose.model("candidat", condidatSchema);

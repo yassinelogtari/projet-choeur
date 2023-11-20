@@ -25,7 +25,7 @@ const fetshCandidats = async (req, res) => {
   }
 };
 
-const addCondidat = async (req, res) => {
+const addCandidat = async (req, res) => {
   try {
     let condidat = await CandidatsVerif.findOne({ email: req.body.email });
     if (condidat) {
@@ -105,7 +105,7 @@ const rempForm = async (req, res) => {
 
 module.exports = {
   fetshCandidats,
-  addCondidat,
+  addCandidat,
   getToken,
   rempForm
 };

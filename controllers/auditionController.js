@@ -93,11 +93,27 @@ const generateSchedule = async (req, res) => {
 
 const fetshAuditions = async (req, res) => {
   try {
-    const auditionsToGet = await Audition.find();
+    const auditionsToGet = await Audition.find().populate("candidat");
     res.status(200).json(auditionsToGet);
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
 };
 
-module.exports = { generateSchedule, fetshAuditions };
+const addAuditionToCandidat = async (req, res) => {
+  try {
+    const _idAudition = req.params._idA;
+    const _idCandidate = req.params._idC;
+
+    const updatedAudition = await Audition.findOneAndUpdate(
+      { _id: _idAudition },
+      { $set: { candidat: _idCandidate, booked: true } },
+      { new: true }
+    );
+    res.status(200).json(updatedAudition);
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+
+module.exports = { generateSchedule, fetshAuditions, addAuditionToCandidat };

@@ -4,7 +4,7 @@ const auditionSchema = new mongoose.Schema(
   {
     candidat: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "condidat",
+      ref: "candidat",
     },
 
     DateAud: {
