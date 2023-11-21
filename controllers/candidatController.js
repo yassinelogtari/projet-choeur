@@ -74,16 +74,24 @@ const getToken = async (req, res) => {
 
 const rempForm = async (req, res) => {
   try {
+    const today = new Date();
+    const dateDebut = new Date('2023-08-01');  
+    const dateEnd = new Date('2024-06-31'); 
+
+    if (today < dateDebut || today > dateEnd) {
+      return res.status(403).send({ message: "Veuillez vérifier les dates d'ouverture." });
+    }
+
     const { id } = req.params;
 
     const condidat = await CandidatsVerif.findOne({ _id: id });
 
     if (!condidat) {
-      return res.status(400).send({ message: "Condidat not found" });
+      return res.status(400).send({ message: "Condidat n'est pas trouvé" });
     }
 
     if (!condidat.verified) {
-      return res.status(401).send({ message: "Email not verified yet" });
+      return res.status(401).send({ message: "Email non vérifié" });
     }
 
     const { nom, prenom,sexe,CIN,telephone,nationalite,dateNaissance,activite,connaisanceMusical,situationPerso} = req.body;
