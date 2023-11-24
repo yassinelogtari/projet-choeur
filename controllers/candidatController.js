@@ -79,7 +79,7 @@ const rempForm = async (req, res) => {
     const dateEnd = new Date('2024-06-31'); 
 
     if (today < dateDebut || today > dateEnd) {
-      return res.status(403).send({ message: "Veuillez vérifier les dates d'ouverture." });
+      return res.status(403).send({ message: "The form is not currently accessible." });
     }
 
     const { id } = req.params;
@@ -87,11 +87,11 @@ const rempForm = async (req, res) => {
     const condidat = await CandidatsVerif.findOne({ _id: id });
 
     if (!condidat) {
-      return res.status(400).send({ message: "Condidat n'est pas trouvé" });
+      return res.status(400).send({ message: "Candidate not found" });
     }
 
     if (!condidat.verified) {
-      return res.status(401).send({ message: "Email non vérifié" });
+      return res.status(401).send({ message: "Email not verified yet" });
     }
 
     const { nom, prenom,sexe,CIN,telephone,nationalite,dateNaissance,activite,connaisanceMusical,situationPerso} = req.body;
