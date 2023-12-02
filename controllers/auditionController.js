@@ -103,32 +103,6 @@ const fetshAuditions = async (req, res) => {
   }
 };
 
-const addAuditionToCandidat = async (req, res) => {
-  try {
-    const _idAudition = req.params._idA;
-    const _idCandidate = req.params._idC;
-
-    
-
-    const updatedAudition = await Audition.findOneAndUpdate(
-      { _id: _idAudition },
-      { $set: { candidat: _idCandidate, booked: true } },
-      { new: true }
-    );
-
-      const Candidat = await Candidats.findOne({ _id: _idCandidate });
-      const formattedDateString = updatedAudition.DateAud.toISOString().slice(8, 10) + '-' + (updatedAudition.DateAud.getUTCMonth() + 1).toString().padStart(2, '0') + '-' + updatedAudition.DateAud.getUTCFullYear();
-      const formattedTimeDString = updatedAudition.HeureDeb.toISOString().slice(11, 16);
-      const formattedTimeFString = updatedAudition.HeureFin.toISOString().slice(11, 16);
-
-      await sendEmail(Candidat.email, "Audition Information", "Bonjour "+ Candidat.prenom +" Félicitations ! Vous avez été présélectionné pour rejoindre l'orchestre symphonique de Cartage. Votre audition aura lieu à " +formattedDateString+" à partir de "+ formattedTimeDString+" à "+formattedTimeFString+". nous avons hâte de découvrir vos talents et de vous voir rejoindre notre équipe.");
-       
 
 
-    res.status(200).json(updatedAudition);
-  } catch (err) {
-    res.status(500).json({ msg: err.message });
-  }
-};
-
-module.exports = { generateSchedule, fetshAuditions, addAuditionToCandidat };
+module.exports = { generateSchedule, fetshAuditions };

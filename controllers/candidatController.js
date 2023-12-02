@@ -1,8 +1,9 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 const Candidats = require("../models/candidatModel");
-const CandidatsVerif=require("../models/candidatMailVerifModel")
-const sendEmail=require("../utils/sendEmail")
+const CandidatsVerif = require("../models/candidatMailVerifModel");
+const sendEmail = require("../utils/sendEmail");
+const Audition = require("../models/auditionModel");
 
 const fetshCandidats = async (req, res) => {
   try {
@@ -29,41 +30,51 @@ const addEmailCandidat = async (req, res) => {
   try {
     let condidat = await CandidatsVerif.findOne({ email: req.body.email });
     if (condidat) {
-      return res.status(409).send({ message: "condidat with given email already exists!" });
+      return res
+        .status(409)
+        .send({ message: "condidat with given email already exists!" });
     }
 
     condidat = await new CandidatsVerif({ ...req.body }).save();
 
-    const token = jwt.sign({ condidatId: condidat._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign(
+      { condidatId: condidat._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
     const url = `${process.env.BASE_URL}/api/candidats/${condidat.id}/verify/${token}`;
     await sendEmail(condidat.email, "Verify Email", url);
 
-    res.status(201).send({ message: "An Email sent to your account, please verify" });
+    res
+      .status(201)
+      .send({ message: "An Email sent to your account, please verify" });
   } catch (error) {
     console.log(error);
-    res.status(500).send({ error:error });
+    res.status(500).send({ error: error });
   }
 };
-
 
 const getToken = async (req, res) => {
   try {
     const { id, token } = req.params;
-    
+
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
     const condidat = await CandidatsVerif.findOne({ _id: id });
     if (!condidat) {
-      console.log('condidat not found');
+      console.log("condidat not found");
       return res.status(400).send({ message: "Invalid link" });
     }
 
-    await CandidatsVerif.updateOne({ _id: condidat._id }, { $set: { verified: true } });
+    await CandidatsVerif.updateOne(
+      { _id: condidat._id },
+      { $set: { verified: true } }
+    );
 
     res.status(200).send({ message: "Email verified successfully" });
   } catch (error) {
-    if (error.name === 'TokenExpiredError') {
+    if (error.name === "TokenExpiredError") {
       res.status(400).send({ message: "Token has expired" });
     } else {
       res.status(500).send({ message: "Internal Server Error" });
@@ -71,15 +82,16 @@ const getToken = async (req, res) => {
   }
 };
 
-
 const rempForm = async (req, res) => {
   try {
     const today = new Date();
-    const dateDebut = new Date('2023-08-01');  
-    const dateEnd = new Date('2024-06-31'); 
+    const dateDebut = new Date("2023-08-01");
+    const dateEnd = new Date("2024-06-31");
 
     if (today < dateDebut || today > dateEnd) {
-      return res.status(403).send({ message: "The form is not currently accessible." });
+      return res
+        .status(403)
+        .send({ message: "The form is not currently accessible." });
     }
 
     const { id } = req.params;
@@ -94,8 +106,19 @@ const rempForm = async (req, res) => {
       return res.status(401).send({ message: "Email not verified yet" });
     }
 
-    const { nom, prenom,sexe,CIN,telephone,nationalite,dateNaissance,activite,connaisanceMusical,situationPerso} = req.body;
-    const newCondidat = await new Candidats({ 
+    const {
+      nom,
+      prenom,
+      sexe,
+      CIN,
+      telephone,
+      nationalite,
+      dateNaissance,
+      activite,
+      connaisanceMusical,
+      situationPerso,
+    } = req.body;
+    const newCondidat = await new Candidats({
       nom,
       prenom,
       email: condidat.email,
@@ -106,22 +129,73 @@ const rempForm = async (req, res) => {
       dateNaissance,
       activite,
       connaisanceMusical,
-      situationPerso
-       }).save();
+      situationPerso,
+    }).save();
 
-    res.status(201).send({ message: "Formulaire rempli avec succès", data: newCondidat });
+    if (newCondidat) {
+      const _idCandidate = newCondidat._id;
+
+      const updatedAudition = await Audition.findOneAndUpdate(
+        { booked: false },
+        { $set: { candidat: _idCandidate, booked: true } },
+        { new: true }
+      );
+      if (!updatedAudition) {
+        res
+          .status(400)
+          .json({
+            error: "il n'ya pas une date libre pour l'audition de candidat ",
+          });
+      }
+
+      const formattedDateString =
+        updatedAudition.DateAud.toISOString().slice(8, 10) +
+        "-" +
+        (updatedAudition.DateAud.getUTCMonth() + 1)
+          .toString()
+          .padStart(2, "0") +
+        "-" +
+        updatedAudition.DateAud.getUTCFullYear();
+      const formattedTimeDString = updatedAudition.HeureDeb.toISOString().slice(
+        11,
+        16
+      );
+      const formattedTimeFString = updatedAudition.HeureFin.toISOString().slice(
+        11,
+        16
+      );
+
+      await sendEmail(
+        newCondidat.email,
+        "Audition Information",
+        "Bonjour " +
+          newCondidat.prenom +
+          " Félicitations ! Vous avez été présélectionné pour rejoindre l'orchestre symphonique de Cartage. Votre audition aura lieu à " +
+          formattedDateString +
+          " à partir de " +
+          formattedTimeDString +
+          " à " +
+          formattedTimeFString +
+          ". nous avons hâte de découvrir vos talents et de vous voir rejoindre notre équipe."
+      );
+      res
+        .status(201)
+        .send({
+          message:
+            "Formulaire rempli avec succès et Audition est affectée avec succée",
+          dataC: newCondidat,
+          dataA: updatedAudition,
+        });
+    }
   } catch (error) {
     console.log(error);
-    res.status(500).send({ error:error});
+    res.status(500).send({ error: error });
   }
 };
-
-
-
 
 module.exports = {
   fetshCandidats,
   addEmailCandidat,
   getToken,
-  rempForm
+  rempForm,
 };
