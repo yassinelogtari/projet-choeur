@@ -25,7 +25,7 @@ const fetshCandidats = async (req, res) => {
   }
 };
 
-const addCandidat = async (req, res) => {
+const addEmailCandidat = async (req, res) => {
   try {
     let condidat = await CandidatsVerif.findOne({ email: req.body.email });
     if (condidat) {
@@ -74,24 +74,40 @@ const getToken = async (req, res) => {
 
 const rempForm = async (req, res) => {
   try {
+    const today = new Date();
+    const dateDebut = new Date('2023-08-01');  
+    const dateEnd = new Date('2024-06-31'); 
+
+    if (today < dateDebut || today > dateEnd) {
+      return res.status(403).send({ message: "The form is not currently accessible." });
+    }
+
     const { id } = req.params;
 
     const condidat = await CandidatsVerif.findOne({ _id: id });
 
     if (!condidat) {
-      return res.status(400).send({ message: "Condidat not found" });
+      return res.status(400).send({ message: "Candidate not found" });
     }
 
     if (!condidat.verified) {
       return res.status(401).send({ message: "Email not verified yet" });
     }
 
-    const { nom, prenom, tlph } = req.body;
+    const { nom, prenom,sexe,CIN,telephone,nationalite,dateNaissance,activite,connaisanceMusical,situationPerso} = req.body;
     const newCondidat = await new Candidats({ 
       nom,
       prenom,
-      tlph,
-      email: condidat.email, }).save();
+      email: condidat.email,
+      sexe,
+      CIN,
+      telephone,
+      nationalite,
+      dateNaissance,
+      activite,
+      connaisanceMusical,
+      situationPerso
+       }).save();
 
     res.status(201).send({ message: "Formulaire rempli avec succès", data: newCondidat });
   } catch (error) {
@@ -105,7 +121,7 @@ const rempForm = async (req, res) => {
 
 module.exports = {
   fetshCandidats,
-  addCandidat,
+  addEmailCandidat,
   getToken,
   rempForm
 };
