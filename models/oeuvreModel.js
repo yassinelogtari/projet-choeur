@@ -6,9 +6,19 @@ const oeuvreSchema = new mongoose.Schema({
         unique:true,
         require:true
     },
-    //compositeurs: 
-    //arrangeurs: 
-    //pupitre:
+    compositeurs: [{
+        type: String, 
+        required: true
+    }],
+    arrangeurs: [{
+        type: String,
+        required: true
+    }],
+   pupitre: [{
+        type: String,
+        enum: ['alto', 'soprano', 'basse', 'ténor'],
+        required: true
+    }],
     anneeComposition:{
         type:Number,
         require:true

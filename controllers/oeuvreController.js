@@ -2,7 +2,7 @@ const Oeuvre = require("../models/oeuvreModel")
 
 
 const addOeuvre= async(req,res)=>{
-    const { titre, anneeComposition, genre, paroles, partition, presenceChoeur } = req.body;
+    const { titre,  pupitre, arrangeurs, compositeurs,anneeComposition, genre, paroles, partition, presenceChoeur } = req.body;
     try {
         
     const existingOeuvre = await Oeuvre.findOne({ titre });
@@ -12,6 +12,9 @@ const addOeuvre= async(req,res)=>{
    
         const nouvelleOeuvre = await new Oeuvre({
             titre,
+            pupitre, 
+            arrangeurs,
+            compositeurs,
             anneeComposition,
             genre,
             paroles,
