@@ -4,6 +4,7 @@ const Candidats = require("../models/candidatModel");
 const CandidatsVerif = require("../models/candidatMailVerifModel");
 const sendEmail = require("../utils/sendEmail");
 const Audition = require("../models/auditionModel");
+const DateRange=require("../models/dateRangeModel")
 
 const fetshCandidats = async (req, res) => {
   try {
@@ -82,17 +83,55 @@ const getToken = async (req, res) => {
   }
 };
 
+const dateFormRange=async(req,res,next)=>{
+  try {
+    const newDateRange = new DateRange({
+      dateDebut: new Date(req.body.dateDebut),
+      dateFin: new Date(req.body.dateFin),
+    });
+
+    const existingDateRange = await DateRange.findOne();
+
+    if (existingDateRange) {
+      return res.status(400).json({ error: "Date range already exists in the database" });
+    }
+
+    const resDateRange = await newDateRange.save();
+    res.status(201).json(resDateRange);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+
+const updateDateRange = async (req, res) => {
+  try {
+    const updatedDateRange = {
+      dateDebut: new Date(req.body.dateDebut),
+      dateFin: new Date(req.body.dateFin),
+    };
+
+    const existingDateRange = await DateRange.findOne();
+
+    if (!existingDateRange) {
+      return res.status(404).json({ error: "Date range not found in the database" });
+    }
+
+    existingDateRange.dateDebut = updatedDateRange.dateDebut;
+    existingDateRange.dateFin = updatedDateRange.dateFin;
+
+    const savedDateRange = await existingDateRange.save();
+
+    res.status(200).json(savedDateRange);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error });
+  }
+};
+
 const rempForm = async (req, res) => {
   try {
-    const today = new Date();
-    const dateDebut = new Date("2023-08-01");
-    const dateEnd = new Date("2024-06-31");
-
-    if (today < dateDebut || today > dateEnd) {
-      return res
-        .status(403)
-        .send({ message: "The form is not currently accessible." });
-    }
 
     const { id } = req.params;
 
@@ -197,5 +236,7 @@ module.exports = {
   fetshCandidats,
   addEmailCandidat,
   getToken,
+  dateFormRange,
+  updateDateRange,
   rempForm,
 };
