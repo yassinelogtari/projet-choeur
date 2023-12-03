@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const Audition = require("../models/auditionModel");
-const sendEmail=require("../utils/sendEmail")
+const sendEmail = require("../utils/sendEmail");
 
 const Candidats = require("../models/candidatModel");
 
@@ -66,6 +66,12 @@ const generateSchedule = async (req, res) => {
       auditionDuration,
     } = req.body;
 
+    const existingAuditions = await Audition.find({});
+
+    if (existingAuditions.length > 0) {
+      await Audition.updateMany({}, { $set: { archived: true } });
+    }
+
     const schedule = generateAuditionSchedule(
       startDate,
       endDate,
@@ -74,6 +80,7 @@ const generateSchedule = async (req, res) => {
       endTime,
       auditionDuration
     );
+    console.log(startDate);
 
     const auditionInstances = schedule.map(
       (session) =>
@@ -102,7 +109,5 @@ const fetshAuditions = async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 };
-
-
 
 module.exports = { generateSchedule, fetshAuditions };

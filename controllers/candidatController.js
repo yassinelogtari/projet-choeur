@@ -4,13 +4,37 @@ const Candidats = require("../models/candidatModel");
 const CandidatsVerif = require("../models/candidatMailVerifModel");
 const sendEmail = require("../utils/sendEmail");
 const Audition = require("../models/auditionModel");
-const DateRange=require("../models/dateRangeModel")
+const DateRange = require("../models/dateRangeModel");
+
+function paginatedResults(model, page, limit) {
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+
+  let paginatedResults = {};
+
+  if (endIndex < model.length) {
+    paginatedResults.next = {
+      page: page + 1,
+      limit: limit,
+    };
+  }
+
+  if (startIndex > 0) {
+    paginatedResults.previous = {
+      page: page - 1,
+      limit: limit,
+    };
+  }
+
+  paginatedResults.results = model.slice(startIndex, endIndex);
+  return paginatedResults;
+}
 
 const fetshCandidats = async (req, res) => {
   try {
     let candidates = await Candidats.find();
     let filteredCandidates = [...candidates];
-    const filters = req.query;
+    const { page, limit, ...filters } = req.query;
     if (Object.keys(filters).length > 0) {
       filteredCandidates = filteredCandidates.filter((candidate) => {
         return Object.entries(filters).every(([key, value]) => {
@@ -21,7 +45,13 @@ const fetshCandidats = async (req, res) => {
         });
       });
     }
-    res.status(200).json(filteredCandidates);
+    if (req.query.page && req.query.limit) {
+      res
+        .status(200)
+        .json(
+          paginatedResults(filteredCandidates, parseInt(page), parseInt(limit))
+        );
+    } else res.status(200).json(filteredCandidates);
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
@@ -83,7 +113,7 @@ const getToken = async (req, res) => {
   }
 };
 
-const dateFormRange=async(req,res,next)=>{
+const dateFormRange = async (req, res, next) => {
   try {
     const newDateRange = new DateRange({
       dateDebut: new Date(req.body.dateDebut),
@@ -93,7 +123,9 @@ const dateFormRange=async(req,res,next)=>{
     const existingDateRange = await DateRange.findOne();
 
     if (existingDateRange) {
-      return res.status(400).json({ error: "Date range already exists in the database" });
+      return res
+        .status(400)
+        .json({ error: "Date range already exists in the database" });
     }
 
     const resDateRange = await newDateRange.save();
@@ -102,8 +134,7 @@ const dateFormRange=async(req,res,next)=>{
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
-}
-
+};
 
 const updateDateRange = async (req, res) => {
   try {
@@ -115,7 +146,9 @@ const updateDateRange = async (req, res) => {
     const existingDateRange = await DateRange.findOne();
 
     if (!existingDateRange) {
-      return res.status(404).json({ error: "Date range not found in the database" });
+      return res
+        .status(404)
+        .json({ error: "Date range not found in the database" });
     }
 
     existingDateRange.dateDebut = updatedDateRange.dateDebut;
@@ -132,7 +165,6 @@ const updateDateRange = async (req, res) => {
 
 const rempForm = async (req, res) => {
   try {
-
     const { id } = req.params;
 
     const condidat = await CandidatsVerif.findOne({ _id: id });
@@ -175,16 +207,14 @@ const rempForm = async (req, res) => {
       const _idCandidate = newCondidat._id;
 
       const updatedAudition = await Audition.findOneAndUpdate(
-        { booked: false },
+        { booked: false, archived: false },
         { $set: { candidat: _idCandidate, booked: true } },
         { new: true }
       );
       if (!updatedAudition) {
-        res
-          .status(400)
-          .json({
-            error: "il n'ya pas une date libre pour l'audition de candidat ",
-          });
+        res.status(400).json({
+          error: "il n'ya pas une date libre pour l'audition de candidat ",
+        });
       }
 
       const formattedDateString =
@@ -217,14 +247,12 @@ const rempForm = async (req, res) => {
           formattedTimeFString +
           ". nous avons hâte de découvrir vos talents et de vous voir rejoindre notre équipe."
       );
-      res
-        .status(201)
-        .send({
-          message:
-            "Formulaire rempli avec succès et Audition est affectée avec succée",
-          dataC: newCondidat,
-          dataA: updatedAudition,
-        });
+      res.status(201).send({
+        message:
+          "Formulaire rempli avec succès et Audition est affectée avec succée",
+        dataC: newCondidat,
+        dataA: updatedAudition,
+      });
     }
   } catch (error) {
     console.log(error);
