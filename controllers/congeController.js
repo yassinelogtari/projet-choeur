@@ -1,5 +1,5 @@
-const Conge=require("../models/conge")
-const Membre=require("../models/membre")
+const Conge=require("../models/congeModel")
+const Membre=require("../models/membreModel")
 const insertConge=async(req,res)=>{
     try{
         const memberId=req.params.id

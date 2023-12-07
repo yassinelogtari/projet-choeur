@@ -1,5 +1,5 @@
 const mongoose=require('mongoose')
-const Membre=require('./membre')
+const Membre=require('./membreModel')
 const congeSchema=mongoose.Schema({
     membre:{type:mongoose.Schema.Types.ObjectId,ref:'Membre'},
     dateDebut:{type:Date,required:true},
