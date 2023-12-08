@@ -1,37 +1,43 @@
 const Joi = require("joi");
-const Audition = require("../models/auditionModel");
-const sendEmail = require("../utils/sendEmail");
 
+const sendEmail = require("../utils/sendEmail");
+const Audition = require("../models/auditionModel");
 const Candidats = require("../models/candidatModel");
 
 const generateAuditionSchedule = (
   startDate,
-  endDate,
-  sessionsPerDay,
+  candidats,
+  CandidatsPerHour,
   startTime,
-  endTime,
-  auditionDuration
+  endTime
 ) => {
   const schedule = [];
   let currentDate = new Date(startDate);
+  let candidateIndex = 0;
+  let i = 0;
 
-  while (currentDate <= new Date(endDate)) {
-    for (let i = 0; i < sessionsPerDay; i++) {
-      const start = new Date(currentDate).setHours(
-        startTime + 1 + i * auditionDuration
-      );
-      const end = new Date(currentDate).setHours(
-        startTime + 1 + (i + 1) * auditionDuration
-      );
+  while (schedule.length < candidats.length / CandidatsPerHour) {
+    const candidates = candidats
+      .slice(candidateIndex, candidateIndex + CandidatsPerHour)
+      .map((candidate) => candidate._id);
+    const start = new Date(currentDate).setHours(startTime + 1 + i);
+    const end = new Date(currentDate).setHours(startTime + 1 + (i + 1));
+    i++;
 
-      schedule.push({
-        date: new Date(currentDate).toISOString(),
-        startTime: new Date(start).toISOString(),
-        endTime: new Date(end).toISOString(),
-      });
+    schedule.push({
+      date: new Date(currentDate).toISOString(),
+      startTime: new Date(start).toISOString(),
+      endTime: new Date(end).toISOString(),
+      candidates,
+    });
+
+    candidateIndex += CandidatsPerHour;
+
+    if (startTime + (i + 1) > endTime) {
+      i = 0;
+      currentDate.setHours(startTime);
+      currentDate.setDate(currentDate.getDate() + 1);
     }
-
-    currentDate.setDate(currentDate.getDate() + 1);
   }
 
   return schedule;
@@ -41,11 +47,9 @@ const generateSchedule = async (req, res) => {
   try {
     const { error } = Joi.object({
       startDate: Joi.date().required(),
-      endDate: Joi.date().required(),
-      sessionsPerDay: Joi.number().integer().required(),
+      CandidatsPerHour: Joi.number().integer().required(),
       startTime: Joi.number().integer().required(),
       endTime: Joi.number().integer().required(),
-      auditionDuration: Joi.number().integer().required(),
     }).validate(req.body, { abortEarly: false });
 
     if (error) {
@@ -57,14 +61,16 @@ const generateSchedule = async (req, res) => {
       });
     }
 
-    const {
-      startDate,
-      endDate,
-      sessionsPerDay,
-      startTime,
-      endTime,
-      auditionDuration,
-    } = req.body;
+    const { startDate, CandidatsPerHour, startTime, endTime } = req.body;
+
+    const candidats = await Candidats.find({});
+
+    if (candidats.length === 0) {
+      return res.status(400).json({
+        success: false,
+        msg: "No candidates found. Please add candidates before generating auditions.",
+      });
+    }
 
     const existingAuditions = await Audition.find({});
 
@@ -74,18 +80,16 @@ const generateSchedule = async (req, res) => {
 
     const schedule = generateAuditionSchedule(
       startDate,
-      endDate,
-      sessionsPerDay,
+      candidats,
+      CandidatsPerHour,
       startTime,
-      endTime,
-      auditionDuration
+      endTime
     );
-    console.log(startDate);
 
     const auditionInstances = schedule.map(
       (session) =>
         new Audition({
-          candidat: null,
+          candidats: session.candidates,
           DateAud: new Date(session.date),
           HeureDeb: new Date(session.startTime),
           HeureFin: new Date(session.endTime),
@@ -94,7 +98,50 @@ const generateSchedule = async (req, res) => {
 
     const savedAuditions = await Audition.insertMany(auditionInstances);
 
-    res.status(200).json({ success: true, savedAuditions });
+    if (savedAuditions) {
+      for (let i = 0; i < savedAuditions.length; i++) {
+        for (let j = 0; j < savedAuditions[i].candidats.length; j++) {
+          console.log(savedAuditions[i].candidats[j]);
+          const candidate = await Candidats.findById(
+            savedAuditions[i].candidats[j]
+          );
+
+          const formattedDateString =
+            savedAuditions[i].DateAud.toISOString().slice(8, 10) +
+            "-" +
+            (savedAuditions[i].DateAud.getUTCMonth() + 1)
+              .toString()
+              .padStart(2, "0") +
+            "-" +
+            savedAuditions[i].DateAud.getUTCFullYear();
+          const formattedTimeDString = savedAuditions[
+            i
+          ].HeureDeb.toISOString().slice(11, 16);
+          const formattedTimeFString = savedAuditions[
+            i
+          ].HeureFin.toISOString().slice(11, 16);
+
+          await sendEmail(
+            candidate.email,
+            "Audition Information",
+            "Bonjour " +
+              candidate.prenom +
+              " Félicitations ! Vous avez été présélectionné pour rejoindre l'orchestre symphonique de Cartage. Votre audition aura lieu à " +
+              formattedDateString +
+              " à partir de " +
+              formattedTimeDString +
+              " à " +
+              formattedTimeFString +
+              ". nous avons hâte de découvrir vos talents et de vous voir rejoindre notre équipe."
+          );
+        }
+      }
+      res.status(201).send({
+        message:
+          "Audition est affectée avec succès et les Email ont été envoyés avec succès",
+        dataA: savedAuditions,
+      });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, msg: error.message });
