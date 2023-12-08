@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 
 const auditionSchema = new mongoose.Schema(
   {
-    candidat: {
+    candidats: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "candidat",
-    },
+    }],
 
     DateAud: {
       type: Date,
