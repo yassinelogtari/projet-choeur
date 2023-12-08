@@ -5,15 +5,9 @@ const { Server } = require("socket.io");
 
 const candidatRoute = require("./routes/candidatRoute");
 const auditionRoute = require("./routes/auditionRoute");
-<<<<<<< HEAD
 const saisonRoute=require("./routes/saisonRoute");
 const oeuvreRoute=require("./routes/ouevreRoute")
-const concertRoute=require("./routes/concertRoute")
-=======
-const saisonRoute = require("./routes/saisonRoute");
-const oeuvreRoute = require("./routes/ouevreRoute");
 
->>>>>>> 7173a1f6a3d45846898a59b25a3ea1a8c6baa944
 dotenv.config();
 
 mongoose
@@ -79,12 +73,7 @@ app.use("/api/candidats", candidatRoute);
 app.use("/api/auditions", auditionRoute);
 app.use("/api/saison", saisonRoute);
 app.use("/api/oeuvre", oeuvreRoute);
-<<<<<<< HEAD
-app.use("/api/concerts", concertRoute);
 
 
-module.exports = app
-=======
 
 module.exports = app;
->>>>>>> 7173a1f6a3d45846898a59b25a3ea1a8c6baa944
