@@ -184,20 +184,19 @@ const addAuditionInfo = async (req, res) => {
       return res.status(404).json({ success: false, msg: "Audition not found." });
     }
 
-   
     if (!audition.candidats.includes(candidatId)) {
       return res.status(400).json({ success: false, msg: "Candidate not associated with this audition." });
     }
 
-    
     audition.candidatsInfo = audition.candidatsInfo || [];
-    const candidatInfoIndex = audition.candidatsInfo.findIndex(info => info.candidat.toString() === candidatId);
+
+  
+    const candidatInfoIndex = audition.candidatsInfo.findIndex(info => info && info.candidat && info.candidat.toString() === candidatId);
+
     if (candidatInfoIndex !== -1) {
-      
-      audition.candidatsInfo[candidatInfoIndex] = { candidat: candidatId, extraitChante, tessiture, evaluation, decision, remarque };
+      audition.candidatsInfo[candidatInfoIndex] = { extraitChante, tessiture, evaluation, decision, remarque };
     } else {
-      
-      audition.candidatsInfo.push({ candidat: candidatId, extraitChante, tessiture, evaluation, decision, remarque });
+      audition.candidatsInfo.push({ extraitChante, tessiture, evaluation, decision, remarque });
     }
 
     await audition.save();

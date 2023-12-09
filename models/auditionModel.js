@@ -30,10 +30,7 @@ const auditionSchema = new mongoose.Schema(
     },
     candidatsInfo: [
       {
-        candidat: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "candidat",
-        },
+        
         extraitChante: {
           type: String,
           default: false,
