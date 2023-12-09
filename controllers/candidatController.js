@@ -203,58 +203,10 @@ const rempForm = async (req, res) => {
       connaisanceMusical,
       situationPerso,
     }).save();
-
-    if (newCondidat) {
-      const _idCandidate = newCondidat._id;
-
-      const updatedAudition = await Audition.findOneAndUpdate(
-        { booked: false, archived: false },
-        { $set: { candidat: _idCandidate, booked: true } },
-        { new: true }
-      );
-      if (!updatedAudition) {
-        res.status(400).json({
-          error: "il n'ya pas une date libre pour l'audition de candidat ",
-        });
-      }
-
-      const formattedDateString =
-        updatedAudition.DateAud.toISOString().slice(8, 10) +
-        "-" +
-        (updatedAudition.DateAud.getUTCMonth() + 1)
-          .toString()
-          .padStart(2, "0") +
-        "-" +
-        updatedAudition.DateAud.getUTCFullYear();
-      const formattedTimeDString = updatedAudition.HeureDeb.toISOString().slice(
-        11,
-        16
-      );
-      const formattedTimeFString = updatedAudition.HeureFin.toISOString().slice(
-        11,
-        16
-      );
-
-      await sendEmail(
-        newCondidat.email,
-        "Audition Information",
-        "Bonjour " +
-          newCondidat.prenom +
-          " Félicitations ! Vous avez été présélectionné pour rejoindre l'orchestre symphonique de Cartage. Votre audition aura lieu à " +
-          formattedDateString +
-          " à partir de " +
-          formattedTimeDString +
-          " à " +
-          formattedTimeFString +
-          ". nous avons hâte de découvrir vos talents et de vous voir rejoindre notre équipe."
-      );
-      res.status(201).send({
-        message:
-          "Formulaire rempli avec succès et Audition est affectée avec succée",
-        dataC: newCondidat,
-        dataA: updatedAudition,
-      });
-    }
+    res.status(201).send({
+      message: "le candidat a été créé avec sucéé",
+      data: newCondidat,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send({ error: error });

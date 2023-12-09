@@ -5,6 +5,6 @@ const auditionController = require("../controllers/auditionController");
 router.post("/generate", auditionController.generateSchedule);
 
 router.get("/", auditionController.fetshAuditions);
-
+router.post("/addinfo", auditionController.addAuditionInfo);
 
 module.exports = router;
