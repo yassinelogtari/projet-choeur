@@ -5,6 +5,7 @@ const auditionSchema = new mongoose.Schema(
     candidats: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "candidat",
+      
     }],
 
     DateAud: {
@@ -27,6 +28,34 @@ const auditionSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    candidatsInfo: [
+      {
+        candidat: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "candidat",
+        },
+        extraitChante: {
+          type: String,
+          default: false,
+        },
+        tessiture: {
+          type: String,
+          default: false,
+        },
+        evaluation: {
+          type: String,
+          enum: ["A", "B", "C"], 
+          default: false,
+        },
+        decision: {
+          type: String,
+          enum: ["Accepté", "Refusé", "En attente"]
+        },
+        remarque: {
+          type: String,
+        }
+      },
+    ],
   },
   { timestamps: true }
 );
