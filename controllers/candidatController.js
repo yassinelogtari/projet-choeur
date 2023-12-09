@@ -5,6 +5,7 @@ const CandidatsVerif = require("../models/candidatMailVerifModel");
 const sendEmail = require("../utils/sendEmail");
 const Audition = require("../models/auditionModel");
 const DateRange = require("../models/dateRangeModel");
+const path=require('path')
 
 function paginatedResults(model, page, limit) {
   const startIndex = (page - 1) * limit;
@@ -259,6 +260,45 @@ const rempForm = async (req, res) => {
     res.status(500).send({ error: error });
   }
 };
+const accepterCandidat=async(req,res)=>{
+  const candidatId=req.params.id
+  const pdfFile=req.file
+  try{
+    const candidat=await Candidats.findById(candidatId)
+    if(!candidat){
+      return res.status(404).json({message:'Candidat non trouvé'})
+    }
+    if(candidat.decision=="retenu"){
+      return res.status(400).json({message:"Le candidat est déjà retenu"})
+    }
+    else if(candidat.decision=="refusé"){
+      return res.status(400).json({message:"Le candidat est refusé : il ne peut pas étre retenu"})
+    }
+    else{
+      candidat.decision="retenu"
+      await candidat.save()
+      const sujetEmail="Acceptation de votre candidature"
+      const corpsEmail = `Bonjour ${candidat.prenom} ${candidat.nom},
+Nous avons le plaisir de vous informer que vous avez été retenu(e) pour faire partie de l'Orchestre Symphonique de Carthage. Félicitations pour cette réussite, et nous sommes impatients de vous accueillir au sein de notre talentueuse équipe.
+Pour formaliser votre engagement en tant que membre de l'orchestre, veuillez trouver ci-joint la Charte de l'Orchestre Symphonique de Carthage. Nous vous prions de bien vouloir lire attentivement le document et de le signer en bas de la dernière page.
+Pour confirmer votre participation,veuillez cliquer sur ce lien:<a href="${lienDeConfirmation}">Confirmer la participation</a>
+Cordialement
+      `;
+      const namePDF="charte.pdf"
+      const attachments=[
+        {
+          filename:namePDF,
+          content:pdfFile.buffer
+        }
+      ]
+      await sendEmail(candidat.email,sujetEmail,corpsEmail,attachments)
+      return res.status(200).json({message:"Candidat retenu avec succés"})
+    }
+  }
+  catch(error){
+    return res.status(500).json({error:error.message})
+  }
+}
 
 module.exports = {
   fetshCandidats,
@@ -267,4 +307,5 @@ module.exports = {
   dateFormRange,
   updateDateRange,
   rempForm,
+  accepterCandidat,
 };
