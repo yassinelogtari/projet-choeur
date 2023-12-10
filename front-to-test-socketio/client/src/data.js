@@ -38,4 +38,19 @@ export const posts = [
     role: "choriste",
     statut: "Inactif",
   },
+  {_id:"6574a8dd7432fef75c2f664e",
+  nom: "ben salah",
+  prenom: "sadak",
+  email: "sadak@gmail.com",
+  sexe: "Homme",
+  dateNaissance: "01-05-2000",
+  nationalite: "tunisien",
+  CIN: "14121578",
+  situationPerso: "célebataire",
+  connaissanceMusic: false,
+  activite: false,
+  telephone: "20147183",
+  role: "choriste",
+  statut: "Inactif"
+}
 ];

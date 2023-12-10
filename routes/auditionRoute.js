@@ -10,5 +10,5 @@ router.post("/generate/additional", auditionController.generateAdditionalSchedul
 
 router.get("/", auditionController.fetshAuditions);
 router.post("/addinfo", auditionController.addAuditionInfo);
-router.post("/accepterCandidat",upload.single('charte'),auditionController.accepterCandidatParAudition)
+//router.post("/accepterCandidat",upload.single('charte'),auditionController.accepterCandidatParAudition)
 module.exports = router;

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 const membre=require("./membreModel")
 const repetitionSchema = new mongoose.Schema(
   {
@@ -20,7 +21,7 @@ const repetitionSchema = new mongoose.Schema(
     },
     membres: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "membre",
+        ref: "Membre",
         required:true
       }],
    
