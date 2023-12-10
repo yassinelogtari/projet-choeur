@@ -157,4 +157,56 @@ const fetshAuditions = async (req, res) => {
   }
 };
 
-module.exports = { generateSchedule, fetshAuditions };
+const addAuditionInfo = async (req, res) => {
+  try {
+    const { auditionId, candidatId, extraitChante, tessiture, evaluation, decision, remarque } = req.body;
+
+    const { error } = Joi.object({
+      auditionId: Joi.string().required(),
+      candidatId: Joi.string().required(),
+      extraitChante: Joi.string().required(),
+      tessiture: Joi.string().required(),
+      evaluation: Joi.string().valid("A", "B", "C").required(),
+      decision: Joi.string(),
+      remarque: Joi.string(),
+    }).validate({ auditionId, candidatId, extraitChante, tessiture, evaluation, decision, remarque }, { abortEarly: false });
+
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        msg: `Validation error: ${error.details.map((detail) => detail.message).join(", ")}`,
+      });
+    }
+
+    const audition = await Audition.findById(auditionId);
+
+    if (!audition) {
+      return res.status(404).json({ success: false, msg: "Audition not found." });
+    }
+
+    if (!audition.candidats.includes(candidatId)) {
+      return res.status(400).json({ success: false, msg: "Candidate not associated with this audition." });
+    }
+
+    audition.candidatsInfo = audition.candidatsInfo || [];
+
+  
+    const candidatInfoIndex = audition.candidatsInfo.findIndex(info => info && info.candidat && info.candidat.toString() === candidatId);
+
+    if (candidatInfoIndex !== -1) {
+      audition.candidatsInfo[candidatInfoIndex] = { extraitChante, tessiture, evaluation, decision, remarque };
+    } else {
+      audition.candidatsInfo.push({ extraitChante, tessiture, evaluation, decision, remarque });
+    }
+
+    await audition.save();
+
+    res.status(200).json({ success: true, msg: "Audition information added successfully." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, msg: error.message });
+  }
+};
+
+
+module.exports = { generateSchedule, fetshAuditions,addAuditionInfo };

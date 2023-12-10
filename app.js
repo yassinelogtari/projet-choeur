@@ -5,8 +5,8 @@ const { Server } = require("socket.io");
 
 const candidatRoute = require("./routes/candidatRoute");
 const auditionRoute = require("./routes/auditionRoute");
-const saisonRoute = require("./routes/saisonRoute");
-const oeuvreRoute = require("./routes/ouevreRoute");
+const saisonRoute=require("./routes/saisonRoute");
+const oeuvreRoute=require("./routes/ouevreRoute")
 
 dotenv.config();
 
@@ -74,5 +74,7 @@ app.use("/api/candidats", candidatRoute);
 app.use("/api/auditions", auditionRoute);
 app.use("/api/saison", saisonRoute);
 app.use("/api/oeuvre", oeuvreRoute);
+
+
 
 module.exports = app;
