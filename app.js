@@ -5,8 +5,11 @@ const { Server } = require("socket.io");
 
 const candidatRoute = require("./routes/candidatRoute");
 const auditionRoute = require("./routes/auditionRoute");
-const saisonRoute=require("./routes/saisonRoute");
-const oeuvreRoute=require("./routes/ouevreRoute")
+const saisonRoute = require("./routes/saisonRoute");
+const oeuvreRoute = require("./routes/ouevreRoute");
+const cron = require("node-cron");
+const Candidat = require("./models/candidatModel");
+const User = require("./models/membreModel");
 
 dotenv.config();
 
@@ -15,57 +18,57 @@ mongoose
   .then(console.log("connected to mongodb"))
   .catch((err) => console.log(err));
 
+const userSocketMap = {};
 const io = new Server({
   cors: {
     origin: "http://localhost:3000",
   },
 });
 
-let onlineUsers = [];
-
-const addNewUser = (username, socketId) => {
-  !onlineUsers.some((user) => user.username === username) &&
-    onlineUsers.push({ username, socketId });
-    console.log(onlineUsers);
-};
-
-const removeUser = (socketId) => {
-  onlineUsers = onlineUsers.filter((user) => user.socketId !== socketId);
-};
-
-const getUser = (username) => {
-  return onlineUsers.find((user) => user.username === username);
-};
-
 io.on("connection", (socket) => {
-  
-  socket.on("newUser", (username) => {
-    addNewUser(username, socket.id);
-  });
+  console.log("A user connected");
 
-  socket.on("sendNotification", ({ senderName, receiverName, type }) => {
-    const receiver = getUser(receiverName);
-    io.to(receiver.socketId).emit("getNotification", {
-      senderName,
-      type,
-    });
-  });
-
-  socket.on("sendText", ({ senderName, receiverName, text }) => {
-    const receiver = getUser(receiverName);
-    io.to(receiver.socketId).emit("getText", {
-      senderName,
-      text,
-    });
+  socket.on("setSocketId", (userId) => {
+    userSocketMap[userId] = socket.id;
+    console.log(`User with ID ${userId} connected with socketId: ${socket.id}`);
   });
 
   socket.on("disconnect", () => {
-    removeUser(socket.id);
+    console.log("User disconnected");
+
+    const userId = Object.keys(userSocketMap).find(
+      (key) => userSocketMap[key] === socket.id
+    );
+    if (userId) {
+      delete userSocketMap[userId];
+      console.log(`User with ID ${userId} disconnected`);
+    }
   });
 });
 
-io.listen(5000);
+cron.schedule("0 10 * * *", async () => {
+  try {
+    const adminUsers = await User.find({ role: "admin" });
 
+    const allCandidates = await Candidat.find();
+    console.log(adminUsers);
+    console.log(userSocketMap);
+    adminUsers.forEach((adminUser) => {
+      const adminSocketId = userSocketMap[adminUser._id];
+
+      if (adminSocketId) {
+        io.to(adminSocketId).emit(
+          "getNotification",
+          ` ${allCandidates.length} nouveaux candidats ont été créés`
+        );
+      }
+    });
+  } catch (error) {
+    console.error("Error in scheduled task:", error);
+  }
+});
+
+io.listen(5000);
 const app = express();
 app.use(express.json());
 
@@ -73,7 +76,5 @@ app.use("/api/candidats", candidatRoute);
 app.use("/api/auditions", auditionRoute);
 app.use("/api/saison", saisonRoute);
 app.use("/api/oeuvre", oeuvreRoute);
-
-
 
 module.exports = app;
