@@ -150,7 +150,7 @@ const generateSchedule = async (req, res) => {
 
 const fetshAuditions = async (req, res) => {
   try {
-    const auditionsToGet = await Audition.find().populate("candidat");
+    const auditionsToGet = await Audition.find().populate("candidats");
     res.status(200).json(auditionsToGet);
   } catch (err) {
     res.status(500).json({ msg: err.message });

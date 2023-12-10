@@ -38,6 +38,7 @@ const getUser = (username) => {
 };
 
 io.on("connection", (socket) => {
+  console.log(onlineUsers)
   
   socket.on("newUser", (username) => {
     addNewUser(username, socket.id);
