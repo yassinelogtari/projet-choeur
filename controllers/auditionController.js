@@ -240,5 +240,33 @@ Cordialement `
     return res.status(500).json({error:error.message})
   }
 }
+const candidatsParTessiture=async(req,res)=>{
+  try{
+    const tessitureParam=req.params.tessiture
+    const tessiture=tessitureParam.toLowerCase()
+    const auditions = await Audition.find({'candidatsInfo.tessiture':tessiture}).populate('candidats');
+    const candidatsParTessiture=[]
+    for(const audition of auditions){
+      for(let i=0;i<audition.candidatsInfo.length;i++){
+        const {_id,nom,prenom,email,sexe,CIN,telephone,nationalite,dateNaissance,activite,connaissanceMusical,situationPerso}=audition.candidats[i]
+        const decision=audition.candidatsInfo[i].decision
+        if(audition.candidatsInfo[i].tessiture.toLowerCase()===tessiture){
+          candidatsParTessiture.push({
+            _id,nom,prenom,email,sexe,CIN,telephone,nationalite,dateNaissance,activite,connaissanceMusical,situationPerso,decision,
+          })
+        }
+      }
+    }
+    const sortedCandidats=candidatsParTessiture.sort((a,b)=>{
+      const decisionsOrder={Retenu:1,Refusé:2}
+      return decisionsOrder[a.decision] - decisionsOrder[b.decision]
+    })
+    return res.status(200).json(sortedCandidats)
 
-module.exports = { generateSchedule, fetshAuditions,addAuditionInfo,accepterCandidatParAudition };
+  }
+  catch(error){
+    return res.status(500).json({error:error.message})
+  }
+}
+
+module.exports = { generateSchedule, fetshAuditions,addAuditionInfo,accepterCandidatParAudition,candidatsParTessiture };

@@ -8,5 +8,6 @@ const upload=multer({storage:storage})
 router.post("/generate", auditionController.generateSchedule);
 router.get("/", auditionController.fetshAuditions);
 router.post("/addinfo", auditionController.addAuditionInfo);
+router.get("/listeCanadidatParPupitre/:tessiture",auditionController.candidatsParTessiture)
 router.post("/accepterCandidat",upload.single('charte'),auditionController.accepterCandidatParAudition)
 module.exports = router;
