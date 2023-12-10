@@ -7,6 +7,8 @@ const Audition = require("../models/auditionModel");
 const DateRange = require("../models/dateRangeModel");
 const path=require('path')
 
+
+
 function paginatedResults(model, page, limit) {
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
