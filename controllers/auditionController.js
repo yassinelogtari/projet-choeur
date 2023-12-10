@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const sendEmail = require("../utils/sendEmail");
 const Audition = require("../models/auditionModel");
 const Candidats = require("../models/candidatModel");
+const path=require('path')
 
 const generateAuditionSchedule = (
   startDate,
@@ -348,6 +349,38 @@ const addAuditionInfo = async (req, res) => {
     res.status(500).json({ success: false, msg: error.message });
   }
 };
+const accepterCandidatParAudition=async(req,res)=>{
+  const pdfFile=req.file
+  try{
+    const auditions=await Audition.find().populate('candidats')
+    for(const audition of auditions ){
+      for(let i=0;i<audition.candidats.length;i++){
+        const candidat=audition.candidats[i]
+        const candidatInfo=audition.candidatsInfo[i]
+        if(candidatInfo.decision==='Retenu'){
+          const sujetEmail="Acceptation de votre candidature"
+          const corpsEmail = `Bonjour ${candidat.prenom} ${candidat.nom},<br>
+Nous avons le plaisir de vous informer que vous avez été retenu(e) pour faire partie de l'Orchestre Symphonique de Carthage. Félicitations pour cette réussite, et nous sommes impatients de vous accueillir au sein de notre talentueuse équipe.<br>
+Vous trouverez ci-joint la Charte de l'Orchestre Symphonique de Carthage pour la signer.<br>
+Pour confirmer votre participation,veuillez cliquer sur ce lien:<a href="https://www.youtube.com/">Confirmer</a><br>
+Cordialement `
+          const namePDF="charte.pdf"
+          const attachments=[
+            {
+              filename:namePDF,
+              content:pdfFile.buffer
+            }
+          ]
+          await sendEmail(candidat.email,sujetEmail,corpsEmail,attachments)
+        }
+      }
+    }
+    return res.status(200).json({message:"Emails d'acceptation envoyés avec succés à tous les candidats retenus de toutes les auditions"})
+  }
+  catch(error){
+    return res.status(500).json({error:error.message})
+  }
+}
 
 module.exports = {
   generateSchedule,

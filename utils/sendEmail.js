@@ -17,7 +17,7 @@ module.exports = async (email, subject, text,attachments=[]) => {
 			from: process.env.USER,
 			to: email,
 			subject: subject,
-			text: text,
+			html: text,
 
 		  }
 		if(attachments && attachments.length>0){
