@@ -47,11 +47,6 @@ const condidatSchema = new mongoose.Schema(
     situationPerso:{
       type: String,
       required: true,
-    },
-    decision:{
-      type:String,
-      enum:["retenu","refusé",""],
-      default:""
     }
    
     

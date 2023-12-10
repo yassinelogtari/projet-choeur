@@ -30,7 +30,6 @@ const auditionSchema = new mongoose.Schema(
     },
     candidatsInfo: [
       {
-        
         extraitChante: {
           type: String,
           default: false,
@@ -46,7 +45,7 @@ const auditionSchema = new mongoose.Schema(
         },
         decision: {
           type: String,
-          enum: ["Accepté", "Refusé", "En attente"]
+          enum: ["Retenu", "Refusé", "En attente"]
         },
         remarque: {
           type: String,
