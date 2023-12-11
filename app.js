@@ -9,6 +9,7 @@ const saisonRoute = require("./routes/saisonRoute");
 const oeuvreRoute = require("./routes/ouevreRoute");
 const cron = require("node-cron");
 const Candidat = require("./models/candidatModel");
+const Repetition=require("./models/repetitionModel")
 const User = require("./models/membreModel");
 const repetitionRoute = require("./routes/repetitionRouteToTestPresence");
 const presenceRoute = require("./routes/presenceRoute");
@@ -69,6 +70,56 @@ cron.schedule("0 10 * * *", async () => {
     console.error("Error in scheduled task:", error);
   }
 });
+
+
+const sendNotificationsForRehearsalToMembers = async (rehearsal) => {
+  try {
+    const members = await User.find({ _id: { $in: rehearsal.membres } });
+
+    members.forEach((member) => {
+      const memberSocketId = userSocketMap[member._id];
+
+      if (memberSocketId) {
+        const notificationMessage = `The rehearsal on ${rehearsal.DateRep.toLocaleDateString()} will start at ${rehearsal.HeureDeb.toLocaleTimeString()}.`;
+
+        io.to(memberSocketId).emit("getNotification", notificationMessage);
+      }
+    });
+  } catch (error) {
+    console.error("Error sending notifications to members:", error);
+  }
+};
+
+
+cron.schedule("07 21 * * *", async () => {
+  try {
+      const now = new Date();
+      console.log("Current Date:", now);
+
+      const startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+      const endDate = new Date(startDate.getTime() + 24 * 60 * 60 * 1000);
+      const repetitions = await Repetition.find({
+        HeureDeb: {
+          $gte: startDate,
+          $lt: endDate,
+        },
+      }).populate("membres");
+
+      if (repetitions.length === 0) {
+        console.log("No repetitions today. Exiting function.");
+        return; 
+      }
+      console.log("repetitions starting today:", repetitions);
+
+      repetitions.forEach((rehearsal) => {
+        sendNotificationsForRehearsalToMembers(rehearsal);
+      });
+  } catch (error) {
+    console.error("Error in rehearsal start notification task:", error);
+  }
+});
+
 
 io.listen(5000);
 const app = express();
