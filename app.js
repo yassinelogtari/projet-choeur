@@ -10,6 +10,8 @@ const oeuvreRoute = require("./routes/ouevreRoute");
 const cron = require("node-cron");
 const Candidat = require("./models/candidatModel");
 const User = require("./models/membreModel");
+const repetitionRoute = require("./routes/repetitionRouteToTestPresence");
+const presenceRoute = require("./routes/presenceRoute");
 
 dotenv.config();
 
@@ -76,5 +78,8 @@ app.use("/api/candidats", candidatRoute);
 app.use("/api/auditions", auditionRoute);
 app.use("/api/saison", saisonRoute);
 app.use("/api/oeuvre", oeuvreRoute);
+app.use("/api/repetition", repetitionRoute);
+app.use("/api/presence", presenceRoute);
+
 
 module.exports = app;
