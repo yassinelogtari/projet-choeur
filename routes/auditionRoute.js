@@ -12,4 +12,7 @@ router.get("/", auditionController.fetshAuditions);
 router.post("/addinfo", auditionController.addAuditionInfo);
 router.get("/listeCanadidatParPupitre/:tessiture",auditionController.candidatsParTessiture)
 router.post("/accepterCandidat",upload.single('charte'),auditionController.accepterCandidatParAudition)
+router.put('/updateaudition', auditionController.updateAudition); 
+router.delete('/deleteaudition/:auditionId', auditionController.deleteAudition);
+
 module.exports = router;

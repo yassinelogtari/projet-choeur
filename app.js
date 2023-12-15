@@ -1,8 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+//var multer = require('multer');
+//var upload = multer();
 const { Server } = require("socket.io");
-
 const candidatRoute = require("./routes/candidatRoute");
 const auditionRoute = require("./routes/auditionRoute");
 const saisonRoute = require("./routes/saisonRoute");
@@ -13,6 +14,11 @@ const Repetition=require("./models/repetitionModel")
 const User = require("./models/membreModel");
 const repetitionRoute = require("./routes/repetitionRouteToTestPresence");
 const presenceRoute = require("./routes/presenceRoute");
+const saisonRoute=require("./routes/saisonRoute");
+const oeuvreRoute=require("./routes/ouevreRoute")
+const concertRoute=require("./routes/concertRoute")
+
+
 
 dotenv.config();
 
@@ -124,13 +130,14 @@ cron.schedule("07 21 * * *", async () => {
 io.listen(5000);
 const app = express();
 app.use(express.json());
-
+//app.use(upload.array());
 app.use("/api/candidats", candidatRoute);
 app.use("/api/auditions", auditionRoute);
 app.use("/api/saison", saisonRoute);
 app.use("/api/oeuvre", oeuvreRoute);
 app.use("/api/repetition", repetitionRoute);
 app.use("/api/presence", presenceRoute);
+app.use("/api/concerts", concertRoute);
 
 
 module.exports = app;
