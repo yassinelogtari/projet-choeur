@@ -37,6 +37,7 @@ const auditionSchema = new mongoose.Schema(
         },
         tessiture: {
           type: String,
+          enum: ["alto", "basse", "soprano","ténor"],
           default: false,
         },
         evaluation: {

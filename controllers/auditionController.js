@@ -208,5 +208,56 @@ const addAuditionInfo = async (req, res) => {
   }
 };
 
+const updateAudition = async (req, res) => {
+  try {
+    const { auditionId, candidats, date, startTime, endTime, candidatsInfo } = req.body;
 
-module.exports = { generateSchedule, fetshAuditions,addAuditionInfo };
+    const updatedAudition = await Audition.findByIdAndUpdate(
+      auditionId,
+      {
+        candidats,
+        DateAud: new Date(date),
+        HeureDeb: new Date(startTime),
+        HeureFin: new Date(endTime),
+        candidatsInfo: candidatsInfo.map(info => ({
+          extraitChante: info.extraitChante,
+          tessiture: info.tessiture,
+          evaluation: info.evaluation,
+          decision: info.decision,
+          remarque: info.remarque,
+        })),
+      },
+      { new: true }
+    );
+
+    if (!updatedAudition) {
+      return res.status(404).json({ success: false, msg: "Audition non trouvée." });
+    }
+
+    res.status(200).json({ success: true, msg: "Audition mise à jour avec succès", data: updatedAudition });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, msg: error.message });
+  }
+};
+
+
+const deleteAudition = async (req, res) => {
+  try {
+    const { auditionId } = req.params;
+
+    const deletedAudition = await Audition.findByIdAndDelete(auditionId);
+
+    if (!deletedAudition) {
+      return res.status(404).json({ success: false, msg: "Audition non trouvée." });
+    }
+
+    res.status(200).json({ success: true, msg: "Audition supprimée avec succès", data: deletedAudition });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, msg: error.message });
+  }
+};
+
+
+module.exports = { generateSchedule, fetshAuditions,addAuditionInfo,updateAudition,deleteAudition };
