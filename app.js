@@ -14,8 +14,6 @@ const Repetition=require("./models/repetitionModel")
 const User = require("./models/membreModel");
 const repetitionRoute = require("./routes/repetitionRouteToTestPresence");
 const presenceRoute = require("./routes/presenceRoute");
-const saisonRoute=require("./routes/saisonRoute");
-const oeuvreRoute=require("./routes/ouevreRoute")
 const concertRoute=require("./routes/concertRoute")
 
 
