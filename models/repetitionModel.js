@@ -29,6 +29,11 @@ const repetitionSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
       },
+      pupitre: {
+        type: String,
+        enum: ["Soprano", "Alto", "Ténor", "Basse"],
+        required: true,
+      },
     },
   ],
   QrCode: {

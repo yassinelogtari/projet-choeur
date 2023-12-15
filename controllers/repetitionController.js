@@ -15,4 +15,29 @@ const createRepetition = async (req, res) => {
   }
 };
 
-module.exports = {createRepetition};
+listPresenceByPupitre = async (req, res) => {
+  try {
+    const { repetitionId } = req.params;
+    const { pupitre } = req.query;
+
+    const repetition = await Repetition.findById(repetitionId).populate('membres.member');
+
+    const membresPupitre = repetition.membres.filter((membre) => membre.member.role === 'choriste' && membre.member.pupitre === pupitre);
+
+  
+    const presenceList = membresPupitre.map((membre) => {
+      return {
+        nom: membre.member.nom,
+        prenom: membre.member.prenom,
+        presence: membre.presence,
+      };
+    });
+
+    res.json({ presenceList });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error:error });
+  }
+};
+
+module.exports = {createRepetition,listPresenceByPupitre};
