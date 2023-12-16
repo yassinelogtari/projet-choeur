@@ -1,5 +1,7 @@
 const Conge=require("../models/congeModel")
 const Membre=require("../models/membreModel")
+
+const addQrCodeToConcert = require("../middlewares/createQrCodeMiddleware");
 const insertConge=async(req,res)=>{
     try{
         const memberId=req.params.id
