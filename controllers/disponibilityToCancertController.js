@@ -67,7 +67,6 @@ const addDisponibility = async (req, res) => {
 
       if (Concert && Member.membre.role == "choriste") {
         for (i = 0; i < Concert.listeMembres.length; i++) {
-          
           if (
             Concert.listeMembres[i].membre.role == "chef du pupitre" &&
             Concert.listeMembres[i].membre.pupitre == Member.membre.pupitre
@@ -75,10 +74,9 @@ const addDisponibility = async (req, res) => {
             const formattedDate = new Date(Concert.date).toLocaleDateString(
               "fr-FR"
             );
-            const formattedTime = new Date(Concert.date).toLocaleTimeString(
-              "fr-FR",
-              { hour: "2-digit", minute: "2-digit" }
-            );
+            const formattedTime = new Date(Concert.date)
+              .toISOString()
+              .slice(11, 16);
 
             await sendEmail(
               Concert.listeMembres[i].membre.email,
