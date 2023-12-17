@@ -125,10 +125,63 @@ cron.schedule("07 21 * * *", async () => {
 });
 
 
+const sendNotificationForUpdatedRehearsal = async (repetition) => {
+  try {
+    const memberIds = repetition.membres.map((member) => member.member);
+
+    const members = await User.find({ _id: { $in: memberIds } });
+
+    members.forEach((member) => {
+      const memberSocketId = userSocketMap[member._id];
+
+      if (memberSocketId) {
+        const notificationMessage = `The repetition on ${repetition.DateRep.toLocaleDateString()} has been updated. It will start at ${repetition.HeureDeb.toLocaleTimeString()} and end at ${repetition.HeureFin.toLocaleTimeString()} at ${repetition.lieu}.`;
+
+        io.to(memberSocketId).emit("getNotification", notificationMessage);
+      }
+    });
+  } catch (error) {
+    console.error("Error sending notifications to members:", error);
+  }
+};
+
+const updateAndSendNotification = async (req, res) => {
+  const repetitionId = req.params.id;
+  const { lieu, DateRep, HeureDeb, HeureFin, membres, QrCode } = req.body;
+
+  try {
+    const updatedRehearsal = await Repetition.findOneAndUpdate(
+      { _id: repetitionId },
+      {
+        lieu,
+        DateRep,
+        HeureDeb,
+        HeureFin,
+        membres,
+        QrCode,
+      },
+      { new: true }
+    );
+    if (!updatedRehearsal) {
+      return res.status(404).json({ message: 'Rehearsal not found' });
+    }
+
+     sendNotificationForUpdatedRehearsal(updatedRehearsal);
+   
+    res.status(200).json(updatedRehearsal);
+  } catch (error) {
+    console.error("Error updating rehearsal:", error);
+    res.status(500).json({ message: 'Internal server error updating rehearsal' });
+  }
+};
+
+
+
 io.listen(5000);
 const app = express();
 app.use(express.json());
 //app.use(upload.array());
+app.put('/update/:id',updateAndSendNotification)
 app.use("/api/candidats", candidatRoute);
 app.use("/api/auditions", auditionRoute);
 app.use("/api/saison", saisonRoute);

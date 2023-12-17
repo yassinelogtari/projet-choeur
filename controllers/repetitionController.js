@@ -15,7 +15,7 @@ const createRepetition = async (req, res) => {
   }
 };
 
-listPresenceByPupitre = async (req, res) => {
+const listPresenceByPupitre = async (req, res) => {
   try {
     const { repetitionId } = req.params;
     const { pupitre } = req.query;
