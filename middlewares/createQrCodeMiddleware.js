@@ -37,8 +37,8 @@ const addQrCodeToCancert = async (req, res, next) => {
       { $set: { QrCode: qrCodeDataURL } },
       { new: true }
     );
-    const updatedCancert = await Repetition.findById(cancertId, {
-      "membres._id": 0,
+    const updatedCancert = await Cancert.findById(cancertId, {
+      "listeMembres._id": 0,
     });
     return res.status(201).json({
       message: "Cancert created successfully",
@@ -50,8 +50,7 @@ const addQrCodeToCancert = async (req, res, next) => {
   }
 };
 
-
-module.exports={
+module.exports = {
   addQrCodeToRepetition,
-  addQrCodeToCancert
-}
+  addQrCodeToCancert,
+};

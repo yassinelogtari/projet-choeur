@@ -27,11 +27,6 @@ const markPresenceToRepetition = async (req, res) => {
       (m) => m.member.toString() === idMember
     );
 
-    if (!member) {
-      return res
-        .status(404)
-        .json({ error: "Member not found in the repetition" });
-    }
 
     member.presence = true;
 
@@ -40,12 +35,12 @@ const markPresenceToRepetition = async (req, res) => {
     res.json({ success: true, message: "Presence marked successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Member not found in the repetition" });
   }
 };
 
 const presenceSchemaToCancert = Joi.object({
-  idRepetition: Joi.string().required(),
+  idCancert: Joi.string().required(),
   idMember: Joi.string().required(),
 });
 
@@ -65,13 +60,10 @@ const markPresenceToCancert = async (req, res) => {
       return res.status(404).json({ error: "Cancert not found" });
     }
 
-    const member = cancert.members.find(
-      (m) => m.member.toString() === idMember
+    const member = cancert.listeMembres.find(
+     
+      (m) => m.membre.toString() === idMember
     );
-
-    if (!member) {
-      return res.status(404).json({ error: "Member not found in the cancert" });
-    }
 
     member.presence = true;
 
@@ -80,7 +72,7 @@ const markPresenceToCancert = async (req, res) => {
     res.json({ success: true, message: "Presence marked successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Member not found in the Cancert" });
   }
 };
 

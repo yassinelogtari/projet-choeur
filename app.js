@@ -15,6 +15,7 @@ const User = require("./models/membreModel");
 const repetitionRoute = require("./routes/repetitionRouteToTestPresence");
 const presenceRoute = require("./routes/presenceRoute");
 const concertRoute=require("./routes/concertRoute")
+const disponibilityToCancertRoute=require("./routes/disponibilityToCancertRoute")
 
 
 
@@ -189,6 +190,7 @@ app.use("/api/oeuvre", oeuvreRoute);
 app.use("/api/repetition", repetitionRoute);
 app.use("/api/presence", presenceRoute);
 app.use("/api/concerts", concertRoute);
+app.use("/api/disponibility/cancert", disponibilityToCancertRoute);
 
 
 module.exports = app;
