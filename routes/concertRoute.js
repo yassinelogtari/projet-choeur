@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const { createConcert } = require('../controllers/concertController'); 
+const { createConcert, updateConcert, deleteConcert, getConcerts, getConcertById } = require('../controllers/concertController'); 
+
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -23,8 +24,8 @@ const upload = multer({
             'application/vnd.ms-excel',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         ];
-
-        if (allowedMimes.includes(file.mimetype)) {
+        const ext = path.extname(file.originalname).toLowerCase();
+        if (allowedMimes.includes(file.mimetype)|| (ext === '.jpg' || ext === '.png')) {
             callback(null, true);
         } else {
             console.log('Seuls les fichiers jpg, png, et Excel sont acceptés');
@@ -36,7 +37,7 @@ const upload = multer({
     },
 });
 
-router.post('/upload', upload.fields([{ name: 'affiche', maxCount: 1 }, { name: 'excelFilePath', maxCount: 1 }]), async (req, res) => {
+router.post('/add-concert', upload.fields([{ name: 'affiche', maxCount: 1 }, { name: 'excelFilePath', maxCount: 1 }]), async (req, res) => {
     try {
         // Vérifier si le fichier affiche existe dans la requête
         if (!req.files || !req.files['affiche']) {
@@ -51,6 +52,7 @@ router.post('/upload', upload.fields([{ name: 'affiche', maxCount: 1 }, { name: 
 
         await createConcert({
             body: {
+                titre: req.body.titre,
                 date: req.body.date,
                 lieu: req.body.lieu,
                 programme : req.body.programme,
@@ -65,5 +67,42 @@ router.post('/upload', upload.fields([{ name: 'affiche', maxCount: 1 }, { name: 
     }
 });
 
+router.patch('/:concertId', upload.fields([{ name: 'affiche', maxCount: 1 }, { name: 'excelFilePath', maxCount: 1 }]), async (req, res) => {
+    try {
+        const afficheFiles = req.files['affiche'];
+        const afficheFile = afficheFiles ? afficheFiles[0] : null;
+        
+        // Faites la même chose pour excelFilePath
+        const excelFiles = req.files['excelFilePath'];
+        const excelFile = excelFiles ? excelFiles[0] : null;
+        
+      const body = {
+        titre: req.body.titre,
+        date: req.body.date,
+        lieu: req.body.lieu,
+        programme: req.body.programme,
+        afficheFile,
+        excelFile,
+        listeMembres: req.body.listeMembres,
+      };
+  
+      // Call the updateConcert function with the constructed body
+      await updateConcert({
+        params: {
+          concertId: req.params.concertId,
+        },
+        body,
+      }, res);
+    } catch (error) {
+      console.error('Erreur lors du traitement du formulaire:', error);
+      res.status(500).json({ message: 'Erreur lors du traitement du formulaire.', error: error.message });
+    }
+  });
+  
+router.delete("/:concertId", deleteConcert);
+
+router.get("/get-concerts",getConcerts);
+
+router.get("/:concertId", getConcertById);
 
 module.exports = router;
