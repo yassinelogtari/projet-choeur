@@ -14,8 +14,10 @@ const membreSchema=mongoose.Schema(
        activite:{type:Boolean,required:true},
        telephone:{type:String,required:true},
        role:{type:String,enum:["choriste","manager","chef du pupitre","chef de choeur","admin"],required:true},
-       statut:{type:String,enum:['Inactif',"Junior","Sénior","Vétéran","En congé"],required:function(){return ['choriste','chef du pupitre'].includes(this.role);}}
-
+       statut:{type:String,enum:['Inactif',"Junior","Sénior","Vétéran","En congé"],required:function(){return ['choriste','chef du pupitre'].includes(this.role);}},
+       pupitre: {type: String,enum: ["Soprano", "Alto", "Ténor", "Basse"],required: function() {return ['choriste','chef du pupitre'].includes(this.role);
+        },
     }
+}
 )
 module.exports=mongoose.model("Membre",membreSchema)

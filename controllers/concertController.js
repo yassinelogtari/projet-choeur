@@ -1,137 +1,119 @@
-const Concert = require('../models/concertModel');
-const Oeuvre = require('../models/oeuvreModel');
-const exceljs = require('exceljs');
-const { promisify } = require('util');
-const fs = require('fs');
+const Concert = require("../models/concertModel");
+const Membre = require("../models/membreModel");
+const Oeuvre = require("../models/oeuvreModel");
+const exceljs = require("exceljs");
+const addQrCodeToRepetition = require("../middlewares/createQrCodeMiddleware");
 
-const readFileAsync = promisify(fs.readFile);
-
-const convertExcelToJson = (path) => {
-  const work = exceljs.readFile(path);
-  const sheetname = work.SheetNames[0];
-  const musicalList = exceljs.utils.sheet_to_json(work.Sheets[sheetname]);
-  return musicalList;
-};
-
-const createConcert = async (req, res) => {
-    try {
-      const { date, lieu, affiche, excelFile, themeprogramme, programme } = req.body;
-  
-      let concertProgramme = [];
-      let atLeastOneOeuvreAdded = false;
-  
-      if (excelFile && !programme) {
-        const workbook = new exceljs.Workbook();
-        const fileBuffer = await readFileAsync(excelFile.path);
-        await workbook.xlsx.load(fileBuffer);
-  
-        const worksheet = workbook.getWorksheet(1);
-  
-        for (let rowNumber = 2; rowNumber <= worksheet.rowCount; rowNumber++) {
-          const titre = worksheet.getCell(`A${rowNumber}`).value;
-          const theme = worksheet.getCell(`B${rowNumber}`).value;
-  
-          try {
-            const oeuvre = await Oeuvre.findOne({ titre });
-
-            if (oeuvre && theme === themeprogramme) {
-              concertProgramme.push({ oeuvre: oeuvre._id });
-              atLeastOneOeuvreAdded = true;
-            } else if (!oeuvre) {
-              console.log(`L'œuvre "${titre}" n'a pas été trouvée.`);
-            }
-          } catch (err) {
-            console.error(err);
-            return res.status(500).json({ success: false, msg: err.message });
-          }
-        }
-  
-        if (!atLeastOneOeuvreAdded) {
-          return res.status(400).json({ success: false, msg: `Aucune œuvre avec le thème "${themeprogramme}" n'a été trouvée.` });
-        }
-  
-      } else if (programme && !excelFile) {
-        for (const item of programme) {
-          const oeuvreId = item.oeuvre;
-          concertProgramme.push({ oeuvre: oeuvreId });
-          atLeastOneOeuvreAdded = true;
-        }
-      } else {
-        return res.status(400).json({ success: false, msg: "Fournissez soit un fichier Excel, soit un programme manuel." });
-      }
-  
-      const concert = new Concert({ date, lieu, affiche, themeprogramme, programme: concertProgramme });
-      await concert.save();
-  
-      res.status(201).json({ success: true, concert });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ success: false, msg: error.message });
-    }
-  };
-  
-  
-  
-  
-
-const getConcerts = async (req, res) => {
+async function createConcert(req, res) {
   try {
-    const concerts = await Concert.find();
-    res.status(200).json({ success: true, concerts });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, msg: error.message });
-  }
-};
-const getConcertById = async (req, res) => {
-    try {
-      const concert = await Concert.findById(req.params.id);
-      if (!concert) {
-        return res.status(404).json({ success: false, msg: "Concert non trouvé." });
-      }
-      res.status(200).json({ success: true, concert });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ success: false, msg: error.message });
-    }
-  };
-  
-  const updateConcertById = async (req, res) => {
-    try {
-      const { date, lieu, affiche, programme } = req.body;
-      const concert = await Concert.findByIdAndUpdate(
-        req.params.id,
-        { date, lieu, affiche, programme },
-        { new: true }
-      );
-      if (!concert) {
-        return res.status(404).json({ success: false, msg: "Concert non trouvé." });
-      }
-      res.status(200).json({ success: true, concert });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ success: false, msg: error.message });
-    }
-  };
-  
-  const deleteConcertById = async (req, res) => {
-    try {
-      const concert = await Concert.findByIdAndDelete(req.params.id);
-      if (!concert) {
-        return res.status(404).json({ success: false, msg: "Concert non trouvé." });
-      }
-      res.status(200).json({ success: true, msg: "Concert supprimé avec succès." });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ success: false, msg: error.message });
-    }
-  };
-  
-  module.exports = {
-    createConcert,
-    getConcerts,
-    getConcertById,
-    updateConcertById,
-    deleteConcertById,
-  };
+    const date = req.body.date;
+    const lieu = req.body.lieu;
+    const afficheFileName = req.body.afficheFile.filename;
+    // ...
+    const excelFilePath = req.body.excelFile ? req.body.excelFile.path : null;
 
+    let programmeData = [];
+
+    if (excelFilePath) {
+      programmeData = await parseExcel(excelFilePath);
+    }
+
+    const programmeManuel = req.body.programme || [];
+
+    const mergedProgramme = [...programmeData, ...programmeManuel];
+
+    const processedProgramme = await processProgramme(mergedProgramme);
+
+    const concert = new Concert({
+      date,
+      lieu,
+      affiche: afficheFileName,
+      programme: processedProgramme,
+      listeMembres: req.body.listeMembres || [],
+    });
+
+    const newConcert = await concert.save();
+    req.cancertId = newConcert._id;
+    await addQrCodeToRepetition.addQrCodeToCancert(req, res, () => {});
+  } catch (error) {
+    res
+      .status(500)
+      .json({
+        message: "Erreur lors de la création du concert.",
+        error: error.message,
+      });
+  }
+}
+
+async function parseExcel(excelFilePath) {
+  const workbook = new exceljs.Workbook();
+  await workbook.xlsx.readFile(excelFilePath);
+
+  const worksheet = workbook.getWorksheet(1);
+
+  const programmeData = [];
+  worksheet.eachRow((row, rowNumber) => {
+    if (rowNumber > 1) {
+      programmeData.push({
+        theme: row.getCell(1).text,
+        titre: row.getCell(2).text,
+        compositeurs: row.getCell(3).text,
+        arrangeurs: row.getCell(4).text,
+        pupitre: row.getCell(5).text,
+        anneeComposition: row.getCell(6).text,
+        genre: row.getCell(7).text,
+        paroles: row.getCell(8).text,
+        partition: row.getCell(9).text,
+        presencechoeur: row.getCell(10).text,
+      });
+    }
+  });
+
+  return programmeData;
+}
+
+async function processProgramme(programmeData) {
+  const processedProgramme = [];
+
+  for (const entry of programmeData) {
+    const existingOeuvre = await Oeuvre.findOne({ titre: entry.titre });
+
+    if (existingOeuvre) {
+      processedProgramme.push({
+        oeuvre: existingOeuvre._id,
+        theme: entry.theme,
+      });
+    } else {
+      const newOeuvre = new Oeuvre({
+        titre: entry.titre,
+        compositeurs: entry.compositeurs,
+        arrangeurs: entry.arrangeurs,
+        pupitre: entry.pupitre,
+        anneeComposition: entry.anneeComposition,
+        genre: entry.genre,
+        paroles: entry.paroles,
+        partition: entry.partition,
+        presencechoeur: entry.presencechoeur,
+      });
+
+      const savedOeuvre = await newOeuvre.save();
+
+      processedProgramme.push({
+        oeuvre: savedOeuvre._id,
+        theme: entry.theme,
+        compositeurs: entry.compositeurs,
+        arrangeurs: entry.arrangeurs,
+        pupitre: entry.pupitre,
+        anneeComposition: entry.anneeComposition,
+        genre: entry.genre,
+        paroles: entry.paroles,
+        partition: entry.partition,
+        presencechoeur: entry.presencechoeur,
+      });
+    }
+  }
+
+  return processedProgramme;
+}
+
+module.exports = { createConcert };
