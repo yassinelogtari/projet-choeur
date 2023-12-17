@@ -11,5 +11,5 @@ router.put("/form/date",candidatController.updateDateRange)
 router.post("/form/:id",dateMiddlewarefunc,candidatController.rempForm)
 
 router.get("/",  candidatController.fetshCandidats);
-
+router.get('/confirm/:email', candidatController.confirmParticipation);
 module.exports = router;

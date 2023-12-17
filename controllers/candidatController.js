@@ -212,7 +212,21 @@ const rempForm = async (req, res) => {
     res.status(500).send({ error: error });
   }
 };
-
+const confirmParticipation=async(req,res)=>{
+  const candidatEmail = req.params.email;
+  try {
+    const candidat = await Candidats.findOne({"email":candidatEmail});
+    if (!candidat) {
+      return res.status(404).json({ message: 'Candidat non trouvé' });
+    }
+    candidat.confirm = true;
+    await candidat.save();
+    
+    return res.status(200).json({ message: 'Votre participation a été bien confirmée.Merci de consulter votre boite mail. ' });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
 module.exports = {
   fetshCandidats,
   addEmailCandidat,
@@ -220,4 +234,5 @@ module.exports = {
   dateFormRange,
   updateDateRange,
   rempForm,
+  confirmParticipation
 };

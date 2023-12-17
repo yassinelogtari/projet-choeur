@@ -217,11 +217,12 @@ const accepterCandidatParAudition=async(req,res)=>{
         const candidat=audition.candidats[i]
         const candidatInfo=audition.candidatsInfo[i]
         if(candidatInfo.decision==='Retenu'){
+          const lienConfirm=`http://localhost:8000/api/candidats/confirm/${encodeURIComponent(candidat.email)}`
           const sujetEmail="Acceptation de votre candidature"
           const corpsEmail = `Bonjour ${candidat.prenom} ${candidat.nom},<br>
 Nous avons le plaisir de vous informer que vous avez été retenu(e) pour faire partie de l'Orchestre Symphonique de Carthage. Félicitations pour cette réussite, et nous sommes impatients de vous accueillir au sein de notre talentueuse équipe.<br>
 Vous trouverez ci-joint la Charte de l'Orchestre Symphonique de Carthage pour la signer.<br>
-Pour confirmer votre participation,veuillez cliquer sur ce lien:<a href="https://www.youtube.com/">Confirmer</a><br>
+Pour confirmer votre participation,veuillez cliquer sur ce lien:<a href="${lienConfirm}">Confirmer</a><br>
 Cordialement `
           const namePDF="charte.pdf"
           const attachments=[
