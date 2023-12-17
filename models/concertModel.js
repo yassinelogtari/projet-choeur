@@ -51,15 +51,15 @@ const concertSchema = new mongoose.Schema({
     default: "",
   },
 });
-concertSchema.path("listeMembres").validate(async function (value) {
-  const membres = await this.model("Membre").find({
-    _id: { $in: value.map((m) => m.membre) },
-  });
-  const membresInvalides = membres.filter(
-    (membre) => membre.role !== "choriste"
-  );
-  return membresInvalides.length === 0;
-}, 'Tous les membres doivent avoir un rôle de "choriste".');
+// concertSchema.path("listeMembres").validate(async function (value) {
+//   const membres = await this.model("Membre").find({
+//     _id: { $in: value.map((m) => m.membre) },
+//   });
+//   const membresInvalides = membres.filter(
+//     (membre) => membre.role !== "choriste"
+//   );
+//   return membresInvalides.length === 0;
+// }, 'Tous les membres doivent avoir un rôle de "choriste".');
 
 const Concert = mongoose.model("Concert", concertSchema);
 
