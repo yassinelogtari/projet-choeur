@@ -17,7 +17,7 @@ const repetitionRoute = require("./routes/repetitionRouteToTestPresence");
 const presenceRoute = require("./routes/presenceRoute");
 const concertRoute=require("./routes/concertRoute")
 const disponibilityToCancertRoute=require("./routes/disponibilityToCancertRoute")
-
+const membreRoute=require("./routes/membreRoute")
 
 
 dotenv.config();
@@ -193,6 +193,6 @@ app.use("/api/repetition", repetitionRoute);
 app.use("/api/presence", presenceRoute);
 app.use("/api/concerts", concertRoute);
 app.use("/api/disponibility/cancert", disponibilityToCancertRoute);
-
+app.use("/api/membre",membreRoute);
 
 module.exports = app;
