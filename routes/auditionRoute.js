@@ -6,7 +6,7 @@ router.post("/generate", auditionController.generateSchedule);
 router.post("/generate/additional", auditionController.generateAdditionalSchedule);
 router.get("/", auditionController.fetshAuditions);
 router.post("/addinfo", auditionController.addAuditionInfo);
-router.put('/updateaudition', auditionController.updateAudition); 
+router.patch('/update-audition/:auditionId', auditionController.updateAudition);
 router.delete('/deleteaudition/:auditionId', auditionController.deleteAudition);
 
 module.exports = router;

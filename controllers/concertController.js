@@ -6,9 +6,11 @@ const addQrCodeToRepetition = require("../middlewares/createQrCodeMiddleware");
 
 async function createConcert(req, res) {
   try {
+    const titre = req.body.titre;
     const date = req.body.date;
     const lieu = req.body.lieu;
-    const afficheFileName = req.body.afficheFile.filename;
+   // const afficheFileName = req.body.afficheFile.filename;
+    const afficheFilePath = req.body.afficheFile.path;
     // ...
     const excelFilePath = req.body.excelFile ? req.body.excelFile.path : null;
 
@@ -25,9 +27,11 @@ async function createConcert(req, res) {
     const processedProgramme = await processProgramme(mergedProgramme);
 
     const concert = new Concert({
+      titre,
       date,
       lieu,
-      affiche: afficheFileName,
+      //affiche: afficheFileName,
+      affiche: afficheFilePath,
       programme: processedProgramme,
       listeMembres: req.body.listeMembres || [],
     });
@@ -116,4 +120,87 @@ async function processProgramme(programmeData) {
   return processedProgramme;
 }
 
-module.exports = { createConcert };
+  async function deleteConcert(req, res) {
+    try {
+      const concertId = req.params.concertId;
+  
+      const deletedConcert = await Concert.findByIdAndDelete(concertId);
+  
+      if (!deletedConcert) {
+        return res.status(404).json({ message: "Concert not found" });
+      }
+  
+      res.json({ message: "Concert deleted successfully" });
+    } catch (error) {
+      res.status(500).json({
+        message: "Error deleting concert",
+        error: error.message,
+      });
+    }
+  }
+  
+  async function getConcerts(req, res) {
+    try {
+      const concerts = await Concert.find();
+      res.json(concerts);
+    } catch (error) {
+      res.status(500).json({
+        message: "Error retrieving concerts",
+        error: error.message,
+      });
+    }
+  }
+  
+  async function getConcertById(req, res) {
+    try {
+      const concertId = req.params.concertId;
+      const concert = await Concert.findById(concertId);
+  
+      if (!concert) {
+        return res.status(404).json({ message: "Concert not found" });
+      }
+  
+      res.json(concert);
+    } catch (error) {
+      res.status(500).json({
+        message: "Error retrieving concert",
+        error: error.message,
+      });
+    }
+}
+async function updateConcert(req, res) {
+    try {
+      const concertId = req.params.concertId;
+      const updates = req.body;
+  
+      if (updates.afficheFile) {
+        // Si oui, extraire le nom du fichier et ajouter à 'affiche'
+        updates.affiche = updates.afficheFile.filename;
+      }
+  
+      const updatedConcert = await Concert.findByIdAndUpdate(
+        concertId,
+        { $set: updates }, 
+        { new: true }
+      );
+  
+      if (!updatedConcert) {
+        return res.status(404).json({ message: 'Concert not found' });
+      }
+  
+      res.json(updatedConcert);
+    } catch (error) {
+      res.status(500).json({
+        message: 'Error updating concert',
+        error: error.message,
+      });
+    }
+  }
+  
+
+module.exports = { 
+    createConcert,  
+
+    deleteConcert,
+    getConcerts,
+    getConcertById,updateConcert };

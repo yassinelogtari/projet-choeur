@@ -27,7 +27,8 @@ const insertConge=async(req,res)=>{
                 membre:memberId,
                 dateDebut,
                 dateFin,
-                raison
+                raison,
+                valide: false,
             })
             await conge.save()
             return res.status(201).json({message:"Congé sauvegardé avec succées"})
@@ -41,7 +42,44 @@ const insertConge=async(req,res)=>{
         res.status(400).json({error:error.message})
     }
 }
+const validerConge = async (req, res) => {
+    try {
+        const { id: congeId } = req.params;
+
+        const conge = await Conge.findByIdAndUpdate(congeId, { valide: true }, { new: true });
+
+        if (!conge) {
+            return res.status(404).json({ message: 'Congé non trouvé' });
+        }
+
+        await Membre.findByIdAndUpdate(conge.membre, { statut: "En congé" });
+
+       
+
+        return res.status(200).json({ message: 'Congé validé avec succès' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+const personnesANotifierSansConge = async () => {
+    try {
+
+        const membresSansConge = await Membre.find({  statut: { $ne: 'En congé' } }, 'nom prenom');
+        
+
+        return membresSansConge;
+    } catch (error) {
+        throw error;
+    }
+};
+
+
+
+
+
     
 module.exports={
-    insertConge
+    insertConge,
+    validerConge,
+    personnesANotifierSansConge
 }
