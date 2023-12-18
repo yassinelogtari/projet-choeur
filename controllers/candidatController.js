@@ -4,10 +4,11 @@ const Candidats = require("../models/candidatModel");
 const CandidatsVerif = require("../models/candidatMailVerifModel");
 const sendEmail = require("../utils/sendEmail");
 const Audition = require("../models/auditionModel");
+const Membre=require("../models/membreModel")
 const DateRange = require("../models/dateRangeModel");
-
-
-
+const path = require("path");
+const generatePassword = require('generate-password')
+const bcrypt=require("bcrypt")
 
 function paginatedResults(model, page, limit) {
   const startIndex = (page - 1) * limit;
@@ -214,7 +215,166 @@ const rempForm = async (req, res) => {
     res.status(500).send({ error: error });
   }
 };
+const accepterCandidatParAudition=async(req,res)=>{
+  const pdfFile=req.file
+  try{
+    const auditions=await Audition.find({"candidatsInfo": { $not: { $size: 0 } }}).populate('candidats')
+    for(const audition of auditions ){
+      for(let i=0;i<audition.candidats.length;i++){
+        const candidat=audition.candidats[i]
+        const candidatInfo=audition.candidatsInfo[i]
+        if(candidatInfo.decision==='Retenu'){
+          const lienConfirm=`http://localhost:8000/api/candidats/confirm/${candidat._id}`
+          const sujetEmail="Acceptation de votre candidature"
+          const corpsEmail = `Bonjour ${candidat.prenom} ${candidat.nom},<br>
+Nous avons le plaisir de vous informer que vous avez été retenu(e) pour faire partie de l'Orchestre Symphonique de Carthage. Félicitations pour cette réussite, et nous sommes impatients de vous accueillir au sein de notre talentueuse équipe.<br>
+Vous trouverez ci-joint la Charte de l'Orchestre Symphonique de Carthage pour la signer.<br>
+Pour confirmer votre participation,veuillez cliquer sur ce lien:<a href="${lienConfirm}">Confirmer</a><br>
+Cordialement `
+          const namePDF="charte.pdf"
+          const attachments=[
+            {
+              filename: namePDF,
+              content: pdfFile.buffer,
+            },
+          ];
+          await sendEmail(candidat.email, sujetEmail, corpsEmail, attachments);
+        }
+      }
+    }
+    return res
+      .status(200)
+      .json({
+        message:
+          "Emails d'acceptation envoyés avec succés à tous les candidats retenus de toutes les auditions",
+      });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+const candidatsParTessiture = async (req, res) => {
+  try {
+    const tessitureParam = req.params.tessiture;
+    const tessiture = tessitureParam.toLowerCase();
+    const auditions = await Audition.find({
+      "candidatsInfo": { $not: { $size: 0 } },"candidatsInfo.tessiture": tessiture,
+    }).populate("candidats");
+    const candidatsParTessiture = [];
+    for (const audition of auditions) {
+      for (let i = 0; i < audition.candidatsInfo.length; i++) {
+        const candidat=audition.candidats[i]
+        const candidatInfo=audition.candidatsInfo[i]
+        if(candidat && candidatInfo){
+        const {
+          _id,
+          nom,
+          prenom,
+          email,
+          sexe,
+          CIN,
+          telephone,
+          nationalite,
+          dateNaissance,
+          activite,
+          connaissanceMusical,
+          situationPerso,
+        } = candidat;
+        const decision = audition.candidatsInfo[i].decision;
+        if (audition.candidatsInfo[i].tessiture.toLowerCase() === tessiture) {
+          candidatsParTessiture.push({
+            _id,
+            nom,
+            prenom,
+            email,
+            sexe,
+            CIN,
+            telephone,
+            nationalite,
+            dateNaissance,
+            activite,
+            connaissanceMusical,
+            situationPerso,
+            decision,
+          });
+        }
+      }
+    }
+    }
+    const sortedCandidats = candidatsParTessiture.sort((a, b) => {
+      const decisionsOrder = { Retenu: 1, Refusé: 2 };
+      return decisionsOrder[a.decision] - decisionsOrder[b.decision];
+    });
+    return res.status(200).json(sortedCandidats);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
 
+const confirmParticipationEtDevenirChoriste=async(req,res)=>{
+  const candidatId = req.params.id;
+  try {
+    const candidat = await Candidats.findOne({"_id":candidatId});
+    if (!candidat) {
+      return res.status(404).json({ message: 'Candidat non trouvé' });
+    }
+    if(candidat.confirm){
+      return res.status(404).json({ message: 'Vous avez déjà confirmer votre participation' });
+    }
+    
+    const passAleatoire=generatePassword.generate({
+      length:12,
+      numbers:true,
+      uppercase:true,
+      lowercase:true,
+      symbols:true
+    })
+    const hashedPassword=await bcrypt.hash(passAleatoire,10)
+    const nouveauMembre=new Membre({
+      nom:candidat.nom,
+      prenom:candidat.prenom,
+      email:candidat.email,
+      password:hashedPassword,
+      sexe:candidat.sexe,
+      dateNaissance:candidat.dateNaissance,
+      nationalite:candidat.nationalite,
+      CIN:candidat.CIN,
+      situationPerso:candidat.situationPerso,
+      connaissanceMusic:candidat.connaisanceMusical,
+      activite:candidat.activite,
+      telephone:candidat.telephone,
+      role:'choriste',
+      statut:'Inactif',
+
+    })
+    const auditions=await Audition.find({"candidatsInfo": { $not: { $size: 0 } }})
+    for(const audition of auditions){
+      for(let i=0;i<audition.candidats.length;i++){
+        const currentCandidat=audition.candidats[i]
+        const currentCandidatID=currentCandidat.toString()
+        const infoCandidat=audition.candidatsInfo[i]
+        if(currentCandidatID===candidatId){
+          const tessiture=infoCandidat.tessiture
+          nouveauMembre.pupitre=tessiture
+          break
+          }
+          
+        }
+      }
+    candidat.confirm = true;
+    await candidat.save();
+    await nouveauMembre.save()
+    const corpsEmail=`Bonjour ${candidat.prenom} ${candidat.nom},<br>
+    Votre participation a été confirmée.<br>
+    Pour accéder à votre compte,voici vos coordonnées.<br>
+    Email: ${candidat.email} <br>
+    Mot de passe: ${passAleatoire} <br> 
+    Cordialement`
+    await sendEmail(candidat.email,"Informations d'inscriptions",corpsEmail)
+    return res.status(200).json({ message: 'Confirmation et inscription en tant que membre effectuées avec succés' });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
 module.exports = {
   fetshCandidats,
   addEmailCandidat,
@@ -222,4 +382,7 @@ module.exports = {
   dateFormRange,
   updateDateRange,
   rempForm,
+  accepterCandidatParAudition,
+  candidatsParTessiture,
+  confirmParticipationEtDevenirChoriste
 };

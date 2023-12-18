@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const { Server } = require("socket.io");
 const candidatRoute = require("./routes/candidatRoute");
 const auditionRoute = require("./routes/auditionRoute");
+const congeRoute=require("./routes/congeRoute")
 const saisonRoute = require("./routes/saisonRoute");
 const oeuvreRoute = require("./routes/ouevreRoute");
 const cron = require("node-cron");
@@ -187,6 +188,7 @@ app.use("/api/candidats", candidatRoute);
 app.use("/api/auditions", auditionRoute);
 app.use("/api/saison", saisonRoute);
 app.use("/api/oeuvre", oeuvreRoute);
+app.use("/api/conge",congeRoute)
 app.use("/api/repetition", repetitionRoute);
 app.use("/api/presence", presenceRoute);
 app.use("/api/concerts", concertRoute);
