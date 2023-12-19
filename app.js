@@ -15,10 +15,8 @@ const Repetition = require("./models/repetitionModel");
 const User = require("./models/membreModel");
 const repetitionRoute = require("./routes/repetitionRouteToTestPresence");
 const presenceRoute = require("./routes/presenceRoute");
-const concertRoute = require("./routes/concertRoute");
 const disponibilityToCancertRoute = require("./routes/disponibilityToCancertRoute");
 const concertRoute = require("./routes/concertRoute");
-const disponibilityToCancertRoute = require("./routes/disponibilityToCancertRoute");
 const ProfileRoute = require("./routes/profileRoute");
 const membreRoute = require("./routes/membreRoute");
 
@@ -186,7 +184,6 @@ const updateAndSendNotification = async (req, res) => {
 
 io.listen(5000);
 const app = express();
-app.use(cors());
 app.use(express.json());
 //app.use(upload.array());
 app.put("/update/:id", updateAndSendNotification);
