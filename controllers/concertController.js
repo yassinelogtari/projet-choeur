@@ -174,7 +174,7 @@ async function updateConcert(req, res) {
       const updates = req.body;
   
       if (updates.afficheFile) {
-        // Si oui, extraire le nom du fichier et ajouter à 'affiche'
+        
         updates.affiche = updates.afficheFile.filename;
       }
   
