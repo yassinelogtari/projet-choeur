@@ -47,6 +47,10 @@ const condidatSchema = new mongoose.Schema(
     situationPerso:{
       type: String,
       required: true,
+    },
+    confirm:{
+      type:Boolean,
+      default:false
     }
    
     

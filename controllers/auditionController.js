@@ -349,129 +349,50 @@ const addAuditionInfo = async (req, res) => {
     res.status(500).json({ success: false, msg: error.message });
   }
 };
-const accepterCandidatParAudition = async (req, res) => {
-  const pdfFile = req.file;
-  try {
-    const auditions = await Audition.find().populate("candidats");
-    for (const audition of auditions) {
-      for (let i = 0; i < audition.candidats.length; i++) {
-        const candidat = audition.candidats[i];
-        const candidatInfo = audition.candidatsInfo[i];
-        if (candidatInfo.decision === "Retenu") {
-          const sujetEmail = "Acceptation de votre candidature";
-          const corpsEmail = `Bonjour ${candidat.prenom} ${candidat.nom},<br>
-Nous avons le plaisir de vous informer que vous avez été retenu(e) pour faire partie de l'Orchestre Symphonique de Carthage. Félicitations pour cette réussite, et nous sommes impatients de vous accueillir au sein de notre talentueuse équipe.<br>
-Vous trouverez ci-joint la Charte de l'Orchestre Symphonique de Carthage pour la signer.<br>
-Pour confirmer votre participation,veuillez cliquer sur ce lien:<a href="https://www.youtube.com/">Confirmer</a><br>
-Cordialement `;
-          const namePDF = "charte.pdf";
-          const attachments = [
-            {
-              filename: namePDF,
-              content: pdfFile.buffer,
-            },
-          ];
-          await sendEmail(candidat.email, sujetEmail, corpsEmail, attachments);
-        }
-      }
-    }
-    return res
-      .status(200)
-      .json({
-        message:
-          "Emails d'acceptation envoyés avec succés à tous les candidats retenus de toutes les auditions",
-      });
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-};
-const candidatsParTessiture = async (req, res) => {
-  try {
-    const tessitureParam = req.params.tessiture;
-    const tessiture = tessitureParam.toLowerCase();
-    const auditions = await Audition.find({
-      "candidatsInfo.tessiture": tessiture,
-    }).populate("candidats");
-    const candidatsParTessiture = [];
-    for (const audition of auditions) {
-      for (let i = 0; i < audition.candidatsInfo.length; i++) {
-        const {
-          _id,
-          nom,
-          prenom,
-          email,
-          sexe,
-          CIN,
-          telephone,
-          nationalite,
-          dateNaissance,
-          activite,
-          connaissanceMusical,
-          situationPerso,
-        } = audition.candidats[i];
-        const decision = audition.candidatsInfo[i].decision;
-        if (audition.candidatsInfo[i].tessiture.toLowerCase() === tessiture) {
-          candidatsParTessiture.push({
-            _id,
-            nom,
-            prenom,
-            email,
-            sexe,
-            CIN,
-            telephone,
-            nationalite,
-            dateNaissance,
-            activite,
-            connaissanceMusical,
-            situationPerso,
-            decision,
-          });
-        }
-      }
-    }
-    const sortedCandidats = candidatsParTessiture.sort((a, b) => {
-      const decisionsOrder = { Retenu: 1, Refusé: 2 };
-      return decisionsOrder[a.decision] - decisionsOrder[b.decision];
-    });
-    return res.status(200).json(sortedCandidats);
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-};
-
-
 const updateAudition = async (req, res) => {
   try {
-    const { auditionId, candidats, date, startTime, endTime, candidatsInfo } = req.body;
+    const { auditionId } = req.params;
+    const {
+      candidatId,
+      extraitChante,
+      tessiture,
+      evaluation,
+      decision,
+      remarque,
+    } = req.body;
 
-    const updatedAudition = await Audition.findByIdAndUpdate(
-      auditionId,
-      {
-        candidats,
-        DateAud: new Date(date),
-        HeureDeb: new Date(startTime),
-        HeureFin: new Date(endTime),
-        candidatsInfo: candidatsInfo.map(info => ({
-          extraitChante: info.extraitChante,
-          tessiture: info.tessiture,
-          evaluation: info.evaluation,
-          decision: info.decision,
-          remarque: info.remarque,
-        })),
-      },
-      { new: true }
-    );
+    console.log('Updating audition for candidatId:', candidatId);
 
-    if (!updatedAudition) {
-      return res.status(404).json({ success: false, msg: "Audition non trouvée." });
+    const audition = await Audition.findById(auditionId);
+
+    if (!audition) {
+      return res
+        .status(404)
+        .json({ success: false, msg: "Audition not found." });
     }
 
-    res.status(200).json({ success: true, msg: "Audition mise à jour avec succès", data: updatedAudition });
+    console.log('Existing candidats in the audition:', audition.candidats);
+
+    if (!candidatId || !audition.candidats.includes(candidatId.toString())) {
+      console.log('Candidate not associated with this audition.');
+      return res.status(400).json({
+        success: false,
+        msg: "Candidate not associated with this audition.",
+      });
+    }
+
+    // ... rest of the logic ...
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, msg: error.message });
   }
 };
+
+
+
+
+
 
 
 const deleteAudition = async (req, res) => {
@@ -492,4 +413,4 @@ const deleteAudition = async (req, res) => {
 };
 
 
-module.exports = { generateSchedule, fetshAuditions,addAuditionInfo,updateAudition,deleteAudition ,generateAdditionalSchedule,accepterCandidatParAudition,candidatsParTessiture,};
+module.exports = { generateSchedule, fetshAuditions,addAuditionInfo,updateAudition,deleteAudition ,generateAdditionalSchedule};

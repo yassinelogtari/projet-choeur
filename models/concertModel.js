@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const concertSchema = new mongoose.Schema({
+  titre: {
+    type: String,
+    required: true,
+  },
   date: {
     type: Date,
     required: true,
@@ -56,10 +60,10 @@ concertSchema.path("listeMembres").validate(async function (value) {
     _id: { $in: value.map((m) => m.membre) },
   });
   const membresInvalides = membres.filter(
-    (membre) => membre.role !== "choriste"
+    (membre) => membre.role !== "choriste" && membre.role !== "chef du pupitre"
   );
   return membresInvalides.length === 0;
-}, 'Tous les membres doivent avoir un rôle de "choriste".');
+}, 'Tous les membres doivent avoir un rôle de "choriste" ou "chef de pupitre".');
 
 const Concert = mongoose.model("Concert", concertSchema);
 

@@ -6,18 +6,21 @@ const dotenv = require("dotenv");
 const { Server } = require("socket.io");
 const candidatRoute = require("./routes/candidatRoute");
 const auditionRoute = require("./routes/auditionRoute");
+const congeRoute = require("./routes/congeRoute");
 const saisonRoute = require("./routes/saisonRoute");
 const oeuvreRoute = require("./routes/ouevreRoute");
 const cron = require("node-cron");
 const Candidat = require("./models/candidatModel");
-const Repetition=require("./models/repetitionModel")
+const Repetition = require("./models/repetitionModel");
 const User = require("./models/membreModel");
 const repetitionRoute = require("./routes/repetitionRouteToTestPresence");
 const presenceRoute = require("./routes/presenceRoute");
-const concertRoute=require("./routes/concertRoute")
-const disponibilityToCancertRoute=require("./routes/disponibilityToCancertRoute")
-
-
+const concertRoute = require("./routes/concertRoute");
+const disponibilityToCancertRoute = require("./routes/disponibilityToCancertRoute");
+const concertRoute = require("./routes/concertRoute");
+const disponibilityToCancertRoute = require("./routes/disponibilityToCancertRoute");
+const ProfileRoute = require("./routes/profileRoute");
+const membreRoute = require("./routes/membreRoute");
 
 dotenv.config();
 
@@ -54,7 +57,7 @@ io.on("connection", (socket) => {
   });
 });
 
-cron.schedule("0 10 * * *", async () => {
+cron.schedule("* 10 * * *", async () => {
   try {
     const adminUsers = await User.find({ role: "admin" });
 
@@ -76,7 +79,6 @@ cron.schedule("0 10 * * *", async () => {
   }
 });
 
-
 const sendNotificationsForRehearsalToMembers = async (rehearsal) => {
   try {
     const members = await User.find({ _id: { $in: rehearsal.membres } });
@@ -95,36 +97,38 @@ const sendNotificationsForRehearsalToMembers = async (rehearsal) => {
   }
 };
 
-
 cron.schedule("07 21 * * *", async () => {
   try {
-      const now = new Date();
-      console.log("Current Date:", now);
+    const now = new Date();
+    console.log("Current Date:", now);
 
-      const startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startDate = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    );
 
-      const endDate = new Date(startDate.getTime() + 24 * 60 * 60 * 1000);
-      const repetitions = await Repetition.find({
-        HeureDeb: {
-          $gte: startDate,
-          $lt: endDate,
-        },
-      }).populate("membres");
+    const endDate = new Date(startDate.getTime() + 24 * 60 * 60 * 1000);
+    const repetitions = await Repetition.find({
+      HeureDeb: {
+        $gte: startDate,
+        $lt: endDate,
+      },
+    }).populate("membres");
 
-      if (repetitions.length === 0) {
-        console.log("No repetitions today. Exiting function.");
-        return; 
-      }
-      console.log("repetitions starting today:", repetitions);
+    if (repetitions.length === 0) {
+      console.log("No repetitions today. Exiting function.");
+      return;
+    }
+    console.log("repetitions starting today:", repetitions);
 
-      repetitions.forEach((rehearsal) => {
-        sendNotificationsForRehearsalToMembers(rehearsal);
-      });
+    repetitions.forEach((rehearsal) => {
+      sendNotificationsForRehearsalToMembers(rehearsal);
+    });
   } catch (error) {
     console.error("Error in rehearsal start notification task:", error);
   }
 });
-
 
 const sendNotificationForUpdatedRehearsal = async (repetition) => {
   try {
@@ -136,7 +140,9 @@ const sendNotificationForUpdatedRehearsal = async (repetition) => {
       const memberSocketId = userSocketMap[member._id];
 
       if (memberSocketId) {
-        const notificationMessage = `The repetition on ${repetition.DateRep.toLocaleDateString()} has been updated. It will start at ${repetition.HeureDeb.toLocaleTimeString()} and end at ${repetition.HeureFin.toLocaleTimeString()} at ${repetition.lieu}.`;
+        const notificationMessage = `The repetition on ${repetition.DateRep.toLocaleDateString()} has been updated. It will start at ${repetition.HeureDeb.toLocaleTimeString()} and end at ${repetition.HeureFin.toLocaleTimeString()} at ${
+          repetition.lieu
+        }.`;
 
         io.to(memberSocketId).emit("getNotification", notificationMessage);
       }
@@ -164,33 +170,36 @@ const updateAndSendNotification = async (req, res) => {
       { new: true }
     );
     if (!updatedRehearsal) {
-      return res.status(404).json({ message: 'Rehearsal not found' });
+      return res.status(404).json({ message: "Rehearsal not found" });
     }
 
-     sendNotificationForUpdatedRehearsal(updatedRehearsal);
-   
+    sendNotificationForUpdatedRehearsal(updatedRehearsal);
+
     res.status(200).json(updatedRehearsal);
   } catch (error) {
     console.error("Error updating rehearsal:", error);
-    res.status(500).json({ message: 'Internal server error updating rehearsal' });
+    res
+      .status(500)
+      .json({ message: "Internal server error updating rehearsal" });
   }
 };
 
-
-
 io.listen(5000);
 const app = express();
+app.use(cors());
 app.use(express.json());
 //app.use(upload.array());
-app.put('/update/:id',updateAndSendNotification)
+app.put("/update/:id", updateAndSendNotification);
 app.use("/api/candidats", candidatRoute);
 app.use("/api/auditions", auditionRoute);
 app.use("/api/saison", saisonRoute);
 app.use("/api/oeuvre", oeuvreRoute);
+app.use("/api/conge", congeRoute);
 app.use("/api/repetition", repetitionRoute);
 app.use("/api/presence", presenceRoute);
 app.use("/api/concerts", concertRoute);
 app.use("/api/disponibility/cancert", disponibilityToCancertRoute);
-
+app.use("/api/profile", ProfileRoute);
+app.use("/api/membre", membreRoute);
 
 module.exports = app;
