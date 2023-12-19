@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
+const concertController=require('../controllers/concertController')
 const { createConcert, updateConcert, deleteConcert, getConcerts, getConcertById } = require('../controllers/concertController'); 
 
 
@@ -104,5 +105,8 @@ router.delete("/:concertId", deleteConcert);
 router.get("/get-concerts",getConcerts);
 
 router.get("/:concertId", getConcertById);
+
+router.get('/:concertId/participants',concertController.getListeParticipantsParPupitre)
+
 
 module.exports = router;

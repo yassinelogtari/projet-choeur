@@ -1,12 +1,11 @@
 const mongoose = require("mongoose");
 
-const concertSchema = new mongoose.Schema({    
-   titre: {
-        type: String,
-        required: true,
-      },
+const concertSchema = new mongoose.Schema({
+  titre: {
+    type: String,
+    required: true,
+  },
   date: {
-
     type: Date,
     required: true,
   },

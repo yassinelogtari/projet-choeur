@@ -120,6 +120,58 @@ async function processProgramme(programmeData) {
   return processedProgramme;
 }
 
+
+
+async function getListeParticipantsParPupitre(req, res) {
+  const concertId = req.params.concertId;
+  
+  try {
+     
+      const concert = await Concert.findById(concertId).populate('listeMembres.membre');
+
+      if (!concert) {
+          throw new Error('Concert not found');
+      }
+
+      const participantsParPupitre = {
+          Soprano: { présents: [], absents: [] },
+          Alto: { présents: [], absents: [] },
+          Ténor: { présents: [], absents: [] },
+          Basse: { présents: [], absents: [] },
+      };
+
+      concert.listeMembres.forEach((participant) => {
+          const { membre, presence } = participant;
+          const { pupitre } = membre;
+
+          if (presence) {
+            const { _id, nom, prenom } = membre;
+            participantsParPupitre[pupitre].présents.push({ _id, nom, prenom });
+        } else {
+            const { _id, nom, prenom } = membre;
+            participantsParPupitre[pupitre].absents.push({ _id, nom, prenom });
+        }
+      });
+
+      const tauxAbsenceParPupitre = {};
+      const tauxPresenceParPupitre = {};
+
+      for (const pupitre in participantsParPupitre) {
+          const totalParticipants = participantsParPupitre[pupitre].présents.length + participantsParPupitre[pupitre].absents.length;
+          const tauxAbsence = totalParticipants > 0 ? (participantsParPupitre[pupitre].absents.length / totalParticipants) * 100 : 0;
+          tauxAbsenceParPupitre[pupitre] = tauxAbsence.toFixed(2) + '%';
+
+          const tauxPresence = totalParticipants > 0 ? (participantsParPupitre[pupitre].présents.length / totalParticipants) * 100 : 0;
+          tauxPresenceParPupitre[pupitre] = tauxPresence.toFixed(2) + '%';
+      }
+
+      res.json({ participantsParPupitre, tauxAbsenceParPupitre ,tauxPresenceParPupitre});
+  } catch (error) {
+      console.error(error.message);
+      res.status(500).json({ error: error.message });
+  }
+}
+
   async function deleteConcert(req, res) {
     try {
       const concertId = req.params.concertId;
@@ -200,7 +252,7 @@ async function updateConcert(req, res) {
 
 module.exports = { 
     createConcert,  
-
+    getListeParticipantsParPupitre,
     deleteConcert,
     getConcerts,
     getConcertById,updateConcert };

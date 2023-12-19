@@ -47,8 +47,8 @@ const addDisponibility = async (req, res) => {
   } else {
     try {
       const cancert = await Cancert.findById(idCancert).populate({
-        path: "listeMembres.membre",
-        model: "Membre",
+        path: "programme.oeuvre",
+        model: "Oeuvre",
       });
 
       if (!cancert) {
@@ -80,10 +80,10 @@ const addDisponibility = async (req, res) => {
 
             await sendEmail(
               Concert.listeMembres[i].membre.email,
-              `Confirmation de la disponibilité de ${Member.membre.prenom} ${Member.membre.nom} pour [Nom du Concert]`,
+              `Confirmation de la disponibilité de ${Member.membre.prenom} ${Member.membre.nom} pour le concert " ${Concert.titre} "`,
               `Cher/Chère ${Concert.listeMembres[i].membre.prenom} ${Concert.listeMembres[i].membre.nom},<br>
             
-              J'espère que ce message vous trouve en bonne santé. Je vous écris pour vous informer que ${Member.membre.prenom} ${Member.membre.nom} a confirmé sa disponibilité pour participer au prochain concert, [Nom du Concert].<br>
+              J'espère que ce message vous trouve en bonne santé. Je vous écris pour vous informer que ${Member.membre.prenom} ${Member.membre.nom} a confirmé sa disponibilité pour participer au prochain concert, " ${Concert.titre} ".<br>
               
               Détails du Concert :<br>
               - Date : ${formattedDate}<br>
