@@ -6,19 +6,20 @@ const dotenv = require("dotenv");
 const { Server } = require("socket.io");
 const candidatRoute = require("./routes/candidatRoute");
 const auditionRoute = require("./routes/auditionRoute");
-const congeRoute=require("./routes/congeRoute")
+const congeRoute = require("./routes/congeRoute");
 const saisonRoute = require("./routes/saisonRoute");
 const oeuvreRoute = require("./routes/ouevreRoute");
 const cron = require("node-cron");
 const Candidat = require("./models/candidatModel");
-const Repetition=require("./models/repetitionModel")
+const Repetition = require("./models/repetitionModel");
 const User = require("./models/membreModel");
 const repetitionRoute = require("./routes/repetitionRouteToTestPresence");
 const presenceRoute = require("./routes/presenceRoute");
-const concertRoute=require("./routes/concertRoute")
-const disponibilityToCancertRoute=require("./routes/disponibilityToCancertRoute")
-
-
+const concertRoute = require("./routes/concertRoute");
+const disponibilityToCancertRoute = require("./routes/disponibilityToCancertRoute");
+const ProfileRoute = require("./routes/profileRoute");
+const Member = require("./models/membreModel");
+const cors = require("cors");
 
 dotenv.config();
 
@@ -55,7 +56,7 @@ io.on("connection", (socket) => {
   });
 });
 
-cron.schedule("0 10 * * *", async () => {
+cron.schedule("* 10 * * *", async () => {
   try {
     const adminUsers = await User.find({ role: "admin" });
 
@@ -181,18 +182,19 @@ const updateAndSendNotification = async (req, res) => {
 
 io.listen(5000);
 const app = express();
+app.use(cors());
 app.use(express.json());
 //app.use(upload.array());
-app.put('/update/:id',updateAndSendNotification)
+app.put("/update/:id", updateAndSendNotification);
 app.use("/api/candidats", candidatRoute);
 app.use("/api/auditions", auditionRoute);
 app.use("/api/saison", saisonRoute);
 app.use("/api/oeuvre", oeuvreRoute);
-app.use("/api/conge",congeRoute)
+app.use("/api/conge", congeRoute);
 app.use("/api/repetition", repetitionRoute);
 app.use("/api/presence", presenceRoute);
 app.use("/api/concerts", concertRoute);
 app.use("/api/disponibility/cancert", disponibilityToCancertRoute);
-
+app.use("/api/profile", ProfileRoute);
 
 module.exports = app;
