@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const { createConcert } = require('../controllers/concertController'); 
+const concertController=require('../controllers/concertController')
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -64,6 +65,9 @@ router.post('/upload', upload.fields([{ name: 'affiche', maxCount: 1 }, { name: 
         res.status(500).json({ message: 'Erreur lors du téléchargement des fichiers.', error: error.message });
     }
 });
+
+
+router.get('/:concertId/participants',concertController.getListeParticipantsParPupitre)
 
 
 module.exports = router;
