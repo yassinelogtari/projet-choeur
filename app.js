@@ -182,10 +182,6 @@ const updateAndSendNotification = async (req, res) => {
 
 io.listen(5000);
 const app = express();
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/ameni
 app.use(express.json());
 //app.use(upload.array());
 app.put("/update/:id", updateAndSendNotification);
