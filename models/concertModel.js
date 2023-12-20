@@ -60,10 +60,10 @@ concertSchema.path("listeMembres").validate(async function (value) {
     _id: { $in: value.map((m) => m.membre) },
   });
   const membresInvalides = membres.filter(
-    (membre) => membre.role !== "choriste" && membre.role !== "chef du pupitre"
+    (membre) => membre.role !== "choriste" && membre.role !== 'chef du pupitre'
   );
   return membresInvalides.length === 0;
-}, 'Tous les membres doivent avoir un rôle de "choriste" ou "chef de pupitre".');
+}, 'Tous les membres doivent avoir un rôle de "choriste" ou "chef du pupitre".');
 
 const Concert = mongoose.model("Concert", concertSchema);
 

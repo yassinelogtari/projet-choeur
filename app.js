@@ -1,8 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-//var multer = require('multer');
-//var upload = multer();
 const { Server } = require("socket.io");
 const candidatRoute = require("./routes/candidatRoute");
 const auditionRoute = require("./routes/auditionRoute");
@@ -184,6 +182,10 @@ const updateAndSendNotification = async (req, res) => {
 
 io.listen(5000);
 const app = express();
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/ameni
 app.use(express.json());
 //app.use(upload.array());
 app.put("/update/:id", updateAndSendNotification);
