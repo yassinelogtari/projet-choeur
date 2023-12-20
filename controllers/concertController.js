@@ -134,10 +134,10 @@ async function getListeParticipantsParPupitre(req, res) {
       }
 
       const participantsParPupitre = {
-          Soprano: { présents: [], absents: [] },
-          Alto: { présents: [], absents: [] },
-          Ténor: { présents: [], absents: [] },
-          Basse: { présents: [], absents: [] },
+          soprano: { présents: [], absents: [] },
+          alto: { présents: [], absents: [] },
+          ténor: { présents: [], absents: [] },
+          basse: { présents: [], absents: [] },
       };
 
       concert.listeMembres.forEach((participant) => {
@@ -167,8 +167,7 @@ async function getListeParticipantsParPupitre(req, res) {
 
       res.json({ participantsParPupitre, tauxAbsenceParPupitre ,tauxPresenceParPupitre});
   } catch (error) {
-      console.error(error.message);
-      res.status(500).json({ error: error.message });
+      console.error(error);
   }
 }
 
