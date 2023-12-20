@@ -18,6 +18,7 @@ const repetitionSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  
   membres: [
     {
       member: {
@@ -36,5 +37,7 @@ const repetitionSchema = new mongoose.Schema({
     default: "",
   },
 });
+
+  
 
 module.exports = mongoose.model("Repetition", repetitionSchema);
