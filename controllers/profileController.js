@@ -83,9 +83,81 @@ const updateNotificationField = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+const fetchAbsences = async (req, res) => {
+  const memberId = req.params.id;
+
+  try {
+    const member = await Member.findById(memberId);
+    if (!member) {
+      return res.status(404).json({ error: "Member not found" });
+    }
+
+    const concerts = await Concert.find({
+      "listeMembres.membre": memberId,
+    });
+
+    const repetitions = await Repetition.find({
+      "membres.member": memberId,
+    });
+
+    const absences = {
+      concerts: [],
+      repetitions: [],
+    };
+
+  
+    for (const concert of concerts) {
+      if (concert.listeMembres) {
+        const isAbsent = concert.listeMembres.some(
+          (item) => item.membre && item.membre.toString() === memberId && !item.presence
+        );
+
+        if (isAbsent) {
+          absences.concerts.push({
+            concertId: concert._id,
+            date: concert.date,
+            lieu: concert.lieu,
+          });
+        }
+      }
+    }
+
+
+    for (const repetition of repetitions) {
+      if (repetition.listeMembres) {
+        const isAbsent = repetition.listeMembres.some(
+          (item) => item.member && item.member.toString() === memberId && !item.presence
+        );
+
+        if (isAbsent) {
+          absences.repetitions.push({
+            repetitionId: repetition._id,
+            date: repetition.date,
+          });
+        }
+      }
+    }
+
+    const response = {
+      member_info: member,
+      number_of_concert_absences: absences.concerts.length,
+      number_of_repetition_absences: absences.repetitions.length,
+      absences,
+    };
+
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
 
 module.exports = {
   fetchHistory,
   getUser,
   updateNotificationField,
+  fetchAbsences,
+  
 };
