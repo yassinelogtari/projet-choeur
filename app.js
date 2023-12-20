@@ -17,6 +17,10 @@ const disponibilityToCancertRoute = require("./routes/disponibilityToCancertRout
 const concertRoute = require("./routes/concertRoute");
 const ProfileRoute = require("./routes/profileRoute");
 const membreRoute = require("./routes/membreRoute");
+const { io } = require("./utils/socket");
+const moment = require("moment");
+const sendNotificationMiddleware = require("./middlewares/sendNotificationMiddleware");
+const { userSocketMap } = require("./utils/socket");
 
 dotenv.config();
 
@@ -25,49 +29,45 @@ mongoose
   .then(console.log("connected to mongodb"))
   .catch((err) => console.log(err));
 
-const userSocketMap = {};
-const io = new Server({
-  cors: {
-    origin: "http://localhost:3000",
-  },
-});
-
-io.on("connection", (socket) => {
-  console.log("A user connected");
-
-  socket.on("setSocketId", (userId) => {
-    userSocketMap[userId] = socket.id;
-    console.log(`User with ID ${userId} connected with socketId: ${socket.id}`);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("User disconnected");
-
-    const userId = Object.keys(userSocketMap).find(
-      (key) => userSocketMap[key] === socket.id
-    );
-    if (userId) {
-      delete userSocketMap[userId];
-      console.log(`User with ID ${userId} disconnected`);
-    }
-  });
-});
-
-cron.schedule("* 10 * * *", async () => {
+cron.schedule("* 10 * * *", async (req, res) => {
   try {
     const adminUsers = await User.find({ role: "admin" });
 
-    const allCandidates = await Candidat.find();
+    const yesterdayTenAM = moment()
+      .subtract(1, "days")
+      .set({ hour: 10, minute: 0, second: 0, millisecond: 0 });
+    const todayTenAM = moment().set({
+      hour: 10,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+    });
+
+    const newCandidates = await Candidat.find({
+      createdAt: {
+        $gte: yesterdayTenAM.toDate(),
+        $lt: todayTenAM.toDate(),
+      },
+    });
+
     console.log(adminUsers);
     console.log(userSocketMap);
-    adminUsers.forEach((adminUser) => {
+
+    adminUsers.forEach(async (adminUser) => {
       const adminSocketId = userSocketMap[adminUser._id];
 
       if (adminSocketId) {
-        io.to(adminSocketId).emit(
-          "getNotification",
-          ` ${allCandidates.length} nouveaux candidats ont été créés`
-        );
+        console.log("//////////");
+        console.log(userSocketMap);
+        console.log(adminUser._id);
+        console.log(`${newCandidates.length} nouveaux candidats ont été créés`);
+        console.log("//////////");
+        req.notificationData = {
+          userId: adminUser._id,
+          notificationMessage: `${newCandidates.length} nouveaux candidats ont été créés`,
+        };
+
+        await sendNotificationMiddleware(req, res, () => {});
       }
     });
   } catch (error) {
