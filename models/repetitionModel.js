@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const membre = require("./membreModel");
 
 const repetitionSchema = new mongoose.Schema({
-    idConcert: {
+    concert: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Concert"
     },
