@@ -3,6 +3,7 @@ const router = express.Router();
 const Repetition = require("../models/repetitionModel");
 const Membre = require("../models/membreModel");
 const addQrCodeToRepetition = require("../middlewares/createQrCodeMiddleware");
+const sendNotificationMiddleware = require("../middlewares/sendNotificationMiddleware")
 
 const genererListeMembres=async(pupitre,pourcentage)=>{
   const membresPupitre=await Membre.find({pupitre,role:{$in:['choriste']},statut:{$ne:'En congé'}})
@@ -112,11 +113,13 @@ const updateRepetition=async(req,res)=>{
       return res.status(404).json({message:"Répétition non trouvée"})
     }
     else{
+      await sendNotificationMiddleware.sendNotificationForUpdatedRehearsal(repetition)
       res.status(200).json({
         message:"Répétition modifiée avec succés",
         model:repetition,
         
       })
+     
     }
 
   }
