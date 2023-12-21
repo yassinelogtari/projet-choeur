@@ -3,6 +3,8 @@ const router = express.Router();
 const Repetition = require("../models/repetitionModel");
 const Membre = require("../models/membreModel");
 const addQrCodeToRepetition = require("../middlewares/createQrCodeMiddleware");
+const sendNotificationMiddleware = require("../middlewares/sendNotificationMiddleware")
+const { userSocketMap } = require("../utils/socket");
 
 const genererListeMembres=async(pupitre,pourcentage)=>{
   const membresPupitre=await Membre.find({pupitre,role:{$in:['choriste']},statut:{$ne:'En congé'}})
@@ -117,8 +119,28 @@ const updateRepetition=async(req,res)=>{
         model:repetition,
         
       })
+     
     }
+    try {
+      const memberIds = repetition.membres.map((member) => member.member);
+  
+      const members = await Membre.find({ _id: { $in: memberIds } });
+      console.log(members)
+      members.forEach(async (member) => {
+        const memberSocketId = userSocketMap[member._id];
 
+        if (memberSocketId) {
+          req.notificationData = {
+            userId: member._id,
+            notificationMessage: `The repetition on ${repetition.DateRep.toLocaleDateString()} has been updated. It will start at ${repetition.HeureDeb.toLocaleTimeString()} and end at ${repetition.HeureFin.toLocaleTimeString()} at ${repetition.lieu}`
+          };
+          console.log(req.notificationData)
+          await sendNotificationMiddleware(req, res, () => {});
+        }
+      });
+    } catch (error) {
+      console.error("Error sending notifications to members:", error);
+    }
   }
   catch(error){
     res.status(400).json({error:error.message})

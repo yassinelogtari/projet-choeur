@@ -37,4 +37,6 @@ const sendNotificationMiddleware = async (req, res, next) => {
   }
 };
 
-module.exports = sendNotificationMiddleware;
+
+
+module.exports = sendNotificationMiddleware

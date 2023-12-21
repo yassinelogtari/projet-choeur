@@ -71,7 +71,7 @@ const validerConge = async (req, res) => {
                   notificationMessage: `${updatedMembre.prenom} ${updatedMembre.nom} a changé son statut "En congé".`,
                 };
     
-                await sendNotificationMiddleware(req, res, () => {});
+                 sendNotificationMiddleware(req, res, () => {});
               }
             });
           }
