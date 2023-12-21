@@ -27,10 +27,18 @@ const insertConge=async(req,res)=>{
                 membre:memberId,
                 dateDebut,
                 dateFin,
-                raison,
-                valide: false,
+                raison
             })
             await conge.save()
+            /*const administrateurs=await Membre.find({role:"admin"})
+            administrateurs.forEach(admin=>{
+                io.to(admin.socketId).emit('nouvelleDemandeConge',{
+                    memberId,
+                    dateDebut,
+                    dateFin,
+                    raison
+                })
+            })*/
             return res.status(201).json({message:"Congé sauvegardé avec succées"})
 
         }
