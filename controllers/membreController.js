@@ -52,6 +52,23 @@ const modifierTessiture = async (req, res) => {
   }
 };
 
+const designerChefsDePupitre = async (req, res) => {
+  try {
+    const { pupitre, chef1Id, chef2Id } = req.body;
+
+    await Membre.findByIdAndUpdate(chef1Id, { role: 'chef du pupitre' });
+
+    await Membre.findByIdAndUpdate(chef2Id, { role: 'chef du pupitre' });
+
+    res.status(200).json({ success: true, message: 'Chefs de pupitre désignés  avec succès' });
+  } catch (error) {
+    console.error('Erreur lors de la désignation des chefs de pupitre :', error);
+    res.status(500).json({ error: 'Erreur interne du serveur lors de la désignation des chefs de pupitre' });
+  }
+};
+
+
+
 module.exports = {
-  modifierTessiture,
+  modifierTessiture,designerChefsDePupitre,
 };

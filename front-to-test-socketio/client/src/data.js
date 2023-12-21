@@ -36,7 +36,7 @@ export const posts = [
       activite: false,
       telephone: "20123456",
       role: "chef du pupitre",
-      statut: "Inactif",
+      statut: "En congé",
       pupitre: "alto"
     },
     {_id:"6574a8dd7432fef75c2f664e",

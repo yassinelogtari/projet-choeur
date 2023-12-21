@@ -77,7 +77,7 @@ cron.schedule("* 10 * * *", async (req, res) => {
 
 const sendNotificationsForRehearsalToMembers = async (rehearsal) => {
   try {
-    const members = await User.find({ _id: { $in: rehearsal.membres } });
+   const members = await User.find({ _id: { $in: rehearsal.membres } });
 
     members.forEach((member) => {
       const memberSocketId = userSocketMap[member._id];
@@ -93,7 +93,7 @@ const sendNotificationsForRehearsalToMembers = async (rehearsal) => {
   }
 };
 
-cron.schedule("07 21 * * *", async () => {
+cron.schedule("33 20 * * *", async () => {
   try {
     const now = new Date();
     console.log("Current Date:", now);

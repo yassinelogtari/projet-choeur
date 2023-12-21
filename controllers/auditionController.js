@@ -352,41 +352,64 @@ const addAuditionInfo = async (req, res) => {
 const updateAudition = async (req, res) => {
   try {
     const { auditionId } = req.params;
-    const {
-      candidatId,
-      extraitChante,
-      tessiture,
-      evaluation,
-      decision,
-      remarque,
-    } = req.body;
-
-    console.log('Updating audition for candidatId:', candidatId);
+    const { candidats, date, startTime, endTime, candidatsInfo } = req.body;
 
     const audition = await Audition.findById(auditionId);
 
     if (!audition) {
-      return res
-        .status(404)
-        .json({ success: false, msg: "Audition not found." });
+      return res.status(404).json({ success: false, msg: "Audition non trouvée." });
     }
 
-    console.log('Existing candidats in the audition:', audition.candidats);
+  
+    if (candidats) {
+      audition.candidats = candidats;
+    }
+    if (date) {
+      audition.DateAud = new Date(date);
+    }
+    if (startTime) {
+      audition.HeureDeb = new Date(startTime);
+    }
+    if (endTime) {
+      audition.HeureFin = new Date(endTime);
+    }
+    // ... Ajoutez des conditions similaires pour les autres champs à mettre à jour
 
-    if (!candidatId || !audition.candidats.includes(candidatId.toString())) {
-      console.log('Candidate not associated with this audition.');
-      return res.status(400).json({
-        success: false,
-        msg: "Candidate not associated with this audition.",
+    // Gérez la mise à jour des candidatsInfo (à adapter en fonction de votre structure)
+    if (Array.isArray(candidatsInfo) && candidatsInfo.length > 0 && Array.isArray(audition.candidatsInfo)) {
+      candidatsInfo.forEach((info) => {
+        const existingInfoIndex = audition.candidatsInfo.findIndex(
+          (existing) => existing && existing._id.toString() === info._id
+        );
+
+        if (existingInfoIndex !== -1) {
+          audition.candidatsInfo[existingInfoIndex] = {
+            extraitChante: info.extraitChante,
+            tessiture: info.tessiture,
+            evaluation: info.evaluation,
+            decision: info.decision,
+            remarque: info.remarque,
+          };
+        } else {
+          audition.candidatsInfo.push({
+            extraitChante: info.extraitChante,
+            tessiture: info.tessiture,
+            evaluation: info.evaluation,
+            decision: info.decision,
+            remarque: info.remarque,
+          });
+        }
       });
     }
 
+    const updatedAudition = await audition.save();
+
+    res.status(200).json({ success: true, msg: "Audition mise à jour avec succès", data: updatedAudition });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, msg: error.message });
   }
 };
-
 
 
 

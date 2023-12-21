@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const concertController=require('../controllers/concertController')
-const { createConcert, updateConcert, deleteConcert, getConcerts, getConcertById } = require('../controllers/concertController'); 
+const { createConcert, deleteConcert, getConcerts, getConcertById,updateConcert } = require('../controllers/concertController'); 
 
 
 const storage = multer.diskStorage({
@@ -72,33 +72,31 @@ router.patch('/:concertId', upload.fields([{ name: 'affiche', maxCount: 1 }, { n
     try {
         const afficheFiles = req.files['affiche'];
         const afficheFile = afficheFiles ? afficheFiles[0] : null;
-        
-        // Faites la même chose pour excelFilePath
         const excelFiles = req.files['excelFilePath'];
         const excelFile = excelFiles ? excelFiles[0] : null;
         
-      const body = {
-        titre: req.body.titre,
-        date: req.body.date,
-        lieu: req.body.lieu,
-        programme: req.body.programme,
-        afficheFile,
-        excelFile,
-        listeMembres: req.body.listeMembres,
-      };
+        const body = {
+            titre: req.body.titre,
+            date: req.body.date,
+            lieu: req.body.lieu,
+            programme: req.body.programme,
+            afficheFile,
+            excelFile,
+            listeMembres: req.body.listeMembres,
+        };
   
-      // Call the updateConcert function with the constructed body
-      await updateConcert({
-        params: {
-          concertId: req.params.concertId,
-        },
-        body,
-      }, res);
+        await updateConcert({
+            params: {
+                concertId: req.params.concertId,
+            },
+            body,
+        }, res);
     } catch (error) {
-      console.error('Erreur lors du traitement du formulaire:', error);
-      res.status(500).json({ message: 'Erreur lors du traitement du formulaire.', error: error.message });
+        console.error('Erreur lors du traitement du formulaire:', error);
+        res.status(500).json({ message: 'Erreur lors du traitement du formulaire.', error: error.message });
     }
-  });
+});
+
   
 router.delete("/:concertId", deleteConcert);
 
