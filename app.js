@@ -20,7 +20,6 @@ const membreRoute = require("./routes/membreRoute");
 const { io } = require("./utils/socket");
 const moment = require("moment");
 const sendNotificationMiddleware = require("./middlewares/sendNotificationMiddleware");
-const sendNotificationToMembersRepitation = require("./middlewares/sendNotificationMiddleware");
 const { userSocketMap } = require("./utils/socket");
 
 dotenv.config();
@@ -78,7 +77,7 @@ cron.schedule("* 10 * * *", async (req, res) => {
 
 
 
-cron.schedule("23 09 * * *", async () => {
+cron.schedule("03 17 * * *", async (req,res) => {
   try {
     const now = new Date();
     console.log("Current Date:", now);
@@ -102,8 +101,27 @@ cron.schedule("23 09 * * *", async () => {
       return;
     }
     
-    repetitions.forEach((rehearsal) => {
-      sendNotificationToMembersRepitation.sendNotificationsForRehearsalToMembers(rehearsal)
+    repetitions.forEach( async (rehearsal) => {
+      try {
+        const memberIds = rehearsal.membres.map((member) => member.member);
+    
+        const members = await User.find({ _id: { $in: memberIds } });
+        console.log(members)
+
+        members.forEach(async (member) => {
+          const memberSocketId = userSocketMap[member._id];
+          if (memberSocketId) {
+            req.notificationData = {
+              userId: member._id,
+              notificationMessage: `The rehearsal on ${rehearsal.DateRep.toLocaleDateString()} will start at ${rehearsal.HeureDeb.toLocaleTimeString()}.`
+            };
+            console.log(req.notificationData)
+            await sendNotificationMiddleware(req, res, () => {});
+          }
+        });
+      } catch (error) {
+        console.error("Error sending notifications to members:", error);
+      }
     });
   } catch (error) {
     console.error("Error in rehearsal start notification task:", error);

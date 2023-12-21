@@ -37,48 +37,6 @@ const sendNotificationMiddleware = async (req, res, next) => {
   }
 };
 
-const sendNotificationForUpdatedRehearsal = async (repetition) => {
-  try {
-    const memberIds = repetition.membres.map((member) => member.member);
-
-    const members = await Membre.find({ _id: { $in: memberIds } });
-    console.log(members)
-    members.forEach((member) => {
-      const memberSocketId = userSocketMap[member._id];
-
-      if (memberSocketId) {
-        const notificationMessage = `The repetition on ${repetition.DateRep.toLocaleDateString()} has been updated. It will start at ${repetition.HeureDeb.toLocaleTimeString()} and end at ${repetition.HeureFin.toLocaleTimeString()} at ${
-          repetition.lieu
-        }.`;
-
-        io.to(memberSocketId).emit("getNotification", notificationMessage);
-      }
-    });
-  } catch (error) {
-    console.error("Error sending notifications to members:", error);
-  }
-};
-
-const sendNotificationsForRehearsalToMembers = async (rehearsal) => {
-  try {
-    const memberIds = rehearsal.membres.map((member) => member.member);
-
-    const members = await Membre.find({ _id: { $in: memberIds } });
-    console.log(members)
-    members.forEach((member) => {
-      const memberSocketId = userSocketMap[member._id];
-
-      if (memberSocketId) {
-        const notificationMessage = `The rehearsal on ${rehearsal.DateRep.toLocaleDateString()} will start at ${rehearsal.HeureDeb.toLocaleTimeString()}.`;
-
-        io.to(memberSocketId).emit("getNotification", notificationMessage);
-      }
-    });
-  } catch (error) {
-    console.error("Error sending notifications to members:", error);
-  }
-};
 
 
-
-module.exports = {sendNotificationMiddleware,sendNotificationForUpdatedRehearsal,sendNotificationsForRehearsalToMembers};
+module.exports = sendNotificationMiddleware
