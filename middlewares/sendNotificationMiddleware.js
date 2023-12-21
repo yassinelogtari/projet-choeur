@@ -1,0 +1,42 @@
+const { io } = require("../utils/socket");
+const { userSocketMap } = require("../utils/socket");
+const Membre = require("../models/membreModel");
+
+const sendNotificationMiddleware = async (req, res, next) => {
+  try {
+    const { userId, notificationMessage } = req.notificationData;
+
+    console.log(userId);
+    console.log(notificationMessage);
+    const userSocketId = userSocketMap[userId];
+
+    if (userSocketId) {
+      io.to(userSocketId).emit("getNotification", notificationMessage);
+    }
+
+    const Newnotification = {
+      notification: notificationMessage,
+      read: false,
+    };
+
+    await Membre.findOneAndUpdate(
+      { _id: userId },
+      { $push: { notifications: Newnotification } },
+      { new: true }
+    );
+
+    next();
+  } catch (error) {
+    console.error("Error sending notification:", error);
+
+    if (res && res.status && res.json) {
+      res
+        .status(500)
+        .json({ message: "Internal server error sending notification" });
+    }
+  }
+};
+
+
+
+module.exports = sendNotificationMiddleware

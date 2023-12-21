@@ -1,8 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-//var multer = require('multer');
-//var upload = multer();
 const { Server } = require("socket.io");
 const candidatRoute = require("./routes/candidatRoute");
 const auditionRoute = require("./routes/auditionRoute");
@@ -19,6 +17,10 @@ const disponibilityToCancertRoute = require("./routes/disponibilityToCancertRout
 const concertRoute = require("./routes/concertRoute");
 const ProfileRoute = require("./routes/profileRoute");
 const membreRoute = require("./routes/membreRoute");
+const { io } = require("./utils/socket");
+const moment = require("moment");
+const sendNotificationMiddleware = require("./middlewares/sendNotificationMiddleware");
+const { userSocketMap } = require("./utils/socket");
 
 dotenv.config();
 
@@ -27,49 +29,45 @@ mongoose
   .then(console.log("connected to mongodb"))
   .catch((err) => console.log(err));
 
-const userSocketMap = {};
-const io = new Server({
-  cors: {
-    origin: "http://localhost:3000",
-  },
-});
-
-io.on("connection", (socket) => {
-  console.log("A user connected");
-
-  socket.on("setSocketId", (userId) => {
-    userSocketMap[userId] = socket.id;
-    console.log(`User with ID ${userId} connected with socketId: ${socket.id}`);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("User disconnected");
-
-    const userId = Object.keys(userSocketMap).find(
-      (key) => userSocketMap[key] === socket.id
-    );
-    if (userId) {
-      delete userSocketMap[userId];
-      console.log(`User with ID ${userId} disconnected`);
-    }
-  });
-});
-
-cron.schedule("* 10 * * *", async () => {
+cron.schedule("* 10 * * *", async (req, res) => {
   try {
     const adminUsers = await User.find({ role: "admin" });
 
-    const allCandidates = await Candidat.find();
+    const yesterdayTenAM = moment()
+      .subtract(1, "days")
+      .set({ hour: 10, minute: 0, second: 0, millisecond: 0 });
+    const todayTenAM = moment().set({
+      hour: 10,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+    });
+
+    const newCandidates = await Candidat.find({
+      createdAt: {
+        $gte: yesterdayTenAM.toDate(),
+        $lt: todayTenAM.toDate(),
+      },
+    });
+
     console.log(adminUsers);
     console.log(userSocketMap);
-    adminUsers.forEach((adminUser) => {
+
+    adminUsers.forEach(async (adminUser) => {
       const adminSocketId = userSocketMap[adminUser._id];
 
       if (adminSocketId) {
-        io.to(adminSocketId).emit(
-          "getNotification",
-          ` ${allCandidates.length} nouveaux candidats ont été créés`
-        );
+        console.log("//////////");
+        console.log(userSocketMap);
+        console.log(adminUser._id);
+        console.log(`${newCandidates.length} nouveaux candidats ont été créés`);
+        console.log("//////////");
+        req.notificationData = {
+          userId: adminUser._id,
+          notificationMessage: `${newCandidates.length} nouveaux candidats ont été créés`,
+        };
+
+        await sendNotificationMiddleware(req, res, () => {});
       }
     });
   } catch (error) {
@@ -77,25 +75,9 @@ cron.schedule("* 10 * * *", async () => {
   }
 });
 
-const sendNotificationsForRehearsalToMembers = async (rehearsal) => {
-  try {
-    const members = await User.find({ _id: { $in: rehearsal.membres } });
 
-    members.forEach((member) => {
-      const memberSocketId = userSocketMap[member._id];
 
-      if (memberSocketId) {
-        const notificationMessage = `The rehearsal on ${rehearsal.DateRep.toLocaleDateString()} will start at ${rehearsal.HeureDeb.toLocaleTimeString()}.`;
-
-        io.to(memberSocketId).emit("getNotification", notificationMessage);
-      }
-    });
-  } catch (error) {
-    console.error("Error sending notifications to members:", error);
-  }
-};
-
-cron.schedule("07 21 * * *", async () => {
+cron.schedule("03 17 * * *", async (req,res) => {
   try {
     const now = new Date();
     console.log("Current Date:", now);
@@ -118,75 +100,40 @@ cron.schedule("07 21 * * *", async () => {
       console.log("No repetitions today. Exiting function.");
       return;
     }
-    console.log("repetitions starting today:", repetitions);
+    
+    repetitions.forEach( async (rehearsal) => {
+      try {
+        const memberIds = rehearsal.membres.map((member) => member.member);
+    
+        const members = await User.find({ _id: { $in: memberIds } });
+        console.log(members)
 
-    repetitions.forEach((rehearsal) => {
-      sendNotificationsForRehearsalToMembers(rehearsal);
+        members.forEach(async (member) => {
+          const memberSocketId = userSocketMap[member._id];
+          if (memberSocketId) {
+            req.notificationData = {
+              userId: member._id,
+              notificationMessage: `The rehearsal on ${rehearsal.DateRep.toLocaleDateString()} will start at ${rehearsal.HeureDeb.toLocaleTimeString()}.`
+            };
+            console.log(req.notificationData)
+            await sendNotificationMiddleware(req, res, () => {});
+          }
+        });
+      } catch (error) {
+        console.error("Error sending notifications to members:", error);
+      }
     });
   } catch (error) {
     console.error("Error in rehearsal start notification task:", error);
   }
 });
 
-const sendNotificationForUpdatedRehearsal = async (repetition) => {
-  try {
-    const memberIds = repetition.membres.map((member) => member.member);
-
-    const members = await User.find({ _id: { $in: memberIds } });
-
-    members.forEach((member) => {
-      const memberSocketId = userSocketMap[member._id];
-
-      if (memberSocketId) {
-        const notificationMessage = `The repetition on ${repetition.DateRep.toLocaleDateString()} has been updated. It will start at ${repetition.HeureDeb.toLocaleTimeString()} and end at ${repetition.HeureFin.toLocaleTimeString()} at ${
-          repetition.lieu
-        }.`;
-
-        io.to(memberSocketId).emit("getNotification", notificationMessage);
-      }
-    });
-  } catch (error) {
-    console.error("Error sending notifications to members:", error);
-  }
-};
-
-const updateAndSendNotification = async (req, res) => {
-  const repetitionId = req.params.id;
-  const { lieu, DateRep, HeureDeb, HeureFin, membres, QrCode } = req.body;
-
-  try {
-    const updatedRehearsal = await Repetition.findOneAndUpdate(
-      { _id: repetitionId },
-      {
-        lieu,
-        DateRep,
-        HeureDeb,
-        HeureFin,
-        membres,
-        QrCode,
-      },
-      { new: true }
-    );
-    if (!updatedRehearsal) {
-      return res.status(404).json({ message: "Rehearsal not found" });
-    }
-
-    sendNotificationForUpdatedRehearsal(updatedRehearsal);
-
-    res.status(200).json(updatedRehearsal);
-  } catch (error) {
-    console.error("Error updating rehearsal:", error);
-    res
-      .status(500)
-      .json({ message: "Internal server error updating rehearsal" });
-  }
-};
 
 io.listen(5000);
 const app = express();
 app.use(express.json());
 //app.use(upload.array());
-app.put("/update/:id", updateAndSendNotification);
+
 app.use("/api/candidats", candidatRoute);
 app.use("/api/auditions", auditionRoute);
 app.use("/api/saison", saisonRoute);

@@ -1,5 +1,7 @@
 const Conge=require("../models/congeModel")
 const Membre=require("../models/membreModel")
+const { userSocketMap } = require("../utils/socket");
+const sendNotificationMiddleware = require("../middlewares/sendNotificationMiddleware")
 
 const addQrCodeToConcert = require("../middlewares/createQrCodeMiddleware");
 const insertConge=async(req,res)=>{
@@ -60,9 +62,27 @@ const validerConge = async (req, res) => {
             return res.status(404).json({ message: 'Congé non trouvé' });
         }
 
-        await Membre.findByIdAndUpdate(conge.membre, { statut: "En congé" });
+        const updatedMembre = await Membre.findByIdAndUpdate(conge.membre, { statut: "En congé" });
 
-       
+        if (updatedMembre) {
+            const chefPupitreByUpdatedMemberUsers = await Membre.find({
+              role: "chef du pupitre",
+              pupitre: updatedMembre.pupitre,
+            });
+    
+            chefPupitreByUpdatedMemberUsers.forEach(async (chefPupitreUser) => {
+              const chefPupitreSocketId = userSocketMap[chefPupitreUser._id];
+             
+              if (chefPupitreSocketId) {
+                req.notificationData = {
+                  userId: chefPupitreUser._id,
+                  notificationMessage: `${updatedMembre.prenom} ${updatedMembre.nom} a changé son statut "En congé".`,
+                };
+    
+                 sendNotificationMiddleware(req, res, () => {});
+              }
+            });
+          }
 
         return res.status(200).json({ message: 'Congé validé avec succès' });
     } catch (error) {

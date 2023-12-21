@@ -13,7 +13,7 @@ const Navbar = ({ socket }) => {
     if (socket) {
       socket.on("getNotification", (data) => {
         setNotifications(data);
-        setCouter(couter + 1);
+        setCouter((prevCounter) => prevCounter + 1);
       });
     }
   }, [socket]);

@@ -23,7 +23,7 @@ export const posts = [
       //   "https://images.pexels.com/photos/762020/pexels-photo-762020.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
       // postImg:
       //   "https://images.pexels.com/photos/3497624/pexels-photo-3497624.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-      _id: "6570f5b97432fef75c2f6615",
+      _id: "657f335e2bf5da651901f5a7",
       nom: "boumaiza",
       prenom: "siwar",
       email: "siwarboumaiza2@gmail.com",
@@ -35,8 +35,9 @@ export const posts = [
       connaissanceMusic: false,
       activite: false,
       telephone: "20123456",
-      role: "choriste",
+      role: "chef du pupitre",
       statut: "Inactif",
+      pupitre: "alto"
     },
     {_id:"6574a8dd7432fef75c2f664e",
     nom: "ben salah",

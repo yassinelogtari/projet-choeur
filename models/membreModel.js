@@ -13,12 +13,7 @@ const membreSchema=mongoose.Schema(
        connaissanceMusic:{type:Boolean,required:true},
        activite:{type:Boolean,required:true},
        telephone:{type:String,required:true},
-       notifications: [
-        {
-          notification: { type: String, default: [] },
-          read: { type: Boolean, default: false },
-        }
-      ],
+       notifications: { type: Array, default: [] },
        role:{type:String,enum:["choriste","manager","chef du pupitre","chef de choeur","admin"],required:true},
        statut:{type:String,enum:['Inactif',"Junior","Sénior","Vétéran","En congé"],required:function(){return ['choriste','chef du pupitre'].includes(this.role);}},
        pupitre: {type: String,enum: ["soprano", "alto", "ténor", "basse"],required: function() {return ['choriste','chef du pupitre'].includes(this.role);

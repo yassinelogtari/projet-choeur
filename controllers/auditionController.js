@@ -381,8 +381,6 @@ const updateAudition = async (req, res) => {
       });
     }
 
-    // ... rest of the logic ...
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, msg: error.message });
