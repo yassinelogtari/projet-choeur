@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const membre = require("./membreModel");
 
 const repetitionSchema = new mongoose.Schema({
+    idConcert: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Concert"
+    },
   lieu: {
     type: String,
     required: true,

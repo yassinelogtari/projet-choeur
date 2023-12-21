@@ -12,6 +12,7 @@ const insertConge=async(req,res)=>{
         if(!membre){
             return res.status(404).json({message:'Membre non trouvé'})
         }
+        else{
         if(membre.role=="choriste"){
             const congeExist=await Conge.findOne({
                 membre:memberId,
@@ -25,6 +26,7 @@ const insertConge=async(req,res)=>{
             if(congeExist){
                 return res.status(400).json({message:"Congé déjà déclaré pour cette période"})
             }
+            else{
             const conge=new Conge({
                 membre:memberId,
                 dateDebut,
@@ -32,21 +34,24 @@ const insertConge=async(req,res)=>{
                 raison
             })
             await conge.save()
-            /*const administrateurs=await Membre.find({role:"admin"})
-            administrateurs.forEach(admin=>{
-                io.to(admin.socketId).emit('nouvelleDemandeConge',{
-                    memberId,
-                    dateDebut,
-                    dateFin,
-                    raison
-                })
-            })*/
+            const administrateurs=await Membre.find({role:"admin"})
+            administrateurs.forEach(async(admin)=>{
+                const adminSocketId=userSocketMap[admin._id]
+                if(adminSocketId){
+                    req.notificationData = {
+                        userId: admin._id,
+                        notificationMessage: `${membre.prenom} ${membre.nom} a déclaré un congé du ${conge.dateDebut.toLocaleDateString()} au ${conge.dateFin.toLocaleDateString()} en raison de ${conge.raison}.`,
+                      };
+                      await sendNotificationMiddleware(req,res,()=>{}) 
+                }   
+            })
             return res.status(201).json({message:"Congé sauvegardé avec succées"})
-
+        }
         }
         else{
             res.status(404).json({message:"Vous n'avez pas la permission de déclarer un congé"}) 
         }
+    }
     }
     catch(error){
         res.status(400).json({error:error.message})
