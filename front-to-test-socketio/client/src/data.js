@@ -70,5 +70,23 @@ export const posts = [
     role: "admin",
     statut: "Inactif"
    
+  },
+  {
+    _id:"657c80e32959073c5357181e",
+    nom: "log",
+    prenom: "youss",
+    email: "youssef@gmail.com",
+    sexe: "Homme",
+    dateNaissance: "01-05-2000",
+    nationalite: "tunisien",
+    CIN: "89562314",
+    situationPerso: "célebataire",
+    connaissanceMusic: false,
+    activite: false,
+    telephone: "20147183",
+    role: "choriste",
+    statut: "En congé",
+    pupitre: "alto"
+    
   }
   ];
