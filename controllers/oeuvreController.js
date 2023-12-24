@@ -2,44 +2,46 @@ const Oeuvre = require("../models/oeuvreModel")
 const Saison=require("../models/saisonModel")
 
 const addOeuvre = async (req, res) => {
-  const { titre, pupitre, arrangeurs, compositeurs, anneeComposition, genre, paroles, partition, presenceChoeur } = req.body;
-
+  const {
+    titre,pupitre,arrangeurs,compositeurs,anneeComposition,genre,paroles,partition,presenceChoeur,saisonId,} = req.body
   try {
-      const existingOeuvre = await Oeuvre.findOne({ titre });
+    const saisonCourante = await Saison.findOne({ saisonCourante: true });
 
-      if (existingOeuvre) {
-          return res.status(400).send({ message: "An oeuvre with the same title already exists." });
-      }
+    if (!saisonCourante) {
+      return res.status(400).send({ message: "No current season found." });
+    }
 
-      const nouvelleOeuvre = await new Oeuvre({
-          titre,
-          pupitre,
-          arrangeurs,
-          compositeurs,
-          anneeComposition,
-          genre,
-          paroles,
-          partition,
-          presenceChoeur,
-      }).save();
+    const saisonCouranteId = saisonCourante._id;
+    if (saisonId.toString() !== saisonCouranteId.toString()) {
+      return res.status(400).send({ message: "Invalid season ID. The provided ID does not match the current season." });
+    }
 
-      const nouvelleOeuvreId = nouvelleOeuvre._id;
-      const saisonId = req.body.saisonId;
+    const existingOeuvre = await Oeuvre.findOne({ titre });
 
-      await Saison.findByIdAndUpdate(
-          saisonId,
-          { $push: { oeuvres: nouvelleOeuvreId } },
-          { new: true }
-      );
+    if (existingOeuvre) {
+      return res.status(400).send({ message: "An oeuvre with the same title already exists." });
+    }
+    const nouvelleOeuvre = new Oeuvre({
+      titre,pupitre,arrangeurs,compositeurs,anneeComposition,genre,paroles,partition,presenceChoeur,
+    });
+    const nouvelleOeuvreEnregistree = await nouvelleOeuvre.save();
 
-      res.status(201).send({ message: "Oeuvre added successfully", data: nouvelleOeuvre });
+    await Saison.findByIdAndUpdate(
+      saisonCouranteId,
+      { $push: { oeuvres: nouvelleOeuvreEnregistree._id } },
+      { new: true }
+    );
+
+    res.status(201).send({ message: "Oeuvre added successfully", data: nouvelleOeuvreEnregistree });
   } catch (error) {
-      console.error(error);
-      res.status(500).send({ error: error.message });
+    console.error(error);
+    res.status(500).send({ error: error.message });
   }
 };
 
-module.exports = addOeuvre;
+module.exports = {
+  addOeuvre,
+};
 
 
 const fetchOeuvre=async(req,res)=>{

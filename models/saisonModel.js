@@ -43,6 +43,10 @@ const saisonSchema = new mongoose.Schema({
       ref: 'Concert',
     },
   ],
+  saisonCourante: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Saison = mongoose.model('Saison', saisonSchema);
