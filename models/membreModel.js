@@ -18,7 +18,14 @@ const membreSchema=mongoose.Schema(
        statut:{type:String,enum:['Inactif',"Junior","Sénior","Vétéran","En congé"],required:function(){return ['choriste','chef du pupitre'].includes(this.role);}},
        pupitre: {type: String,enum: ["soprano", "alto", "ténor", "basse"],required: function() {return ['choriste','chef du pupitre'].includes(this.role);
         },
-    }  
+    }  ,historiqueStatut: [
+        {
+        saison: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Saison',
+          },
+          status: String, 
+     } ], 
 }
 )
 module.exports=mongoose.model("Membre",membreSchema)
