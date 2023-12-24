@@ -12,7 +12,8 @@ const Navbar = ({ socket }) => {
   useEffect(() => {
     if (socket) {
       socket.on("getNotification", (data) => {
-        setNotifications(data);
+        setNotifications((prevNotifications) => [...prevNotifications, data]);
+        console.log(notifications);
         setCouter((prevCounter) => prevCounter + 1);
       });
     }
@@ -40,7 +41,12 @@ const Navbar = ({ socket }) => {
       </div>
       {open && (
         <div className="notifications">
-          {notifications}
+          {notifications.map((notification) => (
+            <span key={notification.id}>
+              <span className="notificationItem">{notification}</span>
+              <br />
+            </span>
+          ))}
           <button className="nButton" onClick={handleRead}>
             Mark as read
           </button>

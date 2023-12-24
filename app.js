@@ -21,6 +21,7 @@ const { io } = require("./utils/socket");
 const moment = require("moment");
 const sendNotificationMiddleware = require("./middlewares/sendNotificationMiddleware");
 const { userSocketMap } = require("./utils/socket");
+const absenceRoute = require("./routes/absenceRoute");
 
 dotenv.config();
 
@@ -196,5 +197,6 @@ app.use("/api/concerts", concertRoute);
 app.use("/api/disponibility/cancert", disponibilityToCancertRoute);
 app.use("/api/profile", ProfileRoute);
 app.use("/api/membre", membreRoute);
+app.use("/api/absence", absenceRoute);
 
 module.exports = app;
