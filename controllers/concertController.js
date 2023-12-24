@@ -1,6 +1,7 @@
 const Concert = require("../models/concertModel");
 const Membre = require("../models/membreModel");
 const Oeuvre = require("../models/oeuvreModel");
+const Saison=require("../models/saisonModel")
 const exceljs = require("exceljs");
 const addQrCodeToRepetition = require("../middlewares/createQrCodeMiddleware");
 
@@ -37,6 +38,15 @@ async function createConcert(req, res) {
     });
 
     const newConcert = await concert.save();
+
+    const nouvelleConcert = newConcert._id;
+    const saisonId = req.body.saisonId;
+    await Saison.findByIdAndUpdate(
+      saisonId,
+      { $push: { concerts: nouvelleConcert } },
+      { new: true }
+  );
+  
     req.cancertId = newConcert._id;
     await addQrCodeToRepetition.addQrCodeToCancert(req, res, () => {});
   } catch (error) {

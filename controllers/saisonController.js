@@ -38,15 +38,11 @@ const fetchArchiverSaison=async(req,res)=>{
 
 const createSaison =(async (req, res) => {
   try {
-    const { nom, dateDebut, dateFin, membres,repetitions,oeuvres,concerts } = req.body
+    const { nom, dateDebut, dateFin} = req.body
     const nouvelleSaison = new Saison({
       nom,
       dateDebut,
       dateFin,
-      membres,
-      repetitions,
-      oeuvres,
-      concerts
     });
     const saisonEnregistree = await nouvelleSaison.save();
     return res.status(201).json({ saison: saisonEnregistree });

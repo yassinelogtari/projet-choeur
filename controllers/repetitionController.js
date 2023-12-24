@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Repetition = require("../models/repetitionModel");
 const Membre = require("../models/membreModel");
+const Saison=require("../models/saisonModel")
 const addQrCodeToRepetition = require("../middlewares/createQrCodeMiddleware");
 const sendNotificationMiddleware = require("../middlewares/sendNotificationMiddleware")
 const { userSocketMap } = require("../utils/socket");
@@ -52,6 +53,16 @@ const createRepetition = async (req, res) => {
       membres:[...membresSoprano,...membresAlto,...membresTenor,...membresBasse]
     })
     await repetition.save()
+    
+    const nouvelleRepitionId = repetition._id;
+    const saisonId = req.body.saisonId;
+
+    await Saison.findByIdAndUpdate(
+        saisonId,
+        { $push: { repetitions: nouvelleRepitionId } },
+        { new: true }
+    );
+
     req.repetitionId = repetition._id;
     await addQrCodeToRepetition.addQrCodeToRepetition(req, res, () => {});
   }
@@ -161,7 +172,6 @@ const listPresenceByPupitre = async (req, res) => {
       return {
         nom: membre.member.nom,
         prenom: membre.member.prenom,
-        presence: membre.presence,
       };
     });
 
