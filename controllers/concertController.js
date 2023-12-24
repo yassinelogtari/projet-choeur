@@ -1,15 +1,20 @@
 const Concert = require("../models/concertModel");
 const Membre = require("../models/membreModel");
 const Oeuvre = require("../models/oeuvreModel");
-
+const Saison=require("../models/saisonModel")
 const exceljs = require("exceljs");
 const addQrCodeToRepetition = require("../middlewares/createQrCodeMiddleware");
 
 async function createConcert(req, res) {
+
   try {
+    const saisonCourante = await Saison.findOne({ saisonCourante: true });
+    const saisonCouranteId = saisonCourante._id;
+
     const titre = req.body.titre;
     const date = req.body.date;
     const lieu = req.body.lieu;
+    const saisonId = req.body.saisonId;
    // const afficheFileName = req.body.afficheFile.filename;
     const afficheFilePath = req.body.afficheFile.path;
     // ...
@@ -36,10 +41,21 @@ async function createConcert(req, res) {
       programme: processedProgramme,
       listeMembres: req.body.listeMembres || [],
     });
+    if (saisonId.toString() !== saisonCouranteId.toString()) {
+      return res.status(400).send({ message: "Invalid season ID. The provided ID does not match the current season." });
+    }
     const newConcert = await concert.save();
+    const nouvelleConcertId = newConcert._id;
+    await Saison.findByIdAndUpdate(
+      saisonCouranteId,
+      { $push: { concerts: nouvelleConcertId } },
+      { new: true }
+    );
+    
     req.cancertId = newConcert._id;
     await addQrCodeToRepetition.addQrCodeToCancert(req, res, () => {});
   } catch (error) {
+    console.log(error)
     res
       .status(500)
       .json({
