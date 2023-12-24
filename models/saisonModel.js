@@ -47,6 +47,10 @@ const saisonSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  archivee: {
+    type: Boolean,
+    default: false 
+  }
 });
 
 const Saison = mongoose.model('Saison', saisonSchema);
