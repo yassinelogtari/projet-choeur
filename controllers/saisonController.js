@@ -36,26 +36,28 @@ const fetchArchiverSaison=async(req,res)=>{
       }
 }
 
-const createSaison =(async (req, res) => {
+const createSaison = async (req, res) => {
   try {
-    const { nom, dateDebut, dateFin, membres,repetitions,oeuvres,concerts } = req.body
+    const { nom, dateDebut, dateFin } = req.body;
+
+    // Mettez à jour la saison courante à false pour toutes les saisons existantes
+    await Saison.updateMany({}, { saisonCourante: false });
+
     const nouvelleSaison = new Saison({
       nom,
       dateDebut,
       dateFin,
-      membres,
-      repetitions,
-      oeuvres,
-      concerts
+      saisonCourante: true, // Marquez la nouvelle saison comme saison courante
     });
+
     const saisonEnregistree = await nouvelleSaison.save();
     return res.status(201).json({ saison: saisonEnregistree });
   } catch (error) {
-
     console.error('Erreur lors de la création de la saison:', error);
     return res.status(500).json({ erreur: 'Erreur lors de la création de la saison' });
   }
-})
+};
+
 
 const getSaisonByid = async (req, res) => {
   try {
