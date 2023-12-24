@@ -53,5 +53,40 @@ export const posts = [
     telephone: "20147183",
     role: "choriste",
     statut: "Inactif"
+  },
+  {
+    _id: "65847a047432fef75c2f670b",
+    nom: "benrjeb",
+    prenom: "kamel",
+    email: "kamel@gmail.com",
+    sexe: "Homme",
+    dateNaissance: "27-06-1969",
+    nationalite: "tunisien",
+    CIN: "14021789",
+    situationPerso: "célebataire",
+    connaissanceMusic: false,
+    activite: false,
+    telephone: "25146789",
+    role: "admin",
+    statut: "Inactif"
+   
+  },
+  {
+    _id:"657c80e32959073c5357181e",
+    nom: "log",
+    prenom: "youss",
+    email: "youssef@gmail.com",
+    sexe: "Homme",
+    dateNaissance: "01-05-2000",
+    nationalite: "tunisien",
+    CIN: "89562314",
+    situationPerso: "célebataire",
+    connaissanceMusic: false,
+    activite: false,
+    telephone: "20147183",
+    role: "choriste",
+    statut: "En congé",
+    pupitre: "alto"
+    
   }
   ];
