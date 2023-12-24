@@ -66,14 +66,22 @@ const validerConge = async (req, res) => {
         if (!conge) {
             return res.status(404).json({ message: 'Congé non trouvé' });
         }
-
+        const membre=await Membre.findOne({_id:conge.membre})
         const updatedMembre = await Membre.findByIdAndUpdate(conge.membre, { statut: "En congé" });
-
+        
         if (updatedMembre) {
             const chefPupitreByUpdatedMemberUsers = await Membre.find({
               role: "chef du pupitre",
               pupitre: updatedMembre.pupitre,
             });
+            const membreSocketId=userSocketMap[updatedMembre._id]
+            if(membreSocketId){
+                req.notificationData={
+                    userId:updatedMembre._id,
+                    notificationMessage:`Votre statut a été changé de "${membre.statut}" en "En congé".`,
+                }
+                sendNotificationMiddleware(req, res, () => {});
+            }
     
             chefPupitreByUpdatedMemberUsers.forEach(async (chefPupitreUser) => {
               const chefPupitreSocketId = userSocketMap[chefPupitreUser._id];
