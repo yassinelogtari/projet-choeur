@@ -24,6 +24,7 @@ const App = () => {
         console.log("Received updated candidates:", allCandidates);
         setCandidates(allCandidates);
       });
+      
 
       return () => {
         // Clean up the socket connection on component unmount

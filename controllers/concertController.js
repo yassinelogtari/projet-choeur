@@ -1,6 +1,7 @@
 const Concert = require("../models/concertModel");
 const Membre = require("../models/membreModel");
 const Oeuvre = require("../models/oeuvreModel");
+
 const exceljs = require("exceljs");
 const addQrCodeToRepetition = require("../middlewares/createQrCodeMiddleware");
 
@@ -35,7 +36,6 @@ async function createConcert(req, res) {
       programme: processedProgramme,
       listeMembres: req.body.listeMembres || [],
     });
-
     const newConcert = await concert.save();
     req.cancertId = newConcert._id;
     await addQrCodeToRepetition.addQrCodeToCancert(req, res, () => {});
