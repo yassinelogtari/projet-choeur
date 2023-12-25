@@ -117,7 +117,7 @@ const addDisponibility = async (req, res) => {
 
 const FetchDisponibleMembers = async (req, res) => {
   const cancertId = req.params.idC;
-
+  const pupitreFilter = req.query.pupitre;
   try {
     const cancert = await Cancert.findById(cancertId).populate({
       path: "listeMembres.membre",
@@ -128,12 +128,19 @@ const FetchDisponibleMembers = async (req, res) => {
       return res.status(404).json({ message: "Concert not found" });
     }
 
-    const availableMembers = cancert.listeMembres
+    let availableMembers = cancert.listeMembres
       .filter(
         (member) =>
           member.disponibility && member.disponibility.isAvailable === true
       )
       .map((member) => member.membre);
+
+   
+    if (pupitreFilter) {
+      availableMembers = availableMembers.filter(
+        (member) => member.pupitre === pupitreFilter
+      );
+    }
 
     res.status(200).json(availableMembers);
   } catch (error) {
@@ -141,6 +148,7 @@ const FetchDisponibleMembers = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 module.exports = {
   addDisponibility,

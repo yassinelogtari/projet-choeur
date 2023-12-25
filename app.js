@@ -21,6 +21,8 @@ const { io } = require("./utils/socket");
 const moment = require("moment");
 const sendNotificationMiddleware = require("./middlewares/sendNotificationMiddleware");
 const { userSocketMap } = require("./utils/socket");
+const absenceRoute = require("./routes/absenceRoute");
+const statisticsRoute = require("./routes/statistiqueRoute");
 
 dotenv.config();
 
@@ -75,9 +77,7 @@ cron.schedule("* 10 * * *", async (req, res) => {
   }
 });
 
-
-
-cron.schedule("07 12 * * *", async (req,res) => {
+cron.schedule("03 17 * * *", async (req, res) => {
   try {
     const now = new Date();
     console.log("Current Date:", now);
@@ -100,22 +100,22 @@ cron.schedule("07 12 * * *", async (req,res) => {
       console.log("No repetitions today. Exiting function.");
       return;
     }
-    
-    repetitions.forEach( async (rehearsal) => {
+
+    repetitions.forEach(async (rehearsal) => {
       try {
         const memberIds = rehearsal.membres.map((member) => member.member);
-    
+
         const members = await User.find({ _id: { $in: memberIds } });
-        console.log(members)
+        console.log(members);
 
         members.forEach(async (member) => {
           const memberSocketId = userSocketMap[member._id];
           if (memberSocketId) {
             req.notificationData = {
               userId: member._id,
-              notificationMessage: `The rehearsal on ${rehearsal.DateRep.toLocaleDateString()} will start at ${rehearsal.HeureDeb.toLocaleTimeString()}.`
+              notificationMessage: `The rehearsal on ${rehearsal.DateRep.toLocaleDateString()} will start at ${rehearsal.HeureDeb.toLocaleTimeString()}.`,
             };
-            console.log(req.notificationData)
+            console.log(req.notificationData);
             await sendNotificationMiddleware(req, res, () => {});
           }
         });
@@ -127,7 +127,6 @@ cron.schedule("07 12 * * *", async (req,res) => {
     console.error("Error in rehearsal start notification task:", error);
   }
 });
-
 
 io.listen(5000);
 const app = express();
@@ -145,5 +144,7 @@ app.use("/api/concerts", concertRoute);
 app.use("/api/disponibility/cancert", disponibilityToCancertRoute);
 app.use("/api/profile", ProfileRoute);
 app.use("/api/membre", membreRoute);
+app.use("/api/absence", absenceRoute);
+app.use("/api/statistics", statisticsRoute);
 
 module.exports = app;
