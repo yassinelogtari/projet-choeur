@@ -4,6 +4,7 @@ const Member = require("../models/membreModel");
 const Concert = require("../models/concertModel");
 const Oeuvre = require("../models/oeuvreModel");
 const Repetition = require("../models/repetitionModel");
+const Saison=require('../models/saisonModel')
 
 const fetchHistory = async (req, res) => {
   const memberId = req.params.id;
@@ -92,11 +93,19 @@ const fetchAbsences = async (req, res) => {
       return res.status(404).json({ error: "Member not found" });
     }
 
+    const saisonCourante = await Saison.findOne({ saisonCourante: true });
+
+    if (!saisonCourante) {
+      return res.status(404).json({ error: "Current season not found" });
+    }
+
     const concerts = await Concert.find({
+      "_id": { $in: saisonCourante.concerts },
       "listeMembres.membre": memberId,
     });
 
     const repetitions = await Repetition.find({
+      "_id": { $in: saisonCourante.repetitions },
       "membres.member": memberId,
     });
 
@@ -105,7 +114,6 @@ const fetchAbsences = async (req, res) => {
       repetitions: [],
     };
 
-  
     for (const concert of concerts) {
       if (concert.listeMembres) {
         const isAbsent = concert.listeMembres.some(
@@ -121,7 +129,6 @@ const fetchAbsences = async (req, res) => {
         }
       }
     }
-
 
     for (const repetition of repetitions) {
       if (repetition.listeMembres) {
@@ -139,7 +146,6 @@ const fetchAbsences = async (req, res) => {
     }
 
     const response = {
-      member_info: member,
       number_of_concert_absences: absences.concerts.length,
       number_of_repetition_absences: absences.repetitions.length,
       absences,
@@ -151,6 +157,9 @@ const fetchAbsences = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+
+
 const fetchHistoriqueStatus = async (req, res) => {
   try {
     const memberId = req.params.id;
