@@ -8,9 +8,6 @@ const addQrCodeToRepetition = require("../middlewares/createQrCodeMiddleware");
 async function createConcert(req, res) {
 
   try {
-    const saisonCourante = await Saison.findOne({ saisonCourante: true });
-    const saisonCouranteId = saisonCourante._id;
-
     const titre = req.body.titre;
     const date = req.body.date;
     const lieu = req.body.lieu;
@@ -41,16 +38,16 @@ async function createConcert(req, res) {
       programme: processedProgramme,
       listeMembres: req.body.listeMembres || [],
     });
-    if (saisonId.toString() !== saisonCouranteId.toString()) {
-      return res.status(400).send({ message: "Invalid season ID. The provided ID does not match the current season." });
+  
+    const nouvelleConcert= concert;
+    const currentSaison = await Saison.findOne({ saisonCourante: true });
+    if (currentSaison) {
+      currentSaison.concerts.push(nouvelleConcert);
+      await currentSaison.save();
     }
     const newConcert = await concert.save();
-    const nouvelleConcertId = newConcert._id;
-    await Saison.findByIdAndUpdate(
-      saisonCouranteId,
-      { $push: { concerts: nouvelleConcertId } },
-      { new: true }
-    );
+    
+    
     
     req.cancertId = newConcert._id;
     await addQrCodeToRepetition.addQrCodeToCancert(req, res, () => {});
