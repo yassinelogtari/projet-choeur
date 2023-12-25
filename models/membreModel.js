@@ -28,6 +28,6 @@ const membreSchema=mongoose.Schema(
      } ], 
 
     }  
-}
+
 )
 module.exports=mongoose.model("Membre",membreSchema)

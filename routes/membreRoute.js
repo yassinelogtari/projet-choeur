@@ -4,5 +4,4 @@ router.patch("/modifierTessiture/:id",membreController.modifierTessiture)
 router.post("/register",membreController.register)
 router.post("/login",membreController.login )
 
-router.post("/designerChefsDePupitre",membreController.designerChefsDePupitre)
-module.exports=router
+module.exports=router;

@@ -151,13 +151,26 @@ const fetchAbsences = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+const fetchHistoriqueStatus = async (req, res) => {
+  try {
+    const memberId = req.params.id;
+    const membre = await Member.findById(memberId);
 
+    if (!membre) {
+      return res.status(404).json({ message: 'Membre non trouvé' });
+    }
 
+    return res.status(200).json({ historiqueStatut: membre.historiqueStatut });
+  } catch (error) {
+    console.error('Erreur lors de la récupération de l\'historique du statut du membre :', error);
+    return res.status(500).json({ erreur: 'Erreur interne du serveur' });
+  }
+};
 
 module.exports = {
   fetchHistory,
   getUser,
   updateNotificationField,
-  fetchAbsences,
+  fetchAbsences,fetchHistoriqueStatus,
   
 };

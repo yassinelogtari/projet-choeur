@@ -130,5 +130,5 @@ const login = async (req, res) => {
 
 
 module.exports = {
-  modifierTessiture,
+  modifierTessiture,register,login,
 };
