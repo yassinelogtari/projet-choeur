@@ -1,12 +1,10 @@
 const router = require("express").Router();
 
-const Saison=require("../controllers/saisonController")
+const saisonController=require("../controllers/saisonController")
 
 
 
-
-router.get("/archive/:date",Saison.fetchArchiverSaison)
-router.post("/createSaison",Saison.createSaison)
-router.get("/getSaison/:id",Saison.getSaisonByid)
-router.put("/updateSaison/:id",Saison.updateSaison)
+router.post('/archiveSeason/:seasonId', saisonController.archiveSeason);
+router.post("/createSaison",saisonController.createSaison)
+router.get("/getSaison/:id",saisonController.getSaisonByid)
 module.exports = router;

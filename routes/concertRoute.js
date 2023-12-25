@@ -53,6 +53,7 @@ router.post('/add-concert', upload.fields([{ name: 'affiche', maxCount: 1 }, { n
 
         await createConcert({
             body: {
+                saisonId:req.body.saisonId,
                 titre: req.body.titre,
                 date: req.body.date,
                 lieu: req.body.lieu,
