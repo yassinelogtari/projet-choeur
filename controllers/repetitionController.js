@@ -26,8 +26,7 @@ else{
 }
 const createRepetition = async (req, res) => {
   try {
-    const saisonCourante = await Saison.findOne({ saisonCourante: true });
-    const saisonCouranteId = saisonCourante._id;
+    
     const {lieu,DateRep,HeureDeb,HeureFin,pourcentages,chefsPupitres}=req.body
 
     const chefsSoprano=await Membre.findOne({_id:chefsPupitres.soprano,role:"chef du pupitre"})
@@ -56,17 +55,13 @@ const createRepetition = async (req, res) => {
     })
     
     
-    const nouvelleRepitionId = repetition._id;
-    const saisonId = req.body.saisonId;
+    const nouvelleRepition= repetition;
 
-    if (saisonId.toString() !== saisonCouranteId.toString()) {
-      return res.status(400).send({ message: "Invalid season ID. The provided ID does not match the current season." });
+    const currentSaison = await Saison.findOne({ saisonCourante: true });
+    if (currentSaison) {
+      currentSaison.repetitions.push(nouvelleRepition);
+      await currentSaison.save();
     }
-    await Saison.findByIdAndUpdate(
-        saisonId,
-        { $push: { repetitions: nouvelleRepitionId } },
-        { new: true }
-    );
     await repetition.save()
 
     req.repetitionId = repetition._id;
