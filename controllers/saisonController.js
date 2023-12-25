@@ -109,5 +109,42 @@ const updateStatus = async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
+const designerChefsDePupitre = async (req, res) => {
+  try {
+    const { pupitre, membre1Id, membre2Id } = req.body;
 
-module.exports={archiveSeason,createSaison,getSaisonByid,updateStatus}
+    const currentSeason = await Saison.findOne({ saisonCourante: true });
+
+    if (!currentSeason) {
+      return res.status(400).json({ error: 'No current season found.' });
+    }
+
+    const membersExistInCurrentSeason = currentSeason.membres.some(
+      memberId => memberId.toString() === membre1Id || memberId.toString() === membre2Id
+    );
+
+    if (!membersExistInCurrentSeason) {
+      return res.status(400).json({ error: 'Specified members do not exist in the current season.' });
+    }
+
+    const existingPupitreLeaders = await Membre.find({ pupitre, role: 'chef du pupitre' });
+
+    if (existingPupitreLeaders.length >= 2) {
+      return res.status(400).json({ error: `There are already two members designated as 'chef du pupitre' for the pupitre ${pupitre}.` });
+    }
+
+    const membersToUpdate = await Membre.find({ _id: { $in: [membre1Id, membre2Id] } });
+
+    for (const member of membersToUpdate) {
+      member.role = 'chef du pupitre';
+      await member.save();
+    }
+
+    res.status(200).json({ message: 'Roles updated successfully.' });
+  } catch (error) {
+    console.error('Error updating roles to "chef de pupitre":', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+module.exports={archiveSeason,createSaison,getSaisonByid,updateStatus,designerChefsDePupitre,}
