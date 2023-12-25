@@ -66,53 +66,55 @@ const validerConge = async (req, res) => {
         if (!conge) {
             return res.status(404).json({ message: 'Congé non trouvé' });
         }
-        const membre=await Membre.findOne({_id:conge.membre})
-        const updatedMembre = await Membre.findByIdAndUpdate(conge.membre, { statut: "En congé" });
-        
-        if (updatedMembre) {
-            const chefPupitreByUpdatedMemberUsers = await Membre.find({
-              role: "chef du pupitre",
-              pupitre: updatedMembre.pupitre,
-            });
-            const membreSocketId=userSocketMap[updatedMembre._id]
-            if(membreSocketId){
-                req.notificationData={
-                    userId:updatedMembre._id,
-                    notificationMessage:`Votre statut a été changé de "${membre.statut}" en "En congé".`,
-                }
-                sendNotificationMiddleware(req, res, () => {});
+
+        const { membre, dateDebut, dateFin } = conge;
+
+        const currentDate = new Date();
+        if (currentDate >= dateDebut && currentDate <= dateFin) {
+            const updatedMembre = await Membre.findByIdAndUpdate(membre, { statut: 'En congé' });
+
+            if (currentDate > dateFin) {
+                const originalMembre = await Membre.findById(membre);
+                await Membre.findByIdAndUpdate(membre, { statut: originalMembre.statut });
             }
-    
-            chefPupitreByUpdatedMemberUsers.forEach(async (chefPupitreUser) => {
-              const chefPupitreSocketId = userSocketMap[chefPupitreUser._id];
-             
-              if (chefPupitreSocketId) {
-                req.notificationData = {
-                  userId: chefPupitreUser._id,
-                  notificationMessage: `${updatedMembre.prenom} ${updatedMembre.nom} a changé son statut "En congé".`,
-                };
-    
-                 sendNotificationMiddleware(req, res, () => {});
-              }
-            });
-          }
+
+            if (updatedMembre) {
+                const chefPupitreByUpdatedMemberUsers = await Membre.find({
+                    role: "chef du pupitre",
+                    pupitre: updatedMembre.pupitre,
+                });
+                const membreSocketId = userSocketMap[updatedMembre._id];
+                if (membreSocketId) {
+                    req.notificationData = {
+                        userId: updatedMembre._id,
+                        notificationMessage: `Votre statut a été changé de "${updatedMembre.statut}" en "En congé".`,
+                    }
+                    sendNotificationMiddleware(req, res, () => { });
+                }
+
+                chefPupitreByUpdatedMemberUsers.forEach(async (chefPupitreUser) => {
+                    const chefPupitreSocketId = userSocketMap[chefPupitreUser._id];
+
+                    if (chefPupitreSocketId) {
+                        req.notificationData = {
+                            userId: chefPupitreUser._id,
+                            notificationMessage: `${updatedMembre.prenom} ${updatedMembre.nom} a changé son statut "En congé".`,
+                        };
+
+                        sendNotificationMiddleware(req, res, () => { });
+                    }
+                });
+            } 
+        }
 
         return res.status(200).json({ message: 'Congé validé avec succès' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
-const personnesANotifierSansConge = async () => {
-    try {
 
-        const membresSansConge = await Membre.find({  statut: { $ne: 'En congé' } }, 'nom prenom');
-        
 
-        return membresSansConge;
-    } catch (error) {
-        throw error;
-    }
-};
+
 
 
 
@@ -122,5 +124,5 @@ const personnesANotifierSansConge = async () => {
 module.exports={
     insertConge,
     validerConge,
-    personnesANotifierSansConge
+
 }

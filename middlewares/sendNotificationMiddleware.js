@@ -3,6 +3,7 @@ const { userSocketMap } = require("../utils/socket");
 const Membre = require("../models/membreModel");
 
 const sendNotificationMiddleware = async (req, res, next) => {
+  console.log(io)
   try {
     const { userId, notificationMessage } = req.notificationData;
 

@@ -1,14 +1,17 @@
 const Concert = require("../models/concertModel");
 const Membre = require("../models/membreModel");
 const Oeuvre = require("../models/oeuvreModel");
+const Saison=require("../models/saisonModel")
 const exceljs = require("exceljs");
 const addQrCodeToRepetition = require("../middlewares/createQrCodeMiddleware");
 
 async function createConcert(req, res) {
+
   try {
     const titre = req.body.titre;
     const date = req.body.date;
     const lieu = req.body.lieu;
+    const saisonId = req.body.saisonId;
    // const afficheFileName = req.body.afficheFile.filename;
     const afficheFilePath = req.body.afficheFile.path;
     // ...
@@ -35,11 +38,21 @@ async function createConcert(req, res) {
       programme: processedProgramme,
       listeMembres: req.body.listeMembres || [],
     });
-
+  
+    const nouvelleConcert= concert;
+    const currentSaison = await Saison.findOne({ saisonCourante: true });
+    if (currentSaison) {
+      currentSaison.concerts.push(nouvelleConcert);
+      await currentSaison.save();
+    }
     const newConcert = await concert.save();
+    
+    
+    
     req.cancertId = newConcert._id;
     await addQrCodeToRepetition.addQrCodeToCancert(req, res, () => {});
   } catch (error) {
+    console.log(error)
     res
       .status(500)
       .json({
@@ -219,34 +232,65 @@ async function getListeParticipantsParPupitre(req, res) {
       });
     }
 }
+
+
 async function updateConcert(req, res) {
+    const concertId = req.params.concertId;
+    const {
+      titre,
+      date,
+      lieu,
+      programme,
+      afficheFile,
+      excelFile,
+      listeMembres,
+    } = req.body;
+  
     try {
-      const concertId = req.params.concertId;
-      const updates = req.body;
+      const concert = await Concert.findById(concertId);
   
-      if (updates.afficheFile) {
-        
-        updates.affiche = updates.afficheFile.filename;
+      if (!concert) {
+        return res.status(404).json({ message: "Concert not found" });
       }
   
-      const updatedConcert = await Concert.findByIdAndUpdate(
-        concertId,
-        { $set: updates }, 
-        { new: true }
-      );
+      // Mettez à jour les champs du concert
+      concert.titre = titre;
+      concert.date = date;
+      concert.lieu = lieu;
+      concert.programme = programme;
+      concert.listeMembres = listeMembres;
   
-      if (!updatedConcert) {
-        return res.status(404).json({ message: 'Concert not found' });
+      // Mettez à jour l'affiche s'il est fourni
+      if (afficheFile) {
+        concert.affiche = afficheFile.path;
       }
   
-      res.json(updatedConcert);
+      // Mettez à jour le fichier Excel s'il est fourni
+      if (excelFile) {
+        const programmeData = await parseExcel(excelFile.path);
+        const processedProgramme = await processProgramme(programmeData);
+        concert.programme = processedProgramme;
+      }
+  
+      const updatedConcert = await concert.save();
+  
+      // Ajoutez le QR code au concert mis à jour
+      req.concertId = updatedConcert._id;
+   
+        // Envoyez la réponse uniquement après l'ajout du QR code
+        res.status(200).json({ message: "Concert updated successfully", concert: updatedConcert });
+     
+  
     } catch (error) {
+      console.error("Error updating concert:", error);
       res.status(500).json({
-        message: 'Error updating concert',
+        message: "Internal server error updating concert",
         error: error.message,
       });
     }
   }
+  
+
   
 
 module.exports = { 

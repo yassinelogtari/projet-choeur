@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Repetition = require("../models/repetitionModel");
 const Membre = require("../models/membreModel");
+const Saison=require("../models/saisonModel")
 const addQrCodeToRepetition = require("../middlewares/createQrCodeMiddleware");
 const sendNotificationMiddleware = require("../middlewares/sendNotificationMiddleware")
 const { userSocketMap } = require("../utils/socket");
@@ -25,6 +26,7 @@ else{
 }
 const createRepetition = async (req, res) => {
   try {
+    
     const {lieu,DateRep,HeureDeb,HeureFin,pourcentages,chefsPupitres}=req.body
 
     const chefsSoprano=await Membre.findOne({_id:chefsPupitres.soprano,role:"chef du pupitre"})
@@ -51,7 +53,17 @@ const createRepetition = async (req, res) => {
       HeureFin,
       membres:[...membresSoprano,...membresAlto,...membresTenor,...membresBasse]
     })
+    
+    
+    const nouvelleRepition= repetition;
+
+    const currentSaison = await Saison.findOne({ saisonCourante: true });
+    if (currentSaison) {
+      currentSaison.repetitions.push(nouvelleRepition);
+      await currentSaison.save();
+    }
     await repetition.save()
+
     req.repetitionId = repetition._id;
     await addQrCodeToRepetition.addQrCodeToRepetition(req, res, () => {});
   }
@@ -161,7 +173,6 @@ const listPresenceByPupitre = async (req, res) => {
       return {
         nom: membre.member.nom,
         prenom: membre.member.prenom,
-        presence: membre.presence,
       };
     });
 

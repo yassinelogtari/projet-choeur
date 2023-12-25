@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-
+const Saison=require("../models/saisonModel")
 const Candidats = require("../models/candidatModel");
 const CandidatsVerif = require("../models/candidatMailVerifModel");
 const sendEmail = require("../utils/sendEmail");
@@ -362,7 +362,14 @@ const confirmParticipationEtDevenirChoriste=async(req,res)=>{
       }
     candidat.confirm = true;
     await candidat.save();
+    const currentSaison = await Saison.findOne({ saisonCourante: true });
+    if (currentSaison) {
+      currentSaison.membres.push(nouveauMembre._id);
+      await currentSaison.save();
+    }
     await nouveauMembre.save()
+
+   
     const corpsEmail=`Bonjour ${candidat.prenom} ${candidat.nom},<br>
     Votre participation a été confirmée.<br>
     Pour accéder à votre compte,voici vos coordonnées.<br>
