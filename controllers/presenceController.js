@@ -4,7 +4,6 @@ const Cancert = require("../models/concertModel");
 
 const presenceSchemaToRepetition = Joi.object({
   idRepetition: Joi.string().required(),
-  idMember: Joi.string().required(),
 });
 
 const markPresenceToRepetition = async (req, res) => {
@@ -14,7 +13,7 @@ const markPresenceToRepetition = async (req, res) => {
     return res.status(400).json({ error: error.details[0].message });
   }
 
-  const { idRepetition, idMember } = req.body;
+  const { idRepetition } = req.body;
 
   try {
     const repetition = await Repetition.findById(idRepetition);
@@ -24,7 +23,7 @@ const markPresenceToRepetition = async (req, res) => {
     }
 
     const member = repetition.membres.find(
-      (m) => m.member.toString() === idMember
+      (m) => m.member.toString() === req.auth.membreId
     );
 
 
@@ -41,7 +40,6 @@ const markPresenceToRepetition = async (req, res) => {
 
 const presenceSchemaToCancert = Joi.object({
   idCancert: Joi.string().required(),
-  idMember: Joi.string().required(),
 });
 
 const markPresenceToCancert = async (req, res) => {
@@ -51,7 +49,7 @@ const markPresenceToCancert = async (req, res) => {
     return res.status(400).json({ error: error.details[0].message });
   }
 
-  const { idCancert, idMember } = req.body;
+  const { idCancert} = req.body;
 
   try {
     const cancert = await Cancert.findById(idCancert);
@@ -62,7 +60,7 @@ const markPresenceToCancert = async (req, res) => {
 
     const member = cancert.listeMembres.find(
      
-      (m) => m.membre.toString() === idMember
+      (m) => m.membre.toString() === req.auth.membreId
     );
 
     member.presence = true;
