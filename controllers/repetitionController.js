@@ -27,7 +27,7 @@ else{
 const createRepetition = async (req, res) => {
   try {
     
-    const {lieu,DateRep,HeureDeb,HeureFin,pourcentages,chefsPupitres}=req.body
+    const {concert,lieu,DateRep,HeureDeb,HeureFin,pourcentages,chefsPupitres}=req.body
 
     const chefsSoprano=await Membre.findOne({_id:chefsPupitres.soprano,role:"chef du pupitre"})
     const chefsAlto=await Membre.findOne({_id:chefsPupitres.alto,role:"chef du pupitre"})
@@ -47,6 +47,7 @@ const createRepetition = async (req, res) => {
     if (pourcentages.tenor > 0 && membresTenor.length != 0) membresTenor.push({ member: chefsPupitres.tenor, role: "chef du pupitre" });
     if (pourcentages.basse > 0 && membresBasse.length != 0) membresBasse.push({ member: chefsPupitres.basse, role: "chef du pupitre" });
     const repetition=new Repetition({
+      concert,
       lieu,
       DateRep,
       HeureDeb,
@@ -88,12 +89,41 @@ const deleteRepetition=async(req,res)=>{
 };
 const getRepetitionById=async(req,res)=>{
   try{
-    const repetition=await Repetition.findOne({_id:req.params.id}).populate("membres.member").exec()
+    const repetition=await Repetition.findOne({_id:req.params.id}).populate({path:"concert",select:"titre"}).populate({path:"membres.member",select:"nom prenom email pupitre role"}).exec()
     if(repetition){
+
+      const choristes={
+        soprano:[],
+        ténor:[],
+        alto:[],
+        basse:[],
+      }
+      
+      repetition.membres.forEach((membre)=>{
+
+        if(membre.member.pupitre==="soprano"){
+          choristes["soprano"].push(membre.member)
+        }
+        else if(membre.member.pupitre==="ténor"){
+          choristes["ténor"].push(membre.member)
+        }
+        else if(membre.member.pupitre==="alto"){
+          choristes["alto"].push(membre.member)
+        }
+        else{
+          choristes["basse"].push(membre.member)
+        }
+      })
       res.status(200).json({
         message:"Répétition trouvée",
-        model:repetition
-        
+        _id:repetition._id,
+        concert:repetition.concert,
+        lieu:repetition.lieu,
+        DateRep:repetition.DateRep,
+        HeureDeb:repetition.HeureDeb,
+        HeureFin:repetition.HeureFin,
+        QrCode:repetition.QrCode,
+        membres:choristes,
       })
     }
     else{
@@ -105,20 +135,55 @@ const getRepetitionById=async(req,res)=>{
     res.status(400).json({error:error.message})
   }
 }
-const getAllRepetition=async(req,res)=>{
-  try{
-    const repetitions=await Repetition.find().populate("membres.member").exec()
-    res.status(200).json({
-      message:"Données extraites avec succés",
-      model:repetitions,
-      
-    })
+const getAllRepetition = async (req, res) => {
+  try {
+    const repetitions = await Repetition.find()
+      .populate({ path: "concert", select: "titre" })
+      .populate({ path: "membres.member", select: "nom prenom email pupitre role" })
+      .exec();
 
+    const formattedRepetitions = repetitions.map((repetition) => {
+      const choristes = {
+        soprano: [],
+        ténor: [],
+        alto: [],
+        basse: [],
+      };
+
+      repetition.membres.forEach((membre) => {
+
+        if (membre.member.pupitre === "soprano") {
+          choristes["soprano"].push(membre.member);
+        } else if (membre.member.pupitre === "ténor") {
+          choristes["ténor"].push(membre.member)
+        } else if (membre.member.pupitre === "alto") {
+          choristes["alto"].push(membre.member)
+        } else {
+          choristes["basse"].push(membre.member)
+        }
+      });
+
+      return {
+        _id:repetition._id,
+        concert: repetition.concert,
+        lieu: repetition.lieu,
+        DateRep: repetition.DateRep,
+        HeureDeb: repetition.HeureDeb,
+        HeureFin: repetition.HeureFin,
+        QrCode: repetition.QrCode,
+        membres: choristes,
+      };
+    });
+
+    res.status(200).json({
+      message: "Données extraites avec succès",
+      model: formattedRepetitions,
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
-  catch(error){
-    res.status(400).json({error:error.message})
-  }
-}
+};
+
 const updateRepetition=async(req,res)=>{
   try{
     const repetition=await Repetition.findOneAndUpdate({_id:req.params.id},req.body,{new:true})

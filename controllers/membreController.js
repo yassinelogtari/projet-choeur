@@ -123,12 +123,60 @@ const login = async (req, res) => {
         res.status(500).json({ error: error.message })
     }
 }
+const getMemberById=async(req,res)=>{
+    try{
+        const membre=await Membre.findOne({_id:req.params.id})
+        if(!membre){
+            return res.status(404).json({message:"Membre non trouvé"})
+        }
+        else{
+            membre.password=undefined
+            res.status(200).json({
+                message:"Membre trouvé",
+                model:membre
+                
+              })
+        }
+    }
+    catch(error){
+        res.status(400).json({error:error.message})
+    }
+}
+const getAllMembers=async(req,res)=>{
+    try {
+        const membres = await Membre.find()
+        membres.forEach((membre) => {
+            membre.password=undefined
+        })
+        res.status(200).json({
+          message: "Données extraites avec succès",
+          model: membres,
+        });
+      } catch (error) {
+        res.status(400).json({ error: error.message });
+      }
+}
+const deleteMember=async(req,res)=>{
+    try{
+        const membre=await Membre.findByIdAndDelete({_id:req.params.id})
+        if(!membre){
+            return res.status(404).json({message:"Membre non trouvé"})
+        }
+        else{
+            res.status(200).json({
+                message:"Membre supprimé avec succés",
+                
+              })
+        }
+    }
+    catch(error){
+        res.status(400).json({error:error.message})
+    }
 
 
-
-
+}
 
 
 module.exports = {
-  modifierTessiture,register,login,
-};
+  modifierTessiture,register,login,getMemberById,getAllMembers,deleteMember
+}
