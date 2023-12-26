@@ -91,7 +91,7 @@ const updateStatus = async (req, res) => {
       
       if (isMemberInSaison2018) {
         membre.statut = "Vétéran";
-      } else {
+      } 
         const totalSeasons = membre.historiqueStatut.length;
 
         if (totalSeasons === 0) {
@@ -99,7 +99,7 @@ const updateStatus = async (req, res) => {
         } else if (totalSeasons === 2) {
           membre.statut = "Sénior"; 
         }
-      }
+      
 
       await membre.save();
     }
