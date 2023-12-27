@@ -69,11 +69,16 @@ const validerConge = async (req, res) => {
 
         const { membre, dateDebut, dateFin } = conge;
 
+
         const currentDate = new Date();
         if (currentDate >= dateDebut && currentDate <= dateFin) {
-            const updatedMembre = await Membre.findByIdAndUpdate(membre, { statut: 'En congé' });
+            const updatedMembre = await Membre.findOneAndUpdate(
+                { _id: membre, statut: { $ne: 'En congé' } }, 
+                { statut: 'En congé' },
+                { new: true }
+            );
 
-            if (currentDate > dateFin) {
+            if (currentDate > dateFin && updatedMembre) {
                 const originalMembre = await Membre.findById(membre);
                 await Membre.findByIdAndUpdate(membre, { statut: originalMembre.statut });
             }
@@ -112,12 +117,6 @@ const validerConge = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-
-
-
-
-
-
 
 
     

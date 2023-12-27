@@ -96,6 +96,8 @@ const updateStatus = async (req, res) => {
 
         if (totalSeasons === 0) {
           membre.statut = "Junior";
+        }else if (totalSeasons === 1) {
+          membre.statut = "Choriste"; 
         } else if (totalSeasons === 2) {
           membre.statut = "Sénior"; 
         }

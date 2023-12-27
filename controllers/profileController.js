@@ -5,6 +5,7 @@ const Concert = require("../models/concertModel");
 const Oeuvre = require("../models/oeuvreModel");
 const Repetition = require("../models/repetitionModel");
 const Saison=require('../models/saisonModel')
+const sendEmail = require("../utils/sendEmail");
 
 const fetchHistory = async (req, res) => {
   const memberId = req.params.id;
@@ -84,19 +85,17 @@ const updateNotificationField = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-const fetchAbsences = async (req, res) => {
-  const memberId = req.params.id;
-
+const fetchAbsences = async (memberId) => {
   try {
     const member = await Member.findById(memberId);
     if (!member) {
-      return res.status(404).json({ error: "Member not found" });
+      return { error: "Member not found" };
     }
 
     const saisonCourante = await Saison.findOne({ saisonCourante: true });
 
     if (!saisonCourante) {
-      return res.status(404).json({ error: "Current season not found" });
+      return { error: "Current season not found" };
     }
 
     const concerts = await Concert.find({
@@ -144,19 +143,19 @@ const fetchAbsences = async (req, res) => {
         }
       }
     }
-
-    const response = {
+    const totalAbsences = absences.concerts.length + absences.repetitions.length;
+    return {
       number_of_concert_absences: absences.concerts.length,
       number_of_repetition_absences: absences.repetitions.length,
+      total_absences: totalAbsences,
       absences,
     };
-
-    res.json(response);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    throw new Error("Internal Server Error");
   }
 };
+
 
 
 
@@ -176,10 +175,114 @@ const fetchHistoriqueStatus = async (req, res) => {
   }
 };
 
+const fetchNominatedMembers = async (req, res) => {
+  const seuilNominations = 6;
+
+  try {
+    const saisonCourante = await Saison.findOne({ saisonCourante: true });
+
+    if (!saisonCourante) {
+      return res.status(404).json({ error: "Current season not found" });
+    }
+
+    const membresSaisonCourante = saisonCourante.membres.map(memberId => memberId.toString());
+
+    const members = await Member.find({
+      _id: { $in: membresSaisonCourante },
+      role: 'choriste' 
+    });
+
+
+    if (!members || members.length === 0) {
+      return res.status(404).json({ error: "Members not found" });
+    }
+
+    const nominatedMembers = [];
+
+    for (const member of members) {
+      const absencesResponse = await fetchAbsences(member._id.toString());
+
+      if (absencesResponse && absencesResponse.total_absences < seuilNominations) {
+        nominatedMembers.push({
+          memberId: member._id,
+          nom: member.nom,
+          prenom: member.prenom,
+          total_absences: absencesResponse.total_absences,
+        });
+        const emailSubject = 'Vous avez été nominé !';
+        const emailText = `Cher ${member.nom}, vous avez été nominé pour votre excellente présence. Félicitations !`;
+        await sendEmail(member.email, emailSubject, emailText);
+      }
+    }
+
+    res.json({ nominatedMembers });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+const fetchEliminatedMembers = async (req, res) => {
+  try {
+    const saisonCourante = await Saison.findOne({ saisonCourante: true });
+
+    if (!saisonCourante) {
+      return res.status(404).json({ error: "Current season not found" });
+    }
+
+    const seuilEliminations = req.query.seuilEliminations || 10;
+
+    const membresSaisonCourante = saisonCourante.membres.map(memberId => memberId.toString());
+
+    const members = await Member.find({
+      _id: { $in: membresSaisonCourante },
+      role: 'choriste' 
+    });
+
+    if (!members || members.length === 0) {
+      return res.status(404).json({ error: "Choristers not found" });
+    }
+
+    const eliminatedMembers = [];
+
+    for (const member of members) {
+      const absencesResponse = await fetchAbsences(member._id.toString());
+
+      if (absencesResponse && absencesResponse.total_absences >= seuilEliminations) {
+        eliminatedMembers.push({
+          memberId: member._id,
+          nom: member.nom,
+          prenom: member.prenom,
+          total_absences: absencesResponse.total_absences,
+        });
+
+        // Supprimer le compte du membre éliminé
+        await Member.findByIdAndRemove(member._id);
+
+        const emailSubject = 'Vous avez été éliminé !';
+        const emailText = `Cher ${member.nom}, vous avez été éliminé en raison d'un dépassement du seuil d'absences. Merci pour votre participation.`;
+        await sendEmail(member.email, emailSubject, emailText);
+      }
+    }
+
+    res.json({ eliminatedMembers });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+
+
+
+
+
+
 module.exports = {
   fetchHistory,
   getUser,
   updateNotificationField,
-  fetchAbsences,fetchHistoriqueStatus,
+  fetchAbsences,fetchHistoriqueStatus,fetchNominatedMembers,fetchEliminatedMembers,
   
 };
