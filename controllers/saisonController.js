@@ -91,15 +91,17 @@ const updateStatus = async (req, res) => {
       
       if (isMemberInSaison2018) {
         membre.statut = "Vétéran";
-      } else {
+      } 
         const totalSeasons = membre.historiqueStatut.length;
 
         if (totalSeasons === 0) {
           membre.statut = "Junior";
+        }else if (totalSeasons === 1) {
+          membre.statut = "Choriste"; 
         } else if (totalSeasons === 2) {
           membre.statut = "Sénior"; 
         }
-      }
+      
 
       await membre.save();
     }
