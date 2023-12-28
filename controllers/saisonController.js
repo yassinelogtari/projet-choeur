@@ -103,7 +103,26 @@ const updateStatus = async (req, res) => {
         }
       
 
-      await membre.save();
+      const updatedMembre = await membre.save();
+      if (updatedMembre) {
+        const chefPupitreByUpdatedMemberUsers = await Membre.find({
+            role: "chef du pupitre",
+            pupitre: updatedMembre.pupitre,
+        });
+        
+        chefPupitreByUpdatedMemberUsers.forEach(async (chefPupitreUser) => {
+            const chefPupitreSocketId = userSocketMap[chefPupitreUser._id];
+
+            if (chefPupitreSocketId) {
+                req.notificationData = {
+                    userId: chefPupitreUser._id,
+                    notificationMessage: `${updatedMembre.prenom} ${updatedMembre.nom} a changé son statut a ${updatedMembre.status}.`,
+                };
+
+                sendNotificationMiddleware(req, res, () => { });
+            }
+        });
+    } 
     }
 
     console.log("Status updated successfully");
@@ -167,7 +186,27 @@ const quitterChoeur = async (req, res) => {
     }
 
     membre.statut = "Inactif";
-    await membre.save();
+    const updatedMembre = await membre.save();
+
+    if (updatedMembre) {
+      const chefPupitreByUpdatedMemberUsers = await Membre.find({
+          role: "chef du pupitre",
+          pupitre: updatedMembre.pupitre,
+      });
+      
+      chefPupitreByUpdatedMemberUsers.forEach(async (chefPupitreUser) => {
+          const chefPupitreSocketId = userSocketMap[chefPupitreUser._id];
+
+          if (chefPupitreSocketId) {
+              req.notificationData = {
+                  userId: chefPupitreUser._id,
+                  notificationMessage: `${updatedMembre.prenom} ${updatedMembre.nom} a changé son statut a Inactif.`,
+              };
+
+              sendNotificationMiddleware(req, res, () => { });
+          }
+      });
+  } 
 
     console.log("Membre a quitté avec succès");
     return res.status(200).json({ message: 'Membre a quitté avec succès' });

@@ -5,7 +5,7 @@ const { fetchAbsences} = require('../controllers/profileController');
 router.get("/liste-des-nomines",profileController.fetchNominatedMembers)
 router.get("/liste-des-elimines",profileController.fetchEliminatedMembers)
 router.get("/history/:id", profileController.fetchHistory);
-router.get("/:nom", profileController.getUser);
+router.get("/getUser/:id", profileController.getUser);
 router.put("/notification/:id", profileController.updateNotificationField);
 router.get('/absences/:id', async (req, res) => {
     const memberId = req.params.id;

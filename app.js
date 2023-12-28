@@ -23,6 +23,7 @@ const sendNotificationMiddleware = require("./middlewares/sendNotificationMiddle
 const { userSocketMap } = require("./utils/socket");
 const absenceRoute = require("./routes/absenceRoute");
 const statisticsRoute = require("./routes/statistiqueRoute");
+const cors = require("cors")
 
 dotenv.config();
 
@@ -128,8 +129,10 @@ cron.schedule("03 17 * * *", async (req, res) => {
   }
 });
 
+
 io.listen(5000);
 const app = express();
+app.use(cors());
 app.use(express.json());
 //app.use(upload.array());
 
