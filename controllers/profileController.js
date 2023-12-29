@@ -176,7 +176,7 @@ const fetchHistoriqueStatus = async (req, res) => {
 };
 
 const fetchNominatedMembers = async (req, res) => {
-  const seuilNominations = 6;
+  
 
   try {
     const saisonCourante = await Saison.findOne({ saisonCourante: true });
@@ -184,7 +184,7 @@ const fetchNominatedMembers = async (req, res) => {
     if (!saisonCourante) {
       return res.status(404).json({ error: "Current season not found" });
     }
-
+    const seuilNominations = saisonCourante.seuilnomination;
     const membresSaisonCourante = saisonCourante.membres.map(memberId => memberId.toString());
 
     const members = await Member.find({
@@ -214,7 +214,8 @@ const fetchNominatedMembers = async (req, res) => {
         await sendEmail(member.email, emailSubject, emailText);
       }
     }
-
+    saisonCourante.nominatedMembers = nominatedMembers;
+    await saisonCourante.save();
     res.json({ nominatedMembers });
   } catch (error) {
     console.error(error);
@@ -230,7 +231,8 @@ const fetchEliminatedMembers = async (req, res) => {
       return res.status(404).json({ error: "Current season not found" });
     }
 
-    const seuilEliminations = req.query.seuilEliminations || 10;
+    const seuilEliminations = saisonCourante.seuilelimination;
+    
 
     const membresSaisonCourante = saisonCourante.membres.map(memberId => memberId.toString());
 
@@ -256,25 +258,47 @@ const fetchEliminatedMembers = async (req, res) => {
           total_absences: absencesResponse.total_absences,
         });
 
-        // Supprimer le compte du membre éliminé
-        await Member.findByIdAndRemove(member._id);
+
 
         const emailSubject = 'Vous avez été éliminé !';
         const emailText = `Cher ${member.nom}, vous avez été éliminé en raison d'un dépassement du seuil d'absences. Merci pour votre participation.`;
         await sendEmail(member.email, emailSubject, emailText);
       }
     }
-
+    saisonCourante.eliminatedMembers = eliminatedMembers;
+    await saisonCourante.save();
     res.json({ eliminatedMembers });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+const eliminateChoristeForReason = async (req, res) => {
+  try {
+    const { memberId } = req.params;
+    const { reason } = req.body;
+
+    const chorister = await Member.findById(memberId);
+
+    if (!chorister || chorister.role !== 'choriste') {
+      return res.status(404).json({ error: 'Chorister not found or not a chorister' });
+    }
+
+    chorister.statut = 'éliminé';
+
+    await chorister.save();
 
 
+    const emailSubject = 'Vous avez été éliminé !';
+    const emailText = `Cher ${chorister.nom}, vous avez été éliminé pour une raison disciplinaire. Merci pour votre participation.`;
+    await sendEmail(chorister.email, emailSubject, emailText);
 
-
+    res.status(200).json({ success: true, message: 'Choriste éliminé pour une raison disciplinaire' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Error eliminating choriste for disciplinary reason' });
+  }
+};
 
 
 
@@ -283,6 +307,6 @@ module.exports = {
   fetchHistory,
   getUser,
   updateNotificationField,
-  fetchAbsences,fetchHistoriqueStatus,fetchNominatedMembers,fetchEliminatedMembers,
+  fetchAbsences,fetchHistoriqueStatus,fetchNominatedMembers,fetchEliminatedMembers,eliminateChoristeForReason
   
 };

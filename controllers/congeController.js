@@ -78,7 +78,7 @@ const validerConge = async (req, res) => {
                 { new: true }
             );
 
-            if (currentDate > dateFin && updatedMembre) {
+            if (currentDate > dateFin) {
                 const originalMembre = await Membre.findById(membre);
                 await Membre.findByIdAndUpdate(membre, { statut: originalMembre.statut });
             }

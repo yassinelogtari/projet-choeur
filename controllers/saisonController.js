@@ -176,6 +176,37 @@ const quitterChoeur = async (req, res) => {
     return res.status(500).json({ error: 'Erreur interne du serveur' });
   }
 };
+const updateSeuilForCurrentSeason = async (seuilType, newSeuilValue) => {
+  try {
+
+    const Saison = require('./chemin-vers-votre-modele/Saison');
+
+    const saisonCourante = await Saison.findOne({ saisonCourante: true });
+
+    if (!saisonCourante) {
+      throw new Error('Saison courante introuvable');
+    }
+
+    if (seuilType === 'nomination') {
+      saisonCourante.seuilnomination = newSeuilValue;
+    } else if (seuilType === 'elimination') {
+      saisonCourante.seuilelimination = newSeuilValue;
+    } else {
+      throw new Error('Type de seuil non valide');
+    }
+
+    await saisonCourante.save();
+
+    console.log(`Seuil de ${seuilType} mis à jour pour la saison courante : ${newSeuilValue}`);
+
+    return { success: true, message: `Seuil de ${seuilType} mis à jour pour la saison courante` };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: 'Erreur lors de la mise à jour du seuil pour la saison courante' };
+  }
+};
+
+
 
 
 module.exports={archiveSeason,createSaison,getSaisonByid,updateStatus,designerChefsDePupitre,quitterChoeur}
