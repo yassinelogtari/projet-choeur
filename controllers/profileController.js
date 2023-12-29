@@ -51,9 +51,9 @@ const fetchHistory = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-  const memberName = req.params.nom;
+  const memberId = req.params.id;
   try {
-    const member = await Member.findOne({ nom: memberName });
+    const member = await Member.findOne({ _id: memberId });
     if (member) {
       res.json(member);
     } else res.status(201).json("member not found in the DB");

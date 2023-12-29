@@ -103,7 +103,7 @@ const validerConge = async (req, res) => {
                     if (chefPupitreSocketId) {
                         req.notificationData = {
                             userId: chefPupitreUser._id,
-                            notificationMessage: `${updatedMembre.prenom} ${updatedMembre.nom} a changé son statut "En congé".`,
+                            notificationMessage: `${updatedMembre.prenom} ${updatedMembre.nom} a changé son statut a "En congé".`,
                         };
 
                         sendNotificationMiddleware(req, res, () => { });
