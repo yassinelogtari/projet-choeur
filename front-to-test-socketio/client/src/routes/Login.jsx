@@ -82,12 +82,12 @@ const Login = () => {
           <h2>Login</h2>
           <input
             type="text"
-            placeholder="username"
+            placeholder="Email"
             onChange={(e) => setEmail(e.target.value)}
           />
           <input
             type="password"
-            placeholder="username"
+            placeholder="password"
             onChange={(e) => setPassword(e.target.value)}
           />
           <button onClick={handleLogin}>Login</button>
