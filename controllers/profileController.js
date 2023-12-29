@@ -287,7 +287,26 @@ const eliminateChoristeForReason = async (req, res) => {
     chorister.statut = 'éliminé';
 
     await chorister.save();
+    chorister.eliminationReason = reason;
 
+    await chorister.save();
+
+    const saisonCourante = await Saison.findOne({ saisonCourante: true });
+
+    if (!saisonCourante) {
+      return res.status(404).json({ error: 'Current season not found' });
+    }
+
+    const eliminatedMember = {
+      memberId: chorister._id,
+      nom: chorister.nom,
+      prenom: chorister.prenom,
+      total_absences: chorister.total_absences,  
+      eliminationReason: reason,
+    };
+
+    saisonCourante.eliminatedMembers.push(eliminatedMember);
+    await saisonCourante.save();
 
     const emailSubject = 'Vous avez été éliminé !';
     const emailText = `Cher ${chorister.nom}, vous avez été éliminé pour une raison disciplinaire. Merci pour votre participation.`;

@@ -215,37 +215,41 @@ const quitterChoeur = async (req, res) => {
     return res.status(500).json({ error: 'Erreur interne du serveur' });
   }
 };
-const updateSeuilForCurrentSeason = async (seuilType, newSeuilValue) => {
+const updateSeuilForCurrentSeason = async (req, res) => {
   try {
+    const { seuilType, newSeuilValue } = req.body;
 
-    const Saison = require('./chemin-vers-votre-modele/Saison');
+
+    if (!seuilType || (seuilType !== 'nomination' && seuilType !== 'elimination')) {
+      return res.status(400).json({ success: false, message: 'Type de seuil non valide' });
+    }
+
 
     const saisonCourante = await Saison.findOne({ saisonCourante: true });
 
     if (!saisonCourante) {
-      throw new Error('Saison courante introuvable');
+      return res.status(404).json({ success: false, message: 'Saison courante introuvable' });
     }
 
     if (seuilType === 'nomination') {
       saisonCourante.seuilnomination = newSeuilValue;
-    } else if (seuilType === 'elimination') {
-      saisonCourante.seuilelimination = newSeuilValue;
     } else {
-      throw new Error('Type de seuil non valide');
+      saisonCourante.seuilelimination = newSeuilValue;
     }
 
     await saisonCourante.save();
 
     console.log(`Seuil de ${seuilType} mis à jour pour la saison courante : ${newSeuilValue}`);
 
-    return { success: true, message: `Seuil de ${seuilType} mis à jour pour la saison courante` };
+    return res.status(200).json({ success: true, message: `Seuil de ${seuilType} mis à jour pour la saison courante` });
   } catch (error) {
     console.error(error);
-    return { success: false, message: 'Erreur lors de la mise à jour du seuil pour la saison courante' };
+    return res.status(500).json({ success: false, message: 'Erreur lors de la mise à jour du seuil pour la saison courante' });
   }
 };
 
 
 
 
-module.exports={archiveSeason,createSaison,getSaisonByid,updateStatus,designerChefsDePupitre,quitterChoeur}
+
+module.exports={archiveSeason,createSaison,getSaisonByid,updateStatus,designerChefsDePupitre,quitterChoeur,updateSeuilForCurrentSeason}

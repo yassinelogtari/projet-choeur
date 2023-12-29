@@ -69,6 +69,7 @@ const saisonSchema = new mongoose.Schema({
       nom: String,
       prenom: String,
       total_absences: Number,
+      eliminationReason: String,
     },
   ],
 
