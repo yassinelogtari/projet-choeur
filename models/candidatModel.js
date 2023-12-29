@@ -24,6 +24,9 @@ const condidatSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    taille:{
+      type:Number,
+    },
     telephone: {
       type: String,
       required: true,
