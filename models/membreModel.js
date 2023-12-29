@@ -5,7 +5,7 @@ const membreSchema=mongoose.Schema(
        prenom:{type:String,required:true},
        email:{type:String,required:true,unique:true},
        password:{type:String,required:true},
-       sexe:{type:String,enum:["Homme","Femme",""],required:function(){return ['choriste'].includes(this.role);}},
+       sexe:{type:String,enum:["Homme","Femme"],required:function(){return ['choriste'].includes(this.role);}},
        dateNaissance:{type:String,required:function(){return ['choriste'].includes(this.role);}},
        nationalite:{type:String,required:function(){return ['choriste'].includes(this.role);}},
        CIN:{type:String,required:function(){return ['choriste'].includes(this.role);}},
@@ -16,8 +16,8 @@ const membreSchema=mongoose.Schema(
        telephone:{type:String,required:function(){return ['choriste'].includes(this.role);}},
        notifications: { type: Array, default: [] },
        role:{type:String,enum:["choriste","manager","chef du pupitre","chef de choeur","admin"],required:true},
-       statut:{type:String,enum:['Inactif',"Junior","Sénior","Vétéran","En congé",""],required:function(){return ['choriste'].includes(this.role);}},
-       pupitre: {type: String,enum: ["soprano", "alto", "ténor", "basse",""],required: function() {return ['choriste','chef du pupitre'].includes(this.role);
+       statut:{type:String,enum:['Inactif',"Junior","Sénior","Vétéran","En congé"],required:function(){return ['choriste'].includes(this.role);}},
+       pupitre: {type: String,enum: ["soprano", "alto", "ténor", "basse"],required: function() {return ['choriste','chef du pupitre'].includes(this.role);
         },
     }  ,historiqueStatut: [
         {
