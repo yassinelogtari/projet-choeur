@@ -105,6 +105,14 @@ const updateStatus = async (req, res) => {
 
       const updatedMembre = await membre.save();
       if (updatedMembre) {
+        const membreSocketId = userSocketMap[updatedMembre._id];
+                if (membreSocketId) {
+                    req.notificationData = {
+                        userId: updatedMembre._id,
+                        notificationMessage: `Votre statut a été changé en ${updatedMembre.statut}.`,
+                    }
+                    sendNotificationMiddleware(req, res, () => { });
+                }
         const chefPupitreByUpdatedMemberUsers = await Membre.find({
             role: "chef du pupitre",
             pupitre: updatedMembre.pupitre,
@@ -116,7 +124,7 @@ const updateStatus = async (req, res) => {
             if (chefPupitreSocketId) {
                 req.notificationData = {
                     userId: chefPupitreUser._id,
-                    notificationMessage: `${updatedMembre.prenom} ${updatedMembre.nom} a changé son statut a ${updatedMembre.status}.`,
+                    notificationMessage: `${updatedMembre.prenom} ${updatedMembre.nom} a changé son statut a ${updatedMembre.statut}.`,
                 };
 
                 sendNotificationMiddleware(req, res, () => { });
