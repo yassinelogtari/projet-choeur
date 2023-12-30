@@ -4,7 +4,7 @@ const Repetition = require("../models/repetitionModel");
 const Membre = require("../models/membreModel");
 const Saison=require("../models/saisonModel")
 const addQrCodeToRepetition = require("../middlewares/createQrCodeMiddleware");
-const sendNotificationMiddleware = require("../middlewares/sendNotificationMiddleware")
+const {sendNotificationMiddleware} = require("../middlewares/sendNotificationMiddleware")
 const { userSocketMap } = require("../utils/socket");
 
 const genererListeMembres=async(pupitre,pourcentage)=>{
