@@ -186,12 +186,14 @@ const rempForm = async (req, res) => {
       prenom,
       sexe,
       CIN,
+      taille,
       telephone,
       nationalite,
       dateNaissance,
       activite,
       connaisanceMusical,
       situationPerso,
+      
     } = req.body;
     const newCondidat = await new Candidats({
       nom,
@@ -199,6 +201,7 @@ const rempForm = async (req, res) => {
       email: condidat.email,
       sexe,
       CIN,
+      taille,
       telephone,
       nationalite,
       dateNaissance,
