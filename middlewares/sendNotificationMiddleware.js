@@ -43,7 +43,7 @@ const sendNotificationMiddleware = async (req, res, next) => {
   }
 };
 
-const sendNotificationMiddlewareSaw = async (req, res, next) => {
+const sendNotificationMiddlewareConge = async (req, res, next) => {
   console.log(io);
   try {
     const { userId, notificationMessage } = req.notificationData;
@@ -84,4 +84,4 @@ const sendNotificationMiddlewareSaw = async (req, res, next) => {
 };
 
 module.exports = {sendNotificationMiddleware,
-  sendNotificationMiddlewareSaw};
+  sendNotificationMiddlewareConge};
