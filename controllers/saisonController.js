@@ -96,12 +96,33 @@ const updateStatus = async (req, res) => {
 
         if (totalSeasons === 0) {
           membre.statut = "Junior";
+        }else if (totalSeasons === 1) {
+          membre.statut = "Choriste"; 
         } else if (totalSeasons === 2) {
           membre.statut = "Sénior"; 
         }
       
 
-      await membre.save();
+      const updatedMembre = await membre.save();
+      if (updatedMembre) {
+        const chefPupitreByUpdatedMemberUsers = await Membre.find({
+            role: "chef du pupitre",
+            pupitre: updatedMembre.pupitre,
+        });
+        
+        chefPupitreByUpdatedMemberUsers.forEach(async (chefPupitreUser) => {
+            const chefPupitreSocketId = userSocketMap[chefPupitreUser._id];
+
+            if (chefPupitreSocketId) {
+                req.notificationData = {
+                    userId: chefPupitreUser._id,
+                    notificationMessage: `${updatedMembre.prenom} ${updatedMembre.nom} a changé son statut a ${updatedMembre.status}.`,
+                };
+
+                sendNotificationMiddleware(req, res, () => { });
+            }
+        });
+    } 
     }
 
     console.log("Status updated successfully");
@@ -165,7 +186,27 @@ const quitterChoeur = async (req, res) => {
     }
 
     membre.statut = "Inactif";
-    await membre.save();
+    const updatedMembre = await membre.save();
+
+    if (updatedMembre) {
+      const chefPupitreByUpdatedMemberUsers = await Membre.find({
+          role: "chef du pupitre",
+          pupitre: updatedMembre.pupitre,
+      });
+      
+      chefPupitreByUpdatedMemberUsers.forEach(async (chefPupitreUser) => {
+          const chefPupitreSocketId = userSocketMap[chefPupitreUser._id];
+
+          if (chefPupitreSocketId) {
+              req.notificationData = {
+                  userId: chefPupitreUser._id,
+                  notificationMessage: `${updatedMembre.prenom} ${updatedMembre.nom} a changé son statut a Inactif.`,
+              };
+
+              sendNotificationMiddleware(req, res, () => { });
+          }
+      });
+  } 
 
     console.log("Membre a quitté avec succès");
     return res.status(200).json({ message: 'Membre a quitté avec succès' });
@@ -174,6 +215,41 @@ const quitterChoeur = async (req, res) => {
     return res.status(500).json({ error: 'Erreur interne du serveur' });
   }
 };
+const updateSeuilForCurrentSeason = async (req, res) => {
+  try {
+    const { seuilType, newSeuilValue } = req.body;
 
 
-module.exports={archiveSeason,createSaison,getSaisonByid,updateStatus,designerChefsDePupitre,quitterChoeur}
+    if (!seuilType || (seuilType !== 'nomination' && seuilType !== 'elimination')) {
+      return res.status(400).json({ success: false, message: 'Type de seuil non valide' });
+    }
+
+
+    const saisonCourante = await Saison.findOne({ saisonCourante: true });
+
+    if (!saisonCourante) {
+      return res.status(404).json({ success: false, message: 'Saison courante introuvable' });
+    }
+
+    if (seuilType === 'nomination') {
+      saisonCourante.seuilnomination = newSeuilValue;
+    } else {
+      saisonCourante.seuilelimination = newSeuilValue;
+    }
+
+    await saisonCourante.save();
+
+    console.log(`Seuil de ${seuilType} mis à jour pour la saison courante : ${newSeuilValue}`);
+
+    return res.status(200).json({ success: true, message: `Seuil de ${seuilType} mis à jour pour la saison courante` });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: 'Erreur lors de la mise à jour du seuil pour la saison courante' });
+  }
+};
+
+
+
+
+
+module.exports={archiveSeason,createSaison,getSaisonByid,updateStatus,designerChefsDePupitre,quitterChoeur,updateSeuilForCurrentSeason}

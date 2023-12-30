@@ -1,5 +1,6 @@
 const Joi = require("joi");
 const Cancert = require("../models/concertModel");
+const Membre = require("../models/membreModel");
 const sendEmail = require("../utils/sendEmail");
 
 const disponibilitySchemaToCancert = Joi.object({
@@ -47,8 +48,8 @@ const addDisponibility = async (req, res) => {
   } else {
     try {
       const cancert = await Cancert.findById(idCancert).populate({
-        path: "programme.oeuvre",
-        model: "Oeuvre",
+        path: "listeMembres.membre",
+        model: "Membre",
       });
 
       if (!cancert) {
@@ -64,9 +65,12 @@ const addDisponibility = async (req, res) => {
       };
 
       const Concert = await cancert.save();
-
+     
+    
       if (Concert && Member.membre.role == "choriste") {
+        
         for (i = 0; i < Concert.listeMembres.length; i++) {
+          console.log(i)
           if (
             Concert.listeMembres[i].membre.role == "chef du pupitre" &&
             Concert.listeMembres[i].membre.pupitre == Member.membre.pupitre
@@ -77,6 +81,7 @@ const addDisponibility = async (req, res) => {
             const formattedTime = new Date(Concert.date)
               .toISOString()
               .slice(11, 16);
+              
 
             await sendEmail(
               Concert.listeMembres[i].membre.email,
