@@ -188,27 +188,15 @@ const deleteMember=async(req,res)=>{
 }
 const updateMember=async(req,res)=>{
     try{
-      const membreVerif=await Membre.findOne({_id:req.params.id})
       const membre=await Membre.findOneAndUpdate({_id:req.params.id},req.body,{new:true})
       if(!membre){
         return res.status(404).json({message:"Membre non trouvé"})
       }
       else{
-        if(membre.role==="choriste" && membreVerif.statut != membre.statut ){
-            const membreSocketId = userSocketMap[membre._id];
-                if (membreSocketId) {
-                    req.notificationData = {
-                        userId: membre._id,
-                        notificationMessage: `Votre statut a été changé en ${membre.statut}.`,
-                    }
-                    sendNotificationMiddleware(req, res, () => { });
-                }
-        }
         membre.password=undefined
         res.status(200).json({
           message:"Membre modifié avec succés",
-          model:membre,
-          
+          model:membre,  
         })
       }
     }
