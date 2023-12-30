@@ -42,7 +42,37 @@ const saisonSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Concert',
     },
+  ],  
+  seuilnomination: {
+    type: Number,
+    default: 3,
+  },nominatedMembers: [
+    { 
+
+      memberId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Membre',
+      },
+      nom: String,
+      prenom: String,
+      total_absences: Number,
+    },
+  ],  seuilelimination: {
+    type: Number,
+    default: 1,
+  },eliminatedMembers: [
+    {
+      memberId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Membre',
+      },
+      nom: String,
+      prenom: String,
+      total_absences: Number,
+      eliminationReason: String,
+    },
   ],
+
   saisonCourante: {
     type: Boolean,
     default: false,
@@ -50,7 +80,7 @@ const saisonSchema = new mongoose.Schema({
   archivee: {
     type: Boolean,
     default: false 
-  }
+  },
 });
 
 const Saison = mongoose.model('Saison', saisonSchema);

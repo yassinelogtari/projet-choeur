@@ -23,6 +23,7 @@ const sendNotificationMiddleware = require("./middlewares/sendNotificationMiddle
 const { userSocketMap } = require("./utils/socket");
 const absenceRoute = require("./routes/absenceRoute");
 const statisticsRoute = require("./routes/statistiqueRoute");
+const placementRoute=require("./routes/placementRoute");
 const cors = require("cors")
 
 dotenv.config();
@@ -149,5 +150,6 @@ app.use("/api/profile", ProfileRoute);
 app.use("/api/membre", membreRoute);
 app.use("/api/absence", absenceRoute);
 app.use("/api/statistics", statisticsRoute);
+app.use("/api/placement", placementRoute);
 
 module.exports = app;

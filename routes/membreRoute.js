@@ -6,5 +6,5 @@ router.post("/login",membreController.login )
 router.get("/getMembreById/:id",membreController.getMemberById )
 router.get("/getAllMembers",membreController.getAllMembers )
 router.delete("/deleteMember/:id",membreController.deleteMember )
-
+router.patch("/updateMember/:id",membreController.updateMember)
 module.exports=router;

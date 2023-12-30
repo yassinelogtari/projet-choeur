@@ -69,7 +69,6 @@ const validerConge = async (req, res) => {
 
         const { membre, dateDebut, dateFin } = conge;
 
-
         const currentDate = new Date();
         if (currentDate >= dateDebut && currentDate <= dateFin) {
             const updatedMembre = await Membre.findOneAndUpdate(
@@ -78,24 +77,25 @@ const validerConge = async (req, res) => {
                 { new: true }
             );
 
-            if (currentDate > dateFin && updatedMembre) {
+            if (currentDate > dateFin) {
                 const originalMembre = await Membre.findById(membre);
                 await Membre.findByIdAndUpdate(membre, { statut: originalMembre.statut });
             }
 
             if (updatedMembre) {
-                const chefPupitreByUpdatedMemberUsers = await Membre.find({
-                    role: "chef du pupitre",
-                    pupitre: updatedMembre.pupitre,
-                });
                 const membreSocketId = userSocketMap[updatedMembre._id];
                 if (membreSocketId) {
                     req.notificationData = {
                         userId: updatedMembre._id,
-                        notificationMessage: `Votre statut a été changé de "${updatedMembre.statut}" en "En congé".`,
+                        notificationMessage: `Votre statut a été changé en "En congé".`,
                     }
                     sendNotificationMiddleware(req, res, () => { });
                 }
+                const chefPupitreByUpdatedMemberUsers = await Membre.find({
+                    role: "chef du pupitre",
+                    pupitre: updatedMembre.pupitre,
+                });
+                
 
                 chefPupitreByUpdatedMemberUsers.forEach(async (chefPupitreUser) => {
                     const chefPupitreSocketId = userSocketMap[chefPupitreUser._id];

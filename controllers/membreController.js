@@ -19,7 +19,7 @@ const modifierTessiture = async (req, res) => {
         { new: true }
       );
 
-      updatedMembre.password = undefined;
+     
       if (updatedMembre) {
         const chefPupitreByUpdatedMemberUsers = await Membre.find({
           role: "chef du pupitre",
@@ -66,20 +66,33 @@ const register = async (req, res) => {
           })
         const hashedPassword=await bcrypt.hash(passAleatoire,10)
         const membre = new Membre({
-            nom:req.body.nom,
-            prenom:req.body.prenom,
+            nom: req.body.nom,
+            prenom: req.body.prenom,
             email: req.body.email,
             password: hashedPassword,
-            role: req.body.role,
+            sexe:null,
+            dateNaissance:null,
+            nationalite: null,
+            CIN: null,
+            taille: null,
+            situationPerso:null,
+            connaissanceMusic: null,
+            activite: null,
+            telephone:null,
+            role:req.body.role,
+            statut: null,
+            pupitre: null
             
         })
+        if(membre.nom==="" || membre.prenom==="" || membre.email==="" || membre.role===""){
+            return res.status(400).json({ message: "Vous devez remplir tous les champs" })
+        }
         if(membre.role==="chef du pupitre"){
-            if(req.body.pupitre){
-                membre.pupitre=req.body.pupitre
+            if(req.body.pupitre === ""){
+                return res.status(400).json({ message: "Vous devez spécifier le pupitre pour le chef du pupitre" })  
             }
             else{
-                return res.status(400).json({ message: "Vous devez spécifier la tessiture pour le chef du pupitre" })
-
+                membre.pupitre=req.body.pupitre
             }  
         }
         const response = await membre.save();
@@ -172,11 +185,27 @@ const deleteMember=async(req,res)=>{
     catch(error){
         res.status(400).json({error:error.message})
     }
-
-
 }
+const updateMember=async(req,res)=>{
+    try{
+      const membre=await Membre.findOneAndUpdate({_id:req.params.id},req.body,{new:true})
+      if(!membre){
+        return res.status(404).json({message:"Membre non trouvé"})
+      }
+      else{
+        membre.password=undefined
+        res.status(200).json({
+          message:"Membre modifié avec succés",
+          model:membre,  
+        })
+      }
+    }
+    catch(error){
+      res.status(400).json({error:error.message})
+    }
+  }
 
 
 module.exports = {
-  modifierTessiture,register,login,getMemberById,getAllMembers,deleteMember
+  modifierTessiture,register,login,getMemberById,getAllMembers,deleteMember,updateMember
 }

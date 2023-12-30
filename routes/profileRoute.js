@@ -19,5 +19,6 @@ router.get('/absences/:id', async (req, res) => {
     }
   });
 router.get("/historique-status/:id",profileController.fetchHistoriqueStatus)
+router.post('/eliminateChoristepour-un-raison/:memberId',profileController.eliminateChoristeForReason);
 
 module.exports = router;
