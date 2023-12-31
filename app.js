@@ -79,7 +79,7 @@ cron.schedule("* 10 * * *", async (req, res) => {
   }
 });
 
-cron.schedule("03 17 * * *", async (req, res) => {
+cron.schedule("09 18 * * *", async (req, res) => {
   try {
     const now = new Date();
     console.log("Current Date:", now);

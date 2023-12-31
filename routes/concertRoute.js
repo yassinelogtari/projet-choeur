@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const concertController=require('../controllers/concertController')
+const middlewareConcert=require("../middlewares/auth")
 const { createConcert, deleteConcert, getConcerts, getConcertById,updateConcert } = require('../controllers/concertController'); 
 
 
@@ -104,7 +105,7 @@ router.get("/get-concerts",getConcerts);
 
 router.get("/:concertId", getConcertById);
 
-router.get('/:concertId/participants',concertController.getListeParticipantsParPupitre)
+router.get('/:concertId/participants',middlewareConcert.loggedMiddleware,middlewareConcert.isAdmin,concertController.getListeParticipantsParPupitre)
 
 
 module.exports = router;
