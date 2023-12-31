@@ -1,9 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const disponibilityToCancertController = require("../controllers/disponibilityToCancertController");
-router.put("/add", disponibilityToCancertController.addDisponibility);
-router.get(
-  "/disponibleMembers/:idC",
-  disponibilityToCancertController.FetchDisponibleMembers
-);
+const authMiddleware = require("../middlewares/auth");
+
+
+
+router.put("/add", authMiddleware.loggedMiddleware, authMiddleware.isChoriste, disponibilityToCancertController.addDisponibility);
+router.get("/disponibleMembers/:idC",authMiddleware.loggedMiddleware, authMiddleware.isAdmin,disponibilityToCancertController.FetchDisponibleMembers);
+
+
 module.exports = router;

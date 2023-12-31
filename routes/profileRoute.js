@@ -1,10 +1,12 @@
 const router = require("express").Router();
 
+const authMiddleware = require("../middlewares/auth");
+
 const profileController = require("../controllers/profileController");
 const { fetchAbsences} = require('../controllers/profileController');
 router.get("/liste-des-nomines",profileController.fetchNominatedMembers)
 router.get("/liste-des-elimines",profileController.fetchEliminatedMembers)
-router.get("/history/:id", profileController.fetchHistory);
+router.get("/history/:id",authMiddleware.loggedMiddleware,authMiddleware.isChoriste,  profileController.fetchHistory);
 router.get("/getUser/:id", profileController.getUser);
 router.put("/notification/:id", profileController.updateNotificationField);
 router.get('/absences/:id', async (req, res) => {
