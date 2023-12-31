@@ -18,7 +18,7 @@ const Navbar = ({ socket }) => {
     const storedTokenValue = String(localStorage.getItem("token"));
 
     if (storedTokenValue) {
-      console.log()
+      console.log();
       setStoredToken(storedTokenValue);
       if (storedToken) {
         fetchUser();
@@ -27,9 +27,7 @@ const Navbar = ({ socket }) => {
   }, [storedToken]);
 
   const fetchUser = async () => {
-   
-      
-      if (storedToken) {
+    if (storedToken) {
       const decodedToken = jwtDecode(storedToken);
       socket.emit("setSocketId", decodedToken.membreId);
       const res = await axios.get(
@@ -98,14 +96,17 @@ const Navbar = ({ socket }) => {
       </div>
       {open && (
         <div className="notifications">
-          {notifications.map((notification) => (
-            <span key={notification.id}>
-              <span className="notificationItem">
-                {notification.notification}
+          {notifications
+            .slice()
+            .reverse()
+            .map((notification) => (
+              <span key={notification.id}>
+                <span className="notificationItem">
+                  {notification.notification}
+                </span>
+                <br />
               </span>
-              <br />
-            </span>
-          ))}
+            ))}
           <button className="nButton" onClick={handleRead}>
             Mark as read
           </button>

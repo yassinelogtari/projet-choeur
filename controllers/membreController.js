@@ -3,7 +3,7 @@ const { userSocketMap } = require("../utils/socket");
 const jwt=require("jsonwebtoken")
 const bcrypt=require("bcrypt")
 const generatePassword = require('generate-password')
-const sendNotificationMiddleware = require("../middlewares/sendNotificationMiddleware")
+const {sendNotificationMiddleware} = require("../middlewares/sendNotificationMiddleware")
 const sendEmail = require("../utils/sendEmail")
 
 const modifierTessiture = async (req, res) => {

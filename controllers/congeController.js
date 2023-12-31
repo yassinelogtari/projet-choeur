@@ -1,7 +1,8 @@
 const Conge=require("../models/congeModel")
 const Membre=require("../models/membreModel")
 const { userSocketMap } = require("../utils/socket");
-const sendNotificationMiddleware = require("../middlewares/sendNotificationMiddleware")
+const {sendNotificationMiddleware} = require("../middlewares/sendNotificationMiddleware")
+const {sendNotificationMiddlewareConge} = require("../middlewares/sendNotificationMiddleware")
 
 const addQrCodeToConcert = require("../middlewares/createQrCodeMiddleware");
 const insertConge=async(req,res)=>{
@@ -83,14 +84,16 @@ const validerConge = async (req, res) => {
             }
 
             if (updatedMembre) {
+                
                 const membreSocketId = userSocketMap[updatedMembre._id];
                 if (membreSocketId) {
                     req.notificationData = {
                         userId: updatedMembre._id,
                         notificationMessage: `Votre statut a été changé en "En congé".`,
                     }
-                    sendNotificationMiddleware(req, res, () => { });
+                    sendNotificationMiddlewareConge(req, res, () => { });
                 }
+                updatedMembre.statut = "En congé"
                 const chefPupitreByUpdatedMemberUsers = await Membre.find({
                     role: "chef du pupitre",
                     pupitre: updatedMembre.pupitre,
