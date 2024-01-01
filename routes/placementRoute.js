@@ -1,7 +1,7 @@
 const router = require("express").Router()
 const placementController = require("../controllers/placementController")
-
-router.post("/placerMembre",placementController.addPlacement)
-router.get("/getPlacementById/:id",placementController.getPlacementById)
-router.patch("/updatePlacement/:id",placementController.updatePlacement)
+const middlewareDate=require("../middlewares/auth")
+router.post("/placerMembre",middlewareDate.loggedMiddleware,middlewareDate.isAdmin,placementController.addPlacement)
+router.get("/getPlacementById/:id",middlewareDate.loggedMiddleware,middlewareDate.isAdmin,placementController.getPlacementById)
+router.patch("/updatePlacement/:id",middlewareDate.loggedMiddleware,middlewareDate.isAdmin,placementController.updatePlacement)
 module.exports=router;
