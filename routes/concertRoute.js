@@ -39,7 +39,7 @@ const upload = multer({
     },
 });
 
-router.post('/add-concert', upload.fields([{ name: 'affiche', maxCount: 1 }, { name: 'excelFilePath', maxCount: 1 }]), async (req, res) => {
+router.post('/add-concert',middlewareConcert.loggedMiddleware,middlewareConcert.isAdmin, upload.fields([{ name: 'affiche', maxCount: 1 }, { name: 'excelFilePath', maxCount: 1 }]), async (req, res) => {
     try {
         // Vérifier si le fichier affiche existe dans la requête
         if (!req.files || !req.files['affiche']) {
@@ -69,7 +69,7 @@ router.post('/add-concert', upload.fields([{ name: 'affiche', maxCount: 1 }, { n
     }
 });
 
-router.patch('/:concertId', upload.fields([{ name: 'affiche', maxCount: 1 }, { name: 'excelFilePath', maxCount: 1 }]), async (req, res) => {
+router.patch('/:concertId',middlewareConcert.loggedMiddleware,middlewareConcert.isAdmin, upload.fields([{ name: 'affiche', maxCount: 1 }, { name: 'excelFilePath', maxCount: 1 }]), async (req, res) => {
     try {
         const afficheFiles = req.files['affiche'];
         const afficheFile = afficheFiles ? afficheFiles[0] : null;
@@ -99,11 +99,11 @@ router.patch('/:concertId', upload.fields([{ name: 'affiche', maxCount: 1 }, { n
 });
 
   
-router.delete("/:concertId", deleteConcert);
+router.delete("/:concertId",middlewareConcert.loggedMiddleware,middlewareConcert.isAdmin, deleteConcert);
 
-router.get("/get-concerts",getConcerts);
+router.get("/get-concerts",middlewareConcert.loggedMiddleware,middlewareConcert.isAdmin,getConcerts);
 
-router.get("/:concertId", getConcertById);
+router.get("/:concertId",middlewareConcert.loggedMiddleware,middlewareConcert.isAdmin, getConcertById);
 
 router.get('/:concertId/participants',middlewareConcert.loggedMiddleware,middlewareConcert.isAdmin,concertController.getListeParticipantsParPupitre)
 
