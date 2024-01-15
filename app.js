@@ -1,5 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 const dotenv = require("dotenv");
 const { Server } = require("socket.io");
 const candidatRoute = require("./routes/candidatRoute");
@@ -136,6 +138,22 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 //app.use(upload.array());
+
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Project de choeur',
+      version: '1.0.0',
+    },
+  },
+  apis: ['./routes/*.js'], // Spécifiez le chemin vers vos fichiers source ici
+};
+
+const swaggerSpec = swaggerJsdoc(options);
+app.use('/api/choeur', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+
 
 app.use("/api/candidats", candidatRoute);
 app.use("/api/auditions", auditionRoute);
