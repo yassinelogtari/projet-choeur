@@ -263,6 +263,7 @@ const fetchEliminatedMembers = async (req, res) => {
         const emailSubject = 'Vous avez été éliminé !';
         const emailText = `Cher ${member.nom}, vous avez été éliminé en raison d'un dépassement du seuil d'absences. Merci pour votre participation.`;
         await sendEmail(member.email, emailSubject, emailText);
+        await Member.deleteOne({ _id: member._id });
       }
     }
     saisonCourante.eliminatedMembers = eliminatedMembers;
@@ -311,7 +312,7 @@ const eliminateChoristeForReason = async (req, res) => {
     const emailSubject = 'Vous avez été éliminé !';
     const emailText = `Cher ${chorister.nom}, vous avez été éliminé pour une raison disciplinaire. Merci pour votre participation.`;
     await sendEmail(chorister.email, emailSubject, emailText);
-
+    await Member.deleteOne({ _id: chorister._id });
     res.status(200).json({ success: true, message: 'Choriste éliminé pour une raison disciplinaire' });
   } catch (error) {
     console.error(error);
