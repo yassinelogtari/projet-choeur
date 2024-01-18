@@ -1,14 +1,13 @@
+const mongoose = require("mongoose");
 const collections = mongoose.connection.collections;
 
-const deleteData = async () => {
-    for (const key in collections) {
-        const collection = collections[key];
-        await collection.deleteMany();
-    }
+const deleteData = async (req, res) => {
+  for (const key in collections) {
+    const collection = collections[key];
+    await collection.deleteMany();
+  }
+  res.status(200).json({ msg: "database reseted succesfully" });
 };
-
-deleteData().then(() => {
-    console.log('All data deleted!');
-    mongoose.connection.close();
-});
-
+module.exports = {
+  deleteData,
+};

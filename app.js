@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const swaggerJsdoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
 const dotenv = require("dotenv");
 const { Server } = require("socket.io");
 const candidatRoute = require("./routes/candidatRoute");
@@ -21,12 +21,15 @@ const ProfileRoute = require("./routes/profileRoute");
 const membreRoute = require("./routes/membreRoute");
 const { io } = require("./utils/socket");
 const moment = require("moment");
-const {sendNotificationMiddleware} = require("./middlewares/sendNotificationMiddleware");
+const {
+  sendNotificationMiddleware,
+} = require("./middlewares/sendNotificationMiddleware");
 const { userSocketMap } = require("./utils/socket");
 const absenceRoute = require("./routes/absenceRoute");
 const statisticsRoute = require("./routes/statistiqueRoute");
-const placementRoute=require("./routes/placementRoute");
-const cors = require("cors")
+const placementRoute = require("./routes/placementRoute");
+const cors = require("cors");
+const resetRoute = require("./routes/resetRoute");
 
 dotenv.config();
 
@@ -132,7 +135,6 @@ cron.schedule("09 18 * * *", async (req, res) => {
   }
 });
 
-
 io.listen(5000);
 const app = express();
 app.use(cors());
@@ -141,19 +143,17 @@ app.use(express.json());
 
 const options = {
   definition: {
-    openapi: '3.0.0',
+    openapi: "3.0.0",
     info: {
-      title: 'Project de choeur',
-      version: '1.0.0',
+      title: "Project de choeur",
+      version: "1.0.0",
     },
   },
-  apis: ['./routes/*.js'],
+  apis: ["./routes/*.js"],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
-app.use('/api/choeur', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-
+app.use("/api/choeur", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/api/candidats", candidatRoute);
 app.use("/api/auditions", auditionRoute);
@@ -169,5 +169,6 @@ app.use("/api/membre", membreRoute);
 app.use("/api/absence", absenceRoute);
 app.use("/api/statistics", statisticsRoute);
 app.use("/api/placement", placementRoute);
+app.use("/api/reset", resetRoute);
 
 module.exports = app;
