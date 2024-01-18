@@ -38,7 +38,7 @@ mongoose
   .then(console.log("connected to mongodb"))
   .catch((err) => console.log(err));
 
-cron.schedule("* 10 * * *", async (req, res) => {
+cron.schedule("03 18 * * *", async (req, res) => {
   try {
     const adminUsers = await User.find({ role: "admin" });
 
