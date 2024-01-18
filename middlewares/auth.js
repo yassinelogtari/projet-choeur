@@ -89,6 +89,19 @@ const isChoriste=(req,res,next)=>{
       res.status(401).json({error:error.message})
     }
   }
+  const AdminManager=(req,res,next)=>{
+    try{
+      if(req.auth.role==="manager" || req.auth.role==="admin"){
+        next()
+      }else{
+        res.status(403).json({error:"Vous ne pouvez pas accéder à cette route"})
+      }
+  
+    }
+    catch(e){
+      res.status(401).json({error:error.message})
+    }
+  }
 
 module.exports={
     loggedMiddleware,
@@ -96,6 +109,7 @@ module.exports={
     isChoriste,
     isManager,
     isChefPupitre,
-    isChefChoeur
+    isChefChoeur,
+    AdminManager,
     
 }

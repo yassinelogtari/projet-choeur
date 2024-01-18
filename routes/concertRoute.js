@@ -39,7 +39,7 @@ const upload = multer({
     },
 });
 
-router.post('/add-concert', upload.fields([{ name: 'affiche', maxCount: 1 }, { name: 'excelFilePath', maxCount: 1 }]), async (req, res) => {
+router.post('/add-concert',middlewareConcert.loggedMiddleware,middlewareConcert.isAdmin, upload.fields([{ name: 'affiche', maxCount: 1 }, { name: 'excelFilePath', maxCount: 1 }]), async (req, res) => {
     try {
         // Vérifier si le fichier affiche existe dans la requête
         if (!req.files || !req.files['affiche']) {
@@ -69,7 +69,7 @@ router.post('/add-concert', upload.fields([{ name: 'affiche', maxCount: 1 }, { n
     }
 });
 
-router.patch('/:concertId', upload.fields([{ name: 'affiche', maxCount: 1 }, { name: 'excelFilePath', maxCount: 1 }]), async (req, res) => {
+router.patch('/:concertId',middlewareConcert.loggedMiddleware,middlewareConcert.isAdmin, upload.fields([{ name: 'affiche', maxCount: 1 }, { name: 'excelFilePath', maxCount: 1 }]), async (req, res) => {
     try {
         const afficheFiles = req.files['affiche'];
         const afficheFile = afficheFiles ? afficheFiles[0] : null;
@@ -99,13 +99,190 @@ router.patch('/:concertId', upload.fields([{ name: 'affiche', maxCount: 1 }, { n
 });
 
   
-router.delete("/:concertId", deleteConcert);
+router.delete("/:concertId",middlewareConcert.loggedMiddleware,middlewareConcert.isAdmin, deleteConcert);
 
-router.get("/get-concerts",getConcerts);
+router.get("/get-concerts",middlewareConcert.loggedMiddleware,middlewareConcert.isAdmin,getConcerts);
 
-router.get("/:concertId", getConcertById);
+router.get("/:concertId",middlewareConcert.loggedMiddleware,middlewareConcert.isAdmin, getConcertById);
 
 router.get('/:concertId/participants',middlewareConcert.loggedMiddleware,middlewareConcert.isAdmin,concertController.getListeParticipantsParPupitre)
+
+
+
+/**
+ * @swagger
+ * tags:
+ *   name: Concert
+ *   description: Concert management
+ * components:
+ *   schemas:
+ *     Concert:
+ *       type: object
+ *       properties:
+ *         titre:
+ *           type: string
+ *         date:
+ *           type: string
+ *           format: date
+ *         lieu:
+ *           type: string
+ *         affiche:
+ *           type: string
+ *         programme:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               oeuvre:
+ *                 type: string
+ *                 format: ObjectId
+ *               theme:
+ *                 type: string
+ *         listeMembres:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               membre:
+ *                 type: string
+ *                 format: ObjectId
+ *               presence:
+ *                 type: boolean
+ *               disponibility:
+ *                 type: object
+ *                 properties:
+ *                   isAvailable:
+ *                     type: boolean
+ *                   reason:
+ *                     type: string
+ *         QrCode:
+ *           type: string
+ *       required:
+ *         - titre
+ *         - date
+ *         - lieu
+ *         - programme
+ *         - listeMembres
+ */
+
+/**
+ * @swagger
+ * /api/concerts/add-concert:
+ *   post:
+ *     summary: Add a new concert
+ *     description: Add a new concert to the database
+ *     tags: [Concert]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             $ref: '#/components/schemas/Concert'
+ *     responses:
+ *       200:
+ *         description: Concert added successfully
+ */
+
+/**
+ * @swagger
+ * /api/concerts/{concertId}:
+ *   patch:
+ *     summary: Update a concert by ID
+ *     description: Update details of a concert in the database by its ID
+ *     tags: [Concert]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: concertId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             $ref: '#/components/schemas/Concert'
+ *     responses:
+ *       200:
+ *         description: Concert updated successfully
+ */
+
+/**
+ * @swagger
+ * /api/concerts/{concertId}:
+ *   delete:
+ *     summary: Delete a concert by ID
+ *     description: Delete a concert from the database by its ID
+ *     tags: [Concert]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: concertId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Concert deleted successfully
+ */
+
+/**
+ * @swagger
+ * /api/concerts/get-concerts:
+ *   get:
+ *     summary: Get all concerts
+ *     description: Retrieve a list of all concerts
+ *     tags: [Concert]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of concerts retrieved successfully
+ */
+
+/**
+ * @swagger
+ * /api/concerts/{concertId}:
+ *   get:
+ *     summary: Get a concert by ID
+ *     description: Retrieve details of a concert by its ID
+ *     tags: [Concert]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: concertId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Concert details retrieved successfully
+ */
+
+/**
+ * @swagger
+ * /api/concerts/{concertId}/participants:
+ *   get:
+ *     summary: Get participants of a concert by ID
+ *     description: Retrieve a list of participants of a concert by its ID
+ *     tags: [Concert]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: concertId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: List of participants retrieved successfully
+ */
+
 
 
 module.exports = router;
