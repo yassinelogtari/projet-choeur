@@ -15,7 +15,7 @@ const Login = () => {
   const [storedToken, setStoredToken] = useState();
   const [decodedToken, setDecodedToken] = useState();
   // Declare socket outside of useEffect
-  const socket = io("http://localhost:5000");
+  const socket = io();
 
   useEffect(() => {
     if (socket) {
