@@ -2,10 +2,11 @@ const mongoose = require("mongoose");
 
 const auditionSchema = new mongoose.Schema(
   {
-    candidat: {
+    candidats: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "candidat",
-    },
+      
+    }],
 
     DateAud: {
       type: Date,
@@ -23,6 +24,35 @@ const auditionSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
+    candidatsInfo: [
+      {
+        extraitChante: {
+          type: String,
+          default: false,
+        },
+        tessiture: {
+          type: String,
+          enum: ["alto", "basse", "soprano","ténor"],
+          default: false,
+        },
+        evaluation: {
+          type: String,
+          enum: ["A", "B", "C"], 
+          default: false,
+        },
+        decision: {
+          type: String,
+          enum: ["Retenu", "Refusé", "En attente"]
+        },
+        remarque: {
+          type: String,
+        }
+      },
+    ],
   },
   { timestamps: true }
 );

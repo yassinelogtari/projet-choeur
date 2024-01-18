@@ -24,6 +24,10 @@ const condidatSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    taille:{
+      type:Number,
+      required:true
+    },
     telephone: {
       type: String,
       required: true,
@@ -48,6 +52,11 @@ const condidatSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    confirm:{
+      type:Boolean,
+      default:false
+    }
+   
     
   },
   

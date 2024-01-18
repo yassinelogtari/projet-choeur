@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
 dotenv.config();
 
-module.exports = async (email, subject, text) => {
+module.exports = async (email, subject, text,attachments=[]) => {
 	try {
 		const transporter = nodemailer.createTransport({
 			host: process.env.HOST,
@@ -13,12 +13,17 @@ module.exports = async (email, subject, text) => {
 			  pass: process.env.pass,
 			},
 		  });
-		await transporter.sendMail({
+		  const mailOptions={
 			from: process.env.USER,
 			to: email,
 			subject: subject,
-			text: text,
-		});
+			html: text,
+
+		  }
+		if(attachments && attachments.length>0){
+			mailOptions.attachments=attachments
+		}
+		await transporter.sendMail(mailOptions)
 		console.log("email sent successfully");
 	} catch (error) {
 		console.log("email not sent!");
