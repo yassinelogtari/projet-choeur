@@ -159,6 +159,9 @@ const options = {
 };
 
 const swaggerSpec = swaggerJsdoc(options);
+app.get("/", (req, res) => {
+    res.json("Hello");
+})
 app.use("/api/choeur", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/api/candidats", candidatRoute);
