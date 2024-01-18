@@ -97,7 +97,7 @@ router.delete('/deleteaudition/:auditionId',authMiddleware.loggedMiddleware,auth
  *             $ref: '#/components/schemas/Audition'
  *     responses:
  *       200:
- *         $ref: '#/components/schemas/AuditionResponse'
+ *         $ref: '#/components/schemas/Audition'
  */
 
 /**
@@ -116,7 +116,7 @@ router.delete('/deleteaudition/:auditionId',authMiddleware.loggedMiddleware,auth
  *             $ref: '#/components/schemas/Audition'
  *     responses:
  *       200:
- *         $ref: '#/components/schemas/AuditionResponse'
+ *         $ref: '#/components/schemas/Audition'
  */
 
 /**
@@ -130,7 +130,7 @@ router.delete('/deleteaudition/:auditionId',authMiddleware.loggedMiddleware,auth
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         $ref: '#/components/schemas/AuditionListResponse'
+ *         $ref: '#/components/schemas/Audition'
  */
 
 /**
@@ -149,7 +149,7 @@ router.delete('/deleteaudition/:auditionId',authMiddleware.loggedMiddleware,auth
  *             $ref: '#/components/schemas/Audition'
  *     responses:
  *       200:
- *         $ref: '#/components/schemas/AuditionResponse'
+ *         $ref: '#/components/schemas/Audition'
  */
 
 /**
@@ -170,7 +170,7 @@ router.delete('/deleteaudition/:auditionId',authMiddleware.loggedMiddleware,auth
  *             $ref: '#/components/schemas/Audition'
  *     responses:
  *       200:
- *         $ref: '#/components/schemas/AuditionResponse'
+ *         $ref: '#/components/schemas/Audition'
  */
 
 /**
@@ -186,7 +186,7 @@ router.delete('/deleteaudition/:auditionId',authMiddleware.loggedMiddleware,auth
  *       - $ref: '#/components/parameters/auditionId'
  *     responses:
  *       200:
- *         $ref: '#/components/schemas/AuditionResponse'
+ *         $ref: '#/components/schemas/Audition'
  */
 
 

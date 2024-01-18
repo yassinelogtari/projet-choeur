@@ -147,7 +147,7 @@ const options = {
       version: '1.0.0',
     },
   },
-  apis: ['./routes/*.js'], // Spécifiez le chemin vers vos fichiers source ici
+  apis: ['./routes/*.js'],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
