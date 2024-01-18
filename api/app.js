@@ -139,7 +139,7 @@ io.listen(5000);
 const app = express();
 app.use(cors(
     {
-        origin: ["https://projet-choeur-api.vercel.app"],
+        origin: ["https://projet-choeur-client.vercel.app"],
         methods: ["POST", "GET","DELETE","PUT","PATCH"],
         credentials: true
     }
@@ -160,7 +160,7 @@ const options = {
 
 const swaggerSpec = swaggerJsdoc(options);
 app.get("/", (req, res) => {
-    res.json("Hello");
+    res.json("Welcome to the Backend");
 })
 app.use("/api/choeur", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
