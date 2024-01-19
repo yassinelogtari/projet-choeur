@@ -159,7 +159,7 @@ router.get('/:repetitionId/presence',middlewareRepetition.loggedMiddleware,middl
  * /api/repetition/{repetitionId}/presence:
  *   get:
  *     summary: Get presence of members in a repetition by ID
- *     description: Retrieve a list of members' presence in a repetition by its ID
+ *     description: Retrieve a list of members' presence in a repetition by its ID with optional filtering by pupitre
  *     tags: [Repetition]
  *     security:
  *       - bearerAuth: []
@@ -169,11 +169,29 @@ router.get('/:repetitionId/presence',middlewareRepetition.loggedMiddleware,middl
  *         required: true
  *         schema:
  *           type: string
+ *       - in: query
+ *         name: pupitre
+ *         schema:
+ *           type: string
+ *         description: Filter presence by pupitre
  *     responses:
  *       200:
  *         description: List of members' presence retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 presenceList:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       nom:
+ *                         type: string
+ *                       prenom:
+ *                         type: string
  */
-
 
 
 module.exports = router;
