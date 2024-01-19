@@ -23,7 +23,6 @@ router.get('/absences/:id',authMiddleware.loggedMiddleware,authMiddleware.isAdmi
 router.get("/historique-status/:id",authMiddleware.loggedMiddleware,authMiddleware.isChoriste,profileController.fetchHistoriqueStatus)
 router.post('/eliminateChoristepour-un-raison/:memberId',authMiddleware.loggedMiddleware,authMiddleware.isAdmin,profileController.eliminateChoristeForReason);
 
-
 /**
  * @swagger
  * /api/profile/liste-des-nomines:
@@ -70,7 +69,12 @@ router.post('/eliminateChoristepour-un-raison/:memberId',authMiddleware.loggedMi
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - $ref: '#/components/parameters/idC'
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the member
  *       - in: query
  *         name: oeuvre
  *         schema:
@@ -93,7 +97,12 @@ router.post('/eliminateChoristepour-un-raison/:memberId',authMiddleware.loggedMi
  *     description: Fetch details of a specific user
  *     tags: [Profile]
  *     parameters:
- *       - $ref: '#/components/parameters/idC'
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the user
  *     responses:
  *       200:
  *         description: User details fetched successfully
@@ -113,7 +122,12 @@ router.post('/eliminateChoristepour-un-raison/:memberId',authMiddleware.loggedMi
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - $ref: '#/components/parameters/idC'
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the user
  *     requestBody:
  *       content:
  *         application/json:
@@ -141,7 +155,12 @@ router.post('/eliminateChoristepour-un-raison/:memberId',authMiddleware.loggedMi
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - $ref: '#/components/parameters/idC'
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the member
  *     responses:
  *       200:
  *         description: Absences fetched successfully
@@ -161,7 +180,12 @@ router.post('/eliminateChoristepour-un-raison/:memberId',authMiddleware.loggedMi
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - $ref: '#/components/parameters/idC'
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the member
  *     responses:
  *       200:
  *         description: Historical status fetched successfully
@@ -169,6 +193,18 @@ router.post('/eliminateChoristepour-un-raison/:memberId',authMiddleware.loggedMi
  *         description: Member not found
  *       500:
  *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     EliminateChoristeForReasonRequest:
+ *       type: object
+ *       properties:
+ *         reason:
+ *           type: string
+ *           description: The reason for eliminating the chorister
  */
 
 /**
@@ -181,7 +217,12 @@ router.post('/eliminateChoristepour-un-raison/:memberId',authMiddleware.loggedMi
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - $ref: '#/components/parameters/memberId'
+ *       - in: path
+ *         name: memberId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the member
  *     requestBody:
  *       content:
  *         application/json:
@@ -195,5 +236,6 @@ router.post('/eliminateChoristepour-un-raison/:memberId',authMiddleware.loggedMi
  *       500:
  *         description: Error eliminating chorister for disciplinary reason
  */
+
 
 module.exports = router;

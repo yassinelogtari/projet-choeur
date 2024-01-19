@@ -8,10 +8,28 @@ router.put("/repetition", authMiddleware.loggedMiddleware,authMiddleware.isChori
 router.put("/manually/cancert", authMiddleware.loggedMiddleware,authMiddleware.isChefPupitre,presenceController.markPresenceToCancertManualy);
 router.put("/manually/repetition", authMiddleware.loggedMiddleware,authMiddleware.isChefPupitre,presenceController.markPresenceToRepetitionManualy);
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Absence:
+ *       type: object
+ *       properties:
+ *         member_id:
+ *           type: string
+ *           description: The ID of the member
+ *         repetition_id:
+ *           type: string
+ *           description: The ID of the repetition
+ *         presence:
+ *           type: boolean
+ *           description: The presence status (true for present, false for absent)
+ */
+
 
 /**
  * @swagger
- * /api/absence/cancert:
+ * /api/presence/cancert:
  *   put:
  *     summary: Mark presence to a concert
  *     description: Mark presence for a member to a specific concert
@@ -36,7 +54,7 @@ router.put("/manually/repetition", authMiddleware.loggedMiddleware,authMiddlewar
 
 /**
  * @swagger
- * /api/absence/repetition:
+ * /api/presence/repetition:
  *   put:
  *     summary: Mark presence to a repetition
  *     description: Mark presence for a member to a specific repetition
@@ -61,7 +79,7 @@ router.put("/manually/repetition", authMiddleware.loggedMiddleware,authMiddlewar
 
 /**
  * @swagger
- * /api/absence/manually/cancert:
+ * /api/presence/manually/cancert:
  *   put:
  *     summary: Manually mark presence to a concert
  *     description: Manually mark presence for a member to a specific concert
@@ -86,7 +104,7 @@ router.put("/manually/repetition", authMiddleware.loggedMiddleware,authMiddlewar
 
 /**
  * @swagger
- * /api/absence/manually/repetition:
+ * /api/presence/manually/repetition:
  *   put:
  *     summary: Manually mark presence to a repetition
  *     description: Manually mark presence for a member to a specific repetition
