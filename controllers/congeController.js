@@ -7,7 +7,7 @@ const {sendNotificationMiddlewareConge} = require("../middlewares/sendNotificati
 const addQrCodeToConcert = require("../middlewares/createQrCodeMiddleware");
 const insertConge=async(req,res)=>{
     try{
-        const memberId=req.params.id
+        const memberId=req.auth.membreId
         const {dateDebut,dateFin,raison}=req.body
         const membre=await Membre.findById(memberId)
         if(!membre){
@@ -46,7 +46,8 @@ const insertConge=async(req,res)=>{
                       await sendNotificationMiddleware(req,res,()=>{}) 
                 }   
             })
-            return res.status(201).json({message:"Congé sauvegardé avec succées"})
+            return res.status(201).json({message:"Congé sauvegardé avec succées",
+        conge:conge})
         }
         }
         else{
