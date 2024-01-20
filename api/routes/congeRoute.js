@@ -2,7 +2,7 @@ const express=require("express")
 const router=express.Router()
 const congeController=require("../controllers/congeController")
 const auth=require("../middlewares/auth")
-router.post("/:id",auth.loggedMiddleware,auth.isChoriste,congeController.insertConge);
+router.post("/",auth.loggedMiddleware,auth.isChoriste,congeController.insertConge);
 router.post('/valider/:id',auth.loggedMiddleware,auth.isAdmin, congeController.validerConge); 
 
 /**
@@ -14,17 +14,13 @@ router.post('/valider/:id',auth.loggedMiddleware,auth.isAdmin, congeController.v
 
 /**
  * @swagger
- * /api/conge/{id}:
+ * /api/conge/:
  *   post:
  *     summary: Declare a congé
  *     description: Declare a congé for a choriste
  *     tags: [Conge]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
  *         schema:
  *           type: string
  *     requestBody:
