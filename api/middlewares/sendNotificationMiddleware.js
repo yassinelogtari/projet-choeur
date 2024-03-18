@@ -8,11 +8,9 @@ const sendNotificationMiddleware = async (req, res, next) => {
     const { userId, notificationMessage } = req.notificationData;
 
     const user = await Membre.findById(userId);
-    console.log(user);
-    console.log(user.statut);
+    
     if (user.statut != "En congé") {
-      console.log(userId);
-      console.log(notificationMessage);
+     
       const userSocketId = userSocketMap[userId];
 
       if (userSocketId) {
