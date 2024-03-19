@@ -11,6 +11,9 @@ import ChefPupitreDashboard from "./pages/ChefPupitreDashboard";
 import ChoristeDashboard from "./pages/ChoristeDashboard";
 import ManagerDashboard from "./pages/ManagerDashboard";
 import AdminAudition from "./pages/admin/AdminAudition";
+import NouvelleSaison from "./pages/admin/saison/NouvelleSaison";
+import SaisonActuelle from "./pages/admin/saison/SaisonActuelle";
+import Archive from "./pages/admin/saison/Archive";
 
 const App = () => {
   return (
@@ -46,6 +49,9 @@ const App = () => {
           />
           <Route exact path="/dashboard/admin/home" element={<AdminDashboard />} />
           <Route  path="/dashboard/admin/audition" element={<AdminAudition />} />
+          <Route  path="/dashboard/admin/nouvelleSaison" element={<NouvelleSaison />} />
+          <Route  path="/dashboard/admin/saisonActuelle" element={<SaisonActuelle />} />
+          <Route  path="/dashboard/admin/archive" element={<Archive />} />
           <Route
             exact
             path="/presence/cancert/:idC"

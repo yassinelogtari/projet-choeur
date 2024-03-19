@@ -3,28 +3,38 @@ const router = express.Router();
 const absenceController = require("../controllers/absenceController");
 const authMiddleware = require("../middlewares/auth");
 
-router.get("/repetition/",authMiddleware.loggedMiddleware,authMiddleware.isAdmin, absenceController.fetchAllRepetitionAbsence);
+router.get(
+  "/repetition/",
+  authMiddleware.loggedMiddleware,
+  authMiddleware.isAdmin,
+  absenceController.fetchAllRepetitionAbsence
+);
 
-router.get("/repetition/pupitre",authMiddleware.loggedMiddleware,authMiddleware.isAdmin, absenceController.fetchAllRepetitionAbsenceByPupitre);
+router.get(
+  "/repetition/pupitre",
+  authMiddleware.loggedMiddleware,
+  authMiddleware.isAdmin,
+  absenceController.fetchAllRepetitionAbsenceByPupitre
+);
 
-router.get("/repetition/choriste",authMiddleware.loggedMiddleware,authMiddleware.isAdmin, absenceController.fetchAllAbsentMembersByChoriste);
-
+router.get(
+  "/repetition/choriste",
+  authMiddleware.loggedMiddleware,
+  authMiddleware.isAdmin,
+  absenceController.fetchAllAbsentMembersByChoriste
+);
 
 /**
  * @swagger
  * /api/absence/repetition:
  *   get:
  *     summary: Fetch all repetition absences
-<<<<<<< HEAD
  *     description: Retrieve a list of all absences for repetition with optional filtering
-=======
  *     description: Retrieve a list of all absences for repetition
->>>>>>> b857dbd4cce43430b3b097398c7cf9a274db7fb3
  *     tags: [Absence]
  *     security:
  *       - bearerAuth: []
  *     parameters:
-<<<<<<< HEAD
  *       - in: query
  *         name: specificDate
  *         schema:
@@ -85,7 +95,6 @@ router.get("/repetition/choriste",authMiddleware.loggedMiddleware,authMiddleware
  *                           type: string
  *                         prenom:
  *                           type: string
-=======
  *       - $ref: '#/components/parameters/specificDate'
  *       - $ref: '#/components/parameters/startDate'
  *       - $ref: '#/components/parameters/endDate'
@@ -93,7 +102,6 @@ router.get("/repetition/choriste",authMiddleware.loggedMiddleware,authMiddleware
  *     responses:
  *       200:
  *         $ref: '#/components/schemas/Absence'
->>>>>>> b857dbd4cce43430b3b097398c7cf9a274db7fb3
  */
 
 /**
@@ -101,7 +109,6 @@ router.get("/repetition/choriste",authMiddleware.loggedMiddleware,authMiddleware
  * /api/absence/repetition/pupitre:
  *   get:
  *     summary: Fetch all repetition absences by pupitre
-<<<<<<< HEAD
  *     description: Retrieve a list of all absences for repetition grouped by pupitre with optional filtering
  *     tags: [Absence]
  *     security:
@@ -179,9 +186,7 @@ router.get("/repetition/choriste",authMiddleware.loggedMiddleware,authMiddleware
  *                               type: string
  */
 
-
-=======
- *     description: Retrieve a list of all absences for repetition grouped by pupitre
+/*     description: Retrieve a list of all absences for repetition grouped by pupitre
  *     tags: [Absence]
  *     security:
  *       - bearerAuth: []
@@ -195,13 +200,11 @@ router.get("/repetition/choriste",authMiddleware.loggedMiddleware,authMiddleware
  *         $ref: '#/components/schemas/Absence'
  */
 
->>>>>>> b857dbd4cce43430b3b097398c7cf9a274db7fb3
 /**
  * @swagger
  * /api/absence/repetition/choriste:
  *   get:
  *     summary: Fetch all absences by choriste
-<<<<<<< HEAD
  *     description: Retrieve a list of all absences for repetition grouped by choriste with optional filtering
  *     tags: [Absence]
  *     security:
@@ -241,7 +244,6 @@ router.get("/repetition/choriste",authMiddleware.loggedMiddleware,authMiddleware
  *                           type: string
  *                         prenom:
  *                           type: string
-=======
  *     description: Retrieve a list of all absences for repetition grouped by choriste
  *     tags: [Absence]
  *     security:
@@ -254,7 +256,6 @@ router.get("/repetition/choriste",authMiddleware.loggedMiddleware,authMiddleware
  *     responses:
  *       200:
  *         $ref: '#/components/schemas/Absence'
->>>>>>> b857dbd4cce43430b3b097398c7cf9a274db7fb3
  */
 
 module.exports = router;
