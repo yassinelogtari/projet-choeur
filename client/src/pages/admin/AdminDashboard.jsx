@@ -8,6 +8,7 @@ import AdminAudition from "./pages/AdminAudition";
 import NouvelleSaison from "./pages/saison/NouvelleSaison";
 import SaisonActuelle from "./pages/saison/SaisonActuelle";
 import Archive from "./pages/saison/Archive";
+import CandidatesList from "./pages/candidates/CandidatesList";
 
 const AdminDashboard = (props) => {
   return (
@@ -27,6 +28,8 @@ const AdminDashboard = (props) => {
             {props.load === "nouvelleSaison" && <NouvelleSaison />}
             {props.load === "saisonActuelle" && <SaisonActuelle />}
             {props.load === "archives" && <Archive />}
+            {props.load === "candidatesList" && <CandidatesList />}
+            
             
           </div>
           <div className="layout-overlay layout-menu-toggle" />
