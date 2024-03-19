@@ -2,7 +2,10 @@ import React from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar1 from "../../components/navbar1/Nabar1";
 import Table from "../../components/table/Table";
+import AddIcon from "@mui/icons-material/Add";
+import { Button } from "@mui/material";
 import "../admin/adminDashboard.css";
+import { NavLink } from "react-router-dom";
 
 const AdminAudition = () => {
   return (
@@ -18,7 +21,21 @@ const AdminAudition = () => {
             </aside>
             <Navbar1 />
             <div className="position-absolute top-50 start-50 translate-middle auditionTable">
-              <p className="auditionTableTitle">Audition List</p>
+              <div className="autionTableTitleAndButton">
+                <p className="auditionTableTitle">Audition List</p>
+
+                <NavLink
+                  to="/dashboard/admin/addAudition"
+                  className="auditionButton"
+                >
+                  <Button type="submit" variant="contained">
+                    <div className="auditionButtonWords">
+                      <AddIcon />
+                      Audition Info
+                    </div>
+                  </Button>
+                </NavLink>
+              </div>
               <Table />
             </div>
           </div>

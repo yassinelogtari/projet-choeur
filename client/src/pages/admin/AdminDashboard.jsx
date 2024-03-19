@@ -1,7 +1,8 @@
 import React from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar1 from "../../components/navbar1/Nabar1";
-import Table from "../../components/table/Table";
+
+
 import "../admin/adminDashboard.css";
 
 const AdminDashboard = () => {
