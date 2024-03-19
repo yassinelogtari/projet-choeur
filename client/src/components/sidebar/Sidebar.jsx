@@ -31,24 +31,9 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-      <li className="menu-item">
-        <a href="javascript:void(0);" className="menu-link menu-toggle">
-          <i className="menu-icon tf-icons bx bx-cube-alt" />
-          <div data-i18n="Misc">Misc</div>
-        </a>
-        <ul className="menu-sub">
-          <li className="menu-item">
-            <a href="pages-misc-error.html" className="menu-link">
-              <div data-i18n="Error">Error</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="pages-misc-under-maintenance.html" className="menu-link">
-              <div data-i18n="Under Maintenance">Under Maintenance</div>
-            </a>
-          </li>
-        </ul>
-      </li>
+  
+
+  
       {/* Components */}
       <li className="menu-header small text-uppercase">
         <span className="menu-header-text">Components</span>
