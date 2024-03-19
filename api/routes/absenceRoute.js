@@ -15,11 +15,16 @@ router.get("/repetition/choriste",authMiddleware.loggedMiddleware,authMiddleware
  * /api/absence/repetition:
  *   get:
  *     summary: Fetch all repetition absences
+<<<<<<< HEAD
  *     description: Retrieve a list of all absences for repetition with optional filtering
+=======
+ *     description: Retrieve a list of all absences for repetition
+>>>>>>> b857dbd4cce43430b3b097398c7cf9a274db7fb3
  *     tags: [Absence]
  *     security:
  *       - bearerAuth: []
  *     parameters:
+<<<<<<< HEAD
  *       - in: query
  *         name: specificDate
  *         schema:
@@ -80,6 +85,15 @@ router.get("/repetition/choriste",authMiddleware.loggedMiddleware,authMiddleware
  *                           type: string
  *                         prenom:
  *                           type: string
+=======
+ *       - $ref: '#/components/parameters/specificDate'
+ *       - $ref: '#/components/parameters/startDate'
+ *       - $ref: '#/components/parameters/endDate'
+ *       - $ref: '#/components/parameters/programme'
+ *     responses:
+ *       200:
+ *         $ref: '#/components/schemas/Absence'
+>>>>>>> b857dbd4cce43430b3b097398c7cf9a274db7fb3
  */
 
 /**
@@ -87,6 +101,7 @@ router.get("/repetition/choriste",authMiddleware.loggedMiddleware,authMiddleware
  * /api/absence/repetition/pupitre:
  *   get:
  *     summary: Fetch all repetition absences by pupitre
+<<<<<<< HEAD
  *     description: Retrieve a list of all absences for repetition grouped by pupitre with optional filtering
  *     tags: [Absence]
  *     security:
@@ -165,11 +180,28 @@ router.get("/repetition/choriste",authMiddleware.loggedMiddleware,authMiddleware
  */
 
 
+=======
+ *     description: Retrieve a list of all absences for repetition grouped by pupitre
+ *     tags: [Absence]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - $ref: '#/components/parameters/specificDate'
+ *       - $ref: '#/components/parameters/startDate'
+ *       - $ref: '#/components/parameters/endDate'
+ *       - $ref: '#/components/parameters/programme'
+ *     responses:
+ *       200:
+ *         $ref: '#/components/schemas/Absence'
+ */
+
+>>>>>>> b857dbd4cce43430b3b097398c7cf9a274db7fb3
 /**
  * @swagger
  * /api/absence/repetition/choriste:
  *   get:
  *     summary: Fetch all absences by choriste
+<<<<<<< HEAD
  *     description: Retrieve a list of all absences for repetition grouped by choriste with optional filtering
  *     tags: [Absence]
  *     security:
@@ -209,6 +241,20 @@ router.get("/repetition/choriste",authMiddleware.loggedMiddleware,authMiddleware
  *                           type: string
  *                         prenom:
  *                           type: string
+=======
+ *     description: Retrieve a list of all absences for repetition grouped by choriste
+ *     tags: [Absence]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - $ref: '#/components/parameters/specificDate'
+ *       - $ref: '#/components/parameters/startDate'
+ *       - $ref: '#/components/parameters/endDate'
+ *       - $ref: '#/components/parameters/programme'
+ *     responses:
+ *       200:
+ *         $ref: '#/components/schemas/Absence'
+>>>>>>> b857dbd4cce43430b3b097398c7cf9a274db7fb3
  */
 
 module.exports = router;
