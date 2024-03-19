@@ -1,6 +1,8 @@
+import Table from "../table/Table";
+
 function Navbar1() {
   return (
-    <div className="layout-page">
+    <div className="layout-page position-relative">
       {/* Navbar */}
       <nav
         className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
@@ -125,6 +127,7 @@ function Navbar1() {
       {/* Content wrapper */}
       <div className="content-wrapper" />
       {/* Content wrapper */}
+      
     </div>
   );
 }
