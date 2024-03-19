@@ -15,7 +15,7 @@ const Login = () => {
   const [storedToken, setStoredToken] = useState();
   const [decodedToken, setDecodedToken] = useState();
   // Declare socket outside of useEffect
-  const socket = io("http://localhost:5000");
+  const socket = io();
 
   useEffect(() => {
     if (socket) {
@@ -39,7 +39,7 @@ const Login = () => {
   const handleLogin = async () => {
     // Check if the entered username matches the "nom" field of any user in posts http://localhost:8000/api/membre/login
 
-    const res = await axios.post("http://localhost:8000/api/membre/login", {
+    const res = await axios.post("https://projet-choeur-api.vercel.app/api/membre/login", {
       email,
       password
     });

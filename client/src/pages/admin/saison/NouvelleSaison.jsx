@@ -1,32 +1,32 @@
 import React from "react";
-import Sidebar from "../components/sidebar/Sidebar";
-import Navbar1 from "../components/navbar1/Nabar1";
+import Sidebar from "../../../components/sidebar/Sidebar";
+import Navbar1 from "../../../components/navbar1/Nabar1";
+import "../../admin/adminDashboard.css";
+import FormSaison from "../../../components/formSaison/FormSaison";
 
-const AdminDashboard = () => {
+
+const NouvelleSaison = () => {
   return (
     <div>
       <div>
-        {/* Layout wrapper */}
         <div className="layout-wrapper layout-content-navbar">
           <div className="layout-container">
-            {/* Menu */}
             <aside
               id="layout-menu"
               className="layout-menu menu-vertical menu bg-menu-theme"
             >
-              <div className="menu-inner-shadow" />
               <Sidebar />
             </aside>
             <Navbar1 />
-            {/* / Layout page */}
+            <div className="position-absolute top-50 start-50 translate-middle ">
+              <FormSaison/>
+            </div>
           </div>
-          {/* Overlay */}
           <div className="layout-overlay layout-menu-toggle" />
         </div>
-        {/* / Layout wrapper */}
       </div>
     </div>
   );
 };
 
-export default AdminDashboard;
+export default NouvelleSaison;

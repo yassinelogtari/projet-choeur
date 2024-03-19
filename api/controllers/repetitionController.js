@@ -230,8 +230,9 @@ const listPresenceByPupitre = async (req, res) => {
     const { pupitre } = req.query;
 
     const repetition = await Repetition.findById(repetitionId).populate('membres.member');
+    
+    const membresPupitre = repetition.membres.filter((membre) => membre.member && membre.member.role === 'choriste' && membre.member.pupitre === pupitre);
 
-    const membresPupitre = repetition.membres.filter((membre) => membre.member.role === 'choriste' && membre.member.pupitre === pupitre);
 
   
     const presenceList = membresPupitre.map((membre) => {

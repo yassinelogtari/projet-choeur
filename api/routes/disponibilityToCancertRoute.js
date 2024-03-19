@@ -10,7 +10,25 @@ router.get("/disponibleMembers/:idC",authMiddleware.loggedMiddleware, authMiddle
 
 /**
  * @swagger
- * /api/dispo-to-concert/add:
+ * components:
+ *   schemas:
+ *     DisponibilityToConcert:
+ *       type: object
+ *       properties:
+ *         memberId:
+ *           type: string
+ *           description: The ID of the member
+ *         concertId:
+ *           type: string
+ *           description: The ID of the concert
+ *         availability:
+ *           type: boolean
+ *           description: The availability status (true for available, false for not available)
+ */
+
+/**
+ * @swagger
+ * /api/disponibility/cancert/add:
  *   put:
  *     summary: Add disponibility to a concert
  *     description: Add disponibility information for a member to a specific concert
@@ -35,7 +53,7 @@ router.get("/disponibleMembers/:idC",authMiddleware.loggedMiddleware, authMiddle
 
 /**
  * @swagger
- * /api/dispo-to-concert/disponibleMembers/{idC}:
+ * /api/disponibility/cancert/disponibleMembers/{idC}:
  *   get:
  *     summary: Fetch available members for a concert
  *     description: Retrieve a list of members who are available for a specific concert
@@ -43,7 +61,12 @@ router.get("/disponibleMembers/:idC",authMiddleware.loggedMiddleware, authMiddle
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - $ref: '#/components/parameters/idC'
+ *       - in: path
+ *         name: idC
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the concert
  *       - in: query
  *         name: pupitre
  *         schema:
