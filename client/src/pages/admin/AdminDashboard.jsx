@@ -4,8 +4,13 @@ import Navbar1 from "../../components/navbar1/Nabar1";
 
 
 import "../admin/adminDashboard.css";
+import HomePage from "./pages/HomePage";
+import AdminAudition from "./pages/AdminAudition";
+import NouvelleSaison from "./pages/saison/NouvelleSaison";
+import SaisonActuelle from "./pages/saison/SaisonActuelle";
+import Archive from "./pages/saison/Archive";
 
-const AdminDashboard = () => {
+const AdminDashboard = (props) => {
   return (
     <div>
       <div>
@@ -18,9 +23,12 @@ const AdminDashboard = () => {
               <Sidebar />
             </aside>
             <Navbar1 />
-            <div className="position-absolute top-50 start-50 translate-middle auditionTable">
-              <p className="auditionTableTitle">Home</p>
-            </div>
+            {props.load === "home" && <HomePage />}
+            {props.load === "adminAudition" && <AdminAudition />}
+            {props.load === "nouvelleSaison" && <NouvelleSaison />}
+            {props.load === "saisonActuelle" && <SaisonActuelle />}
+            {props.load === "archives" && <Archive />}
+            
           </div>
           <div className="layout-overlay layout-menu-toggle" />
         </div>

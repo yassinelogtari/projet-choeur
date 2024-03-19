@@ -4,7 +4,6 @@ const resetController = require("../controllers/resetController");
 
 router.delete("/", resetController.deleteData);
 
-<<<<<<< HEAD
 /**
  * @swagger
 
@@ -21,6 +20,4 @@ router.delete("/", resetController.deleteData);
  *               msg: database reset successfully
  */
 
-=======
->>>>>>> b857dbd4cce43430b3b097398c7cf9a274db7fb3
 module.exports = router;

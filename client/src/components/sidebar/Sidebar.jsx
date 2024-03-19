@@ -34,148 +34,38 @@ function Sidebar() {
   
 
   
-      {/* Components */}
+      {/* Saisons */}
       <li className="menu-header small text-uppercase">
-        <span className="menu-header-text">Components</span>
+        <span className="menu-header-text">Saisons</span>
       </li>
-      {/* Cards */}
+     
+      <NavLink to="/dashboard/admin/nouvelleSaison">
       <li className="menu-item">
-        <a href="cards-basic.html" className="menu-link">
-          <i className="menu-icon tf-icons bx bx-collection" />
-          <div data-i18n="Basic">Cards</div>
+      <a href="javascript:void(0)" className="menu-link menu-toggle">
+          <i className="menu-icon tf-icons bx bx-box" />
+          <div data-i18n="User interface">Nouvelle Saison</div>
         </a>
       </li>
-      {/* User interface */}
+      </NavLink>
+
+      <NavLink to="/dashboard/admin/saisonActuelle">
       <li className="menu-item">
         <a href="javascript:void(0)" className="menu-link menu-toggle">
           <i className="menu-icon tf-icons bx bx-box" />
-          <div data-i18n="User interface">User interface</div>
+          <div data-i18n="User interface">Saison Actuelle</div>
         </a>
-        <ul className="menu-sub">
-          <li className="menu-item">
-            <a href="ui-accordion.html" className="menu-link">
-              <div data-i18n="Accordion">Accordion</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="ui-alerts.html" className="menu-link">
-              <div data-i18n="Alerts">Alerts</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="ui-badges.html" className="menu-link">
-              <div data-i18n="Badges">Badges</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="ui-buttons.html" className="menu-link">
-              <div data-i18n="Buttons">Buttons</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="ui-carousel.html" className="menu-link">
-              <div data-i18n="Carousel">Carousel</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="ui-collapse.html" className="menu-link">
-              <div data-i18n="Collapse">Collapse</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="ui-dropdowns.html" className="menu-link">
-              <div data-i18n="Dropdowns">Dropdowns</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="ui-footer.html" className="menu-link">
-              <div data-i18n="Footer">Footer</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="ui-list-groups.html" className="menu-link">
-              <div data-i18n="List Groups">List groups</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="ui-modals.html" className="menu-link">
-              <div data-i18n="Modals">Modals</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="ui-navbar.html" className="menu-link">
-              <div data-i18n="Navbar">Navbar</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="ui-offcanvas.html" className="menu-link">
-              <div data-i18n="Offcanvas">Offcanvas</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="ui-pagination-breadcrumbs.html" className="menu-link">
-              <div data-i18n="Pagination & Breadcrumbs">
-                Pagination &amp; Breadcrumbs
-              </div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="ui-progress.html" className="menu-link">
-              <div data-i18n="Progress">Progress</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="ui-spinners.html" className="menu-link">
-              <div data-i18n="Spinners">Spinners</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="ui-tabs-pills.html" className="menu-link">
-              <div data-i18n="Tabs & Pills">Tabs &amp; Pills</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="ui-toasts.html" className="menu-link">
-              <div data-i18n="Toasts">Toasts</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="ui-tooltips-popovers.html" className="menu-link">
-              <div data-i18n="Tooltips & Popovers">Tooltips &amp; popovers</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="ui-typography.html" className="menu-link">
-              <div data-i18n="Typography">Typography</div>
-            </a>
-          </li>
-        </ul>
       </li>
-      {/* Extended components */}
+      </NavLink>
+
+      <NavLink to="/dashboard/admin/archive">
       <li className="menu-item">
         <a href="javascript:void(0)" className="menu-link menu-toggle">
           <i className="menu-icon tf-icons bx bx-copy" />
-          <div data-i18n="Extended UI">Extended UI</div>
-        </a>
-        <ul className="menu-sub">
-          <li className="menu-item">
-            <a href="extended-ui-perfect-scrollbar.html" className="menu-link">
-              <div data-i18n="Perfect Scrollbar">Perfect scrollbar</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="extended-ui-text-divider.html" className="menu-link">
-              <div data-i18n="Text Divider">Text Divider</div>
-            </a>
-          </li>
-        </ul>
-      </li>
-      <li className="menu-item">
-        <a href="icons-boxicons.html" className="menu-link">
-          <i className="menu-icon tf-icons bx bx-crown" />
-          <div data-i18n="Boxicons">Boxicons</div>
+          <div data-i18n="Extended UI">Archives</div>
         </a>
       </li>
+      </NavLink>
+      
       {/* Forms & Tables */}
       <li className="menu-header small text-uppercase">
         <span className="menu-header-text">Forms &amp; Tables</span>
