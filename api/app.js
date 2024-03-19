@@ -160,7 +160,7 @@ const options = {
 
 const swaggerSpec = swaggerJsdoc(options);
 app.get("/", (req, res) => {
-    res.json("Welcome to the Backend");
+    res.json("Hello");
 })
 app.use("/api/choeur", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
