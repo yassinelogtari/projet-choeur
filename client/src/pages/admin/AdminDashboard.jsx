@@ -1,7 +1,7 @@
 import React from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar1 from "../../components/navbar1/Nabar1";
-import Table from "../../components/table/Table";
+
 import "../admin/adminDashboard.css";
 import HomePage from "./pages/HomePage";
 import AdminAudition from "./pages/AdminAudition";
@@ -9,6 +9,7 @@ import NouvelleSaison from "./pages/saison/NouvelleSaison";
 import SaisonActuelle from "./pages/saison/SaisonActuelle";
 import Archive from "./pages/saison/Archive";
 import CandidatesList from "./pages/candidates/CandidatesList";
+import AdminAuditionInfo from "../admin/pages/AdminAddAuditionInfo";
 
 const AdminDashboard = (props) => {
   return (
@@ -27,6 +28,7 @@ const AdminDashboard = (props) => {
             {props.load === "adminAudition" && <AdminAudition />}
             {props.load === "nouvelleSaison" && <NouvelleSaison />}
             {props.load === "saisonActuelle" && <SaisonActuelle />}
+            {props.load === "auditionAddInfo" && <AdminAuditionInfo />}
             {props.load === "archives" && <Archive />}
             {props.load === "candidatesList" && <CandidatesList />}
             

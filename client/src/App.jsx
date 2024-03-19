@@ -16,7 +16,6 @@ import ChefPupitreDashboard from "./pages/ChefPupitreDashboard";
 import ChoristeDashboard from "./pages/ChoristeDashboard";
 import ManagerDashboard from "./pages/ManagerDashboard";
 
-
 const App = () => {
   return (
     <Router>
@@ -49,7 +48,10 @@ const App = () => {
             path="/dashboard/chef-de-pupitre"
             element={<ChefPupitreDashboard />}
           />
-          <Route path="/dashboard/admin" element={<Navigate to="/dashboard/admin/home" />} />
+          <Route
+            path="/dashboard/admin"
+            element={<Navigate to="/dashboard/admin/home" />}
+          />
           <Route
             exact
             path="/dashboard/admin/home"
@@ -58,6 +60,10 @@ const App = () => {
           <Route
             path="/dashboard/admin/audition"
             element={<AdminDashboard load="adminAudition" />}
+          />
+          <Route
+            path="/dashboard/admin/archive"
+            element={<AdminDashboard load="archives" />}
           />
           <Route
             path="/dashboard/admin/nouvelleSaison"
@@ -72,10 +78,14 @@ const App = () => {
             element={<AdminDashboard load="archives" />}
           />
           <Route
+            path="/dashboard/admin/addAudition"
+            element={<AdminDashboard load="auditionAddInfo" />}
+          />
+          <Route
             path="/dashboard/admin/Candidature/list"
             element={<AdminDashboard load="candidatesList" />}
           />
-          
+
           <Route
             exact
             path="/presence/cancert/:idC"
