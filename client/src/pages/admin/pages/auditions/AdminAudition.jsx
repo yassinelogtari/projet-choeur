@@ -1,10 +1,11 @@
 import React from "react";
-import Table from "../../../components/table/Table";
+import Table from "../../../../components/table/Table";
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { NavLink } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import "./adminAudition.css"
 const AdminAudition = () => {
   return (
     <div className="position-absolute top-50 start-50 translate-middle auditionTable">

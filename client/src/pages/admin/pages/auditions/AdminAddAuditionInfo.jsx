@@ -9,8 +9,8 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-
-const AdminAudition = () => {
+import "./adminAddAuditionInfo.css";
+const AdminAdAuditionInfo = () => {
   const [Evaluation, setEvaluation] = useState("");
 
   const handleChange = (event) => {
@@ -72,7 +72,6 @@ const AdminAudition = () => {
                   </Select>
                 </FormControl>
 
-
                 <FormControl className="auditionField selectEvaluation">
                   <InputLabel id="demo-simple-select-label">
                     Evaluation
@@ -90,7 +89,7 @@ const AdminAudition = () => {
                     <MenuItem>C</MenuItem>
                   </Select>
                 </FormControl>
-                
+
                 <FormControl className="auditionField selectDecision">
                   <InputLabel id="demo-simple-select-label">
                     Decision
@@ -134,4 +133,4 @@ const AdminAudition = () => {
   );
 };
 
-export default AdminAudition;
+export default AdminAdAuditionInfo;

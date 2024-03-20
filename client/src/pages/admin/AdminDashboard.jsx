@@ -4,12 +4,12 @@ import Navbar1 from "../../components/navbar1/Nabar1";
 
 import "../admin/adminDashboard.css";
 import HomePage from "./pages/HomePage";
-import AdminAudition from "./pages/AdminAudition";
+import AdminAudition from "./pages/auditions/AdminAudition";
 import NouvelleSaison from "./pages/saison/NouvelleSaison";
 import SaisonActuelle from "./pages/saison/SaisonActuelle";
 import Archive from "./pages/saison/Archive";
 import CandidatesList from "./pages/candidates/CandidatesList";
-import AdminAuditionInfo from "../admin/pages/AdminAddAuditionInfo";
+import AdminAuditionInfo from "../admin/pages/auditions/AdminAddAuditionInfo";
 
 const AdminDashboard = (props) => {
   return (
