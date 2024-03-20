@@ -10,10 +10,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import ChefPupitreDashboard from "./pages/ChefPupitreDashboard";
 import ChoristeDashboard from "./pages/ChoristeDashboard";
 import ManagerDashboard from "./pages/ManagerDashboard";
-import AdminAudition from "./pages/admin/pages/AdminAudition";
-import NouvelleSaison from "./pages/admin/pages/saison/NouvelleSaison";
-import SaisonActuelle from "./pages/admin/pages/saison/SaisonActuelle";
-import Archive from "./pages/admin/pages/saison/Archive";
+import Concert from "./pages/concert/Concert";
 
 const App = () => {
   return (
@@ -47,11 +44,12 @@ const App = () => {
             path="/dashboard/chef-de-pupitre"
             element={<ChefPupitreDashboard />}
           />
-          <Route exact path="/dashboard/admin/home" element={<AdminDashboard load="home" />} />
-          <Route  path="/dashboard/admin/audition" element={<AdminDashboard load="adminAudition"  />} />
-          <Route  path="/dashboard/admin/nouvelleSaison" element={<AdminDashboard load="nouvelleSaison"  />} />
-          <Route  path="/dashboard/admin/saisonActuelle" element={<AdminDashboard load="saisonActuelle"  />} />
-          <Route  path="/dashboard/admin/archive" element={<AdminDashboard load="archives"  />} />
+          <Route
+            exact
+            path="/dashboard/admin/home"
+            element={<AdminDashboard load="home" />}
+          />
+
           <Route
             exact
             path="/presence/cancert/:idC"
@@ -62,6 +60,7 @@ const App = () => {
             path="/presence/repetition/:idR"
             element={<PresenceRepetition />}
           />
+          <Route exact path="/concert" element={<Concert />} />
         </Routes>
       </>
     </Router>

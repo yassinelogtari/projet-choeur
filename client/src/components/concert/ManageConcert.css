@@ -1,0 +1,43 @@
+.table-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    /* Adjust as needed */
+}
+
+.concert-table {
+    border-collapse: collapse;
+    width: 80%;
+    /* Adjust as needed */
+}
+
+.concert-table th,
+.concert-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.concert-table th {
+    background-color: #f2f2f2;
+}
+
+.concert-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.concert-table tr:hover {
+    background-color: #ddd;
+}
+
+.delete{
+    border:none;
+   background-color: transparent;
+}
+
+.Fa{
+    color:#333399;
+}
+.Md{
+    color: red;
+}
