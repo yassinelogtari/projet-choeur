@@ -59,7 +59,7 @@ const App = () => {
             element={<AdminDashboard load="home" />}
           />
           <Route
-            path="/dashboard/admin/audition"
+            path="/dashboard/admin/Audition/list"
             element={<AdminDashboard load="adminAudition" />}
           />
           <Route
