@@ -58,3 +58,36 @@
     margin-top: 20px !important;
     width: 300px !important
 }
+
+.selectTessiture{
+  margin-top: 8px !important;
+  margin-right: 14px !important;
+  margin-left: 9px !important;
+}
+
+.selectEvaluation{
+  margin-top: 8px !important;
+}
+
+.selectDecision{
+  margin-top: 8px !important;
+  margin-left: 15px !important;
+}
+
+
+
+.bottonFormAddAuddition{
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.ButtonAndRemarqueAudition{
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.RemarqueAudition{
+  width: 98.5% !important;
+}
+

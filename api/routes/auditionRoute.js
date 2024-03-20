@@ -9,6 +9,7 @@ router.get("/",authMiddleware.loggedMiddleware,authMiddleware.isAdmin, auditionC
 router.post("/addinfo",authMiddleware.loggedMiddleware,authMiddleware.AdminManager, auditionController.addAuditionInfo);
 router.patch('/update-audition/:auditionId',authMiddleware.loggedMiddleware,authMiddleware.isAdmin, auditionController.updateAudition);
 router.delete('/deleteaudition/:auditionId',authMiddleware.loggedMiddleware,authMiddleware.isAdmin, auditionController.deleteAudition);
+router.get('/:auditionId', auditionController.getAuditionById);
 
 
 /**
