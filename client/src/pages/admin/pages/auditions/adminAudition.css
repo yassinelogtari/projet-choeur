@@ -19,7 +19,7 @@
   .editAction:hover{
     margin-left: 2px !important;
     margin-right: 2px !important;
-    background-color: rgb(181, 250, 181);
+    background-color: rgb(234, 250, 234);
     border: 1px solid  green !important;
   }
   
@@ -28,8 +28,6 @@
   }
   
   .deleteAction{
-    margin-left: 2px !important;
-    margin-right: 2px !important;
     background-color: white;
     border: 1px solid  rgb(175, 12, 12) !important;
   }

@@ -10,6 +10,7 @@ import SaisonActuelle from "./pages/saison/SaisonActuelle";
 import Archive from "./pages/saison/Archive";
 import CandidatesList from "./pages/candidates/CandidatesList";
 import AdminAuditionInfo from "../admin/pages/auditions/AdminAddAuditionInfo";
+import AuditionUpdate from "../admin/pages/auditions/AuditionUpdate";
 
 const AdminDashboard = (props) => {
   return (
@@ -31,6 +32,9 @@ const AdminDashboard = (props) => {
             {props.load === "auditionAddInfo" && <AdminAuditionInfo />}
             {props.load === "archives" && <Archive />}
             {props.load === "candidatesList" && <CandidatesList />}
+            {props.load === "updateAudition" && <AuditionUpdate/>}
+
+            
             
             
           </div>

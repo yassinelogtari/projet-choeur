@@ -5,7 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { NavLink } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import "./adminAudition.css"
+import "./adminAudition.css";
 const AdminAudition = () => {
   return (
     <div className="position-absolute top-50 start-50 translate-middle auditionTable">
@@ -22,11 +22,15 @@ const AdminAudition = () => {
             </div>
           </Button>
         </NavLink>
-        <Button variant="outlined" className="editAction">
-          <div>
-            <ModeEditIcon className="editIcon" />
-          </div>
-        </Button>
+
+        <NavLink to="/dashboard/admin/updateAudition">
+          <Button variant="outlined" className="editAction">
+            <div>
+              <ModeEditIcon className="editIcon" />
+            </div>
+          </Button>
+        </NavLink>
+
         <Button variant="outlined" className="deleteAction">
           <div>
             <DeleteIcon className="deleteIcon" />

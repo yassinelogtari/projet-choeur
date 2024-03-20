@@ -9,19 +9,20 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import "./adminAddAuditionInfo.css";
-const AdminAdAuditionInfo = () => {
-  const [Evaluation, setEvaluation] = useState("");
+
+  import "./auditionUpdate.css"
+
+function AuditionUpdate() {
+    const [Evaluation, setEvaluation] = useState("");
 
   const handleChange = (event) => {
     setEvaluation(event.target.value);
   };
-
-  return (
-    <div>
+    return (  
+        <div>
       <div>
         <div className="position-absolute top-50 start-50 translate-middle auditionFormContainer">
-          <p>Add Audition Info</p>
+          <p>Update Audition Info</p>
           <Box
             component="form"
             sx={{
@@ -31,29 +32,29 @@ const AdminAdAuditionInfo = () => {
             autoComplete="off"
           >
             <div className="form-row">
-              <div className="addAuditionInfoForm">
+              <div className="AuditionUpdateInfoForm">
                 <TextField
-                  id="audition"
+                  id="Audition"
                   label="Audition"
                   variant="outlined"
-                  className="auditionField"
+                  className="AuditionUpdateField"
                 />
                 <TextField
                   id="candidat"
                   label="Candidat"
                   variant="outlined"
-                  className="auditionField"
+                  className="AuditionUpdateField"
                 />
 
                 <TextField
                   id="extraitChante"
                   label="Extrait chanté"
                   variant="outlined"
-                  className="auditionField"
+                  className="AuditionUpdateField"
                 />
               </div>
               <div className="bottonFormAddAuddition">
-                <FormControl className="auditionField selectTessiture">
+                <FormControl className="AuditionUpdateField selectTessiture">
                   <InputLabel id="demo-simple-select-label">
                     Tessiture
                   </InputLabel>
@@ -63,7 +64,7 @@ const AdminAdAuditionInfo = () => {
                     value={Evaluation}
                     label="Tessiture"
                     onChange={handleChange}
-                    className="auditionField"
+                    className="AuditionUpdateField"
                   >
                     <MenuItem>alto</MenuItem>
                     <MenuItem>basse</MenuItem>
@@ -72,7 +73,7 @@ const AdminAdAuditionInfo = () => {
                   </Select>
                 </FormControl>
 
-                <FormControl className="auditionField selectEvaluation">
+                <FormControl className="AuditionUpdateField selectEvaluation">
                   <InputLabel id="demo-simple-select-label">
                     Evaluation
                   </InputLabel>
@@ -82,7 +83,7 @@ const AdminAdAuditionInfo = () => {
                     value={Evaluation}
                     label="Evaluation"
                     onChange={handleChange}
-                    className="auditionField"
+                    className="AuditionUpdateField"
                   >
                     <MenuItem>A</MenuItem>
                     <MenuItem>B</MenuItem>
@@ -90,7 +91,7 @@ const AdminAdAuditionInfo = () => {
                   </Select>
                 </FormControl>
 
-                <FormControl className="auditionField selectDecision">
+                <FormControl className="AuditionUpdateField selectDecision">
                   <InputLabel id="demo-simple-select-label">
                     Decision
                   </InputLabel>
@@ -100,7 +101,7 @@ const AdminAdAuditionInfo = () => {
                     value={Evaluation}
                     label="Evaluation"
                     onChange={handleChange}
-                    className="auditionField"
+                    className="AuditionUpdateField"
                   >
                     <MenuItem>Retenu</MenuItem>
                     <MenuItem>Refusé</MenuItem>
@@ -108,20 +109,20 @@ const AdminAdAuditionInfo = () => {
                   </Select>
                 </FormControl>
               </div>
-              <div className="ButtonAndRemarqueAudition">
+              <div className="ButtonAndRemarqueAuditionUpdate">
                 <TextField
                   id="outlined-multiline-static"
                   label="Remarque"
                   multiline
                   rows={4}
-                  className="RemarqueAudition"
+                  className="RemarqueAuditionUpdate"
                 />
                 <Button
                   type="submit"
                   variant="contained"
-                  className="auditionFormButton"
+                  className="AuditionUpdateFormButton"
                 >
-                  Submit
+                  Update
                 </Button>
               </div>
             </div>
@@ -131,6 +132,7 @@ const AdminAdAuditionInfo = () => {
       <div className="layout-overlay layout-menu-toggle" />
     </div>
   );
-};
+    
+}
 
-export default AdminAdAuditionInfo;
+export default AuditionUpdate;
