@@ -15,6 +15,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import ChefPupitreDashboard from "./pages/ChefPupitreDashboard";
 import ChoristeDashboard from "./pages/ChoristeDashboard";
 import ManagerDashboard from "./pages/ManagerDashboard";
+import FormSaison from "./components/formSaison/FormSaison";
 
 const App = () => {
   return (
@@ -85,6 +86,8 @@ const App = () => {
             path="/dashboard/admin/Candidature/list"
             element={<AdminDashboard load="candidatesList" />}
           />
+
+
 
           <Route
             exact

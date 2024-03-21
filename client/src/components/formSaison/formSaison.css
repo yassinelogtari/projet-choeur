@@ -1,0 +1,30 @@
+.form  {
+    border-radius: 5px;
+    background-color: white;
+    padding: 40px;
+    
+}
+
+.input{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    font-size: medium;
+}
+
+.custom-label {
+font-size:x-large;
+
+}
+
+.btn-creation{
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+    padding: 14px 20px;
+    font-size: large;
+    font-weight:500;
+ 
+    
+}
