@@ -20,6 +20,7 @@ import FormSaison from "./components/formSaison/FormSaison";
 import Concert from "./pages/concert/Concert";
 import AddConcert from "./components/concert/AddConcert";
 
+import FormCandidature from "./pages/FormCandidature";
 
 
 const App = () => {
@@ -93,6 +94,11 @@ const App = () => {
             element={<AdminDashboard load="candidatesList" />}
           />
           <Route
+             path="/dashboard/admin/Candidature/listParpupitre"
+             element={<AdminDashboard load="ListeCandidatesParPupitre" />}
+           />
+
+           <Route
             path="/dashboard/admin/updateAudition"
             element={<AdminDashboard load="updateAudition" />}
           />
@@ -111,6 +117,12 @@ const App = () => {
           />
           <Route exact path="/concert" element={<Concert />} />
           <Route exact path="addConcert" element={<AddConcert />} />
+            <Route
+            exact
+            path="/candidatureForm"
+            element={<FormCandidature />}
+          />
+           
         </Routes>
       </>
     </Router>

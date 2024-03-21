@@ -7,8 +7,8 @@ router.post("/generate", auditionController.generateSchedule);
 router.post("/generate/additional",authMiddleware.loggedMiddleware,authMiddleware.isAdmin, auditionController.generateAdditionalSchedule);
 router.get("/", auditionController.fetshAuditions);
 router.post("/addinfo",authMiddleware.loggedMiddleware,authMiddleware.AdminManager, auditionController.addAuditionInfo);
-router.patch('/update-audition/:auditionId',authMiddleware.loggedMiddleware,authMiddleware.isAdmin, auditionController.updateAudition);
-router.delete('/deleteaudition/:auditionId',authMiddleware.loggedMiddleware,authMiddleware.isAdmin, auditionController.deleteAudition);
+router.patch('/update-audition/:auditionId', auditionController.updateAudition);
+router.delete('/deleteaudition/:auditionId', auditionController.deleteAudition);
 router.get('/:auditionId', auditionController.getAuditionById);
 
 

@@ -9,6 +9,7 @@ import NouvelleSaison from "./pages/saison/NouvelleSaison";
 import SaisonActuelle from "./pages/saison/SaisonActuelle";
 import Archive from "./pages/saison/Archive";
 import CandidatesList from "./pages/candidates/CandidatesList";
+import ListeCandidatesParPupitre from "./pages/candidates/ListeCandidatesParPupitre";
 import AdminAuditionInfo from "../admin/pages/auditions/AdminAddAuditionInfo";
 import AuditionUpdate from "../admin/pages/auditions/AuditionUpdate";
 import { io } from "socket.io-client";
@@ -36,6 +37,11 @@ const AdminDashboard = (props) => {
             {props.load === "archives" && <Archive />}
             {props.load === "candidatesList" && <CandidatesList />}
             {props.load === "updateAudition" && <AuditionUpdate />}
+            {props.load === "ListeCandidatesParPupitre" && <ListeCandidatesParPupitre />}
+
+            
+            
+            
           </div>
           <div className="layout-overlay layout-menu-toggle" />
         </div>

@@ -100,7 +100,15 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-
+      <NavLink to="/dashboard/admin/Candidature/listParpupitre">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Liste des candidatures par pupitre</div>
+          </a>
+        </li>
+      </NavLink>
+      
       {/* Forms & Tables */}
       <li className="menu-header small text-uppercase">
         <span className="menu-header-text">Forms &amp; Tables</span>

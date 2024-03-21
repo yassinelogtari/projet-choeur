@@ -84,6 +84,7 @@ cron.schedule("14 8 * * *", async (req, res) => {
   }
 });
 
+
 cron.schedule("09 18 * * *", async (req, res) => {
   try {
     const now = new Date();
@@ -140,7 +141,7 @@ const app = express();
 app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
 //app.use(upload.array());
-
+app.use(cors());
 const options = {
   definition: {
     openapi: "3.0.0",
