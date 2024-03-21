@@ -8,6 +8,8 @@ import { NavLink } from "react-router-dom";
 const CandidatesList = () => {
   const [allCandidates, setAllCandidates] = useState();
   const [auditionId, setAuditionId] = useState("");
+  const [showPopup, setShowPopup] = useState(false); // State pour contrôler la visibilité de la popup
+  const [selectedCandidate, setSelectedCandidate] = useState(null); // State pour stocker les données du candidat sélecti
 
   const handleAudition = (id) => {
     setAuditionId(id);
@@ -31,7 +33,6 @@ const CandidatesList = () => {
       console.log(err);
     }
   };
-  
 
   useEffect(() => {
     fetchCandidates();
@@ -90,17 +91,12 @@ const CandidatesList = () => {
       renderCell: (params) => {
         return (
           <div className="cellActiondash" style={{ display: "flex" }}>
-            <NavLink
-              to={``}
-              style={{ textDecoration: "none", marginRight: "5px" }}
+            <div
+              className="viewButtondash"
+              onClick={() => handleViewProfile(params.row)}
             >
-              <div
-                className="viewButtondash"
-                onClick={() => handleViewProfile(params.row._id)}
-              >
-                View
-              </div>
-            </NavLink>
+              View
+            </div>
             <NavLink
               to={`/dashboard/admin/addAudition?auditionId=${params.row.id}`}
               style={{ textDecoration: "none", marginRight: "5px" }}
@@ -136,16 +132,20 @@ const CandidatesList = () => {
     },
   ];
 
-  const handleViewProfile = (id) => {
-    console.log(id);
+  const handleViewProfile = (row) => {
+    setSelectedCandidate(row);
+    setShowPopup(true);
   };
-
   const handleDeletAudition = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:8000/api/auditions/deleteaudition/${id}`);
-      
+      const response = await axios.delete(
+        `http://localhost:8000/api/auditions/deleteaudition/${id}`
+      );
+
       if (response.data.success) {
-        const updatedCandidates = allCandidates.filter(candidate => candidate.id !== id);
+        const updatedCandidates = allCandidates.filter(
+          (candidate) => candidate.id !== id
+        );
         setAllCandidates(updatedCandidates);
         console.log("Audition deleted successfully.");
       } else {
@@ -155,31 +155,71 @@ const CandidatesList = () => {
       console.error("Error deleting audition:", error.message);
     }
   };
-  
-
 
   return allCandidates ? (
-    <div className="position-absolute top-50 start-50 translate-middle auditionTable">
+    <div>
       <div
-        style={{
-          marginLeft: "10px",
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "column",
-          marginTop: "-350px",
-        }}
+        className={`position-absolute top-50 start-50 translate-middle auditionTable ${
+          showPopup ? "blur-background" : ""
+        }`}
       >
-        <div style={{ marginBottom: "50px" }}>Liste des auditions</div>
+        <div
+          style={{
+            marginLeft: "10px",
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+            marginTop: "-350px",
+          }}
+        >
+          <div style={{ marginBottom: "50px" }}>Liste des auditions</div>
 
-        <DataGrid
-          style={{ background: "white" }}
-          className="datagrid"
-          rows={allCandidates}
-          columns={userColumns.concat(actionColumn)}
-          pageSize={9}
-          rowsPerPageOptions={[9]}
-        />
+          <DataGrid
+            style={{ background: "white" }}
+            className="datagrid"
+            rows={allCandidates}
+            columns={userColumns.concat(actionColumn)}
+            pageSize={9}
+            rowsPerPageOptions={[9]}
+          />
+        </div>
       </div>
+      {/* Popup Overlay */}
+      {showPopup && <div className="popup-overlay"></div>}
+
+      {/* Popup */}
+      {showPopup && (
+        <div className="popup">
+          <div className="popup-container">
+            <div className="popup-content">
+              <span className="close" onClick={() => setShowPopup(false)}>
+                &times;
+              </span>
+              <h2>Information de l'Audition</h2>
+              {selectedCandidate && (
+                <div>
+                  <p className="auditionIdPopup">ID: {selectedCandidate.id}</p>
+                  <p>Date: {selectedCandidate.DateAud}</p>
+                  <p>Heure de début: {selectedCandidate.HeureDeb}</p>
+                  <p>Heure de fin: {selectedCandidate.HeureFin}</p>
+                  {/* Afficher les informations des candidats */}
+                  <h3>Informations des candidats:</h3>
+                  {selectedCandidate.candidatsInfo.map((info, index) => (
+                    <div key={index}>
+                      <p className="candidaIdPopup">Candidat ID: {info._id}</p>
+                      <p>Extrait chanté: {info.extraitChante}</p>
+                      <p>Tessiture: {info.tessiture}</p>
+                      <p>Évaluation: {info.evaluation}</p>
+                      <p>Décision: {info.decision}</p>
+                      <p>Remarque: {info.remarque}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   ) : (
     <div>loading .....</div>
