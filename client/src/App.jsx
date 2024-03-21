@@ -15,6 +15,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import ChefPupitreDashboard from "./pages/ChefPupitreDashboard";
 import ChoristeDashboard from "./pages/ChoristeDashboard";
 import ManagerDashboard from "./pages/ManagerDashboard";
+import FormSaison from "./components/formSaison/FormSaison";
 
 import Concert from "./pages/concert/Concert";
 import AddConcert from "./components/concert/AddConcert";
@@ -93,6 +94,8 @@ const App = () => {
             path="/dashboard/admin/updateAudition"
             element={<AdminDashboard load="updateAudition" />}
           />
+
+
 
           <Route
             exact
