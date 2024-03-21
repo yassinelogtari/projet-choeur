@@ -15,6 +15,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import ChefPupitreDashboard from "./pages/ChefPupitreDashboard";
 import ChoristeDashboard from "./pages/ChoristeDashboard";
 import ManagerDashboard from "./pages/ManagerDashboard";
+import FormCandidature from "./pages/FormCandidature";
 
 const App = () => {
   return (
@@ -96,6 +97,12 @@ const App = () => {
             path="/presence/repetition/:idR"
             element={<PresenceRepetition />}
           />
+            <Route
+            exact
+            path="/candidatureForm"
+            element={<FormCandidature />}
+          />
+           
         </Routes>
       </>
     </Router>
