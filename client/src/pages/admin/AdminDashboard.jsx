@@ -11,6 +11,7 @@ import Archive from "./pages/saison/Archive";
 import CandidatesList from "./pages/candidates/CandidatesList";
 import AdminAuditionInfo from "../admin/pages/auditions/AdminAddAuditionInfo";
 import AuditionUpdate from "../admin/pages/auditions/AuditionUpdate";
+import Concert from "../concert/Concert";
 
 const AdminDashboard = (props) => {
   return (
@@ -27,16 +28,13 @@ const AdminDashboard = (props) => {
             <Navbar1 />
             {props.load === "home" && <HomePage />}
             {props.load === "adminAudition" && <AdminAudition />}
+            {props.load === "Concert" && <Concert />}
             {props.load === "nouvelleSaison" && <NouvelleSaison />}
             {props.load === "saisonActuelle" && <SaisonActuelle />}
             {props.load === "auditionAddInfo" && <AdminAuditionInfo />}
             {props.load === "archives" && <Archive />}
             {props.load === "candidatesList" && <CandidatesList />}
-            {props.load === "updateAudition" && <AuditionUpdate/>}
-
-            
-            
-            
+            {props.load === "updateAudition" && <AuditionUpdate />}
           </div>
           <div className="layout-overlay layout-menu-toggle" />
         </div>

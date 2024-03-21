@@ -32,7 +32,7 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-      <NavLink to="/concert">
+      <NavLink to="/dashboard/admin/concert">
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
@@ -40,10 +40,6 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-
-
-  
-
 
       {/* Saisons */}
       <li className="menu-header small text-uppercase">

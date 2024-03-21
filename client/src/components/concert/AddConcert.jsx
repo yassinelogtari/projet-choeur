@@ -80,9 +80,11 @@ const AddConcert = () => {
 
   return (
     <>
-      <Link to="/dashboard/admin/home">
-        <button>Home</button>
-      </Link>
+      <div className="butConcert">
+        <Link to="/dashboard/admin/concert">
+          <button>Concerts</button>
+        </Link>
+      </div>
       <div className="frame">
         <div className="titreContainer">
           <h2 className="titre">Ajouter un Concert</h2>

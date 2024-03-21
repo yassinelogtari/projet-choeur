@@ -20,7 +20,7 @@ input:focus:valid {
     
 }
 .titre{
-    padding: 3vw;
+    padding: 1vw;
     display: flex;
         justify-content: center;
 }

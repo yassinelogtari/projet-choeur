@@ -104,8 +104,16 @@ const App = () => {
             path="/presence/repetition/:idR"
             element={<PresenceRepetition />}
           />
-          <Route exact path="/concert" element={<Concert />} />
-          <Route exact path="addConcert" element={<AddConcert />} />
+          <Route
+            exact
+            path="/dashboard/admin/concert"
+            element={<Concert load="Concert" />}
+          />
+          <Route
+            exact
+            path="/dashboard/admin/concert/addConcert"
+            element={<AddConcert />}
+          />
         </Routes>
       </>
     </Router>

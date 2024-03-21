@@ -2,19 +2,23 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 60vh;
+    height: 70vh;
   width: 80vw;
 }
+.layout{
+    display:flex;
+}
+
 .concert-table {
     border-collapse: collapse;
-    width: 70%;
-    /* Adjust as needed */
+    width: 60vw;
+    
 }
 
 .concert-table th,
 .concert-table td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 4px;
 }
 
 .concert-table th {
@@ -51,10 +55,15 @@
     width: 70vw;
     display: flex;
     justify-content: center;
-    padding: 1vw;
+    padding: 0.5vw;
     margin:2vh ;
+    height: 5vh;
 }
 .delete{
     margin: 0;
     padding: 0.5vw;
+}
+.edit
+{
+    width: 5vw;
 }
