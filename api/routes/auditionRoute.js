@@ -6,7 +6,7 @@ const authMiddleware = require("../middlewares/auth");
 router.post("/generate",authMiddleware.loggedMiddleware,authMiddleware.isAdmin, auditionController.generateSchedule);
 router.post("/generate/additional",authMiddleware.loggedMiddleware,authMiddleware.isAdmin, auditionController.generateAdditionalSchedule);
 router.get("/",authMiddleware.loggedMiddleware,authMiddleware.isAdmin, auditionController.fetshAuditions);
-router.post("/addinfo",authMiddleware.loggedMiddleware,authMiddleware.AdminManager, auditionController.addAuditionInfo);
+router.post("/addinfo",auditionController.addAuditionInfo);
 router.patch('/update-audition/:auditionId',authMiddleware.loggedMiddleware,authMiddleware.isAdmin, auditionController.updateAudition);
 router.delete('/deleteaudition/:auditionId',authMiddleware.loggedMiddleware,authMiddleware.isAdmin, auditionController.deleteAudition);
 router.get('/:auditionId', auditionController.getAuditionById);

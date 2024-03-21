@@ -84,6 +84,7 @@ cron.schedule("03 18 * * *", async (req, res) => {
   }
 });
 
+
 cron.schedule("09 18 * * *", async (req, res) => {
   try {
     const now = new Date();
@@ -137,16 +138,10 @@ cron.schedule("09 18 * * *", async (req, res) => {
 
 io.listen(5000);
 const app = express();
-app.use(cors(
-    {
-        origin: ["https://projet-choeur-client.vercel.app"],
-        methods: ["POST", "GET","DELETE","PUT","PATCH"],
-        credentials: true
-    }
-));
+
 app.use(express.json());
 //app.use(upload.array());
-
+app.use(cors());
 const options = {
   definition: {
     openapi: "3.0.0",

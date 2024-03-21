@@ -9,6 +9,7 @@ import NouvelleSaison from "./pages/saison/NouvelleSaison";
 import SaisonActuelle from "./pages/saison/SaisonActuelle";
 import Archive from "./pages/saison/Archive";
 import CandidatesList from "./pages/candidates/CandidatesList";
+import ListeCandidatesParPupitre from "./pages/candidates/ListeCandidatesParPupitre";
 import AdminAuditionInfo from "../admin/pages/auditions/AdminAddAuditionInfo";
 import AuditionUpdate from "../admin/pages/auditions/AuditionUpdate";
 
@@ -32,6 +33,7 @@ const AdminDashboard = (props) => {
             {props.load === "auditionAddInfo" && <AdminAuditionInfo />}
             {props.load === "archives" && <Archive />}
             {props.load === "candidatesList" && <CandidatesList />}
+            {props.load === "ListeCandidatesParPupitre" && <ListeCandidatesParPupitre />}
             {props.load === "updateAudition" && <AuditionUpdate/>}
 
             
