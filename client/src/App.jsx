@@ -20,6 +20,8 @@ import FormSaison from "./components/formSaison/FormSaison";
 import Concert from "./pages/concert/Concert";
 import AddConcert from "./components/concert/AddConcert";
 
+
+
 const App = () => {
   return (
     <Router>
@@ -59,7 +61,7 @@ const App = () => {
           <Route
             exact
             path="/dashboard/admin/home"
-            element={<AdminDashboard load="home" />}
+            element={<AdminDashboard load="home"  />}
           />
 
           <Route

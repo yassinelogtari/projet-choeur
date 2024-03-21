@@ -24,7 +24,7 @@ const PresenceConcert = () => {
       console.log(idC);
       console.log(`Bearer ${storedToken}`);
       const res = await axios.put(
-        "https://projet-choeur-api.vercel.app/api/presence/cancert/",
+        "http://localhost:8000/api/presence/cancert/",
         { idCancert: idC },
         {
           headers: {

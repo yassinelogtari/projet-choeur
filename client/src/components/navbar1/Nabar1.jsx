@@ -1,6 +1,104 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import Table from "../table/Table";
+import Notification from "../../img/notification.svg";
+import adminIcon from "../../assets/img/avatars/admin-icon.png"
+import { io } from "socket.io-client";
 
 function Navbar1() {
+  const [notifications, setNotifications] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [couter, setCouter] = useState(false);
+  const [storedToken, setStoredToken] = useState();
+  const [user, setUser] = useState();
+  const [candidates, setCandidates] = useState([]);
+
+  const socket = io.connect("http://localhost:5000/");
+  
+  useEffect(() => {
+    if (socket && user) {
+     
+      // Set the user's socketId when they connect
+      socket.emit("setSocketId", user._id);
+      console.log(socket)
+      // Listen for notifications only if socket is defined
+      socket.on("getNotification", (allCandidates) => {
+        console.log("Received updated candidates:", allCandidates);
+        setCandidates(allCandidates);
+      });
+      
+      return () => {
+        // Clean up the socket connection on component unmount
+        socket.removeAllListeners(); // Remove all event listeners
+        socket.disconnect();
+      };
+    }
+  }, [user, socket]); 
+
+  useEffect(() => {
+    const storedTokenValue = String(localStorage.getItem("token"));
+
+    if (storedTokenValue&& storedTokenValue!="null") {
+      setStoredToken(storedTokenValue);
+      if (storedToken) {
+        console.log( storedToken)
+        fetchUser();
+      }
+    }
+  }, [storedToken]);
+  const fetchUser = async () => {
+    if (storedToken) {
+      const decodedToken = jwtDecode(storedToken);
+
+      socket.emit("setSocketId", decodedToken.membreId);
+
+      const res = await axios.get(
+        `http://localhost:8000/api/profile/getUser/${decodedToken.membreId}`
+      );
+
+      if (res) {
+        setUser(res.data);
+        console.log(res.data.notifications);
+        setNotifications(res.data.notifications);
+        let count = 0;
+        for (let i = 0; i < res.data.notifications.length; i++) {
+          if (res.data.notifications[i].read == false) {
+            setCouter((prevCounter) => prevCounter + 1);
+          }
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("getNotification", (data) => {
+        let dataPlusRead = {
+          notification: data,
+          read: false,
+        };
+        setNotifications((prevNotifications) => [
+          ...prevNotifications,
+          dataPlusRead,
+        ]);
+        console.log(notifications);
+        setCouter((prevCounter) => prevCounter + 1);
+      });
+    }
+  }, [socket]);
+
+  const handleRead = () => {
+    setCouter(0);
+    setOpen(false);
+  };
+
+  const handleLogout = () => {
+    setStoredToken(null);
+    localStorage.removeItem("token");
+    setNotifications([]);
+  };
+
   return (
     <div className="layout-page position-relative">
       {/* Navbar */}
@@ -36,16 +134,28 @@ function Navbar1() {
           <ul className="navbar-nav flex-row align-items-center ms-auto">
             {/* Place this tag where you want the button to render. */}
             <li className="nav-item lh-1 me-3">
-              <a
-                className="github-button"
-                href="https://github.com/themeselection/sneat-html-admin-template-free"
-                data-icon="octicon-star"
-                data-size="large"
-                data-show-count="true"
-                aria-label="Star themeselection/sneat-html-admin-template-free on GitHub"
-              >
-                Star
-              </a>
+              <div className="icon" onClick={() => setOpen(!open)}>
+                <img src={Notification} className="iconImg" alt="" />
+                {couter > 0 && <div className="counter">{couter}</div>}
+              </div>
+              {open && (
+                <div className="notifications">
+                  {notifications
+                    .slice()
+                    .reverse()
+                    .map((notification) => (
+                      <span key={notification.id}>
+                        <span className="notificationItem">
+                          {notification.notification}
+                        </span>
+                        <br />
+                      </span>
+                    ))}
+                  <button className="nButton" onClick={handleRead}>
+                    Mark as read
+                  </button>
+                </div>
+              )}
             </li>
             {/* User */}
             <li className="nav-item navbar-dropdown dropdown-user dropdown">
@@ -56,7 +166,7 @@ function Navbar1() {
               >
                 <div className="avatar avatar-online">
                   <img
-                    src="../assets/img/avatars/1.png"
+                    src={adminIcon}
                     alt
                     className="w-px-40 h-auto rounded-circle"
                   />
@@ -127,7 +237,6 @@ function Navbar1() {
       {/* Content wrapper */}
       <div className="content-wrapper" />
       {/* Content wrapper */}
-      
     </div>
   );
 }

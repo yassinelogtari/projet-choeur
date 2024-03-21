@@ -31,7 +31,7 @@ const Navbar = ({ socket }) => {
       const decodedToken = jwtDecode(storedToken);
       socket.emit("setSocketId", decodedToken.membreId);
       const res = await axios.get(
-        `https://projet-choeur-api.vercel.app/api/profile/getUser/${decodedToken.membreId}`
+        `http://localhost:8000/api/profile/getUser/${decodedToken.membreId}`
       );
 
       if (res) {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar1 from "../../components/navbar1/Nabar1";
 
@@ -11,6 +11,7 @@ import Archive from "./pages/saison/Archive";
 import CandidatesList from "./pages/candidates/CandidatesList";
 import AdminAuditionInfo from "../admin/pages/auditions/AdminAddAuditionInfo";
 import AuditionUpdate from "../admin/pages/auditions/AuditionUpdate";
+import { io } from "socket.io-client";
 
 const AdminDashboard = (props) => {
   return (
@@ -24,7 +25,9 @@ const AdminDashboard = (props) => {
             >
               <Sidebar />
             </aside>
-            <Navbar1 />
+
+            <Navbar1/>
+
             {props.load === "home" && <HomePage />}
             {props.load === "adminAudition" && <AdminAudition />}
             {props.load === "nouvelleSaison" && <NouvelleSaison />}
@@ -32,11 +35,7 @@ const AdminDashboard = (props) => {
             {props.load === "auditionAddInfo" && <AdminAuditionInfo />}
             {props.load === "archives" && <Archive />}
             {props.load === "candidatesList" && <CandidatesList />}
-            {props.load === "updateAudition" && <AuditionUpdate/>}
-
-            
-            
-            
+            {props.load === "updateAudition" && <AuditionUpdate />}
           </div>
           <div className="layout-overlay layout-menu-toggle" />
         </div>
