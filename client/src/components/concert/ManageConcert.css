@@ -2,13 +2,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    /* Adjust as needed */
+    height: 60vh;
+  width: 80vw;
 }
-
 .concert-table {
     border-collapse: collapse;
-    width: 80%;
+    width: 70%;
     /* Adjust as needed */
 }
 
@@ -37,7 +36,25 @@
 
 .Fa{
     color:#333399;
+    
 }
 .Md{
     color: red;
+}
+.title
+{
+    
+    font-weight: bold;
+
+}
+.titleCounter{
+    width: 70vw;
+    display: flex;
+    justify-content: center;
+    padding: 1vw;
+    margin:2vh ;
+}
+.delete{
+    margin: 0;
+    padding: 0.5vw;
 }

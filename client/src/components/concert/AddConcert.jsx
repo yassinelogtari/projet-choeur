@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import "./AddConcert.css";
+import { Link } from "react-router-dom";
 const AddConcert = () => {
   const [formData, setFormData] = useState({
     titre: "",
@@ -79,6 +80,9 @@ const AddConcert = () => {
 
   return (
     <>
+      <Link to="/dashboard/admin/home">
+        <button>Home</button>
+      </Link>
       <div className="frame">
         <div className="titreContainer">
           <h2 className="titre">Ajouter un Concert</h2>

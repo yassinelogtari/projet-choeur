@@ -15,11 +15,9 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import ChefPupitreDashboard from "./pages/ChefPupitreDashboard";
 import ChoristeDashboard from "./pages/ChoristeDashboard";
 import ManagerDashboard from "./pages/ManagerDashboard";
-<<<<<<< HEAD
-import Concert from "./pages/concert/Concert";
-=======
 
->>>>>>> a48f9165021b2d0b4f166a1f19b84e03877e0e48
+import Concert from "./pages/concert/Concert";
+import AddConcert from "./components/concert/AddConcert";
 
 const App = () => {
   return (
@@ -54,19 +52,15 @@ const App = () => {
             element={<ChefPupitreDashboard />}
           />
           <Route
-<<<<<<< HEAD
-=======
             path="/dashboard/admin"
             element={<Navigate to="/dashboard/admin/home" />}
           />
           <Route
->>>>>>> a48f9165021b2d0b4f166a1f19b84e03877e0e48
             exact
             path="/dashboard/admin/home"
             element={<AdminDashboard load="home" />}
           />
-<<<<<<< HEAD
-=======
+
           <Route
             path="/dashboard/admin/audition"
             element={<AdminDashboard load="adminAudition" />}
@@ -95,11 +89,10 @@ const App = () => {
             path="/dashboard/admin/Candidature/list"
             element={<AdminDashboard load="candidatesList" />}
           />
-           <Route
+          <Route
             path="/dashboard/admin/updateAudition"
             element={<AdminDashboard load="updateAudition" />}
           />
->>>>>>> a48f9165021b2d0b4f166a1f19b84e03877e0e48
 
           <Route
             exact
@@ -112,6 +105,7 @@ const App = () => {
             element={<PresenceRepetition />}
           />
           <Route exact path="/concert" element={<Concert />} />
+          <Route exact path="addConcert" element={<AddConcert />} />
         </Routes>
       </>
     </Router>
