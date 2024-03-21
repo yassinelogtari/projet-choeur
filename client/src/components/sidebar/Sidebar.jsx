@@ -23,14 +23,7 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-      <NavLink to="/dashboard/admin/audition">
-        <li className="menu-item">
-          <a href="javascript:void(0);" className="menu-link menu-toggle">
-            <i className="menu-icon tf-icons bx bx-dock-top" />
-            <div data-i18n="Account Settings">Audition</div>
-          </a>
-        </li>
-      </NavLink>
+
   
 
   
@@ -66,6 +59,18 @@ function Sidebar() {
       </li>
       </NavLink>
     {/* Candidature */}
+      <li className="menu-header small text-uppercase">
+        <span className="menu-header-text">Audition</span>
+      </li>
+      <NavLink to="/dashboard/admin/Audition/list">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Liste des audition</div>
+          </a>
+        </li>
+      </NavLink>
+      {/* auditions */}
       <li className="menu-header small text-uppercase">
         <span className="menu-header-text">Candidatures</span>
       </li>

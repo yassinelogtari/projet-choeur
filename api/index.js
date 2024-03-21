@@ -137,13 +137,7 @@ cron.schedule("09 18 * * *", async (req, res) => {
 
 io.listen(5000);
 const app = express();
-app.use(cors(
-    {
-        origin: ["https://projet-choeur-client.vercel.app"],
-        methods: ["POST", "GET","DELETE","PUT","PATCH"],
-        credentials: true
-    }
-));
+app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
 //app.use(upload.array());
 

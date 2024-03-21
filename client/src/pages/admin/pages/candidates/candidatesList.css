@@ -13,6 +13,20 @@
   border: 1px dotted rgba(220, 20, 60, 0.6);
   cursor: pointer;
 }
+.updateButtondash {
+  padding: 2px 5px;
+  border-radius: 5px;
+  color: green;
+  border: 1px dotted green;
+  cursor: pointer;
+}
+.addButtondash {
+  padding: 2px 5px;
+  border-radius: 5px;
+  color: #3ca9ee;
+  border: 1px dotted #3ca9ee;
+  cursor: pointer;
+}
 
 .MuiInputBase-root.MuiInputBase-colorPrimary.MuiTablePagination-input.css-16c50h-MuiInputBase-root-MuiTablePagination-select {
   margin-top: -14px;
@@ -33,7 +47,6 @@
 .MuiTablePagination-spacer.css-1psng7p-MuiTablePagination-spacer {
   display: none !important;
 }
-.MuiInputBase-root.MuiInputBase-colorPrimary.MuiTablePagination-input.css-16c50h-MuiInputBase-root-MuiTablePagination-select
-{
-    display: none !important;
+.MuiInputBase-root.MuiInputBase-colorPrimary.MuiTablePagination-input.css-16c50h-MuiInputBase-root-MuiTablePagination-select {
+  display: none !important;
 }

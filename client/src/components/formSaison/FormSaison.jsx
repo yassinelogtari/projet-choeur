@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Input, Button } from 'antd';
+import axios from "axios";
 import "./formSaison.css"
 
 const MyFormItemContext = React.createContext([]);
@@ -28,41 +29,32 @@ const FormSaison = () => {
 
 
   const onFinish = async (values) => {
-   console.log("nom:" , nom)
-   console.log("dateDebut:" , dateDebut)
-   console.log("dateFin:" , dateFin)
- 
-   const data = {
-    nom: nom,
-    dateDebut: dateDebut,
-    dateFin: dateFin
-  };
-
-  console.log("Data:" , data)
-
-
-   /* try {
-      
-      const response = await fetch('http://localhost:8000/api/saison/createSaison', {
-        
-        method: 'POST',
+    console.log("nom:", nom);
+    console.log("dateDebut:", dateDebut);
+    console.log("dateFin:", dateFin);
+  
+    const data = {
+      nom: nom,
+      dateDebut: dateDebut,
+      dateFin: dateFin
+    };
+  
+    console.log("Data:", data);
+  
+    try {
+      const response = await axios.post('http://localhost:8000/api/saison/createSaison', data, {
         headers: {
-          'Content-Type': 'application/json' 
-        },
-        body: JSON.stringify(data) 
+          'Content-Type': 'application/json'
+        }
       });
+  
+      console.log(response.data); 
       
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data); // Process the server response as needed
-      } else {
-        console.error("Error sending request to the server");
-      }
     } catch (error) {
       console.error("Error sending request to the server:", error);
-    }*/
+    }
   };
+  
 
  
 

@@ -1,45 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Link } from "@mui/material";
 import "./candidatesList.css";
+import axios from "axios";
 
 const CandidatesList = () => {
+  const [allCandidates, setAllCandidates] = useState();
   const PF = "http://localhost:5000/images/";
-  const allCandidates = [
-    {
-      id: "42567",
-      nom: "ounissi",
-      prenom: "mohamed",
-      email: "ounissilol@gmail.com",
-      sexe: "Homme",
-      CIN: "123456789",
-      taille: "180",
-      telephone: "46266051",
-      nationalite: "tunisien",
-      dateNaissance: "03/11/1998",
-      activite: true,
-      connaisanceMusical: true,
-      situationPerso: "",
-      confirm: true,
-    },
-    {
-        id: "42524",
-        nom: "test",
-        prenom: "test",
-        email: "test@gmail.com",
-        sexe: "Homme",
-        CIN: "123456789",
-        taille: "180",
-        telephone: "46266051",
-        nationalite: "tunisien",
-        dateNaissance: "03/11/1998",
-        activite: false,
-        connaisanceMusical: true,
-        situationPerso: "",
-        confirm: false,
-      },
-    
-  ];
+
+  const fetchCandidates = async () => {
+    try {
+      const data = await axios
+        .get("http://localhost:8000/api/candidats")
+        .then((res) => {
+          const modifiedRes = res.data.map(obj => {
+            const { _id, ...rest } = obj; 
+            return { id: _id, ...rest }; 
+          });
+          console.log(modifiedRes)
+          setAllCandidates(modifiedRes);
+          console.log(res);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchCandidates();
+  }, []);
 
   const userColumns = [
     { field: "id", headerName: "ID", width: 70 },
@@ -165,7 +154,7 @@ const CandidatesList = () => {
     console.log(id);
   };
 
-  return (
+  return allCandidates ? (
     <div className="position-absolute top-50 start-50 translate-middle auditionTable">
       <div
         style={{
@@ -176,9 +165,10 @@ const CandidatesList = () => {
           marginTop: "-350px",
         }}
       >
-        <div style={{ marginBottom: "50px" }}>CandidatesList</div>
+        <div style={{ marginBottom: "50px" }}>Liste des candidatures</div>
 
         <DataGrid
+          style={{background:"white"}}
           className="datagrid"
           rows={allCandidates}
           columns={userColumns.concat(actionColumn)}
@@ -187,11 +177,11 @@ const CandidatesList = () => {
           checkboxSelection={false}
           disableSelection={true}
           disableRowSelectionOnClick
-          
-          
         />
       </div>
     </div>
+  ) : (
+    <div>loading .....</div>
   );
 };
 

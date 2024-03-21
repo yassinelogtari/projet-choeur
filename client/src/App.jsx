@@ -17,6 +17,7 @@ import ChoristeDashboard from "./pages/ChoristeDashboard";
 import ManagerDashboard from "./pages/ManagerDashboard";
 import FormSaison from "./components/formSaison/FormSaison";
 
+
 const App = () => {
   return (
     <Router>
@@ -59,7 +60,7 @@ const App = () => {
             element={<AdminDashboard load="home" />}
           />
           <Route
-            path="/dashboard/admin/audition"
+            path="/dashboard/admin/Audition/list"
             element={<AdminDashboard load="adminAudition" />}
           />
           <Route
@@ -85,6 +86,10 @@ const App = () => {
           <Route
             path="/dashboard/admin/Candidature/list"
             element={<AdminDashboard load="candidatesList" />}
+          />
+           <Route
+            path="/dashboard/admin/updateAudition"
+            element={<AdminDashboard load="updateAudition" />}
           />
 
 
