@@ -7,6 +7,11 @@ import { NavLink } from "react-router-dom";
 
 const CandidatesList = () => {
   const [allCandidates, setAllCandidates] = useState();
+  const [auditionId, setAuditionId] = useState("");
+
+  const handleAudition = (id) => {
+    setAuditionId(id);
+  };
   const PF = "http://localhost:5000/images/";
 
   const fetchCandidates = async () => {
@@ -26,16 +31,17 @@ const CandidatesList = () => {
       console.log(err);
     }
   };
+  
 
   useEffect(() => {
     fetchCandidates();
   }, []);
-  
+
   const userColumns = [
-    { 
-      field: 'id', 
-      headerName: 'ID', 
-      width: 140, 
+    {
+      field: "id",
+      headerName: "ID",
+      width: 140,
     },
     {
       field: "candidats",
@@ -52,29 +58,28 @@ const CandidatesList = () => {
         return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
       },
     },
-    { 
-      field: 'HeureDeb', 
-      headerName: 'Starting Time', 
+    {
+      field: "HeureDeb",
+      headerName: "Starting Time",
       width: 140,
       valueFormatter: (params) => {
         const date = new Date(params.value);
-        const hours = date.getHours().toString().padStart(2, '0'); // Ensure two digits
-        const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure two digits
+        const hours = date.getHours().toString().padStart(2, "0"); // Ensure two digits
+        const minutes = date.getMinutes().toString().padStart(2, "0"); // Ensure two digits
         return `${hours}:${minutes}`;
       },
     },
-    { 
-      field: 'HeureFin', 
-      headerName: 'Ending Time', 
+    {
+      field: "HeureFin",
+      headerName: "Ending Time",
       width: 140,
       valueFormatter: (params) => {
         const date = new Date(params.value);
-        const hours = date.getHours().toString().padStart(2, '0'); // Ensure two digits
-        const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure two digits
+        const hours = date.getHours().toString().padStart(2, "0"); // Ensure two digits
+        const minutes = date.getMinutes().toString().padStart(2, "0"); // Ensure two digits
         return `${hours}:${minutes}`;
       },
     },
-    
   ];
 
   const actionColumn = [
@@ -85,11 +90,9 @@ const CandidatesList = () => {
       renderCell: (params) => {
         return (
           <div className="cellActiondash" style={{ display: "flex" }}>
-            
-           
             <NavLink
               to={``}
-              style={{ textDecoration: "none",marginRight:"5px" }}
+              style={{ textDecoration: "none", marginRight: "5px" }}
             >
               <div
                 className="viewButtondash"
@@ -99,31 +102,31 @@ const CandidatesList = () => {
               </div>
             </NavLink>
             <NavLink
-              to={`/dashboard/admin/addAudition`}
-              style={{ textDecoration: "none",marginRight:"5px" }}
+              to={`/dashboard/admin/addAudition?auditionId=${params.row.id}`}
+              style={{ textDecoration: "none", marginRight: "5px" }}
             >
               <div
                 className="addButtondash"
-                onClick={() => handleViewProfile(params.row._id)}
+                onClick={() => handleAudition(params.row.id)}
               >
-                add
+                Add
               </div>
             </NavLink>
             <NavLink
-              to={`/dashboard/admin/updateAudition`}
-              style={{ textDecoration: "none",marginRight:"5px" }}
+              to={`/dashboard/admin/updateAudition?auditionId=${params.row.id}`}
+              style={{ textDecoration: "none", marginRight: "5px" }}
             >
               <div
                 className="updateButtondash"
-                onClick={() => handleViewProfile(params.row._id)}
+                onClick={() => handleAudition(params.row.id)}
               >
                 update
               </div>
             </NavLink>
             <div
               className="deleteButtondash "
-              style={{marginRight:"5px" }}
-              onClick={() => handleDeletepost(params.row._id)}
+              style={{ marginRight: "5px" }}
+              onClick={() => handleDeletAudition(params.row.id)}
             >
               Delete
             </div>
@@ -137,9 +140,23 @@ const CandidatesList = () => {
     console.log(id);
   };
 
-  const handleDeletepost = async (id) => {
-    console.log(id);
+  const handleDeletAudition = async (id) => {
+    try {
+      const response = await axios.delete(`http://localhost:8000/api/auditions/deleteaudition/${id}`);
+      
+      if (response.data.success) {
+        const updatedCandidates = allCandidates.filter(candidate => candidate.id !== id);
+        setAllCandidates(updatedCandidates);
+        console.log("Audition deleted successfully.");
+      } else {
+        console.log("Failed to delete audition.");
+      }
+    } catch (error) {
+      console.error("Error deleting audition:", error.message);
+    }
   };
+  
+
 
   return allCandidates ? (
     <div className="position-absolute top-50 start-50 translate-middle auditionTable">
@@ -161,7 +178,6 @@ const CandidatesList = () => {
           columns={userColumns.concat(actionColumn)}
           pageSize={9}
           rowsPerPageOptions={[9]}
-         
         />
       </div>
     </div>
