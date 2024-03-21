@@ -62,7 +62,7 @@ const App = () => {
           />
 
           <Route
-            path="/dashboard/admin/audition"
+            path="/dashboard/admin/Audition/list"
             element={<AdminDashboard load="adminAudition" />}
           />
           <Route
