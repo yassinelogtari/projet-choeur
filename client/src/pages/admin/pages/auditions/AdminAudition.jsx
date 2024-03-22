@@ -184,10 +184,9 @@ const CandidatesList = () => {
           />
         </div>
       </div>
-      {/* Popup Overlay */}
+
       {showPopup && <div className="popup-overlay"></div>}
 
-      {/* Popup */}
       {showPopup && (
         <div className="popup">
           <div className="popup-container">
@@ -202,11 +201,13 @@ const CandidatesList = () => {
                   <p>Date: {selectedCandidate.DateAud}</p>
                   <p>Heure de début: {selectedCandidate.HeureDeb}</p>
                   <p>Heure de fin: {selectedCandidate.HeureFin}</p>
-                  {/* Afficher les informations des candidats */}
+
                   <h3>Informations des candidats:</h3>
                   {selectedCandidate.candidatsInfo.map((info, index) => (
                     <div key={index}>
-                      <p className="candidaIdPopup">Candidat ID: {info._id}</p>
+                      <p className="candidaIdPopup">
+                        Candidat info ID: {info._id}
+                      </p>
                       <p>Extrait chanté: {info.extraitChante}</p>
                       <p>Tessiture: {info.tessiture}</p>
                       <p>Évaluation: {info.evaluation}</p>
