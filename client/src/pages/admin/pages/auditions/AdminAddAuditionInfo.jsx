@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   Box,
@@ -9,25 +9,30 @@ import {
   Select,
   InputLabel,
   FormControl,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import "./adminAddAuditionInfo.css";
 
-
-
 const AdminAdAuditionInfo = () => {
   const [auditionId, setAuditionId] = useState("");
+  const [allCandidates, setAllCandidates] = useState([]);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get("auditionId");
     setAuditionId(id);
+    fetchCandidates(id);
     setFormData((oldstate) => ({ ...oldstate, auditionId: id }));
   }, [location.search]);
 
   const [formData, setFormData] = useState({
     auditionId: "",
-    candidatId: "",
+    selectedCandidateId: "",
     extraitChante: "",
     tessiture: "",
     evaluation: "",
@@ -35,22 +40,52 @@ const AdminAdAuditionInfo = () => {
     remarque: "",
   });
 
+  const fetchCandidates = async (auditionId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/auditions/${auditionId}`
+      );
+      const candidatesForAudition = response.data.audition.candidats.map(
+        (candidate) => ({
+          _id: candidate._id,
+          nom: candidate.nom,
+          prenom: candidate.prenom,
+        })
+      );
+      setAllCandidates(candidatesForAudition);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  const [openDialog, setOpenDialog] = useState(false);
+  const [formErrors, setFormErrors] = useState({
+    selectedCandidateId: "",
+    extraitChante: "",
+    tessiture: "",
+    evaluation: "",
+    decision: "",
+  });
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     try {
       const response = await axios.post(
         "http://localhost:8000/api/auditions/addinfo",
         formData
       );
       console.log(response.data);
+      setOpenDialog(true);
+
       setFormData({
         auditionId: "",
-        candidatId: "",
+        selectedCandidateId: "",
         extraitChante: "",
         tessiture: "",
         evaluation: "",
@@ -60,6 +95,11 @@ const AdminAdAuditionInfo = () => {
     } catch (error) {
       console.error("Error:", error);
     }
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    navigate("/dashboard/admin/Audition/list");
   };
 
   return (
@@ -85,18 +125,24 @@ const AdminAdAuditionInfo = () => {
                   className="auditionField"
                   name="auditionId"
                   value={auditionId}
-                  disabled
                   onChange={handleChange}
                 />
-                <TextField
-                  id="candidat"
-                  label="Candidat"
-                  variant="outlined"
-                  className="auditionField"
-                  name="candidatId"
-                  value={formData.candidatId}
-                  onChange={handleChange}
-                />
+                <FormControl className="auditionField candidatIDfield">
+                  <InputLabel id="candidat-label">Candidat</InputLabel>
+                  <Select
+                    labelId="candidat-label"
+                    id="candidat-select"
+                    value={formData.candidatId}
+                    name="candidatId"
+                    onChange={handleChange}
+                  >
+                    {allCandidates.map((candidate) => (
+                      <MenuItem key={candidate._id} value={candidate._id}>
+                        {`${candidate.nom} ${candidate.prenom}`}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
 
                 <TextField
                   id="extraitChante"
@@ -181,6 +227,17 @@ const AdminAdAuditionInfo = () => {
           </Box>
         </div>
       </div>
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Validation</DialogTitle>
+        <DialogContent>
+          <p>Votre audition a été ajoutée avec succès !</p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
       <div className="layout-overlay layout-menu-toggle" />
     </div>
   );
