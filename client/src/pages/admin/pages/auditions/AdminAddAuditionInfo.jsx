@@ -19,6 +19,7 @@ import "./adminAddAuditionInfo.css";
 const AdminAdAuditionInfo = () => {
   const [auditionId, setAuditionId] = useState("");
   const [allCandidates, setAllCandidates] = useState([]);
+  const [formErrors, setFormErrors] = useState({});
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -64,16 +65,38 @@ const AdminAdAuditionInfo = () => {
   };
 
   const [openDialog, setOpenDialog] = useState(false);
-  const [formErrors, setFormErrors] = useState({
-    selectedCandidateId: "",
-    extraitChante: "",
-    tessiture: "",
-    evaluation: "",
-    decision: "",
-  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    let errors = {};
+    let hasErrors = false;
+
+    if (!formData.extraitChante) {
+      errors.extraitChante = "Veuillez saisir un extrait chanté.";
+      hasErrors = true;
+    }
+    if (!formData.tessiture) {
+      errors.tessiture = "Veuillez sélectionner une tessiture.";
+      hasErrors = true;
+    }
+    if (!formData.evaluation) {
+      errors.evaluation = "Veuillez sélectionner une évaluation.";
+      hasErrors = true;
+    }
+    if (!formData.decision) {
+      errors.decision = "Veuillez sélectionner une décision.";
+      hasErrors = true;
+    }
+
+    if (!formData.remarque) {
+      errors.remarque = "Veuillez sélectionner une remarque.";
+      hasErrors = true;
+    }
+    if (hasErrors) {
+      setFormErrors(errors);
+      return;
+    }
 
     try {
       const response = await axios.post(
@@ -143,16 +166,23 @@ const AdminAdAuditionInfo = () => {
                     ))}
                   </Select>
                 </FormControl>
-
-                <TextField
-                  id="extraitChante"
-                  label="Extrait chanté"
-                  variant="outlined"
-                  className="auditionField"
-                  name="extraitChante"
-                  value={formData.extraitChante}
-                  onChange={handleChange}
-                />
+                <div className="extraitChanterError">
+                  <TextField
+                    id="extraitChante"
+                    label="Extrait chanté"
+                    variant="outlined"
+                    className="auditionField"
+                    name="extraitChante"
+                    value={formData.extraitChante}
+                    onChange={handleChange}
+                    error={!!formErrors.extraitChante}
+                  />
+                  {formErrors.extraitChante && (
+                    <p className="error">
+                      {formErrors.extraitChante}
+                    </p>
+                  )}
+                </div>
               </div>
               <div className="bottonFormAddAuddition">
                 <FormControl className="auditionField selectTessiture">
@@ -164,12 +194,16 @@ const AdminAdAuditionInfo = () => {
                     name="tessiture"
                     onChange={handleChange}
                     className="auditionField"
+                    error={!!formErrors.tessiture}
                   >
                     <MenuItem value="alto">alto</MenuItem>
                     <MenuItem value="basse">basse</MenuItem>
                     <MenuItem value="soprano">soprano</MenuItem>
                     <MenuItem value="ténor">ténor</MenuItem>
                   </Select>
+                  {formErrors.tessiture && (
+                    <p className="error">{formErrors.tessiture}</p>
+                  )}
                 </FormControl>
 
                 <FormControl className="auditionField selectEvaluation">
@@ -181,11 +215,15 @@ const AdminAdAuditionInfo = () => {
                     name="evaluation"
                     onChange={handleChange}
                     className="auditionField"
+                    error={!!formErrors.evaluation}
                   >
                     <MenuItem value="A">A</MenuItem>
                     <MenuItem value="B">B</MenuItem>
                     <MenuItem value="C">C</MenuItem>
                   </Select>
+                  {formErrors.evaluation && (
+                    <p className="error">{formErrors.evaluation}</p>
+                  )}
                 </FormControl>
 
                 <FormControl className="auditionField selectDecision">
@@ -197,11 +235,15 @@ const AdminAdAuditionInfo = () => {
                     name="decision"
                     onChange={handleChange}
                     className="auditionField"
+                    error={!!formErrors.evaluation}
                   >
                     <MenuItem value="Retenu">Retenu</MenuItem>
                     <MenuItem value="Refusé">Refusé</MenuItem>
                     <MenuItem value="En attente">En attente</MenuItem>
                   </Select>
+                  {formErrors.decision && (
+                    <p className="error">{formErrors.decision}</p>
+                  )}
                 </FormControl>
               </div>
               <div className="ButtonAndRemarqueAudition">
@@ -214,7 +256,11 @@ const AdminAdAuditionInfo = () => {
                   name="remarque"
                   value={formData.remarque}
                   onChange={handleChange}
+                  error={!!formErrors.remarque}
                 />
+                {formErrors.remarque && (
+                  <p className="error">{formErrors.remarque}</p>
+                )}
                 <Button
                   type="submit"
                   variant="contained"
