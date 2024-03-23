@@ -12,7 +12,9 @@ import CandidatesList from "./pages/candidates/CandidatesList";
 import ListeCandidatesParPupitre from "./pages/candidates/ListeCandidatesParPupitre";
 import AdminAuditionInfo from "../admin/pages/auditions/AdminAddAuditionInfo";
 import AuditionUpdate from "../admin/pages/auditions/AuditionUpdate";
+import ListeOeuvres from "./pages/oeuvres/ListeOeuvres";
 import { io } from "socket.io-client";
+import AddOeuvre from "./pages/oeuvres/AddOeuvre";
 
 const AdminDashboard = (props) => {
   return (
@@ -27,7 +29,7 @@ const AdminDashboard = (props) => {
               <Sidebar />
             </aside>
 
-            <Navbar1/>
+            <Navbar1 />
 
             {props.load === "home" && <HomePage />}
             {props.load === "adminAudition" && <AdminAudition />}
@@ -37,11 +39,11 @@ const AdminDashboard = (props) => {
             {props.load === "archives" && <Archive />}
             {props.load === "candidatesList" && <CandidatesList />}
             {props.load === "updateAudition" && <AuditionUpdate />}
-            {props.load === "ListeCandidatesParPupitre" && <ListeCandidatesParPupitre />}
-
-            
-            
-            
+            {props.load === "ListeCandidatesParPupitre" && (
+              <ListeCandidatesParPupitre />
+            )}
+            {props.load === "ListeOeuvres" && <ListeOeuvres />}
+            {props.load === "AddOeuvre" && <AddOeuvre />}
           </div>
           <div className="layout-overlay layout-menu-toggle" />
         </div>

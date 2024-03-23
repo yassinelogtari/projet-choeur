@@ -32,6 +32,7 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
+
       <NavLink to="/concert">
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
@@ -40,10 +41,6 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-
-
-  
-
 
       {/* Saisons */}
       <li className="menu-header small text-uppercase">
@@ -104,11 +101,33 @@ function Sidebar() {
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
-            <div data-i18n="Account Settings">Liste des candidatures par pupitre</div>
+            <div data-i18n="Account Settings">
+              Liste des candidatures par pupitre
+            </div>
           </a>
         </li>
       </NavLink>
-      
+      {/* Ouevres */}
+      <li className="menu-header small text-uppercase">
+        <span className="menu-header-text">Œuvres</span>
+      </li>
+      <NavLink to="/dashboard/admin/oeuvres/liste">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Liste des œuvres</div>
+          </a>
+        </li>
+      </NavLink>
+      <NavLink to="/dashboard/admin/oeuvres/addoeuvre">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Ajouter œuvre</div>
+          </a>
+        </li>
+      </NavLink>
+
       {/* Forms & Tables */}
       <li className="menu-header small text-uppercase">
         <span className="menu-header-text">Forms &amp; Tables</span>
