@@ -1,14 +1,13 @@
 const router = require("express").Router();
 
-const oeuvreController=require("../controllers/oeuvreController")
-const middlewareOuvre=require("../middlewares/auth")
+const oeuvreController = require("../controllers/oeuvreController");
+const middlewareOuvre = require("../middlewares/auth");
 
-router.post("/addoeuvre",middlewareOuvre.loggedMiddleware,middlewareOuvre.isAdmin,oeuvreController.addOeuvre);
-router.get("/getAll",middlewareOuvre.loggedMiddleware,middlewareOuvre.isAdmin,oeuvreController.fetchOeuvre);
-router.get("/getOne/:id",middlewareOuvre.loggedMiddleware,middlewareOuvre.isAdmin,oeuvreController.getByidOeuvre);
-router.delete("/:id",middlewareOuvre.loggedMiddleware,middlewareOuvre.isAdmin,oeuvreController.deleteOuvre);
-router.patch("/update/:id",middlewareOuvre.loggedMiddleware,middlewareOuvre.isAdmin,oeuvreController.updateOeuvre)
-
+router.post("/addoeuvre", oeuvreController.addOeuvre);
+router.get("/getAll", oeuvreController.fetchOeuvre);
+router.get("/getOne/:id", oeuvreController.getByidOeuvre);
+router.delete("/:id", oeuvreController.deleteOuvre);
+router.patch("/update/:id", oeuvreController.updateOeuvre);
 
 /**
  * @swagger
@@ -19,7 +18,6 @@ router.patch("/update/:id",middlewareOuvre.loggedMiddleware,middlewareOuvre.isAd
  *       scheme: bearer
  *       bearerFormat: JWT
  */
-
 
 /**
  * @swagger
@@ -164,7 +162,5 @@ router.patch("/update/:id",middlewareOuvre.loggedMiddleware,middlewareOuvre.isAd
  *       200:
  *         description: Oeuvre updated successfully
  */
-
-
 
 module.exports = router;

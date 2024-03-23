@@ -22,7 +22,6 @@ import AddConcert from "./components/concert/AddConcert";
 
 import FormCandidature from "./pages/FormCandidature";
 
-
 const App = () => {
   return (
     <Router>
@@ -62,7 +61,7 @@ const App = () => {
           <Route
             exact
             path="/dashboard/admin/home"
-            element={<AdminDashboard load="home"  />}
+            element={<AdminDashboard load="home" />}
           />
 
           <Route
@@ -94,16 +93,22 @@ const App = () => {
             element={<AdminDashboard load="candidatesList" />}
           />
           <Route
-             path="/dashboard/admin/Candidature/listParpupitre"
-             element={<AdminDashboard load="ListeCandidatesParPupitre" />}
-           />
+            path="/dashboard/admin/Candidature/listParpupitre"
+            element={<AdminDashboard load="ListeCandidatesParPupitre" />}
+          />
 
-           <Route
+          <Route
             path="/dashboard/admin/updateAudition"
             element={<AdminDashboard load="updateAudition" />}
           />
-
-
+          <Route
+            path="/dashboard/admin/oeuvres/liste"
+            element={<AdminDashboard load="ListeOeuvres" />}
+          />
+          <Route
+            path="/dashboard/admin/oeuvres/addoeuvre"
+            element={<AdminDashboard load="AddOeuvre" />}
+          />
 
           <Route
             exact
@@ -117,12 +122,7 @@ const App = () => {
           />
           <Route exact path="/concert" element={<Concert />} />
           <Route exact path="addConcert" element={<AddConcert />} />
-            <Route
-            exact
-            path="/candidatureForm"
-            element={<FormCandidature />}
-          />
-           
+          <Route exact path="/candidatureForm" element={<FormCandidature />} />
         </Routes>
       </>
     </Router>
