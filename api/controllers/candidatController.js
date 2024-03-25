@@ -364,6 +364,79 @@ const candidatsParTessiture = async (req, res) => {
   }
 };
 
+// const confirmParticipationEtDevenirChoriste=async(req,res)=>{
+//   const candidatId = req.params.id;
+//   try {
+//     const candidat = await Candidats.findOne({"_id":candidatId});
+//     if (!candidat) {
+//       return res.status(404).json({ message: 'Candidat non trouvé' });
+//     }
+//     if(candidat.confirm){
+//       return res.status(404).json({ message: 'Vous avez déjà confirmer votre participation' });
+//     }
+    
+//     const passAleatoire=generatePassword.generate({
+//       length:12,
+//       numbers:true,
+//       uppercase:true,
+//       lowercase:true,
+//       symbols:true
+//     })
+//     const hashedPassword=await bcrypt.hash(passAleatoire,10)
+//     const nouveauMembre=new Membre({
+//       nom:candidat.nom,
+//       prenom:candidat.prenom,
+//       email:candidat.email,
+//       password:hashedPassword,
+//       sexe:candidat.sexe,
+//       dateNaissance:candidat.dateNaissance,
+//       nationalite:candidat.nationalite,
+//       CIN:candidat.CIN,
+//       taille:candidat.taille,
+//       situationPerso:candidat.situationPerso,
+//       connaissanceMusic:candidat.connaisanceMusical,
+//       activite:candidat.activite,
+//       telephone:candidat.telephone,
+//       role:'choriste',
+//       statut:'Inactif',
+
+//     })
+//     const auditions=await Audition.find({"candidatsInfo": { $not: { $size: 0 } }})
+//     for(const audition of auditions){
+//       for(let i=0;i<audition.candidats.length;i++){
+//         const currentCandidat=audition.candidats[i]
+//         const currentCandidatID=currentCandidat.toString()
+//         const infoCandidat=audition.candidatsInfo[i]
+//         if(currentCandidatID===candidatId){
+//           const tessiture=infoCandidat.tessiture
+//           nouveauMembre.pupitre=tessiture
+//           break
+//           }
+          
+//         }
+//       }
+//     candidat.confirm = true;
+//     await candidat.save();
+//     const currentSaison = await Saison.findOne({ saisonCourante: true });
+//     if (currentSaison) {
+//       currentSaison.membres.push(nouveauMembre._id);
+//       await currentSaison.save();
+//     }
+//     await nouveauMembre.save()
+
+   
+//     const corpsEmail=`Bonjour ${candidat.prenom} ${candidat.nom},<br>
+//     Votre participation a été confirmée.<br>
+//     Pour accéder à votre compte,voici vos coordonnées.<br>
+//     Email: ${candidat.email} <br>
+//     Mot de passe: ${passAleatoire} <br> 
+//     Cordialement`
+//     await sendEmail(candidat.email,"Informations d'inscriptions",corpsEmail)
+//     return res.status(200).json({ message: 'Confirmation et inscription en tant que membre effectuées avec succés' });
+//   } catch (error) {
+//     return res.status(500).json({ error: error.message });
+//   }
+// }
 const confirmParticipationEtDevenirChoriste=async(req,res)=>{
   const candidatId = req.params.id;
   try {
@@ -372,7 +445,8 @@ const confirmParticipationEtDevenirChoriste=async(req,res)=>{
       return res.status(404).json({ message: 'Candidat non trouvé' });
     }
     if(candidat.confirm){
-      return res.status(404).json({ message: 'Vous avez déjà confirmer votre participation' });
+      return res.redirect('http://localhost:3000/');
+
     }
     
     const passAleatoire=generatePassword.generate({
@@ -432,7 +506,7 @@ const confirmParticipationEtDevenirChoriste=async(req,res)=>{
     Mot de passe: ${passAleatoire} <br> 
     Cordialement`
     await sendEmail(candidat.email,"Informations d'inscriptions",corpsEmail)
-    return res.status(200).json({ message: 'Confirmation et inscription en tant que membre effectuées avec succés' });
+    return res.redirect('http://localhost:3000/');
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
