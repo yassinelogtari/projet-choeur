@@ -10,7 +10,17 @@ const CandidatesList = () => {
   const [auditionId, setAuditionId] = useState("");
   const [showPopup, setShowPopup] = useState(false); // State pour contrôler la visibilité de la popup
   const [selectedCandidate, setSelectedCandidate] = useState(null); // State pour stocker les données du candidat sélecti
-
+  const handleSendEmails = async () => {
+    try {
+      
+      const response = await axios.post('http://localhost:8000/api/candidats/accepterCandidat');
+      console.log('Emails envoyés avec succès :', response.data);
+      
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi des emails:', error.response ? error.response.data : error.message);
+      
+    }
+  };
   const handleAudition = (id) => {
     setAuditionId(id);
   };
@@ -182,8 +192,9 @@ const CandidatesList = () => {
             pageSize={9}
             rowsPerPageOptions={[9]}
           />
-        </div>
+        </div><button onClick={handleSendEmails} >Envoyer des Emails</button>
       </div>
+      
 
       {showPopup && <div className="popup-overlay"></div>}
 
