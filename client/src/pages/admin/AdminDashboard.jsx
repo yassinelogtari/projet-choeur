@@ -12,6 +12,7 @@ import CandidatesList from "./pages/candidates/CandidatesList";
 import ListeCandidatesParPupitre from "./pages/candidates/ListeCandidatesParPupitre";
 import AdminAuditionInfo from "../admin/pages/auditions/AdminAddAuditionInfo";
 import AuditionUpdate from "../admin/pages/auditions/AuditionUpdate";
+import PlanningAudition from "./pages/auditions/GenererPlanning";
 import { io } from "socket.io-client";
 
 const AdminDashboard = (props) => {
@@ -38,6 +39,7 @@ const AdminDashboard = (props) => {
             {props.load === "candidatesList" && <CandidatesList />}
             {props.load === "updateAudition" && <AuditionUpdate />}
             {props.load === "ListeCandidatesParPupitre" && <ListeCandidatesParPupitre />}
+            {props.load === "genererPlanning" && <PlanningAudition />}
 
             
             

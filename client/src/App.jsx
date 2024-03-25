@@ -102,6 +102,10 @@ const App = () => {
             path="/dashboard/admin/updateAudition"
             element={<AdminDashboard load="updateAudition" />}
           />
+          <Route
+          path="/dashboard/admin/Audition/genererPlanning"
+          element={<AdminDashboard load="genererPlanning"/>}
+          />
 
 
 
