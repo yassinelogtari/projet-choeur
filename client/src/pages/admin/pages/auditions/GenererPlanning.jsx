@@ -21,7 +21,6 @@ import "./genererPlanning.css";
 
 const GenererPlanning = () => {
   const [startDate, setStartDate] = useState("");
-  const [startDateError, setStartDateError] = useState("");
   const [candidatsPerHour, setCandidatsPerHour] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
@@ -30,6 +29,7 @@ const GenererPlanning = () => {
   const [failingCandidats, setFailingCandidats] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const [formErrors, setFormErrors] = useState({});
   useEffect(() => {
     const fetchCandidatsList = async () => {
       try {
@@ -51,25 +51,92 @@ const GenererPlanning = () => {
   const handleDateChange = (e) => {
       const selectedDate = new Date(e.target.value);
       const currentDate = new Date();
-  
       if (selectedDate < currentDate) {
-        setStartDateError("Date expirée, veuillez choisir une autre date.");
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          startDate: "Date expirée, veuillez choisir une autre date.",
+        }));
       } else {
-        setStartDateError("");
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          startDate: "",
+        }));
       }
-  
       setStartDate(e.target.value);
     };
-  
+    const handleCandidatsPerHourChange = (e) => {
+      const value = e.target.value;
+      if (value <= 0) {
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          candidatsPerHour: "Veuillez saisir un nombre de candidat valide.",
+        }));
+      }else{
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          candidatsPerHour: "",
+        }));
+      }
+      setCandidatsPerHour(value);
+    };
+    const handleStartTime = (e) => {
+      const value = e.target.value;
+      if (value) {
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          startTime: "",
+        }));
+      }
+      setStartTime(value);
+    };
+    const handleEndTime = (e) => {
+      const value = e.target.value;
+      if (value) {
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          endTime: "",
+        }));
+      }
+      setEndTime(value);
+    };
+    const handleFailingCandidats = (e) => {
+      const value = e.target.value;
+      if (value) {
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          failingCandidats: "",
+        }));
+      }
+      setFailingCandidats(value);
+    };
+    
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const selectedDate = new Date(startDate);
-    const currentDate = new Date();
+    const errors = {};
 
-    if (selectedDate < currentDate) {
-      setStartDateError("Date expirée, veuillez choisir une autre date.");
-      return; 
+    if (!startDate) {
+      errors.startDate = "Veuillez sélectionner une date de début.";
     }
+
+    if (!candidatsPerHour) {
+      errors.candidatsPerHour = "Veuillez saisir le nombre de candidats par heure.";
+    }
+
+    if (!startTime) {
+      errors.startTime = "Veuillez saisir l'heure de début.";
+    }
+
+    if (!endTime) {
+      errors.endTime = "Veuillez saisir l'heure de fin.";
+    }
+
+    if (generateAdditional && failingCandidats.length === 0) {
+      errors.failingCandidats = "Veuillez sélectionner au moins un candidat défaillant.";
+    }
+
+    setFormErrors(errors);
+
+    if (Object.keys(errors).length === 0) {
     
     let formData = {
       startDate,
@@ -97,6 +164,7 @@ const GenererPlanning = () => {
       console.error("Error:", error.response.data.msg);
     }
   };
+}
 
   return (
     <div>
@@ -112,9 +180,8 @@ const GenererPlanning = () => {
               type="date"
               value={startDate}
               onChange={handleDateChange}
-              required
-              error={!!startDateError}
-              helperText={startDateError}
+              error={!!formErrors.startDate}
+              helperText={formErrors.startDate}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -126,19 +193,17 @@ const GenererPlanning = () => {
               label="Nombre de candidats par heure"
               type="number"
               value={candidatsPerHour}
-              onChange={(e) => setCandidatsPerHour(e.target.value)}
-              required
-              inputProps={{
-                min: 1, 
-                step: 1, 
-              }}
+              onChange={handleCandidatsPerHourChange}
+              error={!!formErrors.candidatsPerHour}
+              helperText={formErrors.candidatsPerHour}
             />
             <TextField
               label="Heure de début"
               type="time"
               value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              required
+              onChange={handleStartTime}
+              error={!!formErrors.startTime}
+              helperText={formErrors.startTime}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -151,8 +216,9 @@ const GenererPlanning = () => {
               label="Heure de fin"
               type="time"
               value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-              required
+              onChange={handleEndTime}
+              error={!!formErrors.endTime}
+              helperText={formErrors.endTime}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -178,9 +244,9 @@ const GenererPlanning = () => {
                 <InputLabel>Candidats défaillants</InputLabel>
                 <Select
                   multiple
-                  required
                   value={failingCandidats}
-                  onChange={(e) => setFailingCandidats(e.target.value)}
+                  onChange={handleFailingCandidats}
+                  error={!!formErrors.failingCandidats}
                   renderValue={(selected) => (
                     <div style={{ display: "flex", flexWrap: "wrap" }}>
                       {selected.map((candidat) => (
@@ -199,9 +265,9 @@ const GenererPlanning = () => {
                     </MenuItem>
                   ))}
                 </Select>
-                <FormHelperText>
-                  Sélectionnez les candidats défaillants
-                </FormHelperText>
+                <FormHelperText error>
+                  {formErrors.failingCandidats}
+                  </FormHelperText>
               </FormControl>
             )}
 
