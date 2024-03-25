@@ -4,7 +4,7 @@ const auditionController = require("../controllers/auditionController");
 const authMiddleware = require("../middlewares/auth");
 
 router.post("/generate", auditionController.generateSchedule);
-router.post("/generate/additional",authMiddleware.loggedMiddleware,authMiddleware.isAdmin, auditionController.generateAdditionalSchedule);
+router.post("/generate/additional", auditionController.generateAdditionalSchedule);
 router.get("/", auditionController.fetshAuditions);
 router.post("/addinfo",authMiddleware.loggedMiddleware,authMiddleware.AdminManager, auditionController.addAuditionInfo);
 router.patch('/update-audition/:auditionId', auditionController.updateAudition);

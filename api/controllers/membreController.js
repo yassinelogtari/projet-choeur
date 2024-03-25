@@ -19,7 +19,6 @@ const modifierTessiture = async (req, res) => {
         { new: true }
       );
 
-     
       if (updatedMembre) {
         const chefPupitreByUpdatedMemberUsers = await Membre.find({
           role: "chef du pupitre",
