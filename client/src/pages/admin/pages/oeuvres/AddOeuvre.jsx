@@ -95,19 +95,20 @@ const AddOeuvre = () => {
 
   return (
     <>
-      <div className="position-absolute">
-        <div>
-          <Typography
-            variant="h4"
-            style={{
-              textAlign: "center",
-              paddingBottom: "20px",
-              paddingTop: "20px",
-            }}
-          >
-            Ajouter une oeuvre
-          </Typography>
-        </div>
+      <div
+        className="position-absolute  positionabsolute2"
+        style={{ width: "900px", marginLeft: "440px", marginTop: "80px" }}
+      >
+        <Typography
+          variant="h4"
+          style={{
+            textAlign: "center",
+            paddingBottom: "20px",
+            paddingTop: "20px",
+          }}
+        >
+          Ajouter une oeuvre
+        </Typography>
 
         <Card className="custom-card">
           <CardContent>
@@ -149,11 +150,11 @@ const AddOeuvre = () => {
                   <TextField
                     label="Pupitre"
                     name="pupitre"
-                    required="true"
                     value={oeuvreData.pupitre}
                     onChange={handleChange}
                     fullWidth
                     helperText="Separate multiple sections with a comma"
+                    disabled={!oeuvreData.presenceChoeur}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>

@@ -33,6 +33,11 @@
   margin-right: 14px !important;
   margin-left: 9px !important;
 }
+.candidatIDfield{
+
+  margin-left: 7.5px !important;
+  margin-top: 8px !important;
+}
 
 .selectEvaluation{
   margin-top: 8px !important;
@@ -40,7 +45,7 @@
 
 .selectDecision{
   margin-top: 8px !important;
-  margin-left: 15px !important;
+  margin-left: 10px !important;
 }
 
 
@@ -59,3 +64,4 @@
 .RemarqueAudition{
   width: 98.5% !important;
 }
+

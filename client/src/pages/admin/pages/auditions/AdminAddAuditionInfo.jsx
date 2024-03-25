@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   Box,
@@ -9,25 +9,31 @@ import {
   Select,
   InputLabel,
   FormControl,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import "./adminAddAuditionInfo.css";
 
-
-
 const AdminAdAuditionInfo = () => {
   const [auditionId, setAuditionId] = useState("");
+  const [allCandidates, setAllCandidates] = useState([]);
+  const [formErrors, setFormErrors] = useState({});
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get("auditionId");
     setAuditionId(id);
+    fetchCandidates(id);
     setFormData((oldstate) => ({ ...oldstate, auditionId: id }));
   }, [location.search]);
 
   const [formData, setFormData] = useState({
     auditionId: "",
-    candidatId: "",
+    selectedCandidateId: "",
     extraitChante: "",
     tessiture: "",
     evaluation: "",
@@ -35,22 +41,74 @@ const AdminAdAuditionInfo = () => {
     remarque: "",
   });
 
+  const fetchCandidates = async (auditionId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/auditions/${auditionId}`
+      );
+      const candidatesForAudition = response.data.audition.candidats.map(
+        (candidate) => ({
+          _id: candidate._id,
+          nom: candidate.nom,
+          prenom: candidate.prenom,
+        })
+      );
+      setAllCandidates(candidatesForAudition);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  const [openDialog, setOpenDialog] = useState(false);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    let errors = {};
+    let hasErrors = false;
+
+    if (!formData.extraitChante) {
+      errors.extraitChante = "Veuillez saisir un extrait chanté.";
+      hasErrors = true;
+    }
+    if (!formData.tessiture) {
+      errors.tessiture = "Veuillez sélectionner une tessiture.";
+      hasErrors = true;
+    }
+    if (!formData.evaluation) {
+      errors.evaluation = "Veuillez sélectionner une évaluation.";
+      hasErrors = true;
+    }
+    if (!formData.decision) {
+      errors.decision = "Veuillez sélectionner une décision.";
+      hasErrors = true;
+    }
+
+    if (!formData.remarque) {
+      errors.remarque = "Veuillez sélectionner une remarque.";
+      hasErrors = true;
+    }
+    if (hasErrors) {
+      setFormErrors(errors);
+      return;
+    }
+
     try {
       const response = await axios.post(
         "http://localhost:8000/api/auditions/addinfo",
         formData
       );
       console.log(response.data);
+      setOpenDialog(true);
+
       setFormData({
         auditionId: "",
-        candidatId: "",
+        selectedCandidateId: "",
         extraitChante: "",
         tessiture: "",
         evaluation: "",
@@ -60,6 +118,11 @@ const AdminAdAuditionInfo = () => {
     } catch (error) {
       console.error("Error:", error);
     }
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    navigate("/dashboard/admin/Audition/list");
   };
 
   return (
@@ -85,28 +148,41 @@ const AdminAdAuditionInfo = () => {
                   className="auditionField"
                   name="auditionId"
                   value={auditionId}
-                  disabled
                   onChange={handleChange}
                 />
-                <TextField
-                  id="candidat"
-                  label="Candidat"
-                  variant="outlined"
-                  className="auditionField"
-                  name="candidatId"
-                  value={formData.candidatId}
-                  onChange={handleChange}
-                />
-
-                <TextField
-                  id="extraitChante"
-                  label="Extrait chanté"
-                  variant="outlined"
-                  className="auditionField"
-                  name="extraitChante"
-                  value={formData.extraitChante}
-                  onChange={handleChange}
-                />
+                <FormControl className="auditionField candidatIDfield">
+                  <InputLabel id="candidat-label">Candidat</InputLabel>
+                  <Select
+                    labelId="candidat-label"
+                    id="candidat-select"
+                    value={formData.candidatId}
+                    name="candidatId"
+                    onChange={handleChange}
+                  >
+                    {allCandidates.map((candidate) => (
+                      <MenuItem key={candidate._id} value={candidate._id}>
+                        {`${candidate.nom} ${candidate.prenom}`}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <div className="extraitChanterError">
+                  <TextField
+                    id="extraitChante"
+                    label="Extrait chanté"
+                    variant="outlined"
+                    className="auditionField"
+                    name="extraitChante"
+                    value={formData.extraitChante}
+                    onChange={handleChange}
+                    error={!!formErrors.extraitChante}
+                  />
+                  {formErrors.extraitChante && (
+                    <p className="error">
+                      {formErrors.extraitChante}
+                    </p>
+                  )}
+                </div>
               </div>
               <div className="bottonFormAddAuddition">
                 <FormControl className="auditionField selectTessiture">
@@ -118,12 +194,16 @@ const AdminAdAuditionInfo = () => {
                     name="tessiture"
                     onChange={handleChange}
                     className="auditionField"
+                    error={!!formErrors.tessiture}
                   >
                     <MenuItem value="alto">alto</MenuItem>
                     <MenuItem value="basse">basse</MenuItem>
                     <MenuItem value="soprano">soprano</MenuItem>
                     <MenuItem value="ténor">ténor</MenuItem>
                   </Select>
+                  {formErrors.tessiture && (
+                    <p className="error">{formErrors.tessiture}</p>
+                  )}
                 </FormControl>
 
                 <FormControl className="auditionField selectEvaluation">
@@ -135,11 +215,15 @@ const AdminAdAuditionInfo = () => {
                     name="evaluation"
                     onChange={handleChange}
                     className="auditionField"
+                    error={!!formErrors.evaluation}
                   >
                     <MenuItem value="A">A</MenuItem>
                     <MenuItem value="B">B</MenuItem>
                     <MenuItem value="C">C</MenuItem>
                   </Select>
+                  {formErrors.evaluation && (
+                    <p className="error">{formErrors.evaluation}</p>
+                  )}
                 </FormControl>
 
                 <FormControl className="auditionField selectDecision">
@@ -151,11 +235,15 @@ const AdminAdAuditionInfo = () => {
                     name="decision"
                     onChange={handleChange}
                     className="auditionField"
+                    error={!!formErrors.evaluation}
                   >
                     <MenuItem value="Retenu">Retenu</MenuItem>
                     <MenuItem value="Refusé">Refusé</MenuItem>
                     <MenuItem value="En attente">En attente</MenuItem>
                   </Select>
+                  {formErrors.decision && (
+                    <p className="error">{formErrors.decision}</p>
+                  )}
                 </FormControl>
               </div>
               <div className="ButtonAndRemarqueAudition">
@@ -168,7 +256,11 @@ const AdminAdAuditionInfo = () => {
                   name="remarque"
                   value={formData.remarque}
                   onChange={handleChange}
+                  error={!!formErrors.remarque}
                 />
+                {formErrors.remarque && (
+                  <p className="error">{formErrors.remarque}</p>
+                )}
                 <Button
                   type="submit"
                   variant="contained"
@@ -181,6 +273,17 @@ const AdminAdAuditionInfo = () => {
           </Box>
         </div>
       </div>
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Validation</DialogTitle>
+        <DialogContent>
+          <p>Votre audition a été ajoutée avec succès !</p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
       <div className="layout-overlay layout-menu-toggle" />
     </div>
   );

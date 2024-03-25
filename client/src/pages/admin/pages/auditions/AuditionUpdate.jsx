@@ -12,19 +12,38 @@ import {
 } from "@mui/material";
 import "./auditionUpdate.css";
 
-const AdminAdAuditionInfo = () => {
+const AuditionUpdate = () => {
   const location = useLocation();
   const [auditionIdParam, setAuditionIdParam] = useState("");
-
   const [tessiture, setTessiture] = useState("");
   const [evaluation, setEvaluation] = useState("");
   const [decision, setDecision] = useState("");
+  const [candidatInfoId, setCandidatInfoId] = useState("");
+  const [candidateOptions, setCandidateOptions] = useState([]);
+  const [formErrors, setFormErrors] = useState({});
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get("auditionId");
     setAuditionIdParam(id);
+    fetchCandidates(id);
   }, [location.search]);
+
+  const fetchCandidates = async (auditionId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/auditions/${auditionId}`
+      );
+      const candidatesForAudition = response.data.audition.candidatsInfo.map(
+        (candidate) => ({
+          _id: candidate._id,
+        })
+      );
+      setCandidateOptions(candidatesForAudition);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleTessitureChange = (event) => {
     setTessiture(event.target.value);
@@ -38,13 +57,50 @@ const AdminAdAuditionInfo = () => {
     setDecision(event.target.value);
   };
 
+  const handleCandidatInfoId = (event) => {
+    setCandidatInfoId(event.target.value);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    let errors = {};
+    let hasErrors = false;
+
+    if (!candidatInfoId) {
+      errors.candidatInfoId = "Veuillez sélectionner une tessiture.";
+      hasErrors = true;
+    }
+
+    if (!tessiture) {
+      errors.tessiture = "Veuillez sélectionner une tessiture.";
+      hasErrors = true;
+    }
+    if (!evaluation) {
+      errors.evaluation = "Veuillez sélectionner une évaluation.";
+      hasErrors = true;
+    }
+    if (!decision) {
+      errors.decision = "Veuillez sélectionner une décision.";
+      hasErrors = true;
+    }
+
+    const extraitChante = event.target.extraitChante.value.trim();
+    if (!extraitChante) {
+      errors.extraitChante = "Veuillez saisir un extrait chanté.";
+      hasErrors = true;
+    }
+    const remarque = event.target.remarque.value.trim();
+    if (!remarque) {
+      errors.remarque = "Veuillez saisir une remarque.";
+      hasErrors = true;
+    }
+    if (hasErrors) {
+      setFormErrors(errors);
+      return;
+    }
+
     try {
-      console.log(auditionIdParam);
-      const candidatId = event.target.candidatId.value;
-      const candidatInfoId = candidatId;
       const requestBody = {
         candidatInfoId,
         updateFields: {
@@ -60,10 +116,12 @@ const AdminAdAuditionInfo = () => {
         `http://localhost:8000/api/auditions/update-audition/${auditionIdParam}`,
         requestBody
       );
-
+      // Clear form and errors on successful submission
+      setCandidatInfoId("");
       setTessiture("");
       setEvaluation("");
       setDecision("");
+      setFormErrors({});
       event.target.reset();
     } catch (error) {
       console.error("Error updating audition info:", error);
@@ -86,18 +144,38 @@ const AdminAdAuditionInfo = () => {
           >
             <div className="form-row">
               <div className="addAuditionInfoForm">
-                <TextField
-                  id="candidatId" // Ajoutez l'ID de l'input
-                  label="ID du Candidat" // Ajoutez le label approprié
-                  variant="outlined"
-                  className="auditionField"
-                />
-                <TextField
-                  id="extraitChante"
-                  label="Extrait chanté"
-                  variant="outlined"
-                  className="auditionField"
-                />
+                <FormControl className="auditionField">
+                  <InputLabel id="candidatId-label">ID du Candidat</InputLabel>
+                  <Select
+                    labelId="candidatId-label"
+                    id="candidatId"
+                    value={candidatInfoId}
+                    onChange={handleCandidatInfoId}
+                    className="auditionField selectCandidatId"
+                    error={!!formErrors.candidatInfoId}
+                  >
+                    {candidateOptions.map((candidate) => (
+                      <MenuItem key={candidate._id} value={candidate._id}>
+                        {candidate._id}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {formErrors.candidatInfoId && (
+                    <p className="error">{formErrors.candidatInfoId}</p>
+                  )}
+                </FormControl>
+                <div>
+                  <TextField
+                    id="extraitChante"
+                    label="Extrait chanté"
+                    variant="outlined"
+                    className="auditionField selectExtraitChante"
+                    error={!!formErrors.extraitChante}
+                  />
+                  {formErrors.extraitChante && (
+                    <p className="error">{formErrors.extraitChante}</p>
+                  )}
+                </div>
               </div>
               <div className="bottonFormAddAuddition">
                 <FormControl className="auditionField selectTessiture">
@@ -109,12 +187,16 @@ const AdminAdAuditionInfo = () => {
                     label="Tessiture"
                     onChange={handleTessitureChange}
                     className="auditionField"
+                    error={!!formErrors.tessiture}
                   >
                     <MenuItem value="alto">alto</MenuItem>
                     <MenuItem value="basse">basse</MenuItem>
                     <MenuItem value="soprano">soprano</MenuItem>
                     <MenuItem value="ténor">ténor</MenuItem>
                   </Select>
+                  {formErrors.tessiture && (
+                    <p className="error">{formErrors.tessiture}</p>
+                  )}
                 </FormControl>
 
                 <FormControl className="auditionField selectEvaluation">
@@ -126,11 +208,15 @@ const AdminAdAuditionInfo = () => {
                     label="Evaluation"
                     onChange={handleEvaluationChange}
                     className="auditionField"
+                    error={!!formErrors.evaluation}
                   >
                     <MenuItem value="A">A</MenuItem>
                     <MenuItem value="B">B</MenuItem>
                     <MenuItem value="C">C</MenuItem>
                   </Select>
+                  {formErrors.evaluation && (
+                    <p className="error">{formErrors.evaluation}</p>
+                  )}
                 </FormControl>
 
                 <FormControl className="auditionField selectDecisionUpdate">
@@ -142,11 +228,15 @@ const AdminAdAuditionInfo = () => {
                     label="Decision"
                     onChange={handleDecisionChange}
                     className="auditionField"
+                    error={!!formErrors.decision}
                   >
                     <MenuItem value="Retenu">Retenu</MenuItem>
                     <MenuItem value="Refusé">Refusé</MenuItem>
                     <MenuItem value="En attente">En attente</MenuItem>
                   </Select>
+                  {formErrors.decision && (
+                    <p className="error">{formErrors.decision}</p>
+                  )}
                 </FormControl>
               </div>
               <div className="ButtonAndRemarqueAudition">
@@ -156,7 +246,11 @@ const AdminAdAuditionInfo = () => {
                   multiline
                   rows={4}
                   className="RemarqueAudition"
+                  error={!!formErrors.remarque}
                 />
+                {formErrors.remarque && (
+                  <p className="error">{formErrors.remarque}</p>
+                )}
                 <Button
                   type="submit"
                   variant="contained"
@@ -174,4 +268,4 @@ const AdminAdAuditionInfo = () => {
   );
 };
 
-export default AdminAdAuditionInfo;
+export default AuditionUpdate;

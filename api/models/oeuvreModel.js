@@ -21,8 +21,7 @@ const oeuvreSchema = new mongoose.Schema({
   pupitre: [
     {
       type: String,
-      enum: ["alto", "soprano", "basse", "ténor"],
-      required: true,
+      enum: ["", "alto", "soprano", "basse", "ténor"],
     },
   ],
   anneeComposition: {

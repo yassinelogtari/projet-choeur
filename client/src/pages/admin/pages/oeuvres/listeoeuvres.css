@@ -1,4 +1,4 @@
-.position-absolute {
+.position-absoluteListeOeuvre {
     position: absolute;
     top: 50%;
     left: 58.5%;
@@ -25,4 +25,23 @@ height: 90px;
 }
 .titreselected{
     color: rgb(71, 71, 244)
+}
+.dialogupdatecontent{
+    margin-top: 20px;
+}
+.liste-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.titre {
+    margin-right: 20px;
+}
+.searchicon{
+    cursor: pointer;
+}
+.searchbar{
+    background-color: rgb(218, 219, 220);
 }
