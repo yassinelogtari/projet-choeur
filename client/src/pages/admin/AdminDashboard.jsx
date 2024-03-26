@@ -7,10 +7,11 @@ import HomePage from "./pages/HomePage";
 import AdminAudition from "./pages/auditions/AdminAudition";
 import NouvelleSaison from "./pages/saison/NouvelleSaison";
 import SaisonActuelle from "./pages/saison/SaisonActuelle";
-import Archive from "./pages/saison/Archive";
+
 import CandidatesList from "./pages/candidates/CandidatesList";
 import AdminAuditionInfo from "../admin/pages/auditions/AdminAddAuditionInfo";
 import AuditionUpdate from "../admin/pages/auditions/AuditionUpdate";
+import Archive from "./pages/saison/archive/Archive";
 
 const AdminDashboard = (props) => {
   return (
