@@ -8,9 +8,30 @@ import { NavLink } from "react-router-dom";
 const CandidatesList = () => {
   const [allCandidates, setAllCandidates] = useState();
   const [auditionId, setAuditionId] = useState("");
-  const [showPopup, setShowPopup] = useState(false); // State pour contrôler la visibilité de la popup
-  const [selectedCandidate, setSelectedCandidate] = useState(null); // State pour stocker les données du candidat sélecti
+  const [showPopup, setShowPopup] = useState(false);
+  const [showModal, setShowModal] = useState(false); 
+  const [popupMessage, setPopupMessage] = useState('');
 
+  const [selectedCandidate, setSelectedCandidate] = useState(null); // State pour stocker les données du candidat sélecti
+  const handleSendEmails = async () => {
+    try {
+      
+      const response = await axios.post('http://localhost:8000/api/candidats/accepterCandidat');
+      console.log('Emails envoyés avec succès :', response.data);
+      // alert('Emails envoyés avec succès');
+
+      setPopupMessage('Emails envoyés avec succès!');
+      setShowModal(true);
+      
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi des emails:', error.response ? error.response.data : error.message);
+      // alert('Erreur lors de l\'envoi des emails');
+      
+      setPopupMessage('Erreur lors de l\'envoi des emails');
+      setShowModal(true);
+      
+    }
+  };
   const handleAudition = (id) => {
     setAuditionId(id);
   };
@@ -182,8 +203,19 @@ const CandidatesList = () => {
             pageSize={9}
             rowsPerPageOptions={[9]}
           />
+        </div><button style={{ backgroundColor: 'mediumblue', color: 'white' }} onClick={handleSendEmails} >Envoyer des Emails d'acceptation</button>
+        {showModal && (
+        <div className="popup1">
+          <div className="popup1-container">
+            <div className="popup1-content">
+              <p>{popupMessage}</p>
+              <span className="close" onClick={() => setShowModal(false)}>&times;</span>
+            </div>
+          </div>
         </div>
+      )}
       </div>
+      
 
       {showPopup && <div className="popup-overlay"></div>}
 

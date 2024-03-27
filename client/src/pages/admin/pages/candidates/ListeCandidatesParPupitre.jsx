@@ -38,7 +38,7 @@ const ListeCandidatesParPupitre = () => {
     headerName: 'Décision',
     width: 100,
     renderCell: (params) => (
-      <span style={{ color: params.value === 'Retenu' ? 'green' : 'red' }}>
+      <span style={{ color: params.value === 'Retenu' ? 'green' : (params.value === 'En attente' ? 'orange' : 'red' )}}>
         {params.value}
       </span>
     ),},
