@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import AdminDashboard from "../pages/admin/AdminDashboard";
 import Navbar from "../components/navbar/Navbar";
 import { io } from "socket.io-client";
 import { posts } from "../data"; // Import your data.js file
@@ -15,7 +15,7 @@ const Login = () => {
   const [storedToken, setStoredToken] = useState();
   const [decodedToken, setDecodedToken] = useState();
   // Declare socket outside of useEffect
-  const socket = io();
+  const socket = io.connect("http://localhost:5000/");
 
   useEffect(() => {
     if (socket) {
@@ -39,7 +39,7 @@ const Login = () => {
   const handleLogin = async () => {
     // Check if the entered username matches the "nom" field of any user in posts http://localhost:8000/api/membre/login
 
-    const res = await axios.post("https://projet-choeur-api.vercel.app/api/membre/login", {
+    const res = await axios.post("http://localhost:8000/api/membre/login", {
       email,
       password
     });
@@ -74,8 +74,7 @@ const Login = () => {
     <div className="container">
       {storedToken ? (
         <>
-          <Navbar socket={socket} />
-          <span className="username">{email}</span>
+          <AdminDashboard socket={socket} load="home" />
         </>
       ) : (
         <div className="login">

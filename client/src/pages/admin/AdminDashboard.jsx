@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar1 from "../../components/navbar1/Nabar1";
 
@@ -9,9 +9,13 @@ import NouvelleSaison from "./pages/saison/NouvelleSaison";
 import SaisonActuelle from "./pages/saison/SaisonActuelle";
 
 import CandidatesList from "./pages/candidates/CandidatesList";
+import ListeCandidatesParPupitre from "./pages/candidates/ListeCandidatesParPupitre";
 import AdminAuditionInfo from "../admin/pages/auditions/AdminAddAuditionInfo";
 import AuditionUpdate from "../admin/pages/auditions/AuditionUpdate";
 import Archive from "./pages/saison/archive/Archive";
+import ListeOeuvres from "./pages/oeuvres/ListeOeuvres";
+import { io } from "socket.io-client";
+import AddOeuvre from "./pages/oeuvres/AddOeuvre";
 
 const AdminDashboard = (props) => {
   return (
@@ -25,7 +29,9 @@ const AdminDashboard = (props) => {
             >
               <Sidebar />
             </aside>
+
             <Navbar1 />
+
             {props.load === "home" && <HomePage />}
             {props.load === "adminAudition" && <AdminAudition />}
             {props.load === "nouvelleSaison" && <NouvelleSaison />}
@@ -33,11 +39,12 @@ const AdminDashboard = (props) => {
             {props.load === "auditionAddInfo" && <AdminAuditionInfo />}
             {props.load === "archives" && <Archive />}
             {props.load === "candidatesList" && <CandidatesList />}
-            {props.load === "updateAudition" && <AuditionUpdate/>}
-
-            
-            
-            
+            {props.load === "updateAudition" && <AuditionUpdate />}
+            {props.load === "ListeCandidatesParPupitre" && (
+              <ListeCandidatesParPupitre />
+            )}
+            {props.load === "ListeOeuvres" && <ListeOeuvres />}
+            {props.load === "AddOeuvre" && <AddOeuvre />}
           </div>
           <div className="layout-overlay layout-menu-toggle" />
         </div>

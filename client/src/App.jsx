@@ -19,6 +19,10 @@ import FormSaison from "./components/formSaison/FormSaison";
 import SaisonArchiveeDetails from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/SaisonArchiveeDetails";
 import MembresTable from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/tablesData/MembresTable";
 
+import Concert from "./pages/concert/Concert";
+import AddConcert from "./components/concert/AddConcert";
+
+import FormCandidature from "./pages/FormCandidature";
 
 const App = () => {
   return (
@@ -61,6 +65,7 @@ const App = () => {
             path="/dashboard/admin/home"
             element={<AdminDashboard load="home" />}
           />
+
           <Route
             path="/dashboard/admin/Audition/list"
             element={<AdminDashboard load="adminAudition" />}
@@ -101,12 +106,23 @@ const App = () => {
             path="/dashboard/admin/Candidature/list"
             element={<AdminDashboard load="candidatesList" />}
           />
-           <Route
+          <Route
+            path="/dashboard/admin/Candidature/listParpupitre"
+            element={<AdminDashboard load="ListeCandidatesParPupitre" />}
+          />
+
+          <Route
             path="/dashboard/admin/updateAudition"
             element={<AdminDashboard load="updateAudition" />}
           />
-
-
+          <Route
+            path="/dashboard/admin/oeuvres/liste"
+            element={<AdminDashboard load="ListeOeuvres" />}
+          />
+          <Route
+            path="/dashboard/admin/oeuvres/addoeuvre"
+            element={<AdminDashboard load="AddOeuvre" />}
+          />
 
           <Route
             exact
@@ -118,6 +134,9 @@ const App = () => {
             path="/presence/repetition/:idR"
             element={<PresenceRepetition />}
           />
+          <Route exact path="/concert" element={<Concert />} />
+          <Route exact path="addConcert" element={<AddConcert />} />
+          <Route exact path="/candidatureForm" element={<FormCandidature />} />
         </Routes>
       </>
     </Router>

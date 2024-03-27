@@ -108,7 +108,7 @@ const ModifArchivForm = () => {
   return (
     <>
       <div className='title'>
-        <h4 className='nomSaison'>{loading}</h4>
+        <h4 className='nomSaison'>{nom}</h4>
         <span className='dateSaison'>{dateDebut} / {dateFin}</span>
       </div>
       <Form className="form" name="form_item_path" layout="vertical" onFinish={updateSaison}>
