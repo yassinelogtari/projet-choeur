@@ -7,12 +7,16 @@ import HomePage from "./pages/HomePage";
 import AdminAudition from "./pages/auditions/AdminAudition";
 import NouvelleSaison from "./pages/saison/NouvelleSaison";
 import SaisonActuelle from "./pages/saison/SaisonActuelle";
-import Archive from "./pages/saison/Archive";
+
 import CandidatesList from "./pages/candidates/CandidatesList";
 import ListeCandidatesParPupitre from "./pages/candidates/ListeCandidatesParPupitre";
 import AdminAuditionInfo from "../admin/pages/auditions/AdminAddAuditionInfo";
 import AuditionUpdate from "../admin/pages/auditions/AuditionUpdate";
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+import Archive from "./pages/saison/archive/Archive";
+>>>>>>> b33bedca7d4f8be64da255dc15ebe0b856674448
 import ListeOeuvres from "./pages/oeuvres/ListeOeuvres";
 =======
 import PlanningAudition from "./pages/auditions/GenererPlanning";

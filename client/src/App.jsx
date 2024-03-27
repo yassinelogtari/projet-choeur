@@ -16,6 +16,8 @@ import ChefPupitreDashboard from "./pages/ChefPupitreDashboard";
 import ChoristeDashboard from "./pages/ChoristeDashboard";
 import ManagerDashboard from "./pages/ManagerDashboard";
 import FormSaison from "./components/formSaison/FormSaison";
+import SaisonArchiveeDetails from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/SaisonArchiveeDetails";
+import MembresTable from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/tablesData/MembresTable";
 
 import Concert from "./pages/concert/Concert";
 import AddConcert from "./components/concert/AddConcert";
@@ -84,6 +86,18 @@ const App = () => {
             path="/dashboard/admin/archive"
             element={<AdminDashboard load="archives" />}
           />
+           <Route
+            exact
+            path="/saison/archive/details-saisonArchivee/:idSA"
+            element={<SaisonArchiveeDetails />}
+          />
+
+<Route
+            exact
+            path="/saison/archive/details-saisonArchivee/table"
+            element={<MembresTable />}
+          />
+          
           <Route
             path="/dashboard/admin/addAudition"
             element={<AdminDashboard load="auditionAddInfo" />}

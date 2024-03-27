@@ -1,0 +1,75 @@
+.form  {
+    border-radius: 5px;
+    background-color: white;
+    padding: 40px;
+    margin-top: 50px;
+    
+}
+
+.input{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    font-size: medium;
+}
+
+.custom-label {
+font-size:x-large;
+
+}
+
+.btns{
+    display: flex;
+    justify-content:space-around;
+
+}
+
+.btn-modification{
+    width: 30%;
+    height: auto;
+    margin-top: 20px;
+    padding: 14px 20px;
+    font-size: large;
+    font-weight:500;
+ 
+    
+}
+
+.btn-archivage{
+    width: 30%;
+    height: auto;
+    margin-top: 20px;
+    padding: 14px 20px;
+    font-size: large;
+    font-weight:500;
+    background-color: #00b27a
+    ;
+ 
+    
+}
+
+.title{
+    display: block;
+    margin-top: 100px;
+    text-align: center;
+    
+    
+
+}
+
+.nomSaison{
+    font-size: 60px;
+}
+
+.dateSaison{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.loading {
+    text-align: center;
+    font-size: xx-large;
+    color: cadetblue;
+    font-weight: bold;
+}
