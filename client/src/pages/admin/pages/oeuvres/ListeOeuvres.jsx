@@ -22,7 +22,10 @@ import {
   Grid,
   Checkbox,
   FormControlLabel,
+  InputAdornment,
 } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -39,6 +42,7 @@ const ListeOeuvres = () => {
   const [message, setMessage] = useState("");
   const [selectedOeuvre, setSelectedOeuvre] = useState(null);
   const [updateId, setUpdateId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const [editData, setEditData] = useState({
     titre: "",
     compositeurs: "",
@@ -150,7 +154,7 @@ const ListeOeuvres = () => {
         `http://localhost:8000/api/oeuvre/update/${updateId}`,
         editData
       );
-
+      setOpenAlert(true);
       setMessage(response.data.message);
       fetchData();
       handleCloseEditDialog();
@@ -182,12 +186,59 @@ const ListeOeuvres = () => {
       [name]: checked,
     }));
   };
+  const handleSearch = () => {
+    const filteredData = data.filter((oeuvre) => {
+      for (const key in oeuvre) {
+        if (
+          oeuvre[key] &&
+          oeuvre[key]
+            .toString()
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
+        ) {
+          return true;
+        }
+      }
+      return false;
+    });
+    console.log("filteredData", filteredData);
+    setData(filteredData);
+  };
+  const resetTable = () => {
+    fetchData();
+    setSearchQuery("");
+  };
+  const handleSearchInputChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  useEffect(() => {
+    if (searchQuery === "") {
+      resetTable();
+    }
+  }, [searchQuery]);
 
   return (
     <div className="position-absoluteListeOeuvre">
-      <Typography variant="h4" className="titre">
-        Liste des oeuvres
-      </Typography>
+      <div className="liste-container">
+        <Typography variant="h4" className="titre">
+          Liste des oeuvres
+        </Typography>
+        <TextField
+          label="Rechercher des oeuvres.."
+          className="searchbar"
+          variant="outlined"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <SearchIcon onClick={handleSearch} className="searchicon" />
+              </InputAdornment>
+            ),
+          }}
+        />
+      </div>
 
       <TableContainer component={Paper}>
         <Table>
@@ -352,12 +403,13 @@ const ListeOeuvres = () => {
       {/*dialog modifier */}
       <Dialog open={updateId !== null} onClose={handleCloseEditDialog}>
         <DialogTitle>Modifier l'oeuvre</DialogTitle>
-        <DialogContent>
+        <DialogContent className="dialogupdatecontent">
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Titre"
                 name="titre"
+                required="true"
                 value={editData.titre}
                 onChange={handleEditChange}
               />
@@ -366,6 +418,7 @@ const ListeOeuvres = () => {
               <TextField
                 label="Compositeurs"
                 name="compositeurs"
+                required="true"
                 value={editData.compositeurs}
                 onChange={handleEditChange}
               />
@@ -374,6 +427,7 @@ const ListeOeuvres = () => {
               <TextField
                 label="Arrangeurs"
                 name="arrangeurs"
+                required="true"
                 value={editData.arrangeurs}
                 onChange={handleEditChange}
               />
@@ -384,12 +438,14 @@ const ListeOeuvres = () => {
                 name="pupitre"
                 value={editData.pupitre}
                 onChange={handleEditChange}
+                disabled={!editData.presenceChoeur}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Année de la composition"
                 name="anneeComposition"
+                required="true"
                 value={editData.anneeComposition}
                 onChange={handleEditChange}
               />
@@ -398,6 +454,7 @@ const ListeOeuvres = () => {
               <TextField
                 label="Genre"
                 name="genre"
+                required="true"
                 value={editData.genre}
                 onChange={handleEditChange}
               />
