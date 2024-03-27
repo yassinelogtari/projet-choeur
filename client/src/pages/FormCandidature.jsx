@@ -5,7 +5,7 @@ function FormCandidature() {
   return (
     <div>
       <CandidatureFormuliare />
-**    </div>
+    </div>
   )
 }
 

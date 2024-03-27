@@ -132,7 +132,6 @@ const CandidatureFormulaire = () => {
   
   
   
-
   return (
     <div style={{ 
       position: 'fixed',

@@ -102,6 +102,7 @@ const App = () => {
             element={<AdminDashboard load="updateAudition" />}
           />
           <Route
+<<<<<<< HEAD
             path="/dashboard/admin/oeuvres/liste"
             element={<AdminDashboard load="ListeOeuvres" />}
           />
@@ -109,6 +110,13 @@ const App = () => {
             path="/dashboard/admin/oeuvres/addoeuvre"
             element={<AdminDashboard load="AddOeuvre" />}
           />
+=======
+          path="/dashboard/admin/Audition/genererPlanning"
+          element={<AdminDashboard load="genererPlanning"/>}
+          />
+
+
+>>>>>>> c2b6f70e505a01194f9c7baca15367fdac361a90
 
           <Route
             exact

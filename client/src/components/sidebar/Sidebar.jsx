@@ -81,7 +81,15 @@ function Sidebar() {
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
-            <div data-i18n="Account Settings">Liste des audition</div>
+            <div data-i18n="Account Settings">Liste des auditions</div>
+          </a>
+        </li>
+      </NavLink>
+      <NavLink to="/dashboard/admin/Audition/genererPlanning">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Générer un planning d'auditions</div>
           </a>
         </li>
       </NavLink>
