@@ -12,21 +12,16 @@ import CandidatesList from "./pages/candidates/CandidatesList";
 import ListeCandidatesParPupitre from "./pages/candidates/ListeCandidatesParPupitre";
 import AdminAuditionInfo from "../admin/pages/auditions/AdminAddAuditionInfo";
 import AuditionUpdate from "../admin/pages/auditions/AuditionUpdate";
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
+
 import Archive from "./pages/saison/archive/Archive";
->>>>>>> b33bedca7d4f8be64da255dc15ebe0b856674448
+
 import ListeOeuvres from "./pages/oeuvres/ListeOeuvres";
-=======
+
 import PlanningAudition from "./pages/auditions/GenererPlanning";
->>>>>>> c2b6f70e505a01194f9c7baca15367fdac361a90
+
 import { io } from "socket.io-client";
-<<<<<<< HEAD
 import AddOeuvre from "./pages/oeuvres/AddOeuvre";
-=======
 import ManageConcert from "../../components/concert/ManageConcert";
->>>>>>> 7794ef5f52efa161f8bc98fd5005934516fce094
 
 const AdminDashboard = (props) => {
   return (
@@ -51,20 +46,14 @@ const AdminDashboard = (props) => {
             {props.load === "archives" && <Archive />}
             {props.load === "candidatesList" && <CandidatesList />}
             {props.load === "updateAudition" && <AuditionUpdate />}
-<<<<<<< HEAD
-            {props.load === "ListeCandidatesParPupitre" && (
-              <ListeCandidatesParPupitre />
-            )}
             {props.load === "ListeOeuvres" && <ListeOeuvres />}
             {props.load === "AddOeuvre" && <AddOeuvre />}
-=======
             {props.load === "ListeCandidatesParPupitre" && <ListeCandidatesParPupitre />}
             {props.load === "genererPlanning" && <PlanningAudition />}
 
             
             
             
->>>>>>> c2b6f70e505a01194f9c7baca15367fdac361a90
           </div>
           <div className="layout-overlay layout-menu-toggle" />
         </div>

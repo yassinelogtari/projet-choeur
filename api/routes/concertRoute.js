@@ -23,56 +23,6 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({
-<<<<<<< HEAD
-    storage: storage,
-    fileFilter: function (req, file, callback) {
-        const allowedMimes = [
-            'image/png',
-            'image/jpg',
-            'application/vnd.ms-excel',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        ];
-        const ext = path.extname(file.originalname).toLowerCase();
-        if (allowedMimes.includes(file.mimetype)|| (ext === '.jpg' || ext === '.png')) {
-            callback(null, true);
-        } else {
-            console.log('Seuls les fichiers jpg, png, et Excel sont acceptés');
-            callback(new Error('Seuls les fichiers jpg, png, et Excel sont acceptés'), false);
-        }
-    },
-    limits: {
-        fileSize: 1024 * 1024 * 10, // 10 MB
-    },
-});
-
-router.post('/add-concert',upload.fields([{ name: 'affiche', maxCount: 1 }, { name: 'excelFilePath', maxCount: 1 }]), async (req, res) => {
-    try {
-        // Vérifier si le fichier affiche existe dans la requête
-        if (!req.files || !req.files['affiche']) {
-            return res.status(400).json({ message: 'Le fichier affiche est requis.' });
-        }
-
-        // Récupérer le fichier affiche
-        const afficheFile = req.files['affiche'][0];
-
-        // Récupérer le fichier excel s'il existe
-        const excelFile = req.files['excelFilePath'] ? req.files['excelFilePath'][0] : null;
-
-        await createConcert({
-            body: {
-                titre: req.body.titre,
-                date: req.body.date,
-                lieu: req.body.lieu,
-                programme : req.body.programme,
-                afficheFile,
-                excelFile,
-                listeMembres: req.body.listeMembres,
-            },
-        }, res);
-    } catch (error) {
-        console.error('Erreur lors du téléchargement des fichiers:', error);
-        res.status(500).json({ message: 'Erreur lors du téléchargement des fichiers.', error: error.message });
-=======
   storage: storage,
   fileFilter: function (req, file, callback) {
     const allowedMimes = [
@@ -94,7 +44,6 @@ router.post('/add-concert',upload.fields([{ name: 'affiche', maxCount: 1 }, { na
         new Error("Seuls les fichiers jpg, png, et Excel sont acceptés"),
         false
       );
->>>>>>> b33bedca7d4f8be64da255dc15ebe0b856674448
     }
   },
   limits: {
@@ -104,8 +53,7 @@ router.post('/add-concert',upload.fields([{ name: 'affiche', maxCount: 1 }, { na
 
 router.post(
   "/add-concert",
-  middlewareConcert.loggedMiddleware,
-  middlewareConcert.isAdmin,
+ 
   upload.fields([
     { name: "affiche", maxCount: 1 },
     { name: "excelFilePath", maxCount: 1 },

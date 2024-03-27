@@ -15,10 +15,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import ChefPupitreDashboard from "./pages/ChefPupitreDashboard";
 import ChoristeDashboard from "./pages/ChoristeDashboard";
 import ManagerDashboard from "./pages/ManagerDashboard";
-<<<<<<< HEAD
-=======
 import FormCandidature from "./pages/FormCandidature";
->>>>>>> 7794ef5f52efa161f8bc98fd5005934516fce094
 import FormSaison from "./components/formSaison/FormSaison";
 import SaisonArchiveeDetails from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/SaisonArchiveeDetails";
 import MembresTable from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/tablesData/MembresTable";
@@ -27,11 +24,8 @@ import Concert from "./pages/concert/Concert";
 import AddConcert from "./components/concert/AddConcert";
 import EmailVerification from "./components/verify/EmailVerification";
 
-<<<<<<< HEAD
-import FormCandidature from "./pages/FormCandidature";
-=======
 
->>>>>>> 7794ef5f52efa161f8bc98fd5005934516fce094
+
 
 const App = () => {
   return (
@@ -125,7 +119,6 @@ const App = () => {
             element={<AdminDashboard load="updateAudition" />}
           />
           <Route
-<<<<<<< HEAD
             path="/dashboard/admin/oeuvres/liste"
             element={<AdminDashboard load="ListeOeuvres" />}
           />
@@ -133,13 +126,11 @@ const App = () => {
             path="/dashboard/admin/oeuvres/addoeuvre"
             element={<AdminDashboard load="AddOeuvre" />}
           />
-=======
-          path="/dashboard/admin/Audition/genererPlanning"
+          <Route path="/dashboard/admin/Audition/genererPlanning"
           element={<AdminDashboard load="genererPlanning"/>}
           />
 
 
->>>>>>> c2b6f70e505a01194f9c7baca15367fdac361a90
 
           <Route
             exact
@@ -151,11 +142,9 @@ const App = () => {
             path="/presence/repetition/:idR"
             element={<PresenceRepetition />}
           />
-<<<<<<< HEAD
           <Route exact path="/concert" element={<Concert />} />
           <Route exact path="addConcert" element={<AddConcert />} />
           <Route exact path="/candidatureForm" element={<FormCandidature />} />
-=======
             <Route
             exact
             path="/candidats/:id/verify/:token"
@@ -176,7 +165,6 @@ const App = () => {
            
           <Route exact path="/concert" element={<Concert />} />
           <Route exact path="addConcert" element={<AddConcert />} />
->>>>>>> 7794ef5f52efa161f8bc98fd5005934516fce094
         </Routes>
       </>
     </Router>
