@@ -22,7 +22,11 @@ import ListeOeuvres from "./pages/oeuvres/ListeOeuvres";
 import PlanningAudition from "./pages/auditions/GenererPlanning";
 >>>>>>> c2b6f70e505a01194f9c7baca15367fdac361a90
 import { io } from "socket.io-client";
+<<<<<<< HEAD
 import AddOeuvre from "./pages/oeuvres/AddOeuvre";
+=======
+import ManageConcert from "../../components/concert/ManageConcert";
+>>>>>>> 7794ef5f52efa161f8bc98fd5005934516fce094
 
 const AdminDashboard = (props) => {
   return (
