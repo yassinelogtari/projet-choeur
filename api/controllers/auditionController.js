@@ -349,6 +349,27 @@ const addAuditionInfo = async (req, res) => {
     res.status(500).json({ success: false, msg: error.message });
   }
 };
+
+
+const getAuditionById = async (req, res) => {
+  const auditionId = req.params.auditionId;
+
+  try {
+    const audition = await Audition.findById(auditionId).populate('candidats');
+    if (!audition) {
+      return res.status(404).json({ success: false, msg: 'Audition not found.' });
+    }
+    res.status(200).json({ success: true, audition });
+  } catch (error) {
+    console.error('Error fetching audition by ID:', error);
+    res.status(500).json({ success: false, msg: 'Internal server error.' });
+  }
+};
+
+
+
+
+
 const updateAudition = async (req, res) => {
   try {
     const { auditionId } = req.params;
@@ -434,4 +455,4 @@ const deleteAudition = async (req, res) => {
 };
 
 
-module.exports = { generateSchedule, fetshAuditions,addAuditionInfo,updateAudition,deleteAudition ,generateAdditionalSchedule};
+module.exports = { generateSchedule, fetshAuditions,addAuditionInfo,updateAudition,deleteAudition ,generateAdditionalSchedule ,getAuditionById};

@@ -18,7 +18,7 @@ const condidatSchema = new mongoose.Schema(
     sexe: {
       type: String,
       enum: ["Homme", "Femme"],
-      required: true,
+      required: false,
     },
     CIN: {
       type: String,

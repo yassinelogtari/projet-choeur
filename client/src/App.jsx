@@ -16,6 +16,13 @@ import ChefPupitreDashboard from "./pages/ChefPupitreDashboard";
 import ChoristeDashboard from "./pages/ChoristeDashboard";
 import ManagerDashboard from "./pages/ManagerDashboard";
 import FormCandidature from "./pages/FormCandidature";
+import FormSaison from "./components/formSaison/FormSaison";
+
+import Concert from "./pages/concert/Concert";
+import AddConcert from "./components/concert/AddConcert";
+import EmailVerification from "./components/verify/EmailVerification";
+
+
 
 const App = () => {
   return (
@@ -56,10 +63,11 @@ const App = () => {
           <Route
             exact
             path="/dashboard/admin/home"
-            element={<AdminDashboard load="home" />}
+            element={<AdminDashboard load="home"  />}
           />
+
           <Route
-            path="/dashboard/admin/audition"
+            path="/dashboard/admin/Audition/list"
             element={<AdminDashboard load="adminAudition" />}
           />
           <Route
@@ -86,6 +94,12 @@ const App = () => {
             path="/dashboard/admin/Candidature/list"
             element={<AdminDashboard load="candidatesList" />}
           />
+          <Route
+            path="/dashboard/admin/updateAudition"
+            element={<AdminDashboard load="updateAudition" />}
+          />
+
+
 
           <Route
             exact
@@ -99,10 +113,24 @@ const App = () => {
           />
             <Route
             exact
-            path="/candidatureForm"
+            path="/candidats/:id/verify/:token"
             element={<FormCandidature />}
           />
+          
+          <Route
+            exact
+            path="/candidatsForm  "
+            element={<FormCandidature />}
+          />
+          
+            <Route
+            exact
+            path="/emailVerification"
+            element={<EmailVerification />}
+          />
            
+          <Route exact path="/concert" element={<Concert />} />
+          <Route exact path="addConcert" element={<AddConcert />} />
         </Routes>
       </>
     </Router>

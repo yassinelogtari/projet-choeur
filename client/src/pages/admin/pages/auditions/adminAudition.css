@@ -1,0 +1,44 @@
+.auditionTable {
+    margin-top: 100px;
+    margin-left: 130px;
+  }
+  
+  .auditionTableTitle {
+    color: black;
+    font-size: 30px;
+  }
+  
+
+  .editAction{
+    margin-left: 2px !important;
+    margin-right: 2px !important;
+    background-color: white;
+    border: 1px solid  green !important;
+  }
+  
+  .editAction:hover{
+    margin-left: 2px !important;
+    margin-right: 2px !important;
+    background-color: rgb(234, 250, 234);
+    border: 1px solid  green !important;
+  }
+  
+  .editIcon{
+    color: green;
+  }
+  
+  .deleteAction{
+    background-color: white;
+    border: 1px solid  rgb(175, 12, 12) !important;
+  }
+  
+  .deletAction:hover{
+    margin-left: 2px !important;
+    margin-right: 2px !important;
+    background-color: rgb(181, 250, 181);
+    border: 1px solid  rgb(175, 12, 12) !important;
+  }
+  
+  .deleteIcon{
+    color: rgb(175, 12, 12);
+  }

@@ -24,7 +24,7 @@ const PresenceRepetition = () => {
       
       console.log(`Bearer ${storedToken}`);
       const res = await axios.put(
-        "https://projet-choeur-api.vercel.app/api/presence/repetition/",
+        "http://localhost:8000/api/presence/repetition/",
         { idRepetition: idR },
         {
           headers: {

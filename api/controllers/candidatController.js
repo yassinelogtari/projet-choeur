@@ -93,7 +93,8 @@ const addEmailCandidat = async (req, res) => {
 const getToken = async (req, res) => {
   try {
     const { id, token } = req.params;
-
+    console.log('ID:', id);
+    console.log('Token:', token);
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
     const condidat = await CandidatsVerif.findOne({ _id: id });
@@ -107,7 +108,8 @@ const getToken = async (req, res) => {
       { $set: { verified: true } }
     );
 
-    res.status(200).send({ message: "Email verified successfully" });
+    // Envoyer l'ID du condidat dans la réponse
+    res.status(200).send({ message: "Email verified successfully", id: condidat._id });
   } catch (error) {
     if (error.name === "TokenExpiredError") {
       res.status(400).send({ message: "Token has expired" });
@@ -168,6 +170,7 @@ const updateDateRange = async (req, res) => {
 };
 
 const rempForm = async (req, res) => {
+  const { id } = req.params;
   try {
     const { id } = req.params;
 

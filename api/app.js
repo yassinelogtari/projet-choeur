@@ -137,13 +137,13 @@ cron.schedule("09 18 * * *", async (req, res) => {
 
 io.listen(5000);
 const app = express();
-app.use(cors(
-    {
-        origin: ["https://projet-choeur-client.vercel.app"],
-        methods: ["POST", "GET","DELETE","PUT","PATCH"],
-        credentials: true
-    }
-));
+app.use(
+  cors({
+    origin: ["https://projet-choeur-client.vercel.app"],
+    methods: ["POST", "GET", "DELETE", "PUT", "PATCH"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 //app.use(upload.array());
 
@@ -160,8 +160,8 @@ const options = {
 
 const swaggerSpec = swaggerJsdoc(options);
 app.get("/", (req, res) => {
-    res.json("Hello");
-})
+  res.json("Hello");
+});
 app.use("/api/choeur", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/api/candidats", candidatRoute);
@@ -182,9 +182,6 @@ app.use("/api/reset", resetRoute);
 
 module.exports = app;
 
-
-
-
-app.listen(8000,()=>{
-    console.log("Listening on 8000")
-})
+app.listen(8000, () => {
+  console.log("Listening on 8000");
+});
