@@ -1,6 +1,6 @@
 
 .AuditionUpdateFormContainer{
-    margin-top: 20px;
+    margin-top: 50px !important;
     margin-left: 130px;
 
 }
@@ -28,26 +28,35 @@
     width: 300px !important
 }
 
+.selectCandidatId{
+  margin-top: 8px;
+ 
+}
+
 .selectTessiture{
   margin-top: 8px !important;
-  margin-right: 14px !important;
-  margin-left: 9px !important;
+}
+
+.selectExtraitChante{
+  margin-left: 20px !important;
 }
 
 .selectEvaluation{
   margin-top: 8px !important;
 }
 
-.selectDecision{
-  margin-top: 8px !important;
-  margin-left: 15px !important;
+.selectDecisionUpdate{
+  margin-top: 25px !important;
+  margin-left: 180px !important;
+  margin-right: 180px !important
 }
 
 
 
-.bottonFormAddAuddition{
+.bottonFormAddAudditionUpdate{
   margin-top: 20px;
   margin-bottom: 30px;
+
 }
 
 .ButtonAndRemarqueAuditionUpdate{

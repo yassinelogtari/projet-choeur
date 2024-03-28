@@ -9,6 +9,55 @@ const DateRange = require("../models/dateRangeModel");
 const path = require("path");
 const generatePassword = require('generate-password')
 const bcrypt=require("bcrypt")
+const fs = require('fs');
+// const path = require('path');
+
+const accepterCandidatParAudition = async (req, res) => {
+  try {
+    // Chemin vers le fichier de la charte stocké sur le serveur
+    const chartePath = path.join(__dirname, '..', 'uploads', 'charte.pdf');
+    const charteBuffer = fs.readFileSync(chartePath);
+
+    // Votre logique existante pour récupérer les candidats et envoyer les emails
+    const auditions = await Audition.find({"candidatsInfo": { $not: { $size: 0 } }}).populate('candidats');
+    for (const audition of auditions) {
+      for (let i = 0; i < audition.candidats.length; i++) {
+        const candidat = audition.candidats[i];
+        const candidatInfo = audition.candidatsInfo[i];
+        if (candidatInfo.decision === 'Retenu') {
+          const lienConfirm = `http://localhost:8000/api/candidats/confirm/${candidat._id}`;
+          const sujetEmail = "Acceptation de votre candidature";
+          const corpsEmail = `Bonjour ${candidat.prenom} ${candidat.nom},<br>
+Nous avons le plaisir de vous informer que vous avez été retenu(e) pour faire partie de l'Orchestre Symphonique de Carthage. Félicitations pour cette réussite, et nous sommes impatients de vous accueillir au sein de notre talentueuse équipe.<br>
+Vous trouverez ci-joint la Charte de l'Orchestre Symphonique de Carthage pour la signer.<br>
+Pour confirmer votre participation, veuillez cliquer sur ce lien : <a href="${lienConfirm}">Confirmer</a><br>
+Cordialement`;
+          
+          // Attachement de la charte
+          const attachments = [{
+            filename: "charte.pdf",
+            content: charteBuffer,
+          }];
+
+          // Envoyer l'email avec le contenu et les pièces jointes
+          await sendEmail(candidat.email, sujetEmail, corpsEmail, attachments);
+        }
+      }
+    }
+
+    // Répondre avec un message de succès
+    return res.status(200).json({
+      message: "Emails d'acceptation envoyés avec succès à tous les candidats retenus de toutes les auditions",
+    });
+  } catch (error) {
+    // En cas d'erreur, renvoyer un statut 500 avec un message d'erreur
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = {
+  accepterCandidatParAudition,
+};
 
 function paginatedResults(model, page, limit) {
   const startIndex = (page - 1) * limit;
@@ -93,7 +142,8 @@ const addEmailCandidat = async (req, res) => {
 const getToken = async (req, res) => {
   try {
     const { id, token } = req.params;
-
+    console.log('ID:', id);
+    console.log('Token:', token);
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
     const condidat = await CandidatsVerif.findOne({ _id: id });
@@ -107,7 +157,8 @@ const getToken = async (req, res) => {
       { $set: { verified: true } }
     );
 
-    res.status(200).send({ message: "Email verified successfully" });
+    // Envoyer l'ID du condidat dans la réponse
+    res.status(200).send({ message: "Email verified successfully", id: condidat._id });
   } catch (error) {
     if (error.name === "TokenExpiredError") {
       res.status(400).send({ message: "Token has expired" });
@@ -168,6 +219,7 @@ const updateDateRange = async (req, res) => {
 };
 
 const rempForm = async (req, res) => {
+  const { id } = req.params;
   try {
     const { id } = req.params;
 
@@ -218,43 +270,43 @@ const rempForm = async (req, res) => {
     res.status(500).send({ error: error });
   }
 };
-const accepterCandidatParAudition=async(req,res)=>{
-  const pdfFile=req.file
-  try{
-    const auditions=await Audition.find({"candidatsInfo": { $not: { $size: 0 } }}).populate('candidats')
-    for(const audition of auditions ){
-      for(let i=0;i<audition.candidats.length;i++){
-        const candidat=audition.candidats[i]
-        const candidatInfo=audition.candidatsInfo[i]
-        if(candidatInfo.decision==='Retenu'){
-          const lienConfirm=`http://localhost:8000/api/candidats/confirm/${candidat._id}`
-          const sujetEmail="Acceptation de votre candidature"
-          const corpsEmail = `Bonjour ${candidat.prenom} ${candidat.nom},<br>
-Nous avons le plaisir de vous informer que vous avez été retenu(e) pour faire partie de l'Orchestre Symphonique de Carthage. Félicitations pour cette réussite, et nous sommes impatients de vous accueillir au sein de notre talentueuse équipe.<br>
-Vous trouverez ci-joint la Charte de l'Orchestre Symphonique de Carthage pour la signer.<br>
-Pour confirmer votre participation,veuillez cliquer sur ce lien:<a href="${lienConfirm}">Confirmer</a><br>
-Cordialement `
-          const namePDF="charte.pdf"
-          const attachments=[
-            {
-              filename: namePDF,
-              content: pdfFile.buffer,
-            },
-          ];
-          await sendEmail(candidat.email, sujetEmail, corpsEmail, attachments);
-        }
-      }
-    }
-    return res
-      .status(200)
-      .json({
-        message:
-          "Emails d'acceptation envoyés avec succés à tous les candidats retenus de toutes les auditions",
-      });
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-};
+// const accepterCandidatParAudition=async(req,res)=>{
+//   const pdfFile=req.file
+//   try{
+//     const auditions=await Audition.find({"candidatsInfo": { $not: { $size: 0 } }}).populate('candidats')
+//     for(const audition of auditions ){
+//       for(let i=0;i<audition.candidats.length;i++){
+//         const candidat=audition.candidats[i]
+//         const candidatInfo=audition.candidatsInfo[i]
+//         if(candidatInfo.decision==='Retenu'){
+//           const lienConfirm=`http://localhost:8000/api/candidats/confirm/${candidat._id}`
+//           const sujetEmail="Acceptation de votre candidature"
+//           const corpsEmail = `Bonjour ${candidat.prenom} ${candidat.nom},<br>
+// Nous avons le plaisir de vous informer que vous avez été retenu(e) pour faire partie de l'Orchestre Symphonique de Carthage. Félicitations pour cette réussite, et nous sommes impatients de vous accueillir au sein de notre talentueuse équipe.<br>
+// Vous trouverez ci-joint la Charte de l'Orchestre Symphonique de Carthage pour la signer.<br>
+// Pour confirmer votre participation,veuillez cliquer sur ce lien:<a href="${lienConfirm}">Confirmer</a><br>
+// Cordialement `
+//           const namePDF="charte.pdf"
+//           const attachments=[
+//             {
+//               filename: namePDF,
+//               content: pdfFile.buffer,
+//             },
+//           ];
+//           await sendEmail(candidat.email, sujetEmail, corpsEmail, attachments);
+//         }
+//       }
+//     }
+//     return res
+//       .status(200)
+//       .json({
+//         message:
+//           "Emails d'acceptation envoyés avec succés à tous les candidats retenus de toutes les auditions",
+//       });
+//   } catch (error) {
+//     return res.status(500).json({ error: error.message });
+//   }
+// };
 const candidatsParTessiture = async (req, res) => {
   try {
     const tessitureParam = req.params.tessiture;
@@ -315,6 +367,79 @@ const candidatsParTessiture = async (req, res) => {
   }
 };
 
+// const confirmParticipationEtDevenirChoriste=async(req,res)=>{
+//   const candidatId = req.params.id;
+//   try {
+//     const candidat = await Candidats.findOne({"_id":candidatId});
+//     if (!candidat) {
+//       return res.status(404).json({ message: 'Candidat non trouvé' });
+//     }
+//     if(candidat.confirm){
+//       return res.status(404).json({ message: 'Vous avez déjà confirmer votre participation' });
+//     }
+    
+//     const passAleatoire=generatePassword.generate({
+//       length:12,
+//       numbers:true,
+//       uppercase:true,
+//       lowercase:true,
+//       symbols:true
+//     })
+//     const hashedPassword=await bcrypt.hash(passAleatoire,10)
+//     const nouveauMembre=new Membre({
+//       nom:candidat.nom,
+//       prenom:candidat.prenom,
+//       email:candidat.email,
+//       password:hashedPassword,
+//       sexe:candidat.sexe,
+//       dateNaissance:candidat.dateNaissance,
+//       nationalite:candidat.nationalite,
+//       CIN:candidat.CIN,
+//       taille:candidat.taille,
+//       situationPerso:candidat.situationPerso,
+//       connaissanceMusic:candidat.connaisanceMusical,
+//       activite:candidat.activite,
+//       telephone:candidat.telephone,
+//       role:'choriste',
+//       statut:'Inactif',
+
+//     })
+//     const auditions=await Audition.find({"candidatsInfo": { $not: { $size: 0 } }})
+//     for(const audition of auditions){
+//       for(let i=0;i<audition.candidats.length;i++){
+//         const currentCandidat=audition.candidats[i]
+//         const currentCandidatID=currentCandidat.toString()
+//         const infoCandidat=audition.candidatsInfo[i]
+//         if(currentCandidatID===candidatId){
+//           const tessiture=infoCandidat.tessiture
+//           nouveauMembre.pupitre=tessiture
+//           break
+//           }
+          
+//         }
+//       }
+//     candidat.confirm = true;
+//     await candidat.save();
+//     const currentSaison = await Saison.findOne({ saisonCourante: true });
+//     if (currentSaison) {
+//       currentSaison.membres.push(nouveauMembre._id);
+//       await currentSaison.save();
+//     }
+//     await nouveauMembre.save()
+
+   
+//     const corpsEmail=`Bonjour ${candidat.prenom} ${candidat.nom},<br>
+//     Votre participation a été confirmée.<br>
+//     Pour accéder à votre compte,voici vos coordonnées.<br>
+//     Email: ${candidat.email} <br>
+//     Mot de passe: ${passAleatoire} <br> 
+//     Cordialement`
+//     await sendEmail(candidat.email,"Informations d'inscriptions",corpsEmail)
+//     return res.status(200).json({ message: 'Confirmation et inscription en tant que membre effectuées avec succés' });
+//   } catch (error) {
+//     return res.status(500).json({ error: error.message });
+//   }
+// }
 const confirmParticipationEtDevenirChoriste=async(req,res)=>{
   const candidatId = req.params.id;
   try {
@@ -323,7 +448,8 @@ const confirmParticipationEtDevenirChoriste=async(req,res)=>{
       return res.status(404).json({ message: 'Candidat non trouvé' });
     }
     if(candidat.confirm){
-      return res.status(404).json({ message: 'Vous avez déjà confirmer votre participation' });
+      return res.redirect('http://localhost:3000/');
+
     }
     
     const passAleatoire=generatePassword.generate({
@@ -383,7 +509,7 @@ const confirmParticipationEtDevenirChoriste=async(req,res)=>{
     Mot de passe: ${passAleatoire} <br> 
     Cordialement`
     await sendEmail(candidat.email,"Informations d'inscriptions",corpsEmail)
-    return res.status(200).json({ message: 'Confirmation et inscription en tant que membre effectuées avec succés' });
+    return res.redirect('http://localhost:3000/');
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

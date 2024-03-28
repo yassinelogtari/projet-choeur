@@ -1,0 +1,39 @@
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;   
+}
+.SupplementaireCheck{
+    color: rgb(47, 48, 49) !important;
+    font-style:italic
+}
+.btnPlanning{
+    height: 42px;
+}
+.pop-up{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+.white-card{
+    position: absolute;
+    margin-top: 170px;
+    margin-left: -1030px;
+    width: 800px;
+}
+.audition-title{
+    position: absolute;
+    margin-top: 110px;
+    margin-left: -1150px;
+}
+.failCandidatsError{
+    color: red;
+}
+
+
+
+
+
+
+

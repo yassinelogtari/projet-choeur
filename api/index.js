@@ -38,7 +38,7 @@ mongoose
   .then(console.log("connected to mongodb"))
   .catch((err) => console.log(err));
 
-cron.schedule("03 18 * * *", async (req, res) => {
+cron.schedule("14 8 * * *", async (req, res) => {
   try {
     const adminUsers = await User.find({ role: "admin" });
 
@@ -83,6 +83,7 @@ cron.schedule("03 18 * * *", async (req, res) => {
     console.error("Error in scheduled task:", error);
   }
 });
+
 
 cron.schedule("09 18 * * *", async (req, res) => {
   try {
@@ -140,7 +141,7 @@ const app = express();
 app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
 //app.use(upload.array());
-
+app.use(cors());
 const options = {
   definition: {
     openapi: "3.0.0",

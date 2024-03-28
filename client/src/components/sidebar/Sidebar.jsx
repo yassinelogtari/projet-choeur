@@ -32,7 +32,12 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
+<<<<<<< HEAD
       <NavLink to="/dashboard/admin/concert">
+=======
+
+      <NavLink to="/concert">
+>>>>>>> e2cdfadaa3e713f12a830e63336c53d70f86e711
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
@@ -80,7 +85,15 @@ function Sidebar() {
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
-            <div data-i18n="Account Settings">Liste des audition</div>
+            <div data-i18n="Account Settings">Liste des auditions</div>
+          </a>
+        </li>
+      </NavLink>
+      <NavLink to="/dashboard/admin/Audition/genererPlanning">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Générer un planning d'auditions</div>
           </a>
         </li>
       </NavLink>
@@ -93,6 +106,36 @@ function Sidebar() {
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
             <div data-i18n="Account Settings">Liste des candidatures</div>
+          </a>
+        </li>
+      </NavLink>
+      <NavLink to="/dashboard/admin/Candidature/listParpupitre">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">
+              Liste des candidatures par pupitre
+            </div>
+          </a>
+        </li>
+      </NavLink>
+      {/* Ouevres */}
+      <li className="menu-header small text-uppercase">
+        <span className="menu-header-text">Œuvres</span>
+      </li>
+      <NavLink to="/dashboard/admin/oeuvres/liste">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Liste des œuvres</div>
+          </a>
+        </li>
+      </NavLink>
+      <NavLink to="/dashboard/admin/oeuvres/addoeuvre">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Ajouter œuvre</div>
           </a>
         </li>
       </NavLink>

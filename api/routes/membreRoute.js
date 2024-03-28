@@ -22,7 +22,13 @@ router.get(
 );
 router.get(
   "/getAllMembers",
+<<<<<<< HEAD
   /*middlewareDate.loggedMiddleware,middlewareDate.isAdmin,*/ membreController.getAllMembers
+=======
+  middlewareDate.loggedMiddleware,
+  middlewareDate.isAdmin,
+  membreController.getAllMembers
+>>>>>>> e2cdfadaa3e713f12a830e63336c53d70f86e711
 );
 router.delete(
   "/deleteMember/:id",
