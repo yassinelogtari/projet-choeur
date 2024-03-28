@@ -1,69 +1,50 @@
-.table-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 70vh;
-  width: 80vw;
-}
-.layout{
-    display:flex;
+.concert-list {
+    position: absolute;
+    top:20vh;
+    left:25vw;
 }
 
-.concert-table {
+table {
+    width: 100%;
     border-collapse: collapse;
-    width: 60vw;
-    
 }
 
-.concert-table th,
-.concert-table td {
+th,
+td {
     border: 1px solid #ddd;
-    padding: 4px;
+   width: 10vw;
+    text-align: center;
 }
 
-.concert-table th {
+th {
     background-color: #f2f2f2;
 }
 
-.concert-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
 
-.concert-table tr:hover {
+
+tr:hover {
     background-color: #ddd;
 }
 
-.delete{
-    border:none;
-   background-color: transparent;
+.edit-btn,
+.delete-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding: 2;
+    margin-right: 5px;
 }
 
-.Fa{
-    color:#333399;
-    
+.edit-btn svg{
+color: #2a00b3;
+font-size: 20px;
 }
-.Md{
-    color: red;
+.delete-btn svg {
+    font-size: 30px;
+    color: #ff0000;
 }
-.title
-{
-    
-    font-weight: bold;
 
-}
-.titleCounter{
-    width: 70vw;
-    display: flex;
-    justify-content: center;
-    padding: 0.5vw;
-    margin:2vh ;
-    height: 5vh;
-}
-.delete{
-    margin: 0;
-    padding: 0.5vw;
-}
-.edit
-{
-    width: 5vw;
+.ul{
+    text-decoration: none;
 }

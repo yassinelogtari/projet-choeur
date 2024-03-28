@@ -95,8 +95,6 @@ const App = () => {
             element={<AdminDashboard load="updateAudition" />}
           />
 
-
-
           <Route
             exact
             path="/presence/cancert/:idC"
@@ -108,9 +106,8 @@ const App = () => {
             element={<PresenceRepetition />}
           />
           <Route
-            exact
             path="/dashboard/admin/concert"
-            element={<Concert load="Concert" />}
+            element={<AdminDashboard load="Concert" />}
           />
           <Route
             exact
