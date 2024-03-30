@@ -54,10 +54,7 @@ const upload = multer({
 
 router.post(
   "/add-concert",
-<<<<<<< HEAD
-=======
  
->>>>>>> e2cdfadaa3e713f12a830e63336c53d70f86e711
   upload.fields([
     { name: "affiche", maxCount: 1 },
     { name: "excelFilePath", maxCount: 1 },
@@ -105,13 +102,6 @@ router.post(
 
 router.patch(
   "/:concertId",
-<<<<<<< HEAD
-  /*middlewareConcert.loggedMiddleware,
-  middlewareConcert.isAdmin,*/
-  upload.fields([{ name: "excelFilePath", maxCount: 1 }]),
-  async (req, res) => {
-    try {
-=======
   middlewareConcert.loggedMiddleware,
   middlewareConcert.isAdmin,
   upload.fields([
@@ -122,7 +112,6 @@ router.patch(
     try {
       const afficheFiles = req.files["affiche"];
       const afficheFile = afficheFiles ? afficheFiles[0] : null;
->>>>>>> e2cdfadaa3e713f12a830e63336c53d70f86e711
       const excelFiles = req.files["excelFilePath"];
       const excelFile = excelFiles ? excelFiles[0] : null;
 
@@ -131,47 +120,6 @@ router.patch(
         date: req.body.date,
         lieu: req.body.lieu,
         programme: req.body.programme,
-<<<<<<< HEAD
-
-        excelFile,
-        listeMembres: req.body.listeMembres,
-      };
-
-      await updateConcert(
-        {
-          params: {
-            concertId: req.params.concertId,
-          },
-          body,
-        },
-        res
-      );
-    } catch (error) {
-      console.error("Erreur lors du traitement du formulaire:", error);
-      res.status(500).json({
-        message: "Erreur lors du traitement du formulaire.",
-        error: error.message,
-      });
-    }
-  }
-);
-
-router.delete(
-  "/:concertId",
-  /*middlewareConcert.loggedMiddleware,
-  middlewareConcert.isAdmin,*/
-  deleteConcert
-);
-
-router.get(
-  "/get-concerts",
-  /*middlewareConcert.loggedMiddleware,
-  middlewareConcert.isAdmin,*/
-  getConcerts
-);
-
-router.get(
-=======
         afficheFile,
         excelFile,
         listeMembres: req.body.listeMembres,
@@ -211,7 +159,6 @@ router.get(
 );
 
 router.get(
->>>>>>> e2cdfadaa3e713f12a830e63336c53d70f86e711
   "/:concertId",
   middlewareConcert.loggedMiddleware,
   middlewareConcert.isAdmin,

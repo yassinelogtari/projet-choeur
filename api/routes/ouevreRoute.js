@@ -3,7 +3,6 @@ const router = require("express").Router();
 const oeuvreController = require("../controllers/oeuvreController");
 const middlewareOuvre = require("../middlewares/auth");
 
-<<<<<<< HEAD
 router.post(
   "/addoeuvre" /*,middlewareOuvre.loggedMiddleware,middlewareOuvre.isAdmin*/,
   oeuvreController.addOeuvre
@@ -32,13 +31,6 @@ router.patch(
   middlewareOuvre.isAdmin,
   oeuvreController.updateOeuvre
 );
-=======
-router.post("/addoeuvre", oeuvreController.addOeuvre);
-router.get("/getAll", oeuvreController.fetchOeuvre);
-router.get("/getOne/:id", oeuvreController.getByidOeuvre);
-router.delete("/:id", oeuvreController.deleteOuvre);
-router.patch("/update/:id", oeuvreController.updateOeuvre);
->>>>>>> e2cdfadaa3e713f12a830e63336c53d70f86e711
 
 /**
  * @swagger
