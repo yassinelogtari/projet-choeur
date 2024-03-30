@@ -130,8 +130,6 @@ const App = () => {
           element={<AdminDashboard load="genererPlanning"/>}
           />
 
-
-
           <Route
             exact
             path="/presence/cancert/:idC"
@@ -142,6 +140,17 @@ const App = () => {
             path="/presence/repetition/:idR"
             element={<PresenceRepetition />}
           />
+<<<<<<< HEAD
+          <Route
+            path="/dashboard/admin/concert"
+            element={<AdminDashboard load="Concert" />}
+          />
+          <Route
+            exact
+            path="/dashboard/admin/concert/addConcert"
+            element={<AddConcert />}
+          />
+=======
           <Route exact path="/concert" element={<Concert />} />
           <Route exact path="addConcert" element={<AddConcert />} />
           <Route exact path="/candidatureForm" element={<FormCandidature />} />
@@ -165,6 +174,7 @@ const App = () => {
            
           <Route exact path="/concert" element={<Concert />} />
           <Route exact path="addConcert" element={<AddConcert />} />
+>>>>>>> e2cdfadaa3e713f12a830e63336c53d70f86e711
         </Routes>
       </>
     </Router>

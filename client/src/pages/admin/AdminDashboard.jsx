@@ -12,6 +12,7 @@ import CandidatesList from "./pages/candidates/CandidatesList";
 import ListeCandidatesParPupitre from "./pages/candidates/ListeCandidatesParPupitre";
 import AdminAuditionInfo from "../admin/pages/auditions/AdminAddAuditionInfo";
 import AuditionUpdate from "../admin/pages/auditions/AuditionUpdate";
+import Concert from "../concert/Concert";
 
 import Archive from "./pages/saison/archive/Archive";
 
@@ -40,12 +41,15 @@ const AdminDashboard = (props) => {
 
             {props.load === "home" && <HomePage />}
             {props.load === "adminAudition" && <AdminAudition />}
+            {props.load === "Concert" && <Concert />}
             {props.load === "nouvelleSaison" && <NouvelleSaison />}
             {props.load === "saisonActuelle" && <SaisonActuelle />}
             {props.load === "auditionAddInfo" && <AdminAuditionInfo />}
             {props.load === "archives" && <Archive />}
             {props.load === "candidatesList" && <CandidatesList />}
             {props.load === "updateAudition" && <AuditionUpdate />}
+<<<<<<< HEAD
+=======
             {props.load === "ListeOeuvres" && <ListeOeuvres />}
             {props.load === "AddOeuvre" && <AddOeuvre />}
             {props.load === "ListeCandidatesParPupitre" && <ListeCandidatesParPupitre />}
@@ -54,6 +58,7 @@ const AdminDashboard = (props) => {
             
             
             
+>>>>>>> e2cdfadaa3e713f12a830e63336c53d70f86e711
           </div>
           <div className="layout-overlay layout-menu-toggle" />
         </div>

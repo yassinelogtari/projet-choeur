@@ -1,239 +1,181 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./ManageConcert.css";
-import { MdDelete } from "react-icons/md";
-import { FaEdit } from "react-icons/fa";
+import { MdDelete, MdEdit, MdSave } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 const ManageConcert = () => {
-  const [concerts, setConcerts] = useState([
-    {
-      id: 1,
-      titre: "Concert 1",
-      listeMembres: "Membres 1, Membres 2",
-      excelFilePath: "example.xlsx",
-      affiche: "poster.jpg",
-      programme: "Programme 1",
-      lieu: "Location 1",
-      date: "2024-04-01",
-    },
-    {
-      id: 2,
-      titre: "Concert 2",
-      listeMembres: "Membres 3, Membres 4",
-      excelFilePath: "example2.xlsx",
-      affiche: "poster2.jpg",
-      programme: "Programme 2",
-      lieu: "Location 2",
-      date: "2024-04-15",
-    },
-    {
-      id: 3,
-      titre: "Concert 3",
-      listeMembres: "Membres 1, Membres 2",
-      excelFilePath: "example.xlsx",
-      affiche: "poster.jpg",
-      programme: "Programme 1",
-      lieu: "Location 1",
-      date: "2024-04-01",
-    },
-    {
-      id: 4,
-      titre: "Concert 4",
-      listeMembres: "Membres 1, Membres 2",
-      excelFilePath: "example.xlsx",
-      affiche: "poster.jpg",
-      programme: "Programme 1",
-      lieu: "Location 1",
-      date: "2024-04-01",
-    },
-    {
-      id: 5,
-      titre: "Concert 5",
-      listeMembres: "Membres 1, Membres 2",
-      excelFilePath: "example.xlsx",
-      affiche: "poster.jpg",
-      programme: "Programme 1",
-      lieu: "Location 1",
-      date: "2024-04-01",
-    },
-  ]);
+  const [concerts, setConcerts] = useState([]);
+  const [editConcertId, setEditConcertId] = useState(null);
+  const [editedDate, setEditedDate] = useState("");
+  const [editedLocation, setEditedLocation] = useState("");
+  const [excelFile, setExcelFile] = useState(null); // State for the uploaded Excel file
 
-  const [editedConcertId, setEditedConcertId] = useState(null);
-
-  const handleDelete = (id) => {
-    setConcerts(concerts.filter((concert) => concert.id !== id));
-  };
-
-  const handleEdit = (id) => {
-    setEditedConcertId(id);
-  };
-
-  const handleSaveEdit = (id, field, value) => {
-    const updatedConcerts = concerts.map((concert) => {
-      if (concert.id === id) {
-        return { ...concert, [field]: value };
+  useEffect(() => {
+    const fetchConcerts = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/concerts/get-concerts"
+        );
+        setConcerts(response.data);
+      } catch (error) {
+        console.error("Error fetching concerts:", error);
       }
-      return concert;
-    });
-    setConcerts(updatedConcerts);
+    };
 
-    // Delay setting editedConcertId to null by a short interval
-    setTimeout(() => {
-      setEditedConcertId(null);
-    }, 5000); // Adjust the delay time as needed
+    fetchConcerts();
+  }, []);
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8000/api/concerts/${id}`);
+      setConcerts(concerts.filter((concert) => concert._id !== id));
+    } catch (error) {
+      console.error("Error deleting concert:", error);
+    }
+  };
+
+  const handleEdit = (id, date, location) => {
+    setEditConcertId(id);
+    setEditedDate(date);
+    setEditedLocation(location);
+  };
+
+  const handleSave = async (id) => {
+    try {
+      const formData = new FormData();
+      formData.append("date", editedDate);
+      formData.append("lieu", editedLocation);
+      formData.append("excelFile", excelFile); // Append the uploaded Excel file to the form data
+
+      const response = await axios.patch(
+        `http://localhost:8000/api/concerts/${id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Set the content type to multipart form data
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const updatedConcerts = concerts.map((concert) => {
+          if (concert._id === id) {
+            return { ...concert, date: editedDate, lieu: editedLocation };
+          }
+          return concert;
+        });
+        setConcerts(updatedConcerts);
+        setEditConcertId(null);
+      } else {
+        console.error("Failed to update concert");
+      }
+    } catch (error) {
+      console.error("Error updating concert:", error);
+    }
   };
 
   return (
-    <>
-      <div className="titleCounter">
-        <h1 className="title">Manage concerts</h1>
-      </div>
-      <div className="table-container">
-        <table className="concert-table">
-          <thead>
-            <tr>
-              <th>Titre</th>
-              <th>Liste des Membres</th>
-              <th>Fichier Excel</th>
-              <th>Affiche</th>
-              <th>Programme</th>
-              <th>Lieu</th>
-              <th>Date</th>
-              <th>Action</th>
+    <div className="concert-list">
+      <h1>Concert List</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>Program</th>
+            <th>Members</th>
+            <th>Excel File</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {concerts.map((concert) => (
+            <tr key={concert._id}>
+              <td>{concert.titre}</td>
+              <td>
+                {editConcertId === concert._id ? (
+                  <input
+                    type="date"
+                    value={editedDate}
+                    onChange={(e) => setEditedDate(e.target.value)}
+                  />
+                ) : (
+                  new Date(concert.date).toLocaleDateString()
+                )}
+              </td>
+              <td>
+                {editConcertId === concert._id ? (
+                  <input
+                    type="text"
+                    value={editedLocation}
+                    onChange={(e) => setEditedLocation(e.target.value)}
+                  />
+                ) : (
+                  concert.lieu
+                )}
+              </td>
+              <td>
+                <ul>
+                  {concert.programme.map((item) => (
+                    <li key={item._id}>
+                      Oeuvre: {item.oeuvre.titre}, Theme: {item.theme}
+                    </li>
+                  ))}
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  {concert.listeMembres.map((member) => (
+                    <li key={member._id}>
+                      Member: {member.membre.nom}, Presence:{" "}
+                      {member.presence ? "Present" : "Absent"}
+                    </li>
+                  ))}
+                </ul>
+              </td>
+              <td>
+                <input
+                  type="file"
+                  accept=".xlsx, .xls"
+                  onChange={(e) => setExcelFile(e.target.files[0])}
+                />
+              </td>
+              <td>
+                {editConcertId === concert._id ? (
+                  <button
+                    onClick={() => handleSave(concert._id)}
+                    className="save-btn"
+                  >
+                    <MdSave />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() =>
+                      handleEdit(concert._id, concert.date, concert.lieu)
+                    }
+                    className="edit-btn"
+                  >
+                    <MdEdit />
+                  </button>
+                )}
+                <button
+                  onClick={() => handleDelete(concert._id)}
+                  className="delete-btn"
+                >
+                  <MdDelete />
+                </button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {concerts.map((concert) => (
-              <tr key={concert.id}>
-                <td>
-                  {editedConcertId === concert.id ? (
-                    <input
-                      type="text"
-                      value={concert.titre}
-                      onChange={(e) =>
-                        handleSaveEdit(concert.id, "titre", e.target.value)
-                      }
-                      onBlur={() => setEditedConcertId(null)}
-                    />
-                  ) : (
-                    concert.titre
-                  )}
-                </td>
-                <td>
-                  {editedConcertId === concert.id ? (
-                    <input
-                      type="text"
-                      value={concert.listeMembres}
-                      onChange={(e) =>
-                        handleSaveEdit(
-                          concert.id,
-                          "listeMembres",
-                          e.target.value
-                        )
-                      }
-                      onBlur={() => setEditedConcertId(null)}
-                    />
-                  ) : (
-                    concert.listeMembres
-                  )}
-                </td>
-                <td>
-                  {editedConcertId === concert.id ? (
-                    <input
-                      type="text"
-                      value={concert.excelFilePath}
-                      onChange={(e) =>
-                        handleSaveEdit(
-                          concert.id,
-                          "excelFilePath",
-                          e.target.value
-                        )
-                      }
-                      onBlur={() => setEditedConcertId(null)}
-                    />
-                  ) : (
-                    concert.excelFilePath
-                  )}
-                </td>
-                <td>
-                  {editedConcertId === concert.id ? (
-                    <input
-                      type="text"
-                      value={concert.affiche}
-                      onChange={(e) =>
-                        handleSaveEdit(concert.id, "affiche", e.target.value)
-                      }
-                      onBlur={() => setEditedConcertId(null)}
-                    />
-                  ) : (
-                    concert.affiche
-                  )}
-                </td>
-                <td>
-                  {editedConcertId === concert.id ? (
-                    <input
-                      type="text"
-                      value={concert.programme}
-                      onChange={(e) =>
-                        handleSaveEdit(concert.id, "programme", e.target.value)
-                      }
-                      onBlur={() => setEditedConcertId(null)}
-                    />
-                  ) : (
-                    concert.programme
-                  )}
-                </td>
-                <td>
-                  {editedConcertId === concert.id ? (
-                    <input
-                      type="text"
-                      value={concert.lieu}
-                      onChange={(e) =>
-                        handleSaveEdit(concert.id, "lieu", e.target.value)
-                      }
-                      onBlur={() => setEditedConcertId(null)}
-                    />
-                  ) : (
-                    concert.lieu
-                  )}
-                </td>
-                <td>
-                  {editedConcertId === concert.id ? (
-                    <input
-                      type="date"
-                      value={concert.date}
-                      onChange={(e) =>
-                        handleSaveEdit(concert.id, "date", e.target.value)
-                      }
-                      onBlur={() => setEditedConcertId(null)}
-                    />
-                  ) : (
-                    concert.date
-                  )}
-                </td>
-                <td>
-                  <button
-                    onClick={() => handleEdit(concert.id)}
-                    className="delete"
-                  >
-                    <FaEdit className="Fa" />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(concert.id)}
-                    className="delete"
-                  >
-                    <MdDelete className="Md" />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <Link to="/addConcert">
-          <button>Ajouter un Concert</button>
-        </Link>
-      </div>
-    </>
+          ))}
+        </tbody>
+      </table>
+
+      <Link to="/dashboard/admin/concert/addConcert">
+        <button>Ajouter un Concert</button>
+      </Link>
+    </div>
   );
 };
 
