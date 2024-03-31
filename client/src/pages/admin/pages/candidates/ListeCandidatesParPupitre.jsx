@@ -70,7 +70,7 @@ const ListeCandidatesParPupitre = () => {
             columns={columns}
             pageSize={5}
             rowsPerPageOptions={[5]}
-            getRowId={(row) => row._id} // Adjust if your rows have a different ID field
+            getRowId={(row) => row._id} 
           />
         </div>
       </div>
