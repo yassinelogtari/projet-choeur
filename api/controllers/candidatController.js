@@ -14,11 +14,11 @@ const fs = require('fs');
 
 const accepterCandidatParAudition = async (req, res) => {
   try {
-    // Chemin vers le fichier de la charte stocké sur le serveur
+    
     const chartePath = path.join(__dirname, '..', 'uploads', 'charte.pdf');
     const charteBuffer = fs.readFileSync(chartePath);
 
-    // Votre logique existante pour récupérer les candidats et envoyer les emails
+    
     const auditions = await Audition.find({"candidatsInfo": { $not: { $size: 0 } }}).populate('candidats');
     for (const audition of auditions) {
       for (let i = 0; i < audition.candidats.length; i++) {
@@ -33,24 +33,23 @@ Vous trouverez ci-joint la Charte de l'Orchestre Symphonique de Carthage pour la
 Pour confirmer votre participation, veuillez cliquer sur ce lien : <a href="${lienConfirm}">Confirmer</a><br>
 Cordialement`;
           
-          // Attachement de la charte
           const attachments = [{
             filename: "charte.pdf",
             content: charteBuffer,
           }];
 
-          // Envoyer l'email avec le contenu et les pièces jointes
+          
           await sendEmail(candidat.email, sujetEmail, corpsEmail, attachments);
         }
       }
     }
 
-    // Répondre avec un message de succès
+    
     return res.status(200).json({
       message: "Emails d'acceptation envoyés avec succès à tous les candidats retenus de toutes les auditions",
     });
   } catch (error) {
-    // En cas d'erreur, renvoyer un statut 500 avec un message d'erreur
+    
     return res.status(500).json({ error: error.message });
   }
 };
@@ -157,7 +156,7 @@ const getToken = async (req, res) => {
       { $set: { verified: true } }
     );
 
-    // Envoyer l'ID du condidat dans la réponse
+    
     res.status(200).send({ message: "Email verified successfully", id: condidat._id });
   } catch (error) {
     if (error.name === "TokenExpiredError") {
