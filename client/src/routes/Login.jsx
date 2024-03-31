@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import AdminDashboard from "../pages/admin/AdminDashboard";
 import Navbar from "../components/navbar/Navbar";
 import { io } from "socket.io-client";
 import { posts } from "../data"; // Import your data.js file
@@ -15,7 +15,7 @@ const Login = () => {
   const [storedToken, setStoredToken] = useState();
   const [decodedToken, setDecodedToken] = useState();
   // Declare socket outside of useEffect
-  const socket = io("http://localhost:5000");
+  const socket = io.connect("http://localhost:5000/");
 
   useEffect(() => {
     if (socket) {
@@ -74,8 +74,7 @@ const Login = () => {
     <div className="container">
       {storedToken ? (
         <>
-          <Navbar socket={socket} />
-          <span className="username">{email}</span>
+          <AdminDashboard socket={socket} load="home" />
         </>
       ) : (
         <div className="login">

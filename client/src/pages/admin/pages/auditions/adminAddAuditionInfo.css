@@ -1,0 +1,67 @@
+
+.auditionFormContainer{
+    margin-top: 20px;
+    margin-left: 130px;
+
+}
+.auditionFormContainer p{
+   
+    color: black;
+    font-size: 30px;
+    margin-left: 9px ;
+    
+}
+
+.addAuditionInfoForm{
+    display: flex;
+    flex-direction: row;
+    flex: 30%;
+}
+
+.auditionField{
+    width: 300px !important;
+}
+
+.auditionFormButton{
+    margin-left: 9px !important;
+    margin-top: 20px !important;
+    width: 300px !important
+}
+
+.selectTessiture{
+  margin-top: 8px !important;
+  margin-right: 14px !important;
+  margin-left: 9px !important;
+}
+.candidatIDfield{
+
+  margin-left: 7.5px !important;
+  margin-top: 8px !important;
+}
+
+.selectEvaluation{
+  margin-top: 8px !important;
+}
+
+.selectDecision{
+  margin-top: 8px !important;
+  margin-left: 10px !important;
+}
+
+
+
+.bottonFormAddAuddition{
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.ButtonAndRemarqueAudition{
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.RemarqueAudition{
+  width: 98.5% !important;
+}
+

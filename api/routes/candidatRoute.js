@@ -11,9 +11,11 @@ router.get("/:id/verify/:token/", candidatController.getToken)
 router.post("/form/date",middlewareDate.loggedMiddleware,middlewareDate.isAdmin,candidatController.dateFormRange)
 router.put("/form/date",middlewareDate.loggedMiddleware,middlewareDate.isAdmin,candidatController.updateDateRange)
 router.post("/form/:id",dateMiddleware,candidatController.rempForm)
-router.get("/",middlewareDate.loggedMiddleware,middlewareDate.isAdmin,  candidatController.fetshCandidats);
-router.get("/listeCandidatParPupitre/:tessiture",middlewareDate.loggedMiddleware,middlewareDate.AdminManager,candidatController.candidatsParTessiture)
-router.post("/accepterCandidat",upload.single('charte'),middlewareDate.loggedMiddleware,middlewareDate.AdminManager,candidatController.accepterCandidatParAudition)
+router.get("/",candidatController.fetshCandidats);
+router.get("/listeCandidatParPupitre/:tessiture",candidatController.candidatsParTessiture)
+// router.post("/accepterCandidat",upload.single('charte'),candidatController.accepterCandidatParAudition)
+router.post("/accepterCandidat", candidatController.accepterCandidatParAudition);
+
 router.get('/confirm/:id', candidatController.confirmParticipationEtDevenirChoriste);
 
 /**
@@ -86,14 +88,26 @@ router.get('/confirm/:id', candidatController.confirmParticipationEtDevenirChori
  *     description: Add email for candidat verification
  *     tags: [Candidat]
  *     requestBody:
+ *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Candidat'
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *             required:
+ *               - email
  *     responses:
- *       200:
+ *       201:
  *         description: Email added successfully for candidat verification
+ *       409:
+ *         description: Candidat with given email already exists
+ *       500:
+ *         description: Internal Server Error
  */
+
 
 /**
  * @swagger
@@ -186,14 +200,36 @@ router.get('/confirm/:id', candidatController.confirmParticipationEtDevenirChori
  * /api/candidats:
  *   get:
  *     summary: Get all candidats
- *     description: Retrieve a list of all candidats
+ *     description: Retrieve a list of all candidats with optional filtration
  *     tags: [Candidat]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: Page number for paginated results
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: Number of items to return per page
+ *       - in: query
+ *         name: nom
+ *         schema:
+ *           type: string
+ *         description: Filter by candidate's last name (nom)
+ *       - in: query
+ *         name: prenom
+ *         schema:
+ *           type: string
+ *         description: Filter by candidate's first name (prenom)
  *     responses:
  *       200:
  *         description: List of candidats retrieved successfully
  */
+
 
 /**
  * @swagger

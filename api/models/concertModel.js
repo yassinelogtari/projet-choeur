@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 
-const concertSchema = new mongoose.Schema({
+const { Schema } = mongoose;
+
+const concertSchema = new Schema({
   titre: {
     type: String,
     required: true,
@@ -19,7 +21,7 @@ const concertSchema = new mongoose.Schema({
   programme: [
     {
       oeuvre: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Oeuvre",
         default: null,
       },
@@ -32,7 +34,7 @@ const concertSchema = new mongoose.Schema({
   listeMembres: [
     {
       membre: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Membre",
         required: true,
       },
@@ -55,12 +57,13 @@ const concertSchema = new mongoose.Schema({
     default: "",
   },
 });
+
 concertSchema.path("listeMembres").validate(async function (value) {
   const membres = await this.model("Membre").find({
     _id: { $in: value.map((m) => m.membre) },
   });
   const membresInvalides = membres.filter(
-    (membre) => membre.role !== "choriste" && membre.role !== 'chef du pupitre'
+    (membre) => membre.role !== "choriste" && membre.role !== "chef du pupitre"
   );
   return membresInvalides.length === 0;
 }, 'Tous les membres doivent avoir un rôle de "choriste" ou "chef du pupitre".');

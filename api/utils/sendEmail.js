@@ -10,7 +10,7 @@ module.exports = async (email, subject, text,attachments=[]) => {
 			secure: process.env.SECURE,
 			auth: {
 			  user: process.env.USER,
-			  pass: process.env.pass,
+			  pass: process.env.PASS,
 			},
 		  });
 		  const mailOptions={

@@ -349,67 +349,56 @@ const addAuditionInfo = async (req, res) => {
     res.status(500).json({ success: false, msg: error.message });
   }
 };
-const updateAudition = async (req, res) => {
+
+
+const getAuditionById = async (req, res) => {
+  const auditionId = req.params.auditionId;
+
   try {
-    const { auditionId } = req.params;
-    const { candidats, date, startTime, endTime, candidatsInfo } = req.body;
-
-    const audition = await Audition.findById(auditionId);
-
+    const audition = await Audition.findById(auditionId).populate('candidats');
     if (!audition) {
-      return res.status(404).json({ success: false, msg: "Audition non trouvée." });
+      return res.status(404).json({ success: false, msg: 'Audition not found.' });
     }
-
-  
-    if (candidats) {
-      audition.candidats = candidats;
-    }
-    if (date) {
-      audition.DateAud = new Date(date);
-    }
-    if (startTime) {
-      audition.HeureDeb = new Date(startTime);
-    }
-    if (endTime) {
-      audition.HeureFin = new Date(endTime);
-    }
-    // ... Ajoutez des conditions similaires pour les autres champs à mettre à jour
-
-    // Gérez la mise à jour des candidatsInfo (à adapter en fonction de votre structure)
-    if (Array.isArray(candidatsInfo) && candidatsInfo.length > 0 && Array.isArray(audition.candidatsInfo)) {
-      candidatsInfo.forEach((info) => {
-        const existingInfoIndex = audition.candidatsInfo.findIndex(
-          (existing) => existing && existing._id.toString() === info._id
-        );
-
-        if (existingInfoIndex !== -1) {
-          audition.candidatsInfo[existingInfoIndex] = {
-            extraitChante: info.extraitChante,
-            tessiture: info.tessiture,
-            evaluation: info.evaluation,
-            decision: info.decision,
-            remarque: info.remarque,
-          };
-        } else {
-          audition.candidatsInfo.push({
-            extraitChante: info.extraitChante,
-            tessiture: info.tessiture,
-            evaluation: info.evaluation,
-            decision: info.decision,
-            remarque: info.remarque,
-          });
-        }
-      });
-    }
-
-    const updatedAudition = await audition.save();
-
-    res.status(200).json({ success: true, msg: "Audition mise à jour avec succès", data: updatedAudition });
+    res.status(200).json({ success: true, audition });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, msg: error.message });
+    console.error('Error fetching audition by ID:', error);
+    res.status(500).json({ success: false, msg: 'Internal server error.' });
   }
 };
+
+
+
+const updateAudition = async (req, res) => {
+  try {
+    const auditionId = req.params.auditionId;
+    const candidatInfoId = req.body.candidatInfoId;
+    const updateFields = req.body.updateFields;
+
+    const audition = await Audition.findById(auditionId);
+    if (!audition) {
+      return res.status(404).json({ message: "Audition not found" });
+    }
+
+
+    const candidatIndex = audition.candidatsInfo.findIndex(info => info._id == candidatInfoId);
+    if (candidatIndex === -1) {
+      return res.status(404).json({ message: "Candidat information not found" });
+    }
+
+    
+    for (let key in updateFields) {
+      audition.candidatsInfo[candidatIndex][key] = updateFields[key];
+    }
+
+    
+    await audition.save();
+
+    return res.status(200).json({ message: "Candidat information updated successfully" });
+  } catch (error) {
+    console.error("Error updating candidat info:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
 
 
 
@@ -434,4 +423,4 @@ const deleteAudition = async (req, res) => {
 };
 
 
-module.exports = { generateSchedule, fetshAuditions,addAuditionInfo,updateAudition,deleteAudition ,generateAdditionalSchedule};
+module.exports = { generateSchedule, fetshAuditions,addAuditionInfo,updateAudition,deleteAudition ,generateAdditionalSchedule ,getAuditionById};

@@ -1,0 +1,10 @@
+.autionTableTitleAndButton {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.auditionTable{
+  color: black;
+  font-size: 30px;
+}

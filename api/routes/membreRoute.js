@@ -1,14 +1,43 @@
-const router = require("express").Router()
-const membreController = require("../controllers/membreController")
-const middlewareDate=require("../middlewares/auth")
-router.patch("/modifierTessiture/:id",middlewareDate.loggedMiddleware,middlewareDate.isAdmin,membreController.modifierTessiture)
-router.post("/register",middlewareDate.loggedMiddleware,middlewareDate.isAdmin,membreController.register)
-router.post("/login",membreController.login )
-router.get("/getMembreById/:id",middlewareDate.loggedMiddleware,middlewareDate.isAdmin,membreController.getMemberById )
-router.get("/getAllMembers",middlewareDate.loggedMiddleware,middlewareDate.isAdmin,membreController.getAllMembers )
-router.delete("/deleteMember/:id",middlewareDate.loggedMiddleware,middlewareDate.isAdmin,membreController.deleteMember )
-router.patch("/updateMember/:id",middlewareDate.loggedMiddleware,middlewareDate.isAdmin,membreController.updateMember)
-
+const router = require("express").Router();
+const membreController = require("../controllers/membreController");
+const middlewareDate = require("../middlewares/auth");
+router.patch(
+  "/modifierTessiture/:id",
+  middlewareDate.loggedMiddleware,
+  middlewareDate.isAdmin,
+  membreController.modifierTessiture
+);
+router.post(
+  "/register",
+  middlewareDate.loggedMiddleware,
+  middlewareDate.isAdmin,
+  membreController.register
+);
+router.post("/login", membreController.login);
+router.get(
+  "/getMembreById/:id",
+  middlewareDate.loggedMiddleware,
+  middlewareDate.isAdmin,
+  membreController.getMemberById
+);
+router.get(
+  "/getAllMembers",
+  middlewareDate.loggedMiddleware,
+  middlewareDate.isAdmin,
+  membreController.getAllMembers
+);
+router.delete(
+  "/deleteMember/:id",
+  middlewareDate.loggedMiddleware,
+  middlewareDate.isAdmin,
+  membreController.deleteMember
+);
+router.patch(
+  "/updateMember/:id",
+  middlewareDate.loggedMiddleware,
+  middlewareDate.isAdmin,
+  membreController.updateMember
+);
 
 /**
  * @swagger
@@ -227,4 +256,4 @@ router.patch("/updateMember/:id",middlewareDate.loggedMiddleware,middlewareDate.
  *         description: Member details updated successfully
  */
 
-module.exports=router;
+module.exports = router;
