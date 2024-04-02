@@ -24,7 +24,7 @@ const AbsenceRepetition = () => {
           date: item.repetition.date,
           heureDeb: item.repetition.heureDeb,
           heureFin: item.repetition.heureFin,
-          absentMembers: item.absentMembers, // Ajout des membres absents
+          absentMembers: item.absentMembers,
         }));
         setAbsenceData(mappedData);
       } catch (error) {
