@@ -5,8 +5,6 @@ const authMiddleware = require("../middlewares/auth");
 
 router.get(
   "/repetition/",
-  authMiddleware.loggedMiddleware,
-  authMiddleware.isAdmin,
   absenceController.fetchAllRepetitionAbsence
 );
 

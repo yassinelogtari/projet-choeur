@@ -25,6 +25,7 @@ import Concert from "./pages/concert/Concert";
 import AddConcert from "./components/concert/AddConcert";
 import EmailVerification from "./components/verify/EmailVerification";
 import Home from "./pages/chefPupitre/pages/Home";
+import AbsenceRepetition from "./pages/admin/pages/absenceRepetition/AbsenceRepetitions";
 
 const App = () => {
   return (
@@ -56,7 +57,7 @@ const App = () => {
           <Route
             exact
             path="/dashboard/chef-de-pupitre/home"
-            element={<ChefPupitreDashboard  load="home"/>}
+            element={<ChefPupitreDashboard load="home" />}
           />
           <Route
             path="/dashboard/chef-de-pupitre/presence-main-concert"
@@ -173,6 +174,11 @@ const App = () => {
 
           <Route exact path="/concert" element={<Concert />} />
           <Route exact path="addConcert" element={<AddConcert />} />
+
+          <Route
+            path="/dashboard/admin/repetition/liste-absence"
+            element={<AdminDashboard load="absenceRep" />}
+          />
         </Routes>
       </>
     </Router>
