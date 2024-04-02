@@ -12,20 +12,19 @@ import "./assets/css/demo.css";
 import "./assets/vendor/css/core.css";
 import "./assets/vendor/css/theme-default.css";
 import AdminDashboard from "./pages/admin/AdminDashboard";
-import ChefPupitreDashboard from "./pages/ChefPupitreDashboard";
+import ChefPupitreDashboard from "./pages/chefPupitre/ChefPupitreDashboard";
 import ChoristeDashboard from "./pages/ChoristeDashboard";
 import ManagerDashboard from "./pages/ManagerDashboard";
 import FormCandidature from "./pages/FormCandidature";
 import FormSaison from "./components/formSaison/FormSaison";
 import SaisonArchiveeDetails from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/SaisonArchiveeDetails";
 import MembresTable from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/tablesData/MembresTable";
+import PresenceMainConcert from "../src/pages/chefPupitre/pages/presenceMain/PresenceMainConcert";
 
 import Concert from "./pages/concert/Concert";
 import AddConcert from "./components/concert/AddConcert";
 import EmailVerification from "./components/verify/EmailVerification";
-
-
-
+import Home from "./pages/chefPupitre/pages/Home";
 
 const App = () => {
   return (
@@ -56,9 +55,14 @@ const App = () => {
           />
           <Route
             exact
-            path="/dashboard/chef-de-pupitre"
-            element={<ChefPupitreDashboard />}
+            path="/dashboard/chef-de-pupitre/home"
+            element={<ChefPupitreDashboard  load="home"/>}
           />
+          <Route
+            path="/dashboard/chef-de-pupitre/presence-main-concert"
+            element={<ChefPupitreDashboard load="presenceConcert" />}
+          />
+
           <Route
             path="/dashboard/admin"
             element={<Navigate to="/dashboard/admin/home" />}
@@ -89,18 +93,18 @@ const App = () => {
             path="/dashboard/admin/archive"
             element={<AdminDashboard load="archives" />}
           />
-           <Route
+          <Route
             exact
             path="/saison/archive/details-saisonArchivee/:idSA"
             element={<SaisonArchiveeDetails />}
           />
 
-<Route
+          <Route
             exact
             path="/saison/archive/details-saisonArchivee/table"
             element={<MembresTable />}
           />
-          
+
           <Route
             path="/dashboard/admin/addAudition"
             element={<AdminDashboard load="auditionAddInfo" />}
@@ -126,8 +130,9 @@ const App = () => {
             path="/dashboard/admin/oeuvres/addoeuvre"
             element={<AdminDashboard load="AddOeuvre" />}
           />
-          <Route path="/dashboard/admin/Audition/genererPlanning"
-          element={<AdminDashboard load="genererPlanning"/>}
+          <Route
+            path="/dashboard/admin/Audition/genererPlanning"
+            element={<AdminDashboard load="genererPlanning" />}
           />
 
           <Route
@@ -152,24 +157,20 @@ const App = () => {
           <Route exact path="/concert" element={<Concert />} />
           <Route exact path="addConcert" element={<AddConcert />} />
           <Route exact path="/candidatureForm" element={<FormCandidature />} />
-            <Route
+          <Route
             exact
             path="/candidats/:id/verify/:token"
             element={<FormCandidature />}
           />
-          
+
+          <Route exact path="/candidatsForm  " element={<FormCandidature />} />
+
           <Route
-            exact
-            path="/candidatsForm  "
-            element={<FormCandidature />}
-          />
-          
-            <Route
             exact
             path="/emailVerification"
             element={<EmailVerification />}
           />
-           
+
           <Route exact path="/concert" element={<Concert />} />
           <Route exact path="addConcert" element={<AddConcert />} />
         </Routes>

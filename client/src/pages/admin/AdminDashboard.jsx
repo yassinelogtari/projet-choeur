@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Sidebar from "../../components/sidebar/Sidebar";
+import Sidebar from "../../components/sidebarAdmin/Sidebar";
 import Navbar1 from "../../components/navbar1/Nabar1";
 
 import "../admin/adminDashboard.css";
@@ -50,12 +50,10 @@ const AdminDashboard = (props) => {
             {props.load === "updateAudition" && <AuditionUpdate />}
             {props.load === "ListeOeuvres" && <ListeOeuvres />}
             {props.load === "AddOeuvre" && <AddOeuvre />}
-            {props.load === "ListeCandidatesParPupitre" && <ListeCandidatesParPupitre />}
+            {props.load === "ListeCandidatesParPupitre" && (
+              <ListeCandidatesParPupitre />
+            )}
             {props.load === "genererPlanning" && <PlanningAudition />}
-
-            
-            
-            
           </div>
           <div className="layout-overlay layout-menu-toggle" />
         </div>
