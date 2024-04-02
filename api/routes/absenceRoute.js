@@ -10,8 +10,6 @@ router.get(
 
 router.get(
   "/repetition/pupitre",
-  authMiddleware.loggedMiddleware,
-  authMiddleware.isAdmin,
   absenceController.fetchAllRepetitionAbsenceByPupitre
 );
 

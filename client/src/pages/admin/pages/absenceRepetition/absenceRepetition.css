@@ -1,4 +1,4 @@
-.popup-overlay {
+.popup-overlay-absence {
   position: fixed;
   top: 0;
   left: 0;
@@ -40,4 +40,9 @@
 
 .memberAbsent{
   font-size: 20px;
+  color: black;
 }
+.pupitreAbsence{
+  color: rgb(240, 106, 106);
+}
+  
