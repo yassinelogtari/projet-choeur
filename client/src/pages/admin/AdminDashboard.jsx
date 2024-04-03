@@ -23,6 +23,7 @@ import PlanningAudition from "./pages/auditions/GenererPlanning";
 import { io } from "socket.io-client";
 import AddOeuvre from "./pages/oeuvres/AddOeuvre";
 import ManageConcert from "../../components/concert/ManageConcert";
+import AbsenceRepetition from "./pages/absenceRepetition/AbsenceRepetitions";
 
 const AdminDashboard = (props) => {
   return (
@@ -54,6 +55,7 @@ const AdminDashboard = (props) => {
               <ListeCandidatesParPupitre />
             )}
             {props.load === "genererPlanning" && <PlanningAudition />}
+            {props.load === "absenceRep" && <AbsenceRepetition />}
           </div>
           <div className="layout-overlay layout-menu-toggle" />
         </div>

@@ -88,7 +88,9 @@ function Sidebar() {
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
-            <div data-i18n="Account Settings">Générer un planning d'auditions</div>
+            <div data-i18n="Account Settings">
+              Générer un planning d'auditions
+            </div>
           </a>
         </li>
       </NavLink>
@@ -131,6 +133,18 @@ function Sidebar() {
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
             <div data-i18n="Account Settings">Ajouter œuvre</div>
+          </a>
+        </li>
+      </NavLink>
+      {/* repeptions */}
+      <li className="menu-header small text-uppercase">
+        <span className="menu-header-text">Repetitions</span>
+      </li>
+      <NavLink to="/dashboard/admin/repetition/liste-absence">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">absences repetions</div>
           </a>
         </li>
       </NavLink>

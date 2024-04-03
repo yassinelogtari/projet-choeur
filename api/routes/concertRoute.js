@@ -153,8 +153,6 @@ router.delete(
 
 router.get(
   "/get-concerts",
-  middlewareConcert.loggedMiddleware,
-  middlewareConcert.isAdmin,
   getConcerts
 );
 
