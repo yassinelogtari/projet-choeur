@@ -1,0 +1,47 @@
+.position-absoluteListeOeuvre {
+    position: absolute;
+    top: 50%;
+    left: 58.5%;
+    transform: translate(-50%, -40%);
+    width: 1200px;
+    height: 700px
+}
+
+.headrow{
+    background-color: rgb(87, 141, 240);
+    height: 80px;
+}
+.headrow .headrowtext {
+    color: white;
+}
+.tab{
+height: 90px;
+}
+.actionicon{
+    cursor: pointer;
+}
+.attributselected{
+    color: green;
+}
+.titreselected{
+    color: rgb(71, 71, 244)
+}
+.dialogupdatecontent{
+    margin-top: 20px;
+}
+.liste-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.titre {
+    margin-right: 20px;
+}
+.searchicon{
+    cursor: pointer;
+}
+.searchbar{
+    background-color: rgb(218, 219, 220);
+}

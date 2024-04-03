@@ -5,21 +5,33 @@ const middlewareSaison = require("../middlewares/auth");
 
 router.post(
   "/archiveSeason/:seasonId",
-  middlewareSaison.loggedMiddleware,
-  middlewareSaison.isAdmin,
+  /* middlewareSaison.loggedMiddleware,
+  middlewareSaison.isAdmin,*/
   saisonController.archiveSeason
 );
 router.post(
   "/createSaison",
-  middlewareSaison.loggedMiddleware,
-  middlewareSaison.isAdmin,
+  /*middlewareSaison.loggedMiddleware,
+  middlewareSaison.isAdmin,*/
   saisonController.createSaison
 );
 router.get(
   "/getSaison/:id",
-  middlewareSaison.loggedMiddleware,
-  middlewareSaison.isAdmin,
+  /*middlewareSaison.loggedMiddleware,
+  middlewareSaison.isAdmin,*/
   saisonController.getSaisonByid
+);
+router.get(
+  "/getSaisonActuelle",
+  /*middlewareSaison.loggedMiddleware,
+  middlewareSaison.isAdmin,*/
+  saisonController.getSaisonCourante
+);
+router.get(
+  "/SaisonArchivee",
+  /*middlewareSaison.loggedMiddleware,
+  middlewareSaison.isAdmin,*/
+  saisonController.getSaisonsArchivees
 );
 router.post(
   "/updatestatus",
@@ -44,6 +56,13 @@ router.post(
   middlewareSaison.loggedMiddleware,
   middlewareSaison.isChoriste,
   saisonController.quitterChoeur
+);
+
+router.patch(
+  "/updateSaison/:id",
+  /*middlewareSaison.loggedMiddleware,
+  middlewareSaison.isAdmin,*/
+  saisonController.updateSaison
 );
 
 /**

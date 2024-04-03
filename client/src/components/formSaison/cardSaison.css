@@ -1,0 +1,13 @@
+.text{
+    font-size:x-large;
+    color: cadetblue;
+
+}
+
+.box {
+    border-radius: 25px;
+}
+
+.box-img {
+    border-radius: 50px;
+}
