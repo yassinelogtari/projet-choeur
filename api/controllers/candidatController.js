@@ -221,6 +221,7 @@ const rempForm = async (req, res) => {
     res.status(500).send({ error: error });
   }
 };
+
 const accepterCandidatParAudition=async(req,res)=>{
   const pdfFile=req.file
   try{
