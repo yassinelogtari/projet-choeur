@@ -106,6 +106,14 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
+      <NavLink to="/dashboard/admin/Candidature/listV2">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Liste des candidatures V2</div>
+          </a>
+        </li>
+      </NavLink>
       <NavLink to="/dashboard/admin/Candidature/listParpupitre">
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
