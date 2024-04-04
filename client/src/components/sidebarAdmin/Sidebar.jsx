@@ -32,7 +32,7 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-      <NavLink to="/concert">
+      <NavLink to="/dashboard/admin/concert">
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
@@ -40,10 +40,6 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-
-
-  
-
 
       {/* Saisons */}
       <li className="menu-header small text-uppercase">
@@ -84,7 +80,17 @@ function Sidebar() {
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
-            <div data-i18n="Account Settings">Liste des audition</div>
+            <div data-i18n="Account Settings">Liste des auditions</div>
+          </a>
+        </li>
+      </NavLink>
+      <NavLink to="/dashboard/admin/Audition/genererPlanning">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">
+              Générer un planning d'auditions
+            </div>
           </a>
         </li>
       </NavLink>
@@ -100,79 +106,48 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-
-      {/* Forms & Tables */}
+      <NavLink to="/dashboard/admin/Candidature/listParpupitre">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">
+              Liste des candidatures par pupitre
+            </div>
+          </a>
+        </li>
+      </NavLink>
+      {/* Ouevres */}
       <li className="menu-header small text-uppercase">
-        <span className="menu-header-text">Forms &amp; Tables</span>
+        <span className="menu-header-text">Œuvres</span>
       </li>
-      {/* Forms */}
-      <li className="menu-item">
-        <a href="javascript:void(0);" className="menu-link menu-toggle">
-          <i className="menu-icon tf-icons bx bx-detail" />
-          <div data-i18n="Form Elements">Form Elements</div>
-        </a>
-        <ul className="menu-sub">
-          <li className="menu-item">
-            <a href="forms-basic-inputs.html" className="menu-link">
-              <div data-i18n="Basic Inputs">Basic Inputs</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="forms-input-groups.html" className="menu-link">
-              <div data-i18n="Input groups">Input groups</div>
-            </a>
-          </li>
-        </ul>
-      </li>
-      <li className="menu-item">
-        <a href="javascript:void(0);" className="menu-link menu-toggle">
-          <i className="menu-icon tf-icons bx bx-detail" />
-          <div data-i18n="Form Layouts">Form Layouts</div>
-        </a>
-        <ul className="menu-sub">
-          <li className="menu-item">
-            <a href="form-layouts-vertical.html" className="menu-link">
-              <div data-i18n="Vertical Form">Vertical Form</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="form-layouts-horizontal.html" className="menu-link">
-              <div data-i18n="Horizontal Form">Horizontal Form</div>
-            </a>
-          </li>
-        </ul>
-      </li>
-      {/* Tables */}
-      <li className="menu-item">
-        <a href="tables-basic.html" className="menu-link">
-          <i className="menu-icon tf-icons bx bx-table" />
-          <div data-i18n="Tables">Tables</div>
-        </a>
-      </li>
-      {/* Misc */}
+      <NavLink to="/dashboard/admin/oeuvres/liste">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Liste des œuvres</div>
+          </a>
+        </li>
+      </NavLink>
+      <NavLink to="/dashboard/admin/oeuvres/addoeuvre">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Ajouter œuvre</div>
+          </a>
+        </li>
+      </NavLink>
+      {/* repeptions */}
       <li className="menu-header small text-uppercase">
-        <span className="menu-header-text">Misc</span>
+        <span className="menu-header-text">Repetitions</span>
       </li>
-      <li className="menu-item">
-        <a
-          href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
-          target="_blank"
-          className="menu-link"
-        >
-          <i className="menu-icon tf-icons bx bx-support" />
-          <div data-i18n="Support">Support</div>
-        </a>
-      </li>
-      <li className="menu-item">
-        <a
-          href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"
-          target="_blank"
-          className="menu-link"
-        >
-          <i className="menu-icon tf-icons bx bx-file" />
-          <div data-i18n="Documentation">Documentation</div>
-        </a>
-      </li>
+      <NavLink to="/dashboard/admin/repetition/liste-absence">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">absences repetions</div>
+          </a>
+        </li>
+      </NavLink>
     </ul>
   );
 }

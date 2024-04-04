@@ -215,7 +215,6 @@ const CandidatureFormulaire = () => {
  
 
   
-
   return (
     <>
       <Transition in={!success} timeout={500}>
