@@ -13,16 +13,10 @@ import ListeCandidatesParPupitre from "./pages/candidates/ListeCandidatesParPupi
 import AdminAuditionInfo from "../admin/pages/auditions/AdminAddAuditionInfo";
 import AuditionUpdate from "../admin/pages/auditions/AuditionUpdate";
 import Concert from "../concert/Concert";
-
 import Archive from "./pages/saison/archive/Archive";
-
 import ListeOeuvres from "./pages/oeuvres/ListeOeuvres";
-
 import PlanningAudition from "./pages/auditions/GenererPlanning";
-
-import { io } from "socket.io-client";
 import AddOeuvre from "./pages/oeuvres/AddOeuvre";
-import ManageConcert from "../../components/concert/ManageConcert";
 
 const AdminDashboard = (props) => {
   return (
@@ -50,12 +44,10 @@ const AdminDashboard = (props) => {
             {props.load === "updateAudition" && <AuditionUpdate />}
             {props.load === "ListeOeuvres" && <ListeOeuvres />}
             {props.load === "AddOeuvre" && <AddOeuvre />}
-            {props.load === "ListeCandidatesParPupitre" && <ListeCandidatesParPupitre />}
+            {props.load === "ListeCandidatesParPupitre" && (
+              <ListeCandidatesParPupitre />
+            )}
             {props.load === "genererPlanning" && <PlanningAudition />}
-
-            
-            
-            
           </div>
           <div className="layout-overlay layout-menu-toggle" />
         </div>
