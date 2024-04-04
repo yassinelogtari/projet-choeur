@@ -140,7 +140,6 @@ const App = () => {
             path="/presence/repetition/:idR"
             element={<PresenceRepetition />}
           />
-<<<<<<< HEAD
           <Route
             path="/dashboard/admin/concert"
             element={<AdminDashboard load="Concert" />}
@@ -150,31 +149,6 @@ const App = () => {
             path="/dashboard/admin/concert/addConcert"
             element={<AddConcert />}
           />
-=======
-          <Route exact path="/concert" element={<Concert />} />
-          <Route exact path="addConcert" element={<AddConcert />} />
-          <Route exact path="/candidatureForm" element={<FormCandidature />} />
-            <Route
-            exact
-            path="/candidats/:id/verify/:token"
-            element={<FormCandidature />}
-          />
-          
-          <Route
-            exact
-            path="/candidatsForm  "
-            element={<FormCandidature />}
-          />
-          
-            <Route
-            exact
-            path="/emailVerification"
-            element={<EmailVerification />}
-          />
-           
-          <Route exact path="/concert" element={<Concert />} />
-          <Route exact path="addConcert" element={<AddConcert />} />
->>>>>>> e2cdfadaa3e713f12a830e63336c53d70f86e711
         </Routes>
       </>
     </Router>

@@ -48,8 +48,6 @@ const AdminDashboard = (props) => {
             {props.load === "archives" && <Archive />}
             {props.load === "candidatesList" && <CandidatesList />}
             {props.load === "updateAudition" && <AuditionUpdate />}
-<<<<<<< HEAD
-=======
             {props.load === "ListeOeuvres" && <ListeOeuvres />}
             {props.load === "AddOeuvre" && <AddOeuvre />}
             {props.load === "ListeCandidatesParPupitre" && <ListeCandidatesParPupitre />}
@@ -58,7 +56,6 @@ const AdminDashboard = (props) => {
             
             
             
->>>>>>> e2cdfadaa3e713f12a830e63336c53d70f86e711
           </div>
           <div className="layout-overlay layout-menu-toggle" />
         </div>

@@ -32,12 +32,8 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-<<<<<<< HEAD
-      <NavLink to="/dashboard/admin/concert">
-=======
 
       <NavLink to="/concert">
->>>>>>> e2cdfadaa3e713f12a830e63336c53d70f86e711
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
