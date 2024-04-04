@@ -375,6 +375,122 @@ async function updateConcert(req, res) {
   }
 }
 
+const calculerTauxPresenceMembres = async (req, res) => {
+  try {
+    const seuil = req.query.seuil || 0;
+
+    const concerts = await Concert.find().populate("listeMembres.membre");
+
+    const tauxPresenceMembres = {};
+
+    concerts.forEach((concert) => {
+      concert.listeMembres.forEach((membreConcert) => {
+        const { membre, presence } = membreConcert;
+        const memberId = membre._id.toString();
+
+        if (!tauxPresenceMembres[memberId]) {
+          tauxPresenceMembres[memberId] = {
+            membre: membre,
+            tauxPresence: 0,
+            concertsParticipes: 0,
+          };
+        }
+
+        if (presence) {
+          tauxPresenceMembres[memberId].tauxPresence += 1;
+        }
+        tauxPresenceMembres[memberId].concertsParticipes += 1;
+      });
+    });
+
+    const membresFiltres = Object.values(tauxPresenceMembres).filter(
+      (membre) => {
+        const tauxPresencePourcentage =
+          (membre.tauxPresence / membre.concertsParticipes) * 100;
+        return tauxPresencePourcentage >= seuil;
+      }
+    );
+
+    membresFiltres.forEach((membre) => {
+      membre.tauxPresence =
+        (membre.tauxPresence / membre.concertsParticipes) * 100;
+    });
+
+    res.json({ membresFiltres });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+
+const validerConcert = async (req, res) => {
+  try {
+    const { concertId } = req.params; // Add a parameter to specify the concert
+
+    const seuil = req.query.seuil || 0;
+
+    const concert = await Concert.findById(concertId).populate(
+      "listeMembres.membre"
+    );
+    const concerts = await Concert.find().populate("listeMembres.membre");
+
+    if (!concert) {
+      return res.status(404).json({ message: "Concert not found" });
+    }
+
+    const tauxPresenceMembres = {};
+
+    concerts.forEach((concert) => {
+      concert.listeMembres.forEach((membreConcert) => {
+        const { membre, presence } = membreConcert;
+        const memberId = membre._id.toString();
+
+        if (!tauxPresenceMembres[memberId]) {
+          tauxPresenceMembres[memberId] = {
+            membre: membre,
+            tauxPresence: 0,
+            concertsParticipes: 0,
+          };
+        }
+
+        if (presence) {
+          tauxPresenceMembres[memberId].tauxPresence += 1;
+        }
+        tauxPresenceMembres[memberId].concertsParticipes += 1;
+      });
+    });
+
+    const membresFiltres = Object.values(tauxPresenceMembres).filter(
+      (membre) => {
+        const tauxPresencePourcentage =
+          (membre.tauxPresence / membre.concertsParticipes) * 100;
+        return tauxPresencePourcentage >= seuil;
+      }
+    );
+    membresFiltres.forEach((membre) => {
+      membre.tauxPresence =
+        (membre.tauxPresence / membre.concertsParticipes) * 100;
+    });
+
+    for (const membre of membresFiltres) {
+      const memberId = membre.membre._id.toString();
+      const membreConcert = concert.listeMembres.find(item => item.membre._id.toString() === memberId);
+  
+      if (membreConcert) {
+          membreConcert.valider = true; // Update the 'valider' field
+          await concert.save(); // Save the modifications to the database
+      } else {
+          console.error("Member concert not found for ID:", memberId);
+      }
+  }
+
+    res.json({ membresFiltres });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   createConcert,
   getListeParticipantsParPupitre,
@@ -382,4 +498,6 @@ module.exports = {
   getConcerts,
   getConcertById,
   updateConcert,
+  calculerTauxPresenceMembres,
+  validerConcert,
 };

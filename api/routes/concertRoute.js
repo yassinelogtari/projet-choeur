@@ -165,11 +165,14 @@ router.get(
 
 router.get(
   "/:concertId/participants",
-  middlewareConcert.loggedMiddleware,
-  middlewareConcert.isAdmin,
   concertController.getListeParticipantsParPupitre
 );
 
+
+
+
+router.get('/tauxPresence/members', concertController.calculerTauxPresenceMembres);
+router.put('/:concertId/valider', concertController.validerConcert)
 /**
  * @swagger
  * tags:
