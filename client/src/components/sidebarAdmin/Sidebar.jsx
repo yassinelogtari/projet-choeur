@@ -23,15 +23,10 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-
-      <NavLink to="/dashboard/admin/audition">
-        <li className="menu-item">
-          <a href="javascript:void(0);" className="menu-link menu-toggle">
-            <i className="menu-icon tf-icons bx bx-dock-top" />
-            <div data-i18n="Account Settings">Audition</div>
-          </a>
-        </li>
-      </NavLink>
+      {/* Concerts */}
+      <li className="menu-header small text-uppercase">
+        <span className="menu-header-text">Concerts</span>
+      </li>
       <NavLink to="/dashboard/admin/concert">
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
@@ -40,7 +35,14 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-
+      <NavLink to="/dashboard/admin/AbsenceConcerts">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Absence Concerts</div>
+          </a>
+        </li>
+      </NavLink>
       {/* Saisons */}
       <li className="menu-header small text-uppercase">
         <span className="menu-header-text">Saisons</span>
