@@ -9,27 +9,29 @@ const CandidatesList = () => {
   const [allCandidates, setAllCandidates] = useState();
   const [auditionId, setAuditionId] = useState("");
   const [showPopup, setShowPopup] = useState(false);
-  const [showModal, setShowModal] = useState(false); 
-  const [popupMessage, setPopupMessage] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
 
-  const [selectedCandidate, setSelectedCandidate] = useState(null); // State pour stocker les données du candidat sélecti
+  const [selectedCandidate, setSelectedCandidate] = useState(null);
   const handleSendEmails = async () => {
     try {
-      
-      const response = await axios.post('http://localhost:8000/api/candidats/accepterCandidat');
-      console.log('Emails envoyés avec succès :', response.data);
+      const response = await axios.post(
+        "http://localhost:8000/api/candidats/accepterCandidat"
+      );
+      console.log("Emails envoyés avec succès :", response.data);
       // alert('Emails envoyés avec succès');
 
-      setPopupMessage('Emails envoyés avec succès!');
+      setPopupMessage("Emails envoyés avec succès!");
       setShowModal(true);
-      
     } catch (error) {
-      console.error('Erreur lors de l\'envoi des emails:', error.response ? error.response.data : error.message);
+      console.error(
+        "Erreur lors de l'envoi des emails:",
+        error.response ? error.response.data : error.message
+      );
       // alert('Erreur lors de l\'envoi des emails');
-      
-      setPopupMessage('Erreur lors de l\'envoi des emails');
+
+      setPopupMessage("Erreur lors de l'envoi des emails");
       setShowModal(true);
-      
     }
   };
   const handleAudition = (id) => {
@@ -203,19 +205,26 @@ const CandidatesList = () => {
             pageSize={9}
             rowsPerPageOptions={[9]}
           />
-        </div><button style={{ backgroundColor: 'mediumblue', color: 'white' }} onClick={handleSendEmails} >Envoyer des Emails d'acceptation</button>
+        </div>
+        <button
+          style={{ backgroundColor: "mediumblue", color: "white" }}
+          onClick={handleSendEmails}
+        >
+          Envoyer des Emails d'acceptation
+        </button>
         {showModal && (
-        <div className="popup1">
-          <div className="popup1-container">
-            <div className="popup1-content">
-              <p>{popupMessage}</p>
-              <span className="close" onClick={() => setShowModal(false)}>&times;</span>
+          <div className="popup1">
+            <div className="popup1-container">
+              <div className="popup1-content">
+                <p>{popupMessage}</p>
+                <span className="close" onClick={() => setShowModal(false)}>
+                  &times;
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
       </div>
-      
 
       {showPopup && <div className="popup-overlay"></div>}
 
@@ -229,7 +238,6 @@ const CandidatesList = () => {
               <h2>Information de l'Audition</h2>
               {selectedCandidate && (
                 <div>
-                  <p className="auditionIdPopup">ID: {selectedCandidate.id}</p>
                   <p>Date: {selectedCandidate.DateAud}</p>
                   <p>Heure de début: {selectedCandidate.HeureDeb}</p>
                   <p>Heure de fin: {selectedCandidate.HeureFin}</p>
@@ -238,7 +246,10 @@ const CandidatesList = () => {
                   {selectedCandidate.candidatsInfo.map((info, index) => (
                     <div key={index}>
                       <p className="candidaIdPopup">
-                        Candidat info ID: {info._id}
+                        Candidat info :
+                        {selectedCandidate.candidats[index].nom +
+                          " " +
+                          selectedCandidate.candidats[index].prenom}
                       </p>
                       <p>Extrait chanté: {info.extraitChante}</p>
                       <p>Tessiture: {info.tessiture}</p>

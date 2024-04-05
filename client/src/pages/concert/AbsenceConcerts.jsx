@@ -6,37 +6,30 @@ import "./absenceConcert.css";
 
 function AbsenceConcerts() {
   const [concerts, setConcerts] = useState([]);
-  const [selectedConcert, setSelectedConcert] = useState(null);
+  const [selectedConcertId, setSelectedConcertId] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [absenceData, setAbsenceData] = useState([]);
 
-  const handleViewClick = (concert) => {
-    if (concert && concert.id) {
-      setSelectedConcert(concert.id);
-      setShowPopup(true);
+  const handleViewClick = (concertId) => {
+    setSelectedConcertId(concertId);
+    setShowPopup(true);
 
-      const concertId = concert.id;
-
-      axios
-        .get(`http://localhost:8000/api/concerts/${concertId}/participants`)
-        .then((response) => {
-          const tauxAbsenceParPupitre =
-            response.data.tauxAbsenceParPupitre;
-          const formattedData = Object.entries(tauxAbsenceParPupitre).map(
-            ([pupitre, taux]) => ({
-              id: pupitre,
-              value: parseFloat(taux.replace("%", "")),
-              label: pupitre,
-            })
-          );
-          setAbsenceData(formattedData);
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-        });
-    } else {
-      console.error("Concert or concert ID is undefined");
-    }
+    axios
+      .get(`http://localhost:8000/api/concerts/${concertId}/participants`)
+      .then((response) => {
+        const tauxAbsenceParPupitre = response.data.tauxAbsenceParPupitre;
+        const formattedData = Object.entries(tauxAbsenceParPupitre).map(
+          ([pupitre, taux]) => ({
+            id: pupitre,
+            value: parseFloat(taux.replace("%", "")),
+            label: pupitre,
+          })
+        );
+        setAbsenceData(formattedData);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   };
 
   useEffect(() => {
@@ -45,11 +38,12 @@ function AbsenceConcerts() {
         const response = await axios.get(
           "http://localhost:8000/api/concerts/get-concerts"
         );
-        const concertsWithIds = response.data.map((concert) => ({
-          ...concert,
-          id: concert._id,
-        }));
-        setConcerts(concertsWithIds);
+        setConcerts(
+          response.data.map((concert, index) => ({
+            ...concert,
+            autoIncrementedId: index + 1,
+          }))
+        );
       } catch (error) {
         console.error("Error fetching concerts:", error);
       }
@@ -59,21 +53,18 @@ function AbsenceConcerts() {
   }, []);
 
   const columns = [
-    { field: "id", headerName: "ID", width: 250 },
+    { field: "autoIncrementedId", headerName: "ID", width: 100 },
     { field: "titre", headerName: "Titre", width: 170 },
     { field: "lieu", headerName: "Lieu", width: 140 },
     { field: "date", headerName: "Date", width: 115 },
     {
       field: "Action",
       headerName: "Action",
-      width: 200,
+      width: 150,
       renderCell: (params) => (
         <div
           className="viewButtondash"
-          style={{
-            marginLeft: "30px",
-          }}
-          onClick={() => handleViewClick(params.row)}
+          onClick={() => handleViewClick(params.row._id)}
         >
           View
         </div>
@@ -94,19 +85,18 @@ function AbsenceConcerts() {
               marginTop: "-100px",
             }}
           >
-            Liste des concerts
+            Liste des absences dans les concerts
             <div style={{ height: 400, width: "100%" }}>
               <DataGrid
-               rows={concerts}
-              columns={columns}
-              pageSize={5}
-              rowsPerPageOptions={[5]}
-              getRowId={(row) => row.id}
-              onRowClick={(row) => {
-                handleViewClick(row.row);
-              }}
-            />
-            
+                rows={concerts}
+                columns={columns}
+                pageSize={5}
+                rowsPerPageOptions={[5]}
+                getRowId={(row) => row.autoIncrementedId}
+                onRowClick={(row) => {
+                  handleViewClick(row.row._id);
+                }}
+              />
             </div>
           </div>
         </div>

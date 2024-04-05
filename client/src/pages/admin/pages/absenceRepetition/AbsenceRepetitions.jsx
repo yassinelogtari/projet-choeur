@@ -18,15 +18,13 @@ const AbsenceRepetition = () => {
         const response = await axios.get(
           "http://localhost:8000/api/absence/repetition"
         );
-        const mappedData = response.data.map((item) => ({
-          id: item.repetition._id,
-          lieu: item.repetition.lieu,
-          date: item.repetition.date,
-          heureDeb: item.repetition.heureDeb,
-          heureFin: item.repetition.heureFin,
-          absentMembers: item.absentMembers,
-        }));
-        setAbsenceData(mappedData);
+        setAbsenceData(
+          response.data.map((item, index) => ({
+            ...item.repetition,
+            autoIncrementedId: index + 1,
+            absentMembers: item.absentMembers,
+          }))
+        );
       } catch (error) {
         console.error("Error fetching absence data:", error);
       }
@@ -43,10 +41,7 @@ const AbsenceRepetition = () => {
         );
         const mappedDataByPupitre = response.data.reduce((acc, item) => {
           acc[item.repetition._id] = {
-            lieu: item.repetition.lieu,
-            date: item.repetition.date,
-            heureDeb: item.repetition.heureDeb,
-            heureFin: item.repetition.heureFin,
+            ...item.repetition,
             absentMembersByPupitre: item.absentMembersByPupitre,
           };
           return acc;
@@ -61,7 +56,7 @@ const AbsenceRepetition = () => {
   }, []);
 
   const columns = [
-    { field: "id", headerName: "ID", width: 170 },
+    { field: "autoIncrementedId", headerName: "ID", width: 100 }, 
     { field: "lieu", headerName: "Lieu", width: 140 },
     { field: "date", headerName: "DateRep", width: 120 },
     { field: "heureDeb", headerName: "HeureDeb", width: 170 },
@@ -109,7 +104,7 @@ const AbsenceRepetition = () => {
   const handleViewByPupitre = (row) => {
     setSelectedRepetition(row);
     setAbsentMembersByPupitre(
-      absenceDataByPupitre[row.id]?.absentMembersByPupitre || []
+      absenceDataByPupitre[row._id]?.absentMembersByPupitre || []
     );
     setShowPopupByPupitre(true);
   };
@@ -134,7 +129,7 @@ const AbsenceRepetition = () => {
                 columns={columns}
                 pageSize={5}
                 rowsPerPageOptions={[5]}
-                getRowId={(row) => row.id}
+                getRowId={(row) => row.autoIncrementedId}
               />
             </div>
           </div>
