@@ -206,7 +206,9 @@ const CandidatesList = () => {
           display: "flex",
           alignItems: "center",
           flexDirection: "column",
-          marginTop: "-280px",
+          position: "absolute",
+          top: "-50vh",
+          right: "-77vh",
         }}
       >
         <div style={{ marginBottom: "50px" }}>Liste des candidatures</div>

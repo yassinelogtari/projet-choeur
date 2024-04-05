@@ -192,7 +192,9 @@ const CandidatesList = () => {
             display: "flex",
 
             flexDirection: "column",
-            marginTop: "-290px",
+            position: "absolute",
+            top: "-50vh",
+            right: "-63vh",
           }}
         >
           <div
