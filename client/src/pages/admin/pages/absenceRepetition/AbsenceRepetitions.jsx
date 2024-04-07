@@ -11,6 +11,7 @@ const AbsenceRepetition = () => {
   const [selectedRepetition, setSelectedRepetition] = useState(null);
   const [absentMembers, setAbsentMembers] = useState([]);
   const [absentMembersByPupitre, setAbsentMembersByPupitre] = useState([]);
+  const [saisonCourante, setSaisonCourante] = useState(null);
 
   useEffect(() => {
     const fetchAbsenceData = async () => {
@@ -55,8 +56,23 @@ const AbsenceRepetition = () => {
     fetchAbsenceDataByPupitre();
   }, []);
 
+  useEffect(() => {
+    const fetchSaisonCourante = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/saison/getSaisonActuelle"
+        );
+        setSaisonCourante(response.data.saison.repetitions);
+      } catch (error) {
+        console.error("Error fetching current season:", error);
+      }
+    };
+
+    fetchSaisonCourante();
+  }, []);
+
   const columns = [
-    { field: "autoIncrementedId", headerName: "ID", width: 100 }, 
+    { field: "autoIncrementedId", headerName: "ID", width: 100 },
     { field: "lieu", headerName: "Lieu", width: 140 },
     { field: "date", headerName: "DateRep", width: 120 },
     { field: "heureDeb", headerName: "HeureDeb", width: 170 },
@@ -68,9 +84,7 @@ const AbsenceRepetition = () => {
       renderCell: (params) => (
         <div
           className="viewButtondash"
-          style={{
-            marginLeft: "30px",
-          }}
+          style={{ marginLeft: "30px" }}
           onClick={() => handleViewProfile(params.row)}
         >
           View
@@ -84,9 +98,7 @@ const AbsenceRepetition = () => {
       renderCell: (params) => (
         <div
           className="viewButtondash"
-          style={{
-            marginLeft: "20px",
-          }}
+          style={{ marginLeft: "20px" }}
           onClick={() => handleViewByPupitre(params.row)}
         >
           View
@@ -111,7 +123,9 @@ const AbsenceRepetition = () => {
 
   return (
     <div>
-      <div className={`position-absolute top-50 start-50 translate-middle auditionTable`}>
+      <div
+        className={`position-absolute top-50 start-50 translate-middle auditionTable`}
+      >
         <div>
           <div
             style={{
@@ -125,7 +139,13 @@ const AbsenceRepetition = () => {
             Liste des absences de repetitions
             <div style={{ height: 400, width: "100%" }}>
               <DataGrid
-                rows={absenceData}
+                rows={absenceData.filter(
+                  (item) =>
+                    saisonCourante &&
+                    saisonCourante.some((rep) => {
+                      return rep._id=== item._id.toString();
+                    })
+                )}
                 columns={columns}
                 pageSize={5}
                 rowsPerPageOptions={[5]}
@@ -163,40 +183,40 @@ const AbsenceRepetition = () => {
       )}
       {showPopupByPupitre && (
         <div className="popup-overlay-absence">
-        <div className="popup">
-          <div className="popup-container">
-            <div className="popup-content">
-              <span
-                className="close"
-                onClick={() => setShowPopupByPupitre(false)}
-              >
-                &times;
-              </span>
-              {selectedRepetition && (
-                <div>
-                  <h3>Membres Absents par Pupitre:</h3>
-                  <ul>
-                    {Object.entries(absentMembersByPupitre).map(
-                      ([pupitre, members]) => (
-                        <div key={pupitre}>
-                          <h4 className="pupitreAbsence">{pupitre}</h4>
-                          <ul>
-                            {members.map((member) => (
-                              <li
-                                className="memberAbsent"
-                                key={member._id}
-                              >{`${member.nom} ${member.prenom}`}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )
-                    )}
-                  </ul>
-                </div>
-              )}
+          <div className="popup">
+            <div className="popup-container">
+              <div className="popup-content">
+                <span
+                  className="close"
+                  onClick={() => setShowPopupByPupitre(false)}
+                >
+                  &times;
+                </span>
+                {selectedRepetition && (
+                  <div>
+                    <h3>Membres Absents par Pupitre:</h3>
+                    <ul>
+                      {Object.entries(absentMembersByPupitre).map(
+                        ([pupitre, members]) => (
+                          <div key={pupitre}>
+                            <h4 className="pupitreAbsence">{pupitre}</h4>
+                            <ul>
+                              {members.map((member) => (
+                                <li
+                                  className="memberAbsent"
+                                  key={member._id}
+                                >{`${member.nom} ${member.prenom}`}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )
+                      )}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
         </div>
       )}
     </div>

@@ -9,6 +9,42 @@ function AbsenceConcerts() {
   const [selectedConcertId, setSelectedConcertId] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [absenceData, setAbsenceData] = useState([]);
+  const [saisonCourante, setSaisonCourante] = useState(null);
+
+  useEffect(() => {
+    const fetchConcerts = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/concerts/get-concerts"
+        );
+        setConcerts(
+          response.data.map((concert, index) => ({
+            ...concert,
+            autoIncrementedId: index + 1,
+          }))
+        );
+      } catch (error) {
+        console.error("Error fetching concerts:", error);
+      }
+    };
+
+    fetchConcerts();
+  }, []);
+
+  useEffect(() => {
+    const fetchSaisonCourante = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/saison/getSaisonActuelle"
+        );
+        setSaisonCourante(response.data.saison.concerts);
+      } catch (error) {
+        console.error("Error fetching current season:", error);
+      }
+    };
+
+    fetchSaisonCourante();
+  }, []);
 
   const handleViewClick = (concertId) => {
     setSelectedConcertId(concertId);
@@ -31,26 +67,6 @@ function AbsenceConcerts() {
         console.error("Error fetching data:", error);
       });
   };
-
-  useEffect(() => {
-    const fetchConcerts = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8000/api/concerts/get-concerts"
-        );
-        setConcerts(
-          response.data.map((concert, index) => ({
-            ...concert,
-            autoIncrementedId: index + 1,
-          }))
-        );
-      } catch (error) {
-        console.error("Error fetching concerts:", error);
-      }
-    };
-
-    fetchConcerts();
-  }, []);
 
   const columns = [
     { field: "autoIncrementedId", headerName: "ID", width: 100 },
@@ -88,7 +104,13 @@ function AbsenceConcerts() {
             Liste des absences dans les concerts
             <div style={{ height: 400, width: "100%" }}>
               <DataGrid
-                rows={concerts}
+                rows={concerts.filter(
+                  (concert) =>
+                    saisonCourante &&
+                    saisonCourante.some(
+                      (cons) => cons._id === concert._id.toString()
+                    )
+                )}
                 columns={columns}
                 pageSize={5}
                 rowsPerPageOptions={[5]}
