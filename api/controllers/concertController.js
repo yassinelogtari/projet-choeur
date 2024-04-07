@@ -379,7 +379,24 @@ const calculerTauxPresenceMembres = async (req, res) => {
   try {
     const seuil = req.query.seuil || 0;
 
-    const concerts = await Concert.find().populate("listeMembres.membre");
+    const saisonCourante = await Saison.findOne({ saisonCourante: true });
+
+    if (!saisonCourante) {
+      return res
+        .status(404)
+        .json({ message: "Aucune saison courante trouvée" });
+    }
+
+    await saisonCourante.populate("concerts");
+    const concerts = saisonCourante.concerts;
+
+    
+    if (!concerts || concerts.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Aucun concert trouvé pour la saison courante" });
+    }
+
 
     const tauxPresenceMembres = {};
 
@@ -425,17 +442,31 @@ const calculerTauxPresenceMembres = async (req, res) => {
 
 const validerConcert = async (req, res) => {
   try {
-    const { concertId } = req.params; // Add a parameter to specify the concert
+    const { concertId } = req.params;
 
     const seuil = req.query.seuil || 0;
 
-    const concert = await Concert.findById(concertId).populate(
-      "listeMembres.membre"
-    );
-    const concerts = await Concert.find().populate("listeMembres.membre");
+    
+    const saisonCourante = await Saison.findOne({ saisonCourante: true });
+
+    if (!saisonCourante) {
+      return res.status(404).json({ message: "Aucune saison courante trouvée" });
+    }
+
+    
+    const concert = await Concert.findById(concertId).populate("listeMembres.membre");
 
     if (!concert) {
-      return res.status(404).json({ message: "Concert not found" });
+      return res.status(404).json({ message: "Concert non trouvé" });
+    }
+
+    
+    await saisonCourante.populate('concerts');
+    const concerts = saisonCourante.concerts;
+
+    
+    if (!concerts || concerts.length === 0) {
+      return res.status(404).json({ message: "Aucun concert trouvé pour la saison courante" });
     }
 
     const tauxPresenceMembres = {};
@@ -474,22 +505,26 @@ const validerConcert = async (req, res) => {
 
     for (const membre of membresFiltres) {
       const memberId = membre.membre._id.toString();
-      const membreConcert = concert.listeMembres.find(item => item.membre._id.toString() === memberId);
-  
+      const membreConcert = concert.listeMembres.find(
+        (item) => item.membre._id.toString() === memberId
+      );
+
       if (membreConcert) {
-          membreConcert.valider = true; // Update the 'valider' field
-          await concert.save(); // Save the modifications to the database
+        membreConcert.valider = true; 
       } else {
-          console.error("Member concert not found for ID:", memberId);
+        console.error("Membre non trouvé pour l'ID du membre :", memberId);
       }
-  }
+    }
+
+    await concert.save();
 
     res.json({ membresFiltres });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Erreur serveur" });
   }
 };
+
 
 module.exports = {
   createConcert,
@@ -499,5 +534,5 @@ module.exports = {
   getConcertById,
   updateConcert,
   calculerTauxPresenceMembres,
-  validerConcert,
+  validerConcert
 };

@@ -54,7 +54,7 @@ const upload = multer({
 
 router.post(
   "/add-concert",
- 
+
   upload.fields([
     { name: "affiche", maxCount: 1 },
     { name: "excelFilePath", maxCount: 1 },
@@ -151,10 +151,7 @@ router.delete(
   deleteConcert
 );
 
-router.get(
-  "/get-concerts",
-  getConcerts
-);
+router.get("/get-concerts", getConcerts);
 
 router.get(
   "/:concertId",
@@ -168,11 +165,11 @@ router.get(
   concertController.getListeParticipantsParPupitre
 );
 
-
-
-
-router.get('/tauxPresence/members', concertController.calculerTauxPresenceMembres);
-router.put('/:concertId/valider', concertController.validerConcert)
+router.get(
+  "/tauxPresence/members",
+  concertController.calculerTauxPresenceMembres
+);
+router.put("/:concertId/valider", concertController.validerConcert);
 /**
  * @swagger
  * tags:

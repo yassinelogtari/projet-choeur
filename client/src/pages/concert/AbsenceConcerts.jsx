@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import { PieChart } from "@mui/x-charts/PieChart";
+import { TextField, Button, MenuItem } from "@mui/material"; // Import des composants Material-UI
 import "./absenceConcert.css";
+import DialogComponent from "../../components/dialog/Dialog";
 
 function AbsenceConcerts() {
   const [concerts, setConcerts] = useState([]);
@@ -10,7 +12,10 @@ function AbsenceConcerts() {
   const [showPopup, setShowPopup] = useState(false);
   const [absenceData, setAbsenceData] = useState([]);
   const [saisonCourante, setSaisonCourante] = useState(null);
-
+  const [seuil, setSeuil] = useState(0); 
+  const [selectedConcert, setSelectedConcert] = useState("");
+  const [openDialog, setOpenDialog] = useState(false);
+  
   useEffect(() => {
     const fetchConcerts = async () => {
       try {
@@ -68,6 +73,30 @@ function AbsenceConcerts() {
       });
   };
 
+  const handleSeuilChange = (event) => {
+    setSeuil(event.target.value);
+  };
+
+  const handleConcertSelectChange = (event) => {
+    setSelectedConcert(event.target.value);
+  };
+
+  const handleValiderClick = () => {
+    axios
+      .put(
+        `http://localhost:8000/api/concerts/${selectedConcert}/valider?seuil=${seuil}`
+      )
+      .then((response) => {
+        console.log(response.data);
+        setOpenDialog(true);
+        setSeuil(0);
+        setSelectedConcert("");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   const columns = [
     { field: "autoIncrementedId", headerName: "ID", width: 100 },
     { field: "titre", headerName: "Titre", width: 170 },
@@ -87,6 +116,10 @@ function AbsenceConcerts() {
       ),
     },
   ];
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   return (
     <div>
@@ -119,6 +152,50 @@ function AbsenceConcerts() {
                   handleViewClick(row.row._id);
                 }}
               />
+            </div>
+            <div style={{ marginTop: "40px" }}>
+              <h3 className="ValidateConcertTitle">validate concert</h3>
+              <TextField
+                label="Seuil"
+                type="number"
+                value={seuil}
+                onChange={handleSeuilChange}
+              />
+              <TextField
+                select
+                label="Concert"
+                value={selectedConcert}
+                onChange={handleConcertSelectChange}
+                style={{ marginLeft: "10px", width: "150px" }}
+              >
+                {concerts
+                  .filter(
+                    (concert) =>
+                      saisonCourante &&
+                      saisonCourante.some(
+                        (cons) => cons._id === concert._id.toString()
+                      )
+                  )
+                  .map((concert) => (
+                    <MenuItem key={concert._id} value={concert._id}>
+                      {concert.titre}
+                    </MenuItem>
+                  ))}
+              </TextField>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleValiderClick}
+                style={{ marginLeft: "10px" }}
+              >
+                Valider
+              </Button>
+              <DialogComponent
+                open={openDialog}
+                handleClose={handleCloseDialog}
+                successMessage="Your Concert has been successfully validate!"
+              />
+              <div></div>
             </div>
           </div>
         </div>
