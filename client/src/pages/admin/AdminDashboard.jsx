@@ -25,6 +25,7 @@ import AddOeuvre from "./pages/oeuvres/AddOeuvre";
 import ManageConcert from "../../components/concert/ManageConcert";
 import AbsenceRepetition from "./pages/absenceRepetition/AbsenceRepetitions";
 import CandidatesListV2 from "./pages/candidates/CandidatesListV2"
+import AbsenceConcerts from "../concert/AbsenceConcerts";
 
 const AdminDashboard = (props) => {
   return (
@@ -59,6 +60,7 @@ const AdminDashboard = (props) => {
             {props.load === "absenceRep" && <AbsenceRepetition />}
             {props.load === "candidatesListV2" && <CandidatesListV2 />}
           </div>
+          {props.load === "AbsenceConcerts" && <AbsenceConcerts />}
           <div className="layout-overlay layout-menu-toggle" />
         </div>
       </div>

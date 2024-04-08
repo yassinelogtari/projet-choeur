@@ -1,15 +1,16 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const Membre = require('./membreModel'); 
-const Repetition = require('./repetitionModel');
-const Oeuvre = require('./oeuvreModel');
-const Concert=require('./concertModel')
+const Membre = require("./membreModel");
+const Repetition = require("./repetitionModel");
+const Oeuvre = require("./oeuvreModel");
+const Concert = require("./concertModel");
+
 
 const saisonSchema = new mongoose.Schema({
   nom: {
     type: String,
     required: true,
-    unique:true
+    unique: true,
   },
   dateDebut: {
     type: Date,
@@ -19,28 +20,34 @@ const saisonSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  candidats: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "candidat",
+    },
+  ],
   membres: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Membre',
+      ref: "Membre",
     },
   ],
   repetitions: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Repetition',
+      ref: "Repetition",
     },
   ],
   oeuvres: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Oeuvre',
+      ref: "Oeuvre",
     },
   ],
-   concerts: [
+  concerts: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Concert',
+      ref: "Concert",
     },
   ],
   
@@ -53,25 +60,27 @@ const saisonSchema = new mongoose.Schema({
   seuilnomination: {
     type: Number,
     default: 3,
-  },nominatedMembers: [
-    { 
-
+  },
+  nominatedMembers: [
+    {
       memberId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Membre',
+        ref: "Membre",
       },
       nom: String,
       prenom: String,
       total_absences: Number,
     },
-  ],  seuilelimination: {
+  ],
+  seuilelimination: {
     type: Number,
     default: 1,
-  },eliminatedMembers: [
+  },
+  eliminatedMembers: [
     {
       memberId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Membre',
+        ref: "Membre",
       },
       nom: String,
       prenom: String,
@@ -86,10 +95,10 @@ const saisonSchema = new mongoose.Schema({
   },
   archivee: {
     type: Boolean,
-    default: false 
+    default: false,
   },
 });
 
-const Saison = mongoose.model('Saison', saisonSchema);
+const Saison = mongoose.model("Saison", saisonSchema);
 
 module.exports = Saison;

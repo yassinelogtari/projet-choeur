@@ -50,6 +50,10 @@ const concertSchema = new Schema({
           type: String,
         },
       },
+      valider:{
+        type: Boolean,
+        default:false
+      }
     },
   ],
   QrCode: {

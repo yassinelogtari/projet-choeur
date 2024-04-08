@@ -184,7 +184,10 @@ const App = () => {
             element={<AdminDashboard load="candidatesListV2" />}
           />
 
-
+          <Route
+            path="/dashboard/admin/AbsenceConcerts"
+            element={<AdminDashboard load="AbsenceConcerts" />}
+          />
         </Routes>
       </>
     </Router>

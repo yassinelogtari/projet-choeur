@@ -12,7 +12,7 @@ const CandidatesList = () => {
   const [showModal, setShowModal] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
 
-  const [selectedCandidate, setSelectedCandidate] = useState(null); // State pour stocker les données du candidat sélecti
+  const [selectedCandidate, setSelectedCandidate] = useState(null);
   const handleSendEmails = async () => {
     try {
       const response = await axios.post(
@@ -219,7 +219,6 @@ const CandidatesList = () => {
             rowsPerPageOptions={[5]}
           />
         </div>
-
         {showModal && (
           <div className="popup1">
             <div className="popup1-container">
@@ -246,7 +245,6 @@ const CandidatesList = () => {
               <h2>Information de l'Audition</h2>
               {selectedCandidate && (
                 <div>
-                  <p className="auditionIdPopup">ID: {selectedCandidate.id}</p>
                   <p>Date: {selectedCandidate.DateAud}</p>
                   <p>Heure de début: {selectedCandidate.HeureDeb}</p>
                   <p>Heure de fin: {selectedCandidate.HeureFin}</p>
@@ -255,7 +253,10 @@ const CandidatesList = () => {
                   {selectedCandidate.candidatsInfo.map((info, index) => (
                     <div key={index}>
                       <p className="candidaIdPopup">
-                        Candidat info ID: {info._id}
+                        Candidat info :
+                        {selectedCandidate.candidats[index].nom +
+                          " " +
+                          selectedCandidate.candidats[index].prenom}
                       </p>
                       <p>Extrait chanté: {info.extraitChante}</p>
                       <p>Tessiture: {info.tessiture}</p>

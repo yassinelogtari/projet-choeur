@@ -141,15 +141,6 @@ const AdminAdAuditionInfo = () => {
           >
             <div className="form-row">
               <div className="addAuditionInfoForm">
-                <TextField
-                  id="audition"
-                  label="Audition"
-                  variant="outlined"
-                  className="auditionField"
-                  name="auditionId"
-                  value={auditionId}
-                  onChange={handleChange}
-                />
                 <FormControl className="auditionField candidatIDfield">
                   <InputLabel id="candidat-label">Candidat</InputLabel>
                   <Select

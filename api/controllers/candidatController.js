@@ -1,30 +1,30 @@
 const jwt = require("jsonwebtoken");
-const Saison=require("../models/saisonModel")
+const Saison = require("../models/saisonModel");
 const Candidats = require("../models/candidatModel");
 const CandidatsVerif = require("../models/candidatMailVerifModel");
 const sendEmail = require("../utils/sendEmail");
 const Audition = require("../models/auditionModel");
-const Membre=require("../models/membreModel")
+const Membre = require("../models/membreModel");
 const DateRange = require("../models/dateRangeModel");
 const path = require("path");
-const generatePassword = require('generate-password')
-const bcrypt=require("bcrypt")
-const fs = require('fs');
+const generatePassword = require("generate-password");
+const bcrypt = require("bcrypt");
+const fs = require("fs");
 // const path = require('path');
 
 const accepterCandidatParAudition = async (req, res) => {
   try {
-    
-    const chartePath = path.join(__dirname, '..', 'uploads', 'charte.pdf');
+    const chartePath = path.join(__dirname, "..", "uploads", "charte.pdf");
     const charteBuffer = fs.readFileSync(chartePath);
 
-    
-    const auditions = await Audition.find({"candidatsInfo": { $not: { $size: 0 } }}).populate('candidats');
+    const auditions = await Audition.find({
+      candidatsInfo: { $not: { $size: 0 } },
+    }).populate("candidats");
     for (const audition of auditions) {
       for (let i = 0; i < audition.candidats.length; i++) {
         const candidat = audition.candidats[i];
         const candidatInfo = audition.candidatsInfo[i];
-        if (candidatInfo.decision === 'Retenu') {
+        if (candidatInfo.decision === "Retenu") {
           const lienConfirm = `http://localhost:8000/api/candidats/confirm/${candidat._id}`;
           const sujetEmail = "Acceptation de votre candidature";
           const corpsEmail = `Bonjour ${candidat.prenom} ${candidat.nom},<br>
@@ -32,24 +32,24 @@ Nous avons le plaisir de vous informer que vous avez été retenu(e) pour faire 
 Vous trouverez ci-joint la Charte de l'Orchestre Symphonique de Carthage pour la signer.<br>
 Pour confirmer votre participation, veuillez cliquer sur ce lien : <a href="${lienConfirm}">Confirmer</a><br>
 Cordialement`;
-          
-          const attachments = [{
-            filename: "charte.pdf",
-            content: charteBuffer,
-          }];
 
-          
+          const attachments = [
+            {
+              filename: "charte.pdf",
+              content: charteBuffer,
+            },
+          ];
+
           await sendEmail(candidat.email, sujetEmail, corpsEmail, attachments);
         }
       }
     }
 
-    
     return res.status(200).json({
-      message: "Emails d'acceptation envoyés avec succès à tous les candidats retenus de toutes les auditions",
+      message:
+        "Emails d'acceptation envoyés avec succès à tous les candidats retenus de toutes les auditions",
     });
   } catch (error) {
-    
     return res.status(500).json({ error: error.message });
   }
 };
@@ -141,8 +141,8 @@ const addEmailCandidat = async (req, res) => {
 const getToken = async (req, res) => {
   try {
     const { id, token } = req.params;
-    console.log('ID:', id);
-    console.log('Token:', token);
+    console.log("ID:", id);
+    console.log("Token:", token);
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
     const condidat = await CandidatsVerif.findOne({ _id: id });
@@ -156,8 +156,9 @@ const getToken = async (req, res) => {
       { $set: { verified: true } }
     );
 
-    
-    res.status(200).send({ message: "Email verified successfully", id: condidat._id });
+    res
+      .status(200)
+      .send({ message: "Email verified successfully", id: condidat._id });
   } catch (error) {
     if (error.name === "TokenExpiredError") {
       res.status(400).send({ message: "Token has expired" });
@@ -244,7 +245,6 @@ const rempForm = async (req, res) => {
       activite,
       connaisanceMusical,
       situationPerso,
-      
     } = req.body;
     const newCondidat = await new Candidats({
       nom,
@@ -260,6 +260,11 @@ const rempForm = async (req, res) => {
       connaisanceMusical,
       situationPerso,
     }).save();
+    const currentSaison = await Saison.findOne({ saisonCourante: true });
+    if (currentSaison) {
+      currentSaison.candidats.push(newCondidat);
+      await currentSaison.save();
+    }
     res.status(201).send({
       message: "le candidat a été créé avec sucéé",
       data: newCondidat,
@@ -311,32 +316,16 @@ const candidatsParTessiture = async (req, res) => {
     const tessitureParam = req.params.tessiture;
     const tessiture = tessitureParam.toLowerCase();
     const auditions = await Audition.find({
-      "candidatsInfo": { $not: { $size: 0 } },"candidatsInfo.tessiture": tessiture,
+      candidatsInfo: { $not: { $size: 0 } },
+      "candidatsInfo.tessiture": tessiture,
     }).populate("candidats");
     const candidatsParTessiture = [];
     for (const audition of auditions) {
       for (let i = 0; i < audition.candidatsInfo.length; i++) {
-        const candidat=audition.candidats[i]
-        const candidatInfo=audition.candidatsInfo[i]
-        if(candidat && candidatInfo){
-        const {
-          _id,
-          nom,
-          prenom,
-          email,
-          sexe,
-          CIN,
-          taille,
-          telephone,
-          nationalite,
-          dateNaissance,
-          activite,
-          connaissanceMusical,
-          situationPerso,
-        } = candidat;
-        const decision = audition.candidatsInfo[i].decision;
-        if (audition.candidatsInfo[i].tessiture.toLowerCase() === tessiture) {
-          candidatsParTessiture.push({
+        const candidat = audition.candidats[i];
+        const candidatInfo = audition.candidatsInfo[i];
+        if (candidat && candidatInfo) {
+          const {
             _id,
             nom,
             prenom,
@@ -350,11 +339,28 @@ const candidatsParTessiture = async (req, res) => {
             activite,
             connaissanceMusical,
             situationPerso,
-            decision,
-          });
+          } = candidat;
+          const decision = audition.candidatsInfo[i].decision;
+          if (audition.candidatsInfo[i].tessiture.toLowerCase() === tessiture) {
+            candidatsParTessiture.push({
+              _id,
+              nom,
+              prenom,
+              email,
+              sexe,
+              CIN,
+              taille,
+              telephone,
+              nationalite,
+              dateNaissance,
+              activite,
+              connaissanceMusical,
+              situationPerso,
+              decision,
+            });
+          }
         }
       }
-    }
     }
     const sortedCandidats = candidatsParTessiture.sort((a, b) => {
       const decisionsOrder = { Retenu: 1, Refusé: 2 };
@@ -376,7 +382,7 @@ const candidatsParTessiture = async (req, res) => {
 //     if(candidat.confirm){
 //       return res.status(404).json({ message: 'Vous avez déjà confirmer votre participation' });
 //     }
-    
+
 //     const passAleatoire=generatePassword.generate({
 //       length:12,
 //       numbers:true,
@@ -414,7 +420,7 @@ const candidatsParTessiture = async (req, res) => {
 //           nouveauMembre.pupitre=tessiture
 //           break
 //           }
-          
+
 //         }
 //       }
 //     candidat.confirm = true;
@@ -426,12 +432,11 @@ const candidatsParTessiture = async (req, res) => {
 //     }
 //     await nouveauMembre.save()
 
-   
 //     const corpsEmail=`Bonjour ${candidat.prenom} ${candidat.nom},<br>
 //     Votre participation a été confirmée.<br>
 //     Pour accéder à votre compte,voici vos coordonnées.<br>
 //     Email: ${candidat.email} <br>
-//     Mot de passe: ${passAleatoire} <br> 
+//     Mot de passe: ${passAleatoire} <br>
 //     Cordialement`
 //     await sendEmail(candidat.email,"Informations d'inscriptions",corpsEmail)
 //     return res.status(200).json({ message: 'Confirmation et inscription en tant que membre effectuées avec succés' });
@@ -439,58 +444,57 @@ const candidatsParTessiture = async (req, res) => {
 //     return res.status(500).json({ error: error.message });
 //   }
 // }
-const confirmParticipationEtDevenirChoriste=async(req,res)=>{
+const confirmParticipationEtDevenirChoriste = async (req, res) => {
   const candidatId = req.params.id;
   try {
-    const candidat = await Candidats.findOne({"_id":candidatId});
+    const candidat = await Candidats.findOne({ _id: candidatId });
     if (!candidat) {
-      return res.status(404).json({ message: 'Candidat non trouvé' });
+      return res.status(404).json({ message: "Candidat non trouvé" });
     }
-    if(candidat.confirm){
-      return res.redirect('http://localhost:3000/');
-
+    if (candidat.confirm) {
+      return res.redirect("http://localhost:3000/");
     }
-    
-    const passAleatoire=generatePassword.generate({
-      length:12,
-      numbers:true,
-      uppercase:true,
-      lowercase:true,
-      symbols:true
-    })
-    const hashedPassword=await bcrypt.hash(passAleatoire,10)
-    const nouveauMembre=new Membre({
-      nom:candidat.nom,
-      prenom:candidat.prenom,
-      email:candidat.email,
-      password:hashedPassword,
-      sexe:candidat.sexe,
-      dateNaissance:candidat.dateNaissance,
-      nationalite:candidat.nationalite,
-      CIN:candidat.CIN,
-      taille:candidat.taille,
-      situationPerso:candidat.situationPerso,
-      connaissanceMusic:candidat.connaisanceMusical,
-      activite:candidat.activite,
-      telephone:candidat.telephone,
-      role:'choriste',
-      statut:'Inactif',
 
-    })
-    const auditions=await Audition.find({"candidatsInfo": { $not: { $size: 0 } }})
-    for(const audition of auditions){
-      for(let i=0;i<audition.candidats.length;i++){
-        const currentCandidat=audition.candidats[i]
-        const currentCandidatID=currentCandidat.toString()
-        const infoCandidat=audition.candidatsInfo[i]
-        if(currentCandidatID===candidatId){
-          const tessiture=infoCandidat.tessiture
-          nouveauMembre.pupitre=tessiture
-          break
-          }
-          
+    const passAleatoire = generatePassword.generate({
+      length: 12,
+      numbers: true,
+      uppercase: true,
+      lowercase: true,
+      symbols: true,
+    });
+    const hashedPassword = await bcrypt.hash(passAleatoire, 10);
+    const nouveauMembre = new Membre({
+      nom: candidat.nom,
+      prenom: candidat.prenom,
+      email: candidat.email,
+      password: hashedPassword,
+      sexe: candidat.sexe,
+      dateNaissance: candidat.dateNaissance,
+      nationalite: candidat.nationalite,
+      CIN: candidat.CIN,
+      taille: candidat.taille,
+      situationPerso: candidat.situationPerso,
+      connaissanceMusic: candidat.connaisanceMusical,
+      activite: candidat.activite,
+      telephone: candidat.telephone,
+      role: "choriste",
+      statut: "Inactif",
+    });
+    const auditions = await Audition.find({
+      candidatsInfo: { $not: { $size: 0 } },
+    });
+    for (const audition of auditions) {
+      for (let i = 0; i < audition.candidats.length; i++) {
+        const currentCandidat = audition.candidats[i];
+        const currentCandidatID = currentCandidat.toString();
+        const infoCandidat = audition.candidatsInfo[i];
+        if (currentCandidatID === candidatId) {
+          const tessiture = infoCandidat.tessiture;
+          nouveauMembre.pupitre = tessiture;
+          break;
         }
       }
+    }
     candidat.confirm = true;
     await candidat.save();
     const currentSaison = await Saison.findOne({ saisonCourante: true });
@@ -498,21 +502,20 @@ const confirmParticipationEtDevenirChoriste=async(req,res)=>{
       currentSaison.membres.push(nouveauMembre._id);
       await currentSaison.save();
     }
-    await nouveauMembre.save()
+    await nouveauMembre.save();
 
-   
-    const corpsEmail=`Bonjour ${candidat.prenom} ${candidat.nom},<br>
+    const corpsEmail = `Bonjour ${candidat.prenom} ${candidat.nom},<br>
     Votre participation a été confirmée.<br>
     Pour accéder à votre compte,voici vos coordonnées.<br>
     Email: ${candidat.email} <br>
     Mot de passe: ${passAleatoire} <br> 
-    Cordialement`
-    await sendEmail(candidat.email,"Informations d'inscriptions",corpsEmail)
-    return res.redirect('http://localhost:3000/');
+    Cordialement`;
+    await sendEmail(candidat.email, "Informations d'inscriptions", corpsEmail);
+    return res.redirect("http://localhost:3000/");
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
-}
+};
 module.exports = {
   fetshCandidats,
   addEmailCandidat,
@@ -522,5 +525,5 @@ module.exports = {
   rempForm,
   accepterCandidatParAudition,
   candidatsParTessiture,
-  confirmParticipationEtDevenirChoriste
+  confirmParticipationEtDevenirChoriste,
 };
