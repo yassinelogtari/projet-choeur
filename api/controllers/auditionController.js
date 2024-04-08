@@ -4,6 +4,7 @@ const sendEmail = require("../utils/sendEmail");
 const Audition = require("../models/auditionModel");
 const Candidats = require("../models/candidatModel");
 const path = require("path");
+const Saison = require("../models/saisonModel");
 
 const generateAuditionSchedule = (
   startDate,
@@ -99,6 +100,13 @@ const generateSchedule = async (req, res) => {
     );
 
     const savedAuditions = await Audition.insertMany(auditionInstances);
+
+    const currentSaison = await Saison.findOne({ saisonCourante: true });
+    if (currentSaison) {
+      savedAuditions.map((audition) => currentSaison.auditions.push(audition));
+
+      await currentSaison.save();
+    }
 
     if (savedAuditions) {
       for (let i = 0; i < savedAuditions.length; i++) {
@@ -199,6 +207,13 @@ const generateAdditionalSchedule = async (req, res) => {
     );
 
     const savedAuditions = await Audition.insertMany(auditionInstances);
+
+    const currentSaison = await Saison.findOne({ saisonCourante: true });
+    if (currentSaison) {
+      savedAuditions.map((audition) => currentSaison.auditions.push(audition));
+
+      await currentSaison.save();
+    }
 
     if (savedAuditions) {
       for (let i = 0; i < savedAuditions.length; i++) {
@@ -350,23 +365,22 @@ const addAuditionInfo = async (req, res) => {
   }
 };
 
-
 const getAuditionById = async (req, res) => {
   const auditionId = req.params.auditionId;
 
   try {
-    const audition = await Audition.findById(auditionId).populate('candidats');
+    const audition = await Audition.findById(auditionId).populate("candidats");
     if (!audition) {
-      return res.status(404).json({ success: false, msg: 'Audition not found.' });
+      return res
+        .status(404)
+        .json({ success: false, msg: "Audition not found." });
     }
     res.status(200).json({ success: true, audition });
   } catch (error) {
-    console.error('Error fetching audition by ID:', error);
-    res.status(500).json({ success: false, msg: 'Internal server error.' });
+    console.error("Error fetching audition by ID:", error);
+    res.status(500).json({ success: false, msg: "Internal server error." });
   }
 };
-
-
 
 const updateAudition = async (req, res) => {
   try {
@@ -379,31 +393,29 @@ const updateAudition = async (req, res) => {
       return res.status(404).json({ message: "Audition not found" });
     }
 
-
-    const candidatIndex = audition.candidatsInfo.findIndex(info => info._id == candidatInfoId);
+    const candidatIndex = audition.candidatsInfo.findIndex(
+      (info) => info._id == candidatInfoId
+    );
     if (candidatIndex === -1) {
-      return res.status(404).json({ message: "Candidat information not found" });
+      return res
+        .status(404)
+        .json({ message: "Candidat information not found" });
     }
 
-    
     for (let key in updateFields) {
       audition.candidatsInfo[candidatIndex][key] = updateFields[key];
     }
 
-    
     await audition.save();
 
-    return res.status(200).json({ message: "Candidat information updated successfully" });
+    return res
+      .status(200)
+      .json({ message: "Candidat information updated successfully" });
   } catch (error) {
     console.error("Error updating candidat info:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
-}
-
-
-
-
-
+};
 
 const deleteAudition = async (req, res) => {
   try {
@@ -412,15 +424,28 @@ const deleteAudition = async (req, res) => {
     const deletedAudition = await Audition.findByIdAndDelete(auditionId);
 
     if (!deletedAudition) {
-      return res.status(404).json({ success: false, msg: "Audition non trouvée." });
+      return res
+        .status(404)
+        .json({ success: false, msg: "Audition non trouvée." });
     }
 
-    res.status(200).json({ success: true, msg: "Audition supprimée avec succès", data: deletedAudition });
+    res.status(200).json({
+      success: true,
+      msg: "Audition supprimée avec succès",
+      data: deletedAudition,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, msg: error.message });
   }
 };
 
-
-module.exports = { generateSchedule, fetshAuditions,addAuditionInfo,updateAudition,deleteAudition ,generateAdditionalSchedule ,getAuditionById};
+module.exports = {
+  generateSchedule,
+  fetshAuditions,
+  addAuditionInfo,
+  updateAudition,
+  deleteAudition,
+  generateAdditionalSchedule,
+  getAuditionById,
+};
