@@ -67,7 +67,8 @@ const getSaisonCourante = async (req, res) => {
   try {
     const saisonCourante = await Saison.findOne({
       saisonCourante: true,
-    }).populate("membres repetitions oeuvres concerts");
+    }).populate("membres repetitions oeuvres concerts candidats auditions")
+;
 
     if (!saisonCourante) {
       return res.status(404).json({ erreur: "Aucune saison courante trouvée" });

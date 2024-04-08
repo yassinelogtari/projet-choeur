@@ -2,6 +2,14 @@ import { Link } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
 function Sidebar() {
+  function goup() {
+    var scrollStep = -window.scrollY / (400 / 15),
+      scrollInterval = setInterval(function () {
+        if (window.scrollY != 0) {
+          window.scrollBy(0, scrollStep);
+        } else clearInterval(scrollInterval);
+      }, 15);
+  }
   return (
     <ul className="menu-inner py-1">
       {/* Dashboard */}
@@ -23,15 +31,10 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-
-      <NavLink to="/dashboard/admin/audition">
-        <li className="menu-item">
-          <a href="javascript:void(0);" className="menu-link menu-toggle">
-            <i className="menu-icon tf-icons bx bx-dock-top" />
-            <div data-i18n="Account Settings">Audition</div>
-          </a>
-        </li>
-      </NavLink>
+      {/* Concerts */}
+      <li className="menu-header small text-uppercase">
+        <span className="menu-header-text">Concerts</span>
+      </li>
       <NavLink to="/dashboard/admin/concert">
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
@@ -40,7 +43,14 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-
+      <NavLink to="/dashboard/admin/AbsenceConcerts">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Absence Concerts</div>
+          </a>
+        </li>
+      </NavLink>
       {/* Saisons */}
       <li className="menu-header small text-uppercase">
         <span className="menu-header-text">Saisons</span>
@@ -76,7 +86,7 @@ function Sidebar() {
       <li className="menu-header small text-uppercase">
         <span className="menu-header-text">Audition</span>
       </li>
-      <NavLink to="/dashboard/admin/Audition/list">
+      <NavLink to="/dashboard/admin/Audition/list" onClick={goup}>
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
@@ -98,11 +108,19 @@ function Sidebar() {
       <li className="menu-header small text-uppercase">
         <span className="menu-header-text">Candidatures</span>
       </li>
-      <NavLink to="/dashboard/admin/Candidature/list">
+      <NavLink to="/dashboard/admin/Candidature/list" onClick={goup}>
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
             <div data-i18n="Account Settings">Liste des candidatures</div>
+          </a>
+        </li>
+      </NavLink>
+      <NavLink to="/dashboard/admin/Candidature/listV2" onClick={goup}>
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Liste des candidatures V2</div>
           </a>
         </li>
       </NavLink>
