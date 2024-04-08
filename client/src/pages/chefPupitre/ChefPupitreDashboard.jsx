@@ -4,7 +4,7 @@ import SidebarChefPupitre from "../../components/sidebarChefPupitre/SidebarChefP
 import PresenceMainConcert from "../chefPupitre/pages/presenceMain/PresenceMainConcert";
 import Home from "./pages/Home";
 
-const chefPupitreDashboard = (props) => {
+const ChefPupitreDashboard = (props) => {
   return (
     <div>
       <div>
@@ -30,4 +30,4 @@ const chefPupitreDashboard = (props) => {
 };
 
 
-export default chefPupitreDashboard;
+export default ChefPupitreDashboard;

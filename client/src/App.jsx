@@ -13,7 +13,6 @@ import "./assets/vendor/css/core.css";
 import "./assets/vendor/css/theme-default.css";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ChefPupitreDashboard from "./pages/chefPupitre/ChefPupitreDashboard";
-import ChoristeDashboard from "./pages/ChoristeDashboard";
 import ManagerDashboard from "./pages/ManagerDashboard";
 import FormCandidature from "./pages/FormCandidature";
 import FormSaison from "./components/formSaison/FormSaison";
@@ -26,6 +25,7 @@ import AddConcert from "./components/concert/AddConcert";
 import EmailVerification from "./components/verify/EmailVerification";
 import Home from "./pages/chefPupitre/pages/Home";
 import AbsenceRepetition from "./pages/admin/pages/absenceRepetition/AbsenceRepetitions";
+import ChoristeDashboard from "./pages/choriste/ChoristeDashboard";
 
 const App = () => {
   return (
@@ -33,15 +33,20 @@ const App = () => {
       <>
         <Routes>
           <Route exact path="/" element={<Login />} />
-          <Route
-            exact
-            path="/presence/cancert/:idC"
-            element={<PresenceConcert />}
+           <Route
+            path="/dashboard/choriste/presence/allRepetitions"
+            element={<ChoristeDashboard load="allRepetitions" />}
           />
-          <Route
-            exact
-            path="/presence/repetition/:idR"
-            element={<PresenceRepetition />}
+
+<Route
+            path="/dashboard/choriste/presence/allConcerts"
+            element={<ChoristeDashboard load="allConcerts" />}
+          />
+
+
+           <Route
+            path="/dashboard/choriste/home"
+            element={<ChoristeDashboard load="home" />}
           />
 
           <Route
