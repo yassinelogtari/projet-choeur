@@ -12,9 +12,9 @@ const CandidatesList = () => {
   const fetchCandidates = async () => {
     try {
       const data = await axios
-        .get("http://localhost:8000/api/candidats")
+        .get( "http://localhost:8000/api/saison/getSaisonActuelle")
         .then((res) => {
-          const modifiedRes = res.data.map((obj,index) => {
+          const modifiedRes = res.data.saison.candidats.map((obj,index) => {
             const { _id, ...rest } = obj;
             return { id: index + 1, ...rest };
           });
@@ -26,6 +26,8 @@ const CandidatesList = () => {
       console.log(err);
     }
   };
+
+ 
 
   useEffect(() => {
     fetchCandidates();

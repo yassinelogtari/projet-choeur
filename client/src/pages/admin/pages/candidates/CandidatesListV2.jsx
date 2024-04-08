@@ -13,27 +13,38 @@ const CandidatesList = () => {
   const [filterByValue, setFilterByValue] = useState("");
   const PF = "http://localhost:5000/images/";
 
+  function findCommonElements(arr1, arr2) {
+    const commonElements = [];
+    
+    for (let i = 0; i < arr1.length; i++) {
+        
+        if (arr2.includes(arr1[i])) {
+            commonElements.push(arr1[i]);
+        }
+    }
+    return commonElements;
+}
+
   const fetchCandidates = async () => {
     try {
         if(filterByValue==""){
       const data = await axios
-        .get("http://localhost:8000/api/candidats")
-        .then((res) => {
-          const modifiedRes = res.data.map((obj,index) => {
-            const { _id, ...rest } = obj;
-            return { id: index + 1, ...rest };
+      .get( "http://localhost:8000/api/saison/getSaisonActuelle")
+      .then((res) => {
+        const modifiedRes = res.data.saison.candidats.map((obj,index) => {
+            
+            return { id: index + 1, ...obj };
           });
           console.log(modifiedRes);
           setAllCandidates(modifiedRes);
           console.log(res);
         });
     }else{
-        const data = await axios
-        .get(`http://localhost:8000/api/candidats?${filterBy}=${filterByValue}`)
+        const data1 = await axios.get(`http://localhost:8000/api/candidats?${filterBy}=${filterByValue}`)
         .then((res) => {
           const modifiedRes = res.data.map((obj,index) => {
-            const { _id, ...rest } = obj;
-            return { id: index + 1, ...rest };
+            
+            return { id: index + 1, ...obj };
           });
           console.log(modifiedRes);
           setAllCandidates(modifiedRes);

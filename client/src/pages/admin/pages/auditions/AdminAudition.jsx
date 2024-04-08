@@ -41,10 +41,15 @@ const CandidatesList = () => {
 
   const fetchCandidates = async () => {
     try {
+
+      // .get( "http://localhost:8000/api/saison/getSaisonActuelle")
+      //   .then((res) => {
+      //     const modifiedRes = res.data.saison.candidats.map((obj,index) => {
       const data = await axios
-        .get("http://localhost:8000/api/auditions/")
+        .get("http://localhost:8000/api/saison/getSaisonActuelle")
         .then((res) => {
-          const modifiedRes = res.data.map((obj,index) => {
+          console.log(res)
+          const modifiedRes = res.data.saison.auditions.map((obj,index) => {
             
             return { id: index + 1, ...obj };
           });
