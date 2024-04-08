@@ -42,6 +42,13 @@ const saisonSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Concert',
     },
+  ],
+  
+  auditions: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'audition',
+    },
   ],  
   seuilnomination: {
     type: Number,

@@ -19,9 +19,9 @@ const CandidatesList = () => {
       const data = await axios
         .get("http://localhost:8000/api/candidats")
         .then((res) => {
-          const modifiedRes = res.data.map((obj) => {
+          const modifiedRes = res.data.map((obj,index) => {
             const { _id, ...rest } = obj;
-            return { id: _id, ...rest };
+            return { id: index + 1, ...rest };
           });
           console.log(modifiedRes);
           setAllCandidates(modifiedRes);
@@ -31,9 +31,9 @@ const CandidatesList = () => {
         const data = await axios
         .get(`http://localhost:8000/api/candidats?${filterBy}=${filterByValue}`)
         .then((res) => {
-          const modifiedRes = res.data.map((obj) => {
+          const modifiedRes = res.data.map((obj,index) => {
             const { _id, ...rest } = obj;
-            return { id: _id, ...rest };
+            return { id: index + 1, ...rest };
           });
           console.log(modifiedRes);
           setAllCandidates(modifiedRes);

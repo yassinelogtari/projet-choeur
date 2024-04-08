@@ -44,9 +44,9 @@ const CandidatesList = () => {
       const data = await axios
         .get("http://localhost:8000/api/auditions/")
         .then((res) => {
-          const modifiedRes = res.data.map((obj) => {
-            const { _id, ...rest } = obj;
-            return { id: _id, ...rest };
+          const modifiedRes = res.data.map((obj,index) => {
+            
+            return { id: index + 1, ...obj };
           });
           console.log(modifiedRes);
           setAllCandidates(modifiedRes);
@@ -65,7 +65,7 @@ const CandidatesList = () => {
     {
       field: "id",
       headerName: "ID",
-      width: 140,
+      width: 80,
     },
     {
       field: "candidats",
@@ -121,23 +121,23 @@ const CandidatesList = () => {
               View
             </div>
             <NavLink
-              to={`/dashboard/admin/addAudition?auditionId=${params.row.id}`}
+              to={`/dashboard/admin/addAudition?auditionId=${params.row._id}`}
               style={{ textDecoration: "none", marginRight: "5px" }}
             >
               <div
                 className="addButtondash"
-                onClick={() => handleAudition(params.row.id)}
+                onClick={() => handleAudition(params.row._id)}
               >
                 Add
               </div>
             </NavLink>
             <NavLink
-              to={`/dashboard/admin/updateAudition?auditionId=${params.row.id}`}
+              to={`/dashboard/admin/updateAudition?auditionId=${params.row._id}`}
               style={{ textDecoration: "none", marginRight: "5px" }}
             >
               <div
                 className="updateButtondash"
-                onClick={() => handleAudition(params.row.id)}
+                onClick={() => handleAudition(params.row._id)}
               >
                 update
               </div>
@@ -145,7 +145,7 @@ const CandidatesList = () => {
             <div
               className="deleteButtondash "
               style={{ marginRight: "5px" }}
-              onClick={() => handleDeletAudition(params.row.id)}
+              onClick={() => handleDeletAudition(params.row._id)}
             >
               Delete
             </div>
@@ -167,7 +167,7 @@ const CandidatesList = () => {
 
       if (response.data.success) {
         const updatedCandidates = allCandidates.filter(
-          (candidate) => candidate.id !== id
+          (candidate) => candidate._id !== id
         );
         setAllCandidates(updatedCandidates);
         console.log("Audition deleted successfully.");
@@ -194,7 +194,7 @@ const CandidatesList = () => {
             flexDirection: "column",
             position: "absolute",
             top: "-50vh",
-            right: "-63vh",
+            right: "-55vh",
           }}
         >
           <div
@@ -215,8 +215,8 @@ const CandidatesList = () => {
             className="datagrid"
             rows={allCandidates}
             columns={userColumns.concat(actionColumn)}
-            pageSize={9}
-            rowsPerPageOptions={[9]}
+            pageSize={5}
+            rowsPerPageOptions={[5]}
           />
         </div>
 

@@ -6,6 +6,7 @@ import axios from "axios";
 
 const CandidatesList = () => {
   const [allCandidates, setAllCandidates] = useState();
+  
   const PF = "http://localhost:5000/images/";
 
   const fetchCandidates = async () => {
@@ -13,9 +14,9 @@ const CandidatesList = () => {
       const data = await axios
         .get("http://localhost:8000/api/candidats")
         .then((res) => {
-          const modifiedRes = res.data.map(obj => {
-            const { _id, ...rest } = obj; 
-            return { id: _id, ...rest }; 
+          const modifiedRes = res.data.map((obj,index) => {
+            const { _id, ...rest } = obj;
+            return { id: index + 1, ...rest };
           });
           console.log(modifiedRes)
           setAllCandidates(modifiedRes);
@@ -174,8 +175,8 @@ const CandidatesList = () => {
           className="datagrid"
           rows={allCandidates}
           columns={userColumns.concat(actionColumn)}
-          pageSize={9}
-          rowsPerPageOptions={[9]}
+          pageSize={10}
+          rowsPerPageOptions={[10]}
           checkboxSelection={false}
           disableSelection={true}
           disableRowSelectionOnClick

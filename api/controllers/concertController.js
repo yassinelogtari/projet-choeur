@@ -3,6 +3,7 @@ const Membre = require("../models/membreModel");
 const Oeuvre = require("../models/oeuvreModel");
 const Saison = require("../models/saisonModel");
 //const exceljs = require("exceljs");
+const addQrCodeToRepetition = require("../middlewares/createQrCodeMiddleware");   
 
 const excelToJson = require("convert-excel-to-json");
 const {
@@ -81,11 +82,8 @@ async function createConcert(req, res) {
     const newConcert = await concert.save();
 
     req.cancertId = newConcert._id;
-
-    res.status(200).json({
-      message: "Concert created successfully",
-      concert: newConcert,
-    });
+    await addQrCodeToRepetition.addQrCodeToCancert(req, res, () => {});
+    
   } catch (error) {
     console.log(error);
     res.status(500).json({
