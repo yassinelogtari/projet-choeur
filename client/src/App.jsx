@@ -48,6 +48,10 @@ const App = () => {
             path="/dashboard/choriste/home"
             element={<ChoristeDashboard load="home" />}
           />
+          <Route
+            path="/dashboard/choriste/historique/:id"
+            element={<ChoristeDashboard load="historique" />}
+          />
 
           <Route
             exact

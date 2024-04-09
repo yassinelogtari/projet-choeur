@@ -39,6 +39,14 @@ function SidebarChoriste() {
           </a>
         </li>
       </NavLink>
+      <NavLink to="/dashboard/choriste/historique">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings"> Historique </div>
+          </a>
+        </li>
+      </NavLink>
     </ul>
   );
 }
