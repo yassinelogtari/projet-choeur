@@ -146,8 +146,8 @@ router.patch(
 
 router.delete(
   "/:concertId",
-  middlewareConcert.loggedMiddleware,
-  middlewareConcert.isAdmin,
+  /*middlewareConcert.loggedMiddleware,
+  middlewareConcert.isAdmin,*/
   deleteConcert
 );
 
