@@ -152,7 +152,7 @@ const App = () => {
           />
           <Route
             exact
-            path="/dashboard/admin/concert/addConcert"
+            path="  "
             element={<AddConcert />}
           />
           <Route exact path="/concert" element={<Concert />} />
@@ -188,6 +188,8 @@ const App = () => {
             path="/dashboard/admin/AbsenceConcerts"
             element={<AdminDashboard load="AbsenceConcerts" />}
           />
+
+
         </Routes>
       </>
     </Router>
