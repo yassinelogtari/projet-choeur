@@ -27,7 +27,7 @@ const columns = [
     rowScope: 'row',
     width: 100, 
   },
- {
+ /*{
     title: 'Concert',
     dataIndex: 'concert',
     render: (concert) => (
@@ -36,7 +36,7 @@ const columns = [
       </div>
     ),
     width: 150,
-  },
+  },*/
   {
     title: 'Lieu',
     dataIndex: 'lieu',

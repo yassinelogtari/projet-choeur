@@ -5,8 +5,8 @@ const middlewareRepetition = require("../middlewares/auth");
 
 router.post(
   "/create",
-  middlewareRepetition.loggedMiddleware,
-  middlewareRepetition.isAdmin,
+  /*middlewareRepetition.loggedMiddleware,
+  middlewareRepetition.isAdmin,*/
   repetitionController.createRepetition
 );
 router.delete(
