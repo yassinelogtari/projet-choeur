@@ -39,43 +39,43 @@
   }
   .pupitre-select {
     padding: 10px;
-    border: 1px solid #c4c4c4; /* Couleur de bordure légère */
-    border-radius: 4px; /* Rayon de bordure pour les angles arrondis */
+    border: 1px solid #c4c4c4; 
+    border-radius: 4px; 
     background-color: white;
-    font-size: 16px; /* Taille de police standard */
-    color: #333; /* Couleur de texte standard */
-    outline: none; /* Supprime la bordure de mise au point par défaut */
-    margin-bottom: 20px; /* Espace en dessous du select */
-    cursor: pointer; /* Change le curseur en pointeur */
+    font-size: 16px; 
+    color: #333;
+    outline: none; 
+    margin-bottom: 20px; 
+    cursor: pointer; 
   }
   
   .pupitre-select:hover {
-    border-color: #a0a0a0; /* Assombrir la bordure au survol */
+    border-color: #a0a0a0; 
   }
   
   .pupitre-select:focus {
-    border-color: #3f51b5; /* Couleur de mise au point, peut utiliser la couleur primaire de votre thème MUI */
+    border-color: #3f51b5; 
   }
-  /* ListeCandidatesParPupitre.css */
+ 
 .boxContainer {
-  height: 650px; /* Augmentez la hauteur pour mieux afficher le tableau */
+  height: 650px; 
   width: '100%';
   display: flex;
   flex-direction: column;
-  gap: 20px; /* Espacement entre les éléments */
-  padding: 20px; /* Padding autour du composant */
+  gap: 20px; 
+  padding: 20px; 
 }
 
 .dataGridContainer {
-  flex-grow: 1; /* Permet à la grille de prendre tout l'espace vertical disponible */
-  border: 1px solid #e0e0e0; /* Bordure légère autour de la grille */
+  flex-grow: 1; 
+  border: 1px solid #e0e0e0; 
 }
 
 .formControl {
-  min-width: 120px; /* Largeur minimale pour le sélecteur */
+  min-width: 120px;
 }
 
-/* Style spécifique pour le sélecteur (dropdown) */
+
 .selectPupitre {
   background-color: #ffffff;
   border-radius: 4px;

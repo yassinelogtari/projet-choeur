@@ -22,7 +22,9 @@ router.get(
 );
 router.get(
   "/getAllMembers",
-  /*middlewareDate.loggedMiddleware,middlewareDate.isAdmin,*/ membreController.getAllMembers
+  middlewareDate.loggedMiddleware,
+  middlewareDate.isAdmin,
+  membreController.getAllMembers
 );
 router.delete(
   "/deleteMember/:id",

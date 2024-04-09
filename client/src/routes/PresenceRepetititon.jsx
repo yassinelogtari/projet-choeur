@@ -1,10 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import SuccessMessage from "../pages/choriste/pages/presenceRepetition/SuccessMessage";
 
 const PresenceRepetition = () => {
   const [storedToken, setStoredToken] = useState();
   const [textToShow, setTextToShow] = useState("");
+  const [success, setSuccess] = useState(false);
   const { idR } = useParams();
 
   useEffect(() => {
@@ -34,7 +36,8 @@ const PresenceRepetition = () => {
       );
       if(res)
       {
-        setTextToShow("you are marked succefully present in this repetition :) ");
+        //setTextToShow("vous êtes marqué présent avec succès dans cette répétition :)");
+        setSuccess(true);
       }
     } catch (e) {
       console.log(e.response.data.error)
@@ -52,8 +55,8 @@ const PresenceRepetition = () => {
   };
 
   return storedToken ? (
-    <div>{textToShow}</div>
-  ) : (
+    success ? <SuccessMessage /> : <div>{textToShow}</div>
+  ) :  (
     <div>
       please click{" "}
       <Link

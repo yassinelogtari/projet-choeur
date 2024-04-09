@@ -14,12 +14,14 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
+import DialogComponent from "../../../../components/dialog/Dialog";
 import "./adminAddAuditionInfo.css";
 
 const AdminAdAuditionInfo = () => {
   const [auditionId, setAuditionId] = useState("");
   const [allCandidates, setAllCandidates] = useState([]);
   const [formErrors, setFormErrors] = useState({});
+  const [openDialog, setOpenDialog] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -63,8 +65,6 @@ const AdminAdAuditionInfo = () => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
-
-  const [openDialog, setOpenDialog] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -141,15 +141,6 @@ const AdminAdAuditionInfo = () => {
           >
             <div className="form-row">
               <div className="addAuditionInfoForm">
-                <TextField
-                  id="audition"
-                  label="Audition"
-                  variant="outlined"
-                  className="auditionField"
-                  name="auditionId"
-                  value={auditionId}
-                  onChange={handleChange}
-                />
                 <FormControl className="auditionField candidatIDfield">
                   <InputLabel id="candidat-label">Candidat</InputLabel>
                   <Select
@@ -178,9 +169,7 @@ const AdminAdAuditionInfo = () => {
                     error={!!formErrors.extraitChante}
                   />
                   {formErrors.extraitChante && (
-                    <p className="error">
-                      {formErrors.extraitChante}
-                    </p>
+                    <p className="error">{formErrors.extraitChante}</p>
                   )}
                 </div>
               </div>
@@ -273,17 +262,13 @@ const AdminAdAuditionInfo = () => {
           </Box>
         </div>
       </div>
-      <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>Validation</DialogTitle>
-        <DialogContent>
-          <p>Votre audition a été ajoutée avec succès !</p>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <div>
+        <DialogComponent
+          open={openDialog}
+          handleClose={handleCloseDialog}
+          successMessage="Your audition has been successfully added !"
+        />
+      </div>
       <div className="layout-overlay layout-menu-toggle" />
     </div>
   );

@@ -67,14 +67,14 @@ const FormSaison = () => {
       <MyFormItemGroup prefix={['user']}>
         <MyFormItemGroup prefix={['name']}>
           <MyFormItem name="nom" label="Nom de la saison" rules={[{ required: true, message: 'Veuillez saisir le nom de la saison!' }]}>
-            <Input className='input' value={nom} onChange={(e) => setNom(e.target.value)} />
+            <Input className='inp' value={nom} onChange={(e) => setNom(e.target.value)} />
           </MyFormItem>
           <MyFormItem name="date debut" label="Date Début" rules={[{ required: true, message: 'Veuillez sélectionner la date de début!' }]}>
-            <Input className='input' type='date' value={dateDebut} onChange={(e) => setDateDebut(e.target.value)} />
+            <Input className='inp' type='date' value={dateDebut} onChange={(e) => setDateDebut(e.target.value)} />
           </MyFormItem>
         </MyFormItemGroup>
         <MyFormItem name="date fin" label="Date Fin" rules={[{ required: true, message: 'Veuillez sélectionner la date de fin!' }]}>
-          <Input className='input' type='date' value={dateFin} onChange={(e) => setDateFin(e.target.value)} />
+          <Input className='inp' type='date' value={dateFin} onChange={(e) => setDateFin(e.target.value)} />
         </MyFormItem>
       </MyFormItemGroup>
       <Button className='btn-creation' type="primary" htmlType="submit">

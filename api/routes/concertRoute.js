@@ -102,8 +102,8 @@ router.post(
 
 router.patch(
   "/:concertId",
-  /*middlewareConcert.loggedMiddleware,
-  middlewareConcert.isAdmin,*/
+  middlewareConcert.loggedMiddleware,
+  middlewareConcert.isAdmin,
   upload.fields([
     { name: "affiche", maxCount: 1 },
     { name: "excelFilePath", maxCount: 1 },
@@ -167,11 +167,14 @@ router.get(
 
 router.get(
   "/:concertId/participants",
-  middlewareConcert.loggedMiddleware,
-  middlewareConcert.isAdmin,
   concertController.getListeParticipantsParPupitre
 );
 
+router.get(
+  "/tauxPresence/members",
+  concertController.calculerTauxPresenceMembres
+);
+router.put("/:concertId/valider", concertController.validerConcert);
 /**
  * @swagger
  * tags:

@@ -11,6 +11,7 @@ import {
   FormControl,
 } from "@mui/material";
 import "./auditionUpdate.css";
+import DialogComponent from "../../../../components/dialog/Dialog";
 
 const AuditionUpdate = () => {
   const location = useLocation();
@@ -21,6 +22,7 @@ const AuditionUpdate = () => {
   const [candidatInfoId, setCandidatInfoId] = useState("");
   const [candidateOptions, setCandidateOptions] = useState([]);
   const [formErrors, setFormErrors] = useState({});
+  const [openDialog, setOpenDialog] = useState(false);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -116,7 +118,7 @@ const AuditionUpdate = () => {
         `http://localhost:8000/api/auditions/update-audition/${auditionIdParam}`,
         requestBody
       );
-      // Clear form and errors on successful submission
+      setOpenDialog(true);
       setCandidatInfoId("");
       setTessiture("");
       setEvaluation("");
@@ -126,6 +128,10 @@ const AuditionUpdate = () => {
     } catch (error) {
       console.error("Error updating audition info:", error);
     }
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
   };
 
   return (
@@ -263,6 +269,13 @@ const AuditionUpdate = () => {
           </Box>
         </div>
       </div>
+      <div>
+          <DialogComponent
+            open={openDialog}
+            handleClose={handleCloseDialog}
+            successMessage="Your audition has been successfully updated!"
+          />
+        </div>
       <div className="layout-overlay layout-menu-toggle" />
     </div>
   );

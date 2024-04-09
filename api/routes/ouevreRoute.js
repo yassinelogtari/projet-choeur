@@ -31,11 +31,6 @@ router.patch(
   middlewareOuvre.isAdmin,
   oeuvreController.updateOeuvre
 );
-router.post("/addoeuvre", oeuvreController.addOeuvre);
-router.get("/getAll", oeuvreController.fetchOeuvre);
-router.get("/getOne/:id", oeuvreController.getByidOeuvre);
-router.delete("/:id", oeuvreController.deleteOuvre);
-router.patch("/update/:id", oeuvreController.updateOeuvre);
 
 /**
  * @swagger

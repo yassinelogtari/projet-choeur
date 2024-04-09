@@ -2,6 +2,14 @@ import { Link } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
 function Sidebar() {
+  function goup() {
+    var scrollStep = -window.scrollY / (400 / 15),
+      scrollInterval = setInterval(function () {
+        if (window.scrollY != 0) {
+          window.scrollBy(0, scrollStep);
+        } else clearInterval(scrollInterval);
+      }, 15);
+  }
   return (
     <ul className="menu-inner py-1">
       {/* Dashboard */}
@@ -23,16 +31,10 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-
-      <NavLink to="/dashboard/admin/audition">
-        <li className="menu-item">
-          <a href="javascript:void(0);" className="menu-link menu-toggle">
-            <i className="menu-icon tf-icons bx bx-dock-top" />
-            <div data-i18n="Account Settings">Audition</div>
-          </a>
-        </li>
-      </NavLink>
-
+      {/* Concerts */}
+      <li className="menu-header small text-uppercase">
+        <span className="menu-header-text">Concerts</span>
+      </li>
       <NavLink to="/dashboard/admin/concert">
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
@@ -41,7 +43,14 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-
+      <NavLink to="/dashboard/admin/AbsenceConcerts">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Absence Concerts</div>
+          </a>
+        </li>
+      </NavLink>
       {/* Saisons */}
       <li className="menu-header small text-uppercase">
         <span className="menu-header-text">Saisons</span>
@@ -77,7 +86,7 @@ function Sidebar() {
       <li className="menu-header small text-uppercase">
         <span className="menu-header-text">Audition</span>
       </li>
-      <NavLink to="/dashboard/admin/Audition/list">
+      <NavLink to="/dashboard/admin/Audition/list" onClick={goup}>
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
@@ -99,11 +108,19 @@ function Sidebar() {
       <li className="menu-header small text-uppercase">
         <span className="menu-header-text">Candidatures</span>
       </li>
-      <NavLink to="/dashboard/admin/Candidature/list">
+      <NavLink to="/dashboard/admin/Candidature/list" onClick={goup}>
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
             <div data-i18n="Account Settings">Liste des candidatures</div>
+          </a>
+        </li>
+      </NavLink>
+      <NavLink to="/dashboard/admin/Candidature/listV2" onClick={goup}>
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Liste des candidatures V2</div>
           </a>
         </li>
       </NavLink>
@@ -137,79 +154,30 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-
-      {/* Forms & Tables */}
+      {/* repeptions */}
       <li className="menu-header small text-uppercase">
-        <span className="menu-header-text">Forms &amp; Tables</span>
+        <span className="menu-header-text">Repetitions</span>
       </li>
-      {/* Forms */}
-      <li className="menu-item">
-        <a href="javascript:void(0);" className="menu-link menu-toggle">
-          <i className="menu-icon tf-icons bx bx-detail" />
-          <div data-i18n="Form Elements">Form Elements</div>
-        </a>
-        <ul className="menu-sub">
-          <li className="menu-item">
-            <a href="forms-basic-inputs.html" className="menu-link">
-              <div data-i18n="Basic Inputs">Basic Inputs</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="forms-input-groups.html" className="menu-link">
-              <div data-i18n="Input groups">Input groups</div>
-            </a>
-          </li>
-        </ul>
-      </li>
-      <li className="menu-item">
-        <a href="javascript:void(0);" className="menu-link menu-toggle">
-          <i className="menu-icon tf-icons bx bx-detail" />
-          <div data-i18n="Form Layouts">Form Layouts</div>
-        </a>
-        <ul className="menu-sub">
-          <li className="menu-item">
-            <a href="form-layouts-vertical.html" className="menu-link">
-              <div data-i18n="Vertical Form">Vertical Form</div>
-            </a>
-          </li>
-          <li className="menu-item">
-            <a href="form-layouts-horizontal.html" className="menu-link">
-              <div data-i18n="Horizontal Form">Horizontal Form</div>
-            </a>
-          </li>
-        </ul>
-      </li>
-      {/* Tables */}
-      <li className="menu-item">
-        <a href="tables-basic.html" className="menu-link">
-          <i className="menu-icon tf-icons bx bx-table" />
-          <div data-i18n="Tables">Tables</div>
-        </a>
-      </li>
-      {/* Misc */}
+      <NavLink to="/dashboard/admin/repetition/liste-absence">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">absences repetions</div>
+          </a>
+        </li>
+      </NavLink>
+      {/* gestion des compte */}
       <li className="menu-header small text-uppercase">
-        <span className="menu-header-text">Misc</span>
+        <span className="menu-header-text">Comptes</span>
       </li>
-      <li className="menu-item">
-        <a
-          href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
-          target="_blank"
-          className="menu-link"
-        >
-          <i className="menu-icon tf-icons bx bx-support" />
-          <div data-i18n="Support">Support</div>
-        </a>
-      </li>
-      <li className="menu-item">
-        <a
-          href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"
-          target="_blank"
-          className="menu-link"
-        >
-          <i className="menu-icon tf-icons bx bx-file" />
-          <div data-i18n="Documentation">Documentation</div>
-        </a>
-      </li>
+      <NavLink to="/dashboard/admin/accounts/register" onClick={goup}>
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Création des comptes</div>
+          </a>
+        </li>
+      </NavLink>
     </ul>
   );
 }

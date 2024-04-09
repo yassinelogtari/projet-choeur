@@ -6,7 +6,7 @@
     
 }
 
-.input{
+.inp{
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -72,4 +72,12 @@ font-size:x-large;
     font-size: xx-large;
     color: cadetblue;
     font-weight: bold;
+}
+
+.archived-season{
+    text-align: center;
+    font-size: xx-large;
+   
+    font-weight: bold;
+
 }
