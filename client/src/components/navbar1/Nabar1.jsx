@@ -3,8 +3,12 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import Table from "../table/Table";
 import Notification from "../../img/notification.svg";
-import adminIcon from "../../assets/img/avatars/admin-icon.png"
+import adminIcon from "../../assets/img/avatars/admin-icon.png";
 import { io } from "socket.io-client";
+import PermIdentityRoundedIcon from "@mui/icons-material/PermIdentityRounded";
+import PowerSettingsNewRoundedIcon from "@mui/icons-material/PowerSettingsNewRounded";
+import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 function Navbar1() {
   const [notifications, setNotifications] = useState([]);
@@ -13,36 +17,38 @@ function Navbar1() {
   const [storedToken, setStoredToken] = useState();
   const [user, setUser] = useState();
   const [candidates, setCandidates] = useState([]);
-
+  const [hideDropDownMenu, sethideDropDownMenu] = useState(
+    "dropdown-menu dropdown-menu-end"
+  );
+  const navigate = useNavigate();
   const socket = io.connect("http://localhost:5000/");
-  
+
   useEffect(() => {
     if (socket && user) {
-     
       // Set the user's socketId when they connect
       socket.emit("setSocketId", user._id);
-      console.log(socket)
+      console.log(socket);
       // Listen for notifications only if socket is defined
       socket.on("getNotification", (allCandidates) => {
         console.log("Received updated candidates:", allCandidates);
         setCandidates(allCandidates);
       });
-      
+
       return () => {
         // Clean up the socket connection on component unmount
         socket.removeAllListeners(); // Remove all event listeners
         socket.disconnect();
       };
     }
-  }, [user, socket]); 
+  }, [user, socket]);
 
   useEffect(() => {
     const storedTokenValue = String(localStorage.getItem("token"));
 
-    if (storedTokenValue&& storedTokenValue!="null") {
+    if (storedTokenValue && storedTokenValue != "null") {
       setStoredToken(storedTokenValue);
       if (storedToken) {
-        console.log( storedToken)
+        console.log(storedToken);
         fetchUser();
       }
     }
@@ -97,6 +103,14 @@ function Navbar1() {
     setStoredToken(null);
     localStorage.removeItem("token");
     setNotifications([]);
+    navigate('/');
+    window.location.reload();
+  };
+
+  const handleClickProfileImage = () => {
+    hideDropDownMenu == "dropdown-menu dropdown-menu-end"
+      ? sethideDropDownMenu("dropdown-menu dropdown-menu-end show")
+      : sethideDropDownMenu("dropdown-menu dropdown-menu-end");
   };
 
   return (
@@ -158,7 +172,10 @@ function Navbar1() {
               )}
             </li>
             {/* User */}
-            <li className="nav-item navbar-dropdown dropdown-user dropdown">
+            <li
+              className="nav-item navbar-dropdown dropdown-user dropdown"
+              onClick={handleClickProfileImage}
+            >
               <a
                 className="nav-link dropdown-toggle hide-arrow"
                 href="javascript:void(0);"
@@ -172,14 +189,14 @@ function Navbar1() {
                   />
                 </div>
               </a>
-              <ul className="dropdown-menu dropdown-menu-end">
+              <ul className={hideDropDownMenu} style={{ right: "0" }}>
                 <li>
                   <a className="dropdown-item" href="#">
                     <div className="d-flex">
                       <div className="flex-shrink-0 me-3">
                         <div className="avatar avatar-online">
                           <img
-                            src="../assets/img/avatars/1.png"
+                            src={adminIcon}
                             alt
                             className="w-px-40 h-auto rounded-circle"
                           />
@@ -196,36 +213,20 @@ function Navbar1() {
                   <div className="dropdown-divider" />
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#">
-                    <i className="bx bx-user me-2" />
+                  <Link className="dropdown-item">
+                    <PermIdentityRoundedIcon className="bx bx-user me-2"></PermIdentityRoundedIcon>
                     <span className="align-middle">My Profile</span>
-                  </a>
+                  </Link>
                 </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    <i className="bx bx-cog me-2" />
-                    <span className="align-middle">Settings</span>
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    <span className="d-flex align-items-center align-middle">
-                      <i className="flex-shrink-0 bx bx-credit-card me-2" />
-                      <span className="flex-grow-1 align-middle">Billing</span>
-                      <span className="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">
-                        4
-                      </span>
-                    </span>
-                  </a>
-                </li>
+
                 <li>
                   <div className="dropdown-divider" />
                 </li>
                 <li>
-                  <a className="dropdown-item" href="auth-login-basic.html">
-                    <i className="bx bx-power-off me-2" />
+                  <Link className="dropdown-item" onClick={handleLogout}>
+                    <PowerSettingsNewRoundedIcon className="bx bx-power-off me-2"></PowerSettingsNewRoundedIcon>
                     <span className="align-middle">Log Out</span>
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </li>
