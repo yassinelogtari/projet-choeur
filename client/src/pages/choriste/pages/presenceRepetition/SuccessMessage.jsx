@@ -13,7 +13,7 @@ export default function SuccessMessage() {
         Confirmation de Présence Enregistrée
       </Title>
       <Text style={{ color: 'rgba(0, 0, 0, 0.45)' , fontSize:"x-large" }}>
-        Votre présence a été enregistrée avec succès pour cette répétition. Vous pouvez accéder à votre tableau de bord en cliquant 
+        Votre présence a été enregistrée avec succès. Vous pouvez accéder à votre tableau de bord en cliquant 
         <Button style={{ color: 'rgba(0, 0, 0, 0.45)', fontSize: 'x-large' }} type="link">
           <Link to="/dashboard/choriste/home" style={{ textDecoration: 'underline' , color:"blue" }}>ici</Link> 
         </Button>
