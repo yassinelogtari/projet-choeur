@@ -19,12 +19,13 @@ import FormSaison from "./components/formSaison/FormSaison";
 import SaisonArchiveeDetails from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/SaisonArchiveeDetails";
 import MembresTable from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/tablesData/MembresTable";
 import PresenceMainConcert from "../src/pages/chefPupitre/pages/presenceMain/PresenceMainConcert";
-
+import "./app.css";
 import Concert from "./pages/concert/Concert";
 import AddConcert from "./components/concert/AddConcert";
 import EmailVerification from "./components/verify/EmailVerification";
 import Home from "./pages/chefPupitre/pages/Home";
 import AbsenceRepetition from "./pages/admin/pages/absenceRepetition/AbsenceRepetitions";
+import AcountRegister from "./pages/admin/pages/comptes/AcountRegister";
 import ChoristeDashboard from "./pages/choriste/ChoristeDashboard";
 
 const App = () => {
@@ -33,18 +34,17 @@ const App = () => {
       <>
         <Routes>
           <Route exact path="/" element={<Login />} />
-           <Route
+          <Route
             path="/dashboard/choriste/presence/allRepetitions"
             element={<ChoristeDashboard load="allRepetitions" />}
           />
 
-<Route
+          <Route
             path="/dashboard/choriste/presence/allConcerts"
             element={<ChoristeDashboard load="allConcerts" />}
           />
 
-
-           <Route
+          <Route
             path="/dashboard/choriste/home"
             element={<ChoristeDashboard load="home" />}
           />
@@ -192,6 +192,10 @@ const App = () => {
           <Route
             path="/dashboard/admin/AbsenceConcerts"
             element={<AdminDashboard load="AbsenceConcerts" />}
+          />
+          <Route
+            path="/dashboard/admin/accounts/register"
+            element={<AdminDashboard load="AcountRegister" />}
           />
         </Routes>
       </>

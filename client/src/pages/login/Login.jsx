@@ -48,7 +48,7 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setWrongCredentials(false)
+    setWrongCredentials(false);
     const newErrors = {};
 
     if (!validateEmail(email)) {
@@ -75,12 +75,12 @@ const Login = () => {
           setStoredToken(res.data.token);
           localStorage.setItem("token", res.data.token);
           const decodedToken = jwtDecode(res.data.token);
-          setDecodedToken(decodedToken)
+          setDecodedToken(decodedToken);
           if (decodedToken) {
             setUser(decodedToken.membreId);
-            console.log("decodetoken" , decodedToken)
-            console.log("id memebre : " , decodedToken.membreId)
-            console.log("role memebre : " , decodedToken.role)
+            console.log("decodetoken", decodedToken);
+            console.log("id memebre : ", decodedToken.membreId);
+            console.log("role memebre : ", decodedToken.role);
           } else {
             console.log("User not found");
           }
@@ -99,6 +99,8 @@ const Login = () => {
     // If a value is found, set the state with that value
     if (storedTokenValue) {
       setStoredToken(storedTokenValue);
+      console.log(decodedToken);  
+      setDecodedToken(jwtDecode(storedTokenValue));
     }
   }, []);
 
@@ -117,24 +119,27 @@ const Login = () => {
     <div>
       {storedToken ? (
         <>
-        {decodedToken ? (
-          <>
-            {decodedToken.role === "admin" ? (
-              <AdminDashboard socket={socket} load="home" />
-            ) : decodedToken.role === "choriste" ? (
-              <ChoristeDashboard socket={socket} load="home" />
-            ) : decodedToken.role === "chef du pupitre" ? (
-              <ChefPupitreDashboard socket={socket} load="home" />
-            ) : (
-              // Redirection vers une page par défaut ou affichage d'un message d'erreur
-              <p>Vous n'avez pas les permissions nécessaires pour accéder à cette page.</p>
-            )}
-          </>
-        ) : (
-          // Gérer le cas où le token est stocké mais non décodé
-          <p>Loading...</p>
-        )}
-      </>
+          {decodedToken ? (
+            <>
+              {decodedToken.role === "admin" ? (
+                <AdminDashboard socket={socket} load="home" />
+              ) : decodedToken.role === "choriste" ? (
+                <ChoristeDashboard socket={socket} load="home" />
+              ) : decodedToken.role === "chef du pupitre" ? (
+                <ChefPupitreDashboard socket={socket} load="home" />
+              ) : (
+                // Redirection vers une page par défaut ou affichage d'un message d'erreur
+                <p>
+                  Vous n'avez pas les permissions nécessaires pour accéder à
+                  cette page.
+                </p>
+              )}
+            </>
+          ) : (
+            // Gérer le cas où le token est stocké mais non décodé
+            <p>Loading...</p>
+          )}
+        </>
       ) : (
         <div className="login-container">
           <div className="login">
@@ -166,7 +171,7 @@ const Login = () => {
                     Please enter a valid email
                   </p>
                 )}
-  
+
                 <div className="login__box">
                   <i className="ri-lock-2-line login__icon" />
                   <div className="login__box-input">
@@ -177,7 +182,7 @@ const Login = () => {
                       placeholder=" "
                       onChange={(e) => setPassword(e.target.value)}
                     />
-  
+
                     <label htmlFor="login-pass" className="login__label">
                       Password
                     </label>
@@ -205,7 +210,9 @@ const Login = () => {
                     alignItems: "center",
                   }}
                 >
-                  <p style={{ margin: "0", color: "red" ,marginBottom: "20px" }}>
+                  <p
+                    style={{ margin: "0", color: "red", marginBottom: "20px" }}
+                  >
                     Please verify your credentials
                   </p>
                 </div>
@@ -223,7 +230,6 @@ const Login = () => {
       )}
     </div>
   );
-  
 };
 
 export default Login;
