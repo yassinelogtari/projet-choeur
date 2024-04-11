@@ -1,11 +1,11 @@
-import "./adminAudition.css";
+import "./accountList.css";
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Link } from "@mui/material";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 
-const CandidatesList = () => {
+const AccountList = () => {
   const [allCandidates, setAllCandidates] = useState();
   const [auditionId, setAuditionId] = useState("");
   const [showPopup, setShowPopup] = useState(false);
@@ -13,27 +13,7 @@ const CandidatesList = () => {
   const [popupMessage, setPopupMessage] = useState("");
 
   const [selectedCandidate, setSelectedCandidate] = useState(null);
-  const handleSendEmails = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/api/candidats/accepterCandidat"
-      );
-      console.log("Emails envoyés avec succès :", response.data);
-      // alert('Emails envoyés avec succès');
 
-      setPopupMessage("Emails envoyés avec succès!");
-      setShowModal(true);
-    } catch (error) {
-      console.error(
-        "Erreur lors de l'envoi des emails:",
-        error.response ? error.response.data : error.message
-      );
-      // alert('Erreur lors de l\'envoi des emails');
-
-      setPopupMessage("Erreur lors de l'envoi des emails");
-      setShowModal(true);
-    }
-  };
   const handleAudition = (id) => {
     setAuditionId(id);
   };
@@ -41,16 +21,14 @@ const CandidatesList = () => {
 
   const fetchCandidates = async () => {
     try {
-
       // .get( "http://localhost:8000/api/saison/getSaisonActuelle")
       //   .then((res) => {
       //     const modifiedRes = res.data.saison.candidats.map((obj,index) => {
       const data = await axios
         .get("http://localhost:8000/api/saison/getSaisonActuelle")
         .then((res) => {
-          console.log(res)
-          const modifiedRes = res.data.saison.auditions.map((obj,index) => {
-            
+          console.log(res);
+          const modifiedRes = res.data.saison.membres.map((obj, index) => {
             return { id: index + 1, ...obj };
           });
           console.log(modifiedRes);
@@ -70,44 +48,57 @@ const CandidatesList = () => {
     {
       field: "id",
       headerName: "ID",
+      width: 50,
+    },
+    {
+      field: "nom",
+      headerName: "Nom",
       width: 80,
     },
     {
-      field: "candidats",
-      headerName: "Number of Candidats",
+      field: "prenom",
+      headerName: "Prenom",
+      width: 80,
+    },
+    {
+      field: "email",
+      headerName: "Email",
       width: 150,
-      valueGetter: (params) => params.row.candidats.length,
     },
     {
-      field: "DateAud",
-      headerName: "Audition date",
-      width: 140,
-      valueFormatter: (params) => {
-        const date = new Date(params.value);
-        return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-      },
+      field: "sexe",
+      headerName: "sexe",
+      width: 80,
     },
     {
-      field: "HeureDeb",
-      headerName: "Starting Time",
-      width: 140,
-      valueFormatter: (params) => {
-        const date = new Date(params.value);
-        const hours = date.getHours().toString().padStart(2, "0"); // Ensure two digits
-        const minutes = date.getMinutes().toString().padStart(2, "0"); // Ensure two digits
-        return `${hours}:${minutes}`;
-      },
+      field: "dateNaissance",
+      headerName: "DateN",
+      width: 100,
     },
     {
-      field: "HeureFin",
-      headerName: "Ending Time",
-      width: 140,
-      valueFormatter: (params) => {
-        const date = new Date(params.value);
-        const hours = date.getHours().toString().padStart(2, "0"); // Ensure two digits
-        const minutes = date.getMinutes().toString().padStart(2, "0"); // Ensure two digits
-        return `${hours}:${minutes}`;
-      },
+      field: "nationalite",
+      headerName: "Nationalite",
+      width: 80,
+    },
+    {
+      field: "CIN",
+      headerName: "CIN",
+      width: 80,
+    },
+    {
+      field: "telephone",
+      headerName: "Tlph",
+      width: 80,
+    },
+    {
+      field: "role",
+      headerName: "Role",
+      width: 80,
+    },
+    {
+      field: "pupitre",
+      headerName: "Pupitre",
+      width: 80,
     },
   ];
 
@@ -115,7 +106,7 @@ const CandidatesList = () => {
     {
       field: "action",
       headerName: "Actions",
-      width: 230,
+      width: 170,
       renderCell: (params) => {
         return (
           <div className="cellActiondash" style={{ display: "flex" }}>
@@ -125,17 +116,7 @@ const CandidatesList = () => {
             >
               View
             </div>
-            <NavLink
-              to={`/dashboard/admin/addAudition?auditionId=${params.row._id}`}
-              style={{ textDecoration: "none", marginRight: "5px" }}
-            >
-              <div
-                className="addButtondash"
-                onClick={() => handleAudition(params.row._id)}
-              >
-                Add
-              </div>
-            </NavLink>
+
             <NavLink
               to={`/dashboard/admin/updateAudition?auditionId=${params.row._id}`}
               style={{ textDecoration: "none", marginRight: "5px" }}
@@ -167,10 +148,15 @@ const CandidatesList = () => {
   const handleDeletAudition = async (id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8000/api/auditions/deleteaudition/${id}`
+        `http://localhost:8000/api/membre/deleteMember/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       );
 
-      if (response.data.success) {
+      if (response) {
         const updatedCandidates = allCandidates.filter(
           (candidate) => candidate._id !== id
         );
@@ -195,11 +181,10 @@ const CandidatesList = () => {
           style={{
             marginLeft: "10px",
             display: "flex",
-
             flexDirection: "column",
             position: "absolute",
             top: "-50vh",
-            right: "-55vh",
+            right: "-72vh",
           }}
         >
           <div
@@ -209,10 +194,7 @@ const CandidatesList = () => {
               justifyContent: "center",
             }}
           >
-            <span>Liste des auditions</span>
-          </div>
-          <div className="linkdash" onClick={handleSendEmails}>
-            Envoyer des Emails d'acceptation
+            <span>Liste des comptes</span>
           </div>
 
           <DataGrid
@@ -224,8 +206,6 @@ const CandidatesList = () => {
               ...allCandidates.initialState,
               pagination: { paginationModel: { pageSize: 7 } },
             }}
-           
-            
           />
         </div>
         {showModal && (
@@ -286,4 +266,4 @@ const CandidatesList = () => {
   );
 };
 
-export default CandidatesList;
+export default AccountList;

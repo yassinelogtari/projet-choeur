@@ -88,7 +88,7 @@ const AccountRegister = () => {
       newErrors.role = false;
       newErrorsText.role = "";
     }
-    if (inputs.pupitre == "") {
+    if (inputs.pupitre == "" && inputs.role == "chef du pupitre") {
       newErrors.pupitre = true;
       newErrorsText.pupitre = "Ce champ est obligatoire";
     } else {
@@ -140,7 +140,10 @@ const AccountRegister = () => {
   return (
     <div style={{ marginTop: "30px" }}>
       <h4 className="audition-title">
-        <span class="text-muted fw-light" style={{color:"#5456FC"}}>COMPTE /</span> Créer un compte
+        <span class="text-muted fw-light" style={{ color: "#5456FC" }}>
+          COMPTE /
+        </span>{" "}
+        Créer un compte
       </h4>
       <Card className="white-card" style={{ marginTop: "190px" }}>
         <CardContent style={{ display: "flex", flexDirection: "column" }}>
@@ -171,7 +174,7 @@ const AccountRegister = () => {
               //   helperText={formErrors.candidatsPerHour}
             />
             <TextField
-            value={inputs.nom}
+              value={inputs.nom}
               error={errors.nom}
               label="Nom"
               type="text"
@@ -193,7 +196,7 @@ const AccountRegister = () => {
             style={{ width: "100%", paddingLeft: "4%", marginBottom: "30px" }}
           >
             <TextField
-            value={inputs.email}
+              value={inputs.email}
               error={errors.email}
               label="Email"
               type="text"
@@ -211,67 +214,104 @@ const AccountRegister = () => {
               //   helperText={formErrors.candidatsPerHour}
             />
           </div>
-          <div
-            style={{
-              width: "100%",
-              paddingLeft: "4%",
-              marginBottom: "30px",
-              display: "flex",
-            }}
-          >
-            <Autocomplete
-              style={{ background: "white", width: "45%" }}
-              options={roleArray}
-              getOptionLabel={(option) => option.title}
-              sx={{ width: 150 }}
-              value={
-                inputs.role
-                  ? roleArray.find((option) => option.title === inputs.role)
-                  : null
-              }
-              onChange={(event, value) => {
-                setInputs((prevInputs) => ({
-                  ...prevInputs,
-                  role: value ? value.title : "",
-                }));
+          {inputs.role == "chef du pupitre" ? (
+            <div
+              style={{
+                width: "100%",
+                paddingLeft: "4%",
+                marginBottom: "30px",
+                display: "flex",
               }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Role"
-                  error={errors.role}
-                  helperText={errorsText.role}
-                />
-              )}
-            />
-            <Autocomplete
-              style={{ background: "white", width: "45%", marginLeft: "6%" }}
-              options={pupitreArray}
-              getOptionLabel={(option) => option.title}
-              sx={{ width: 150 }}
-              value={
-                inputs.pupitre
-                  ? pupitreArray.find(
-                      (option) => option.title === inputs.pupitre
-                    )
-                  : null
-              }
-              onChange={(event, value) => {
-                setInputs((prevInputs) => ({
-                  ...prevInputs,
-                  pupitre: value ? value.title : "",
-                }));
+            >
+              <Autocomplete
+                style={{ background: "white", width: "45%" }}
+                options={roleArray}
+                getOptionLabel={(option) => option.title}
+                sx={{ width: 150 }}
+                value={
+                  inputs.role
+                    ? roleArray.find((option) => option.title === inputs.role)
+                    : null
+                }
+                onChange={(event, value) => {
+                  setInputs((prevInputs) => ({
+                    ...prevInputs,
+                    role: value ? value.title : "",
+                  }));
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Role"
+                    error={errors.role}
+                    helperText={errorsText.role}
+                  />
+                )}
+              />
+              <Autocomplete
+                style={{ background: "white", width: "45%", marginLeft: "6%" }}
+                options={pupitreArray}
+                getOptionLabel={(option) => option.title}
+                sx={{ width: 150 }}
+                value={
+                  inputs.pupitre
+                    ? pupitreArray.find(
+                        (option) => option.title === inputs.pupitre
+                      )
+                    : null
+                }
+                onChange={(event, value) => {
+                  setInputs((prevInputs) => ({
+                    ...prevInputs,
+                    pupitre: value ? value.title : "",
+                  }));
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Pupitre"
+                    error={errors.pupitre}
+                    helperText={errorsText.pupitre}
+                  />
+                )}
+              />
+            </div>
+          ) : (
+            <div
+              style={{
+                width: "100%",
+                paddingLeft: "4%",
+                marginBottom: "30px",
+                display: "flex",
               }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Pupitre"
-                  error={errors.pupitre}
-                  helperText={errorsText.pupitre}
-                />
-              )}
-            />
-          </div>
+            >
+              <Autocomplete
+                style={{ background: "white", width: "80%", marginLeft: "8%"  }}
+                options={roleArray}
+                getOptionLabel={(option) => option.title}
+                sx={{ width: 150 }}
+                value={
+                  inputs.role
+                    ? roleArray.find((option) => option.title === inputs.role)
+                    : null
+                }
+                onChange={(event, value) => {
+                  setInputs((prevInputs) => ({
+                    ...prevInputs,
+                    role: value ? value.title : "",
+                  }));
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Role"
+                    error={errors.role}
+                    helperText={errorsText.role}
+                  />
+                )}
+              />
+            </div>
+          )}
           <div
             style={{
               width: "100%",
@@ -281,12 +321,14 @@ const AccountRegister = () => {
             }}
           >
             <Button
-              
               type="submit"
               className="btnPlanning"
               variant="contained"
-              
-              style={{ width: "25%", letterSpacing: "2px" ,background:"#696CFF"}}
+              style={{
+                width: "25%",
+                letterSpacing: "2px",
+                background: "#696CFF",
+              }}
               onClick={handleCreateAccountButton}
             >
               Créer le compte
@@ -309,7 +351,7 @@ const AccountRegister = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            borderRadius:"10px"
+            borderRadius: "10px",
           }}
         >
           <Typography id="modal-description" sx={{ mt: 2 }}>
@@ -317,7 +359,7 @@ const AccountRegister = () => {
           </Typography>
 
           <Button
-          style={{letterSpacing:"1px",background:"#696CFF"}}
+            style={{ letterSpacing: "1px", background: "#696CFF" }}
             className="pop-upBtn"
             onClick={() => {
               setInputs({
@@ -327,7 +369,7 @@ const AccountRegister = () => {
                 role: "",
                 pupitre: "",
               });
-              setOpenModal(false)
+              setOpenModal(false);
             }}
             variant="contained"
             color="primary"

@@ -15,56 +15,53 @@ const CandidatesList = () => {
 
   function findCommonElements(arr1, arr2) {
     const commonElements = [];
-    
+
     for (let i = 0; i < arr1.length; i++) {
-        
-        if (arr2.includes(arr1[i])) {
-            commonElements.push(arr1[i]);
-        }
+      if (arr2.includes(arr1[i])) {
+        commonElements.push(arr1[i]);
+      }
     }
     return commonElements;
-}
+  }
 
   const fetchCandidates = async () => {
     try {
-        if(filterByValue==""){
-      const data = await axios
-      .get( "http://localhost:8000/api/saison/getSaisonActuelle")
-      .then((res) => {
-        const modifiedRes = res.data.saison.candidats.map((obj,index) => {
-            
-            return { id: index + 1, ...obj };
+      if (filterByValue == "") {
+        const data = await axios
+          .get("http://localhost:8000/api/saison/getSaisonActuelle")
+          .then((res) => {
+            const modifiedRes = res.data.saison.candidats.map((obj, index) => {
+              return { id: index + 1, ...obj };
+            });
+            console.log(modifiedRes);
+            setAllCandidates(modifiedRes);
+            console.log(res);
           });
-          console.log(modifiedRes);
-          setAllCandidates(modifiedRes);
-          console.log(res);
-        });
-    }else{
-        const data1 = await axios.get(`http://localhost:8000/api/candidats?${filterBy}=${filterByValue}`)
-        .then((res) => {
-          const modifiedRes = res.data.map((obj,index) => {
-            
-            return { id: index + 1, ...obj };
+      } else {
+        const data1 = await axios
+          .get(
+            `http://localhost:8000/api/candidats?${filterBy}=${filterByValue}`
+          )
+          .then((res) => {
+            const modifiedRes = res.data.map((obj, index) => {
+              return { id: index + 1, ...obj };
+            });
+            console.log(modifiedRes);
+            setAllCandidates(modifiedRes);
+            console.log(res);
           });
-          console.log(modifiedRes);
-          setAllCandidates(modifiedRes);
-          console.log(res);
-        });
-    }
+      }
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-    
     fetchCandidates();
-  },[filterByValue]);
+  }, [filterByValue]);
 
-  
   useEffect(() => {
-    
-    console.log(filterByValue)
+    console.log(filterByValue);
   });
 
   const userColumns = [
@@ -200,7 +197,6 @@ const CandidatesList = () => {
     },
   ];
 
-
   const handleViewProfile = (id) => {
     console.log(id);
   };
@@ -266,7 +262,7 @@ const CandidatesList = () => {
               value={filterByValue}
               onChange={(event) => {
                 if (filterBy != "") {
-                    console.log(event.target.value)
+                  console.log(event.target.value);
                   setFilterByValue(event.target.value);
                 }
               }}
@@ -278,8 +274,10 @@ const CandidatesList = () => {
           className="datagrid"
           rows={allCandidates}
           columns={userColumns.concat(actionColumn)}
-          pageSize={9}
-          rowsPerPageOptions={[9]}
+          initialState={{
+            ...allCandidates.initialState,
+            pagination: { paginationModel: { pageSize: 5 } },
+          }}
           checkboxSelection={false}
           disableSelection={true}
           disableRowSelectionOnClick

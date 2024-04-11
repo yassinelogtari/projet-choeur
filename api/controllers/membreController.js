@@ -7,6 +7,7 @@ const {
   sendNotificationMiddleware,
 } = require("../middlewares/sendNotificationMiddleware");
 const sendEmail = require("../utils/sendEmail");
+const Saison = require("../models/saisonModel");
 
 const modifierTessiture = async (req, res) => {
   try {
@@ -96,11 +97,9 @@ const register = async (req, res) => {
     }
     if (membre.role === "chef du pupitre") {
       if (req.body.pupitre === "") {
-        return res
-          .status(400)
-          .json({
-            message: "Vous devez spécifier le pupitre pour le chef du pupitre",
-          });
+        return res.status(400).json({
+          message: "Vous devez spécifier le pupitre pour le chef du pupitre",
+        });
       } else {
         membre.pupitre = req.body.pupitre;
       }
@@ -112,7 +111,13 @@ const register = async (req, res) => {
     Mot de passe: ${passAleatoire} <br> 
     Cordialement`;
     await sendEmail(membre.email, "Informations d'inscriptions", corpsEmail);
+
     const newMembre = response.toObject();
+    const currentSaison = await Saison.findOne({ saisonCourante: true });
+    if (currentSaison) {
+      currentSaison.membres.push(newMembre._id);
+      await currentSaison.save();
+    }
     delete newMembre.password;
 
     res.status(201).json({

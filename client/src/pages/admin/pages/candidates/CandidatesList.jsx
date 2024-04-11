@@ -177,8 +177,10 @@ const CandidatesList = () => {
           className="datagrid"
           rows={allCandidates}
           columns={userColumns.concat(actionColumn)}
-          pageSize={10}
-          rowsPerPageOptions={[10]}
+          initialState={{
+            ...allCandidates.initialState,
+            pagination: { paginationModel: { pageSize: 7 } },
+          }}
           checkboxSelection={false}
           disableSelection={true}
           disableRowSelectionOnClick

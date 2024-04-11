@@ -197,6 +197,10 @@ const App = () => {
             path="/dashboard/admin/accounts/register"
             element={<AdminDashboard load="AcountRegister" />}
           />
+          <Route
+            path="/dashboard/admin/accounts/list"
+            element={<AdminDashboard load="AcountList" />}
+          />
         </Routes>
       </>
     </Router>
