@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Table, Button, Modal } from 'antd';
-import { CheckCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
 const formatDate = (date) => {
     const d = new Date(date);
@@ -19,17 +19,58 @@ const RepetitionsChoristeTable = ({ repetitions }) => {
     const [visible, setVisible] = useState(false);
     const [selectedQRCode, setSelectedQRCode] = useState('');
     const [presenceConfirmed, setPresenceConfirmed] = useState(false);
+    const [missedRepetition, setMissedRepetition] = useState(false);
+    const [waitForRehearsal, setWaitForRehearsal] = useState(false);
 
     const handleShowQRCode = (record) => {
-        setSelectedQRCode(record.QrCode);
-        setVisible(true);
         const isPresent = record.membres.some((membre) => membre.presence === true);
         setPresenceConfirmed(isPresent);
-    };
 
+        // Convertir les dates en objets Date
+        const currentDate = new Date();
+        const rehearsalStartDate = new Date(record.DateRep);
+        const rehearsalStartTime = new Date(record.HeureDeb);
+        const rehearsalEndTime = new Date(record.HeureFin);
+        
+
+        // Vérifier si la date actuelle est le même jour que la date de répétition
+        const isSameRehearsalDate = currentDate.toDateString() === rehearsalStartDate.toDateString();
+
+        // Vérifier si la date actuelle est comprise entre HeureDeb et HeureFin et que c'est le même jour que la date de répétition
+        const isBetweenRehearsalHours = isSameRehearsalDate && currentDate >= rehearsalStartTime && currentDate <= rehearsalEndTime;
+
+        // Si l'utilisateur est absent et que la date actuelle est entre HeureDeb et HeureFin
+        if (!isPresent && isBetweenRehearsalHours) {
+            setSelectedQRCode(record.QrCode);
+            setVisible(true);
+            return;
+        }
+
+        // Si l'utilisateur est absent mais que la date actuelle est avant HeureDeb
+        if (!isPresent && isSameRehearsalDate && currentDate < rehearsalStartTime) {
+            setWaitForRehearsal(true);
+            setVisible(true);
+            return;
+        }
+
+         // Si l'utilisateur est absent mais que la date actuelle est après HeureFin
+    if (!isPresent && isSameRehearsalDate && currentDate > rehearsalEndTime) {
+        setMissedRepetition(true); // Ajout de cette ligne pour gérer missedRepetition
+        setVisible(true);
+        return;
+    }
+
+        // Si la date actuelle n'est pas le même jour que la date de répétition
+        // Afficher un message indiquant d'attendre la date et l'heure de la répétition
+        setMissedRepetition(true);
+        setVisible(true);
+    };
 
     const handleCancel = () => {
         setVisible(false);
+        setMissedRepetition(false);
+        setPresenceConfirmed(false);
+        setWaitForRehearsal(false);
     };
 
     const columns = [
@@ -89,29 +130,29 @@ const RepetitionsChoristeTable = ({ repetitions }) => {
             />
             <Modal visible={visible} footer={null} onCancel={handleCancel}>
                 {presenceConfirmed ? (
-                   <div style={{marginTop:'50px'}}>
-                    <div style={{ textAlign: 'center' }}>
-                    <CheckCircleOutlined style={{ fontSize: '50px', color: 'green', marginBottom:'20px' }} />
+                    <div style={{ marginTop: '50px', textAlign: 'center' }}>
+                        <CheckCircleOutlined style={{ fontSize: '50px', color: 'green', marginBottom: '20px' }} />
+                        <p style={{ fontSize: 'x-large' }}>Votre présence est déjà enregistrée pour cette répétition.</p>
                     </div>
-                    <p style={{ fontSize: "x-large", textAlign: "center"}}>Votre présence est déjà enregistrée pour cette répétition.
-
-
-
-
-
-</p>
+                ) : missedRepetition ? (
+                    <div style={{ marginTop: '50px', textAlign: 'center' }}>
+                        <ExclamationCircleOutlined style={{ fontSize: '50px', color: 'red', marginBottom: '20px' }} />
+                        <p style={{ fontSize: 'x-large' }}>Vous avez manqué cette répétition. Vous ne pouvez plus marquer votre présence.</p>
+                    </div>
+                ) : waitForRehearsal ? (
+                    <div style={{ marginTop: '50px', textAlign: 'center' }}>
+                        <ExclamationCircleOutlined style={{ fontSize: '50px', color: '#9999ff', marginBottom: '20px' }} />
+                        <p style={{ fontSize: 'x-large' }}>Veuillez attendre la date et l'heure de la répétition pour enregistrer votre présence.</p>
                     </div>
                 ) : (
-                    <>
-                        <p style={{ fontSize: "x-large", textAlign: "center", color: "#9999ff", marginTop: "50px" }}>Scanner le QR Code pour marquer votre présence à cette répétition</p>
+                    <div style={{ textAlign: 'center' }}>
+                        <p style={{ fontSize: 'x-large', color: '#9999ff', marginTop: '50px' }}>Scanner le QR Code pour marquer votre présence à cette répétition</p>
                         <img src={selectedQRCode} alt="QR Code" style={{ width: '100%', height: 'auto' }} />
-                    </>
+                    </div>
                 )}
             </Modal>
         </div>
     );
-    
-    
 };
 
 export default RepetitionsChoristeTable;

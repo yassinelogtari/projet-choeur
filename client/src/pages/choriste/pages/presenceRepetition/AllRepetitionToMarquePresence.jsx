@@ -42,11 +42,10 @@ function AllRepetitionToMarquePresence() {
         const saisonData = response.data.saison;
         const filtered = filteredRepetitions(saisonData.repetitions, membreId);
         setRepetitions(filtered);
+        setLoading(false);
       } catch (error) {
         console.error("Erreur lors de la récupération des données de la saison:", error);
-      }finally {
-        setLoading(false);
-    }
+      }
     };
 
     fetchSeason();
@@ -64,7 +63,7 @@ function AllRepetitionToMarquePresence() {
         <>
             {repetitions.length > 0 ? (
                 <div>
-                    <p style={{ fontSize: 'xx-large', textAlign: 'center', fontWeight: 'bold', color: '#9999ff', marginBottom: '30px' }}>Marquer Présence</p>
+                    <p style={{ fontSize: 'xx-large', textAlign: 'center', fontWeight: 'bold', color: '#9999ff', marginBottom: '30px' }}>Marquer Présence Répétition</p>
                     <RepetitionsChoristeTable repetitions={repetitions} />
                 </div>
             ) : (
