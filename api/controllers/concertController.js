@@ -3,12 +3,9 @@ const Membre = require("../models/membreModel");
 const Oeuvre = require("../models/oeuvreModel");
 const Saison = require("../models/saisonModel");
 //const exceljs = require("exceljs");
-const addQrCodeToRepetition = require("../middlewares/createQrCodeMiddleware");   
-
-const excelToJson = require("convert-excel-to-json");
-const {
-  Types: { ObjectId },
-} = require("mongoose");
+const addQrCodeToRepetition = require("../middlewares/createQrCodeMiddleware");
+const multer = require("multer");
+const exceljs = require("exceljs");
 
 async function createConcert(req, res) {
   try {
@@ -83,7 +80,6 @@ async function createConcert(req, res) {
 
     req.cancertId = newConcert._id;
     await addQrCodeToRepetition.addQrCodeToCancert(req, res, () => {});
-    
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -388,13 +384,11 @@ const calculerTauxPresenceMembres = async (req, res) => {
     await saisonCourante.populate("concerts");
     const concerts = saisonCourante.concerts;
 
-    
     if (!concerts || concerts.length === 0) {
       return res
         .status(404)
         .json({ message: "Aucun concert trouvé pour la saison courante" });
     }
-
 
     const tauxPresenceMembres = {};
 
@@ -444,27 +438,29 @@ const validerConcert = async (req, res) => {
 
     const seuil = req.query.seuil || 0;
 
-    
     const saisonCourante = await Saison.findOne({ saisonCourante: true });
 
     if (!saisonCourante) {
-      return res.status(404).json({ message: "Aucune saison courante trouvée" });
+      return res
+        .status(404)
+        .json({ message: "Aucune saison courante trouvée" });
     }
 
-    
-    const concert = await Concert.findById(concertId).populate("listeMembres.membre");
+    const concert = await Concert.findById(concertId).populate(
+      "listeMembres.membre"
+    );
 
     if (!concert) {
       return res.status(404).json({ message: "Concert non trouvé" });
     }
 
-    
-    await saisonCourante.populate('concerts');
+    await saisonCourante.populate("concerts");
     const concerts = saisonCourante.concerts;
 
-    
     if (!concerts || concerts.length === 0) {
-      return res.status(404).json({ message: "Aucun concert trouvé pour la saison courante" });
+      return res
+        .status(404)
+        .json({ message: "Aucun concert trouvé pour la saison courante" });
     }
 
     const tauxPresenceMembres = {};
@@ -508,7 +504,7 @@ const validerConcert = async (req, res) => {
       );
 
       if (membreConcert) {
-        membreConcert.valider = true; 
+        membreConcert.valider = true;
       } else {
         console.error("Membre non trouvé pour l'ID du membre :", memberId);
       }
@@ -522,8 +518,62 @@ const validerConcert = async (req, res) => {
     res.status(500).json({ message: "Erreur serveur" });
   }
 };
+const ExcelJS = require("exceljs"); // Import ExcelJS library
 
+async function extractAndSaveConcert(filePath) {
+  try {
+    // Load Excel workbook
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.readFile(filePath);
 
+    // Assuming the concert details are in the first worksheet
+    const worksheet = workbook.getWorksheet(1);
+
+    console.log("Excel file loaded successfully.");
+
+    // Extract concert details
+    const concertData = {
+      titre: worksheet.getCell("A2").value,
+      date: worksheet.getCell("B2").value,
+      lieu: worksheet.getCell("C2").value,
+      affiche: worksheet.getCell("D2").value,
+      programme: [], // Extract program details based on your Excel structure
+      listeMembres: [], // Extract member details based on your Excel structure
+    };
+
+    console.log("Concert details extracted from the Excel file:", concertData);
+
+    // Extract program items
+    for (let rowNumber = 2; rowNumber <= worksheet.rowCount; rowNumber++) {
+      const oeuvre = worksheet.getCell(`E${rowNumber}`).value;
+      const theme = worksheet.getCell(`F${rowNumber}`).value;
+      if (oeuvre) {
+        concertData.programme.push({ oeuvre, theme });
+      }
+    }
+
+    console.log("Programme items extracted:", concertData.programme);
+
+    // Extract members
+    for (let rowNumber = 2; rowNumber <= worksheet.rowCount; rowNumber++) {
+      const memberName = worksheet.getCell(`G${rowNumber}`).value;
+      if (memberName) {
+        concertData.listeMembres.push({ membre: memberName });
+      }
+    }
+
+    console.log("Members extracted:", concertData.listeMembres);
+
+    const concert = new Concert(concertData);
+    await concert.save();
+
+    console.log("Concert data extracted and saved successfully:", concertData);
+    return concertData;
+  } catch (error) {
+    console.error("Error extracting and saving concert data:", error);
+    throw error; // Propagate the error to the caller
+  }
+}
 module.exports = {
   createConcert,
   getListeParticipantsParPupitre,
@@ -532,5 +582,6 @@ module.exports = {
   getConcertById,
   updateConcert,
   calculerTauxPresenceMembres,
-  validerConcert
+  validerConcert,
+  extractAndSaveConcert,
 };

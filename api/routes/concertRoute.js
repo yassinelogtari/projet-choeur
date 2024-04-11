@@ -1,16 +1,19 @@
-const express = require("express");
-const router = express.Router();
-const multer = require("multer");
-const path = require("path");
-const concertController = require("../controllers/concertController");
-const middlewareConcert = require("../middlewares/auth");
 const {
   createConcert,
   deleteConcert,
   getConcerts,
   getConcertById,
   updateConcert,
+  uploadAndCreateConcerts,
 } = require("../controllers/concertController");
+
+const express = require("express");
+const router = express.Router();
+const multer = require("multer");
+const path = require("path");
+const concertController = require("../controllers/concertController");
+const middlewareConcert = require("../middlewares/auth");
+const createConcertsFromExcel = require("../controllers/concertController");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -40,6 +43,7 @@ const upload = multer({
       callback(null, true);
     } else {
       console.log("Seuls les fichiers jpg, png, et Excel sont acceptés");
+
       callback(
         new Error("Seuls les fichiers jpg, png, et Excel sont acceptés"),
         false
@@ -52,6 +56,30 @@ const upload = multer({
 });
 //router.post('/add-concert',middlewareConcert.loggedMiddleware,middlewareConcert.isAdmin, upload.fields([{ name: 'affiche', maxCount: 1 }, { name: 'excelFilePath', maxCount: 1 }]), async (req, res) => {
 
+router.post("/concert", upload.single("excelFilePath"), async (req, res) => {
+  try {
+    const { file } = req; // Access the uploaded file using req.file
+
+    // Check if a file was uploaded
+    if (!file) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Excel file is required." });
+    }
+
+    const filePath = file.path;
+
+    // Call extractAndSaveConcert function to extract and save data
+    const concertData = await concertController.extractAndSaveConcert(filePath);
+
+    res.status(200).json({ success: true, data: concertData });
+  } catch (error) {
+    console.error("Error saving concert data:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to save concert data." });
+  }
+});
 router.post(
   "/add-concert",
 
