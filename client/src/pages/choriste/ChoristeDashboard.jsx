@@ -6,7 +6,10 @@ import Home from "../chefPupitre/pages/Home";
 import PresenceRepetition from "../../routes/PresenceRepetititon";
 import AllRepetitionToMarquePresence from "./pages/presenceRepetition/AllRepetitionToMarquePresence";
 import AllConcertsToMarquePresence from "./pages/presenceConcert/AllConcertsToMarquePresence";
-import Historique from "./pages/historique/Historique"
+import Historique from "./pages/historique/Historique";
+import CongeChoristePage from "../admin/pages/conges/CongeChoristePage";
+import CongeChoriste from "../../components/conge/CongeChoriste";
+
 const ChoristeDashboard = (props) => {
   return (
     <div>
@@ -24,9 +27,12 @@ const ChoristeDashboard = (props) => {
             </aside>
             <Navbar1 />
             {props.load === "home" && <Home />}
-            {props.load==="allRepetitions" && <AllRepetitionToMarquePresence />}
-            {props.load==="allConcerts" && <AllConcertsToMarquePresence />}
-            {props.load==="historique" && <Historique />}
+            {props.load === "allRepetitions" && (
+              <AllRepetitionToMarquePresence />
+            )}
+            {props.load === "allConcerts" && <AllConcertsToMarquePresence />}
+            {props.load === "historique" && <Historique />}
+            {props.load === "conge Choriste" && <CongeChoristePage />}
           </div>
           {/* Overlay */}
           <div className="layout-overlay layout-menu-toggle" />

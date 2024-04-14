@@ -22,6 +22,7 @@ import Concert from "./pages/concert/Concert";
 import AddConcert from "./components/concert/AddConcert";
 import EmailVerification from "./components/verify/EmailVerification";
 import ChoristeDashboard from "./pages/choriste/ChoristeDashboard";
+import CongeChoriste from "./components/conge/CongeChoriste";
 
 const App = () => {
   return (
@@ -46,6 +47,10 @@ const App = () => {
           <Route
             path="/dashboard/choriste/historique/:id"
             element={<ChoristeDashboard load="historique" />}
+          />
+          <Route
+            path="/dashboard/choriste/conge"
+            element={<ChoristeDashboard load="conge Choriste" />}
           />
 
           <Route
@@ -173,7 +178,11 @@ const App = () => {
           />
 
           <Route exact path="/concert" element={<Concert />} />
-          <Route exact path="addConcert" element={<AddConcert />} />
+          <Route
+            exact
+            path="/dashboard/admin/concert/addConcert"
+            element={<AddConcert />}
+          />
 
           <Route
             path="/dashboard/admin/repetition/liste-absence"
