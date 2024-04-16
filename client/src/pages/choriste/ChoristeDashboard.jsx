@@ -6,7 +6,7 @@ import Home from "../chefPupitre/pages/Home";
 import PresenceRepetition from "../../routes/PresenceRepetititon";
 import AllRepetitionToMarquePresence from "./pages/presenceRepetition/AllRepetitionToMarquePresence";
 import AllConcertsToMarquePresence from "./pages/presenceConcert/AllConcertsToMarquePresence";
-
+import Historique from "./pages/historique/Historique"
 const ChoristeDashboard = (props) => {
   return (
     <div>
@@ -26,6 +26,7 @@ const ChoristeDashboard = (props) => {
             {props.load === "home" && <Home />}
             {props.load==="allRepetitions" && <AllRepetitionToMarquePresence />}
             {props.load==="allConcerts" && <AllConcertsToMarquePresence />}
+            {props.load==="historique" && <Historique />}
           </div>
           {/* Overlay */}
           <div className="layout-overlay layout-menu-toggle" />

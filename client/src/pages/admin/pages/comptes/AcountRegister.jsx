@@ -355,7 +355,7 @@ const AccountRegister = () => {
           }}
         >
           <Typography id="modal-description" sx={{ mt: 2 }}>
-            {"votre compte a été créé avec succès "}
+            {"le compte a été créé avec succès "}
           </Typography>
 
           <Button

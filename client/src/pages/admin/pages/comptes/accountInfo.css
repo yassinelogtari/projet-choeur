@@ -1,0 +1,94 @@
+.chartsuinfo {
+  background-color: #e9ebee;
+  justify-content: center;
+}
+
+.contentuinfo2 {
+  display: flex;
+  flex-direction: column;
+  flex: 2;
+  background-color: #fff;
+  border-radius: 12px;
+  height: 83%;
+}
+
+.contentuinfo {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 12px;
+  height: 68%;
+  width: 100%;
+}
+
+.contentuinfopart1 {
+  display: flex;
+  flex-direction: column;
+  
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: bold;
+}
+
+
+
+.contentuinfopart1image {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.contentuinfopart1h1 {
+  color: #5456FC;
+}
+
+.contentuinfopart1p {
+  color: #868e96;
+  margin-bottom: 20px;
+  font-weight: 600;
+  padding-top: 10px;
+}
+
+.contentuinfopart1p2 {
+  font-size: 14px;
+  font-weight: 100;
+  color: #212529;
+}
+
+.contentuinfoprofile{
+    background: white;
+    width: calc(100vw - 24rem);
+    height: calc(100vh - 200px);
+    margin-top: -100px;
+    border-radius: 15px;
+    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+}
+
+.content-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Three columns with equal width */
+  grid-column-gap: 20px; /* Adjust the gap between columns */
+  font-size: x-large;
+  margin-left: 5%;
+  margin-top: 5%;
+}
+
+.content-item {
+  margin-bottom: 10px; /* Adjust the spacing between items */
+}
+.css-vqmohf-MuiButtonBase-root-MuiRadio-root.Mui-checked {
+  color:#5456FC !important;
+}
+
+span.MuiButtonBase-root.MuiRadio-root.MuiRadio-colorPrimary.PrivateSwitchBase-root.MuiRadio-root.MuiRadio-colorPrimary.MuiRadio-root.MuiRadio-colorPrimary.css-vqmohf-MuiButtonBase-root-MuiRadio-root{
+  padding: 0px !important;
+  padding-left: 11px !important;
+  padding-right: 11px !important;
+}
+
+label.MuiFormControlLabel-root.MuiFormControlLabel-labelPlacementEnd.css-j204z7-MuiFormControlLabel-root{
+  margin-right: 0px !important;
+}

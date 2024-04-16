@@ -21,16 +21,22 @@ const AccountList = () => {
 
   const fetchCandidates = async () => {
     try {
-      // .get( "http://localhost:8000/api/saison/getSaisonActuelle")
+      // const data = await axios
+      //   .get("http://localhost:8000/api/saison/getSaisonActuelle")
       //   .then((res) => {
-      //     const modifiedRes = res.data.saison.candidats.map((obj,index) => {
+      //     console.log(res);
+      //     const modifiedRes = res.data.saison.membres.map((obj, index) => {
+      //       return { id: index + 1, ...obj };
+      //     });
+
       const data = await axios
-        .get("http://localhost:8000/api/saison/getSaisonActuelle")
+        .get("http://localhost:8000/api/membre/getAllMembers")
         .then((res) => {
           console.log(res);
-          const modifiedRes = res.data.saison.membres.map((obj, index) => {
+          const modifiedRes = res.data.model.map((obj, index) => {
             return { id: index + 1, ...obj };
           });
+
           console.log(modifiedRes);
           setAllCandidates(modifiedRes);
           console.log(res);
@@ -110,15 +116,19 @@ const AccountList = () => {
       renderCell: (params) => {
         return (
           <div className="cellActiondash" style={{ display: "flex" }}>
-            <div
-              className="viewButtondash"
-              onClick={() => handleViewProfile(params.row)}
+            <NavLink
+              to={`http://localhost:3000/dashboard/admin/accounts/infos/${params.row._id}`}
             >
-              View
-            </div>
+              <div
+                className="viewButtondash"
+                onClick={() => handleViewProfile(params.row)}
+              >
+                View
+              </div>
+            </NavLink>
 
             <NavLink
-              to={`/dashboard/admin/updateAudition?auditionId=${params.row._id}`}
+              to={`http://localhost:3000/dashboard/admin/accounts/infos/edit/${params.row._id}`}
               style={{ textDecoration: "none", marginRight: "5px" }}
             >
               <div

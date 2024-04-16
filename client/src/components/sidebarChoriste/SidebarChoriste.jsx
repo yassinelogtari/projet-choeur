@@ -23,6 +23,9 @@ function SidebarChoriste() {
           </a>
         </li>
       </NavLink>
+      <li className="menu-header small text-uppercase">
+        <span className="menu-header-text">Présence</span>
+      </li>
       <NavLink to="/dashboard/choriste/presence/allRepetitions">
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
@@ -36,6 +39,14 @@ function SidebarChoriste() {
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
             <div data-i18n="Account Settings">Marquer présence pour un Concert</div>
+          </a>
+        </li>
+      </NavLink>
+      <NavLink to="/dashboard/choriste/historique">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings"> Historique </div>
           </a>
         </li>
       </NavLink>
