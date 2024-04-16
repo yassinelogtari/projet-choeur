@@ -7,48 +7,48 @@ const Repetition = require("../models/repetitionModel");
 const Saison=require('../models/saisonModel')
 const sendEmail = require("../utils/sendEmail");
 
-const fetchHistory = async (req, res) => {
-  const memberId = req.params.id;
-  const oeuvreName = req.query.oeuvre;
+  const fetchHistory = async (req, res) => {
+    const memberId = req.params.id;
+    const oeuvreName = req.query.oeuvre;
 
-  try {
-    const member = await Member.findById(memberId);
-    if (!member) {
-      return res.status(404).json({ error: "Member not found" });
+    try {
+      const member = await Member.findById(memberId);
+      if (!member) {
+        return res.status(404).json({ error: "Member not found" });
+      }
+
+      const concerts = await Concert.find({
+        "listeMembres.membre": memberId,
+        "listeMembres.presence": true,
+      }).populate({
+        path: "programme.oeuvre",
+        model: Oeuvre,
+      });
+
+      const filteredConcerts = oeuvreName
+        ? concerts.filter((concert) =>
+            concert.programme.some((item) => item.oeuvre.titre === oeuvreName)
+          )
+        : concerts;
+
+      const repetitions = await Repetition.find({
+        "membres.member": memberId,
+        "listeMembres.presence": true,
+      });
+
+      const response = {
+        member_info: member,
+        number_of_repetition: repetitions.length,
+        number_of_concerts: filteredConcerts.length,
+        concerts: filteredConcerts,
+      };
+
+      res.json(response);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
     }
-
-    const concerts = await Concert.find({
-      "listeMembres.membre": memberId,
-      "listeMembres.presence": true,
-    }).populate({
-      path: "programme.oeuvre",
-      model: Oeuvre,
-    });
-
-    const filteredConcerts = oeuvreName
-      ? concerts.filter((concert) =>
-          concert.programme.some((item) => item.oeuvre.titre === oeuvreName)
-        )
-      : concerts;
-
-    const repetitions = await Repetition.find({
-      "membres.member": memberId,
-      "listeMembres.presence": true,
-    });
-
-    const response = {
-      member_info: member,
-      number_of_repetition: repetitions.length,
-      number_of_concerts: filteredConcerts.length,
-      concerts: filteredConcerts,
-    };
-
-    res.json(response);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
+  };
 
 const getUser = async (req, res) => {
   const memberId = req.params.id;
