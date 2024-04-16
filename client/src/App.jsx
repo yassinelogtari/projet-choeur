@@ -15,17 +15,14 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import ChefPupitreDashboard from "./pages/chefPupitre/ChefPupitreDashboard";
 import ManagerDashboard from "./pages/ManagerDashboard";
 import FormCandidature from "./pages/FormCandidature";
-import FormSaison from "./components/formSaison/FormSaison";
 import SaisonArchiveeDetails from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/SaisonArchiveeDetails";
 import MembresTable from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/tablesData/MembresTable";
-import PresenceMainConcert from "../src/pages/chefPupitre/pages/presenceMain/PresenceMainConcert";
-
+import "./app.css";
 import Concert from "./pages/concert/Concert";
 import AddConcert from "./components/concert/AddConcert";
 import EmailVerification from "./components/verify/EmailVerification";
-import Home from "./pages/chefPupitre/pages/Home";
-import AbsenceRepetition from "./pages/admin/pages/absenceRepetition/AbsenceRepetitions";
 import ChoristeDashboard from "./pages/choriste/ChoristeDashboard";
+import CongeChoriste from "./components/conge/CongeChoriste";
 
 const App = () => {
   return (
@@ -33,18 +30,17 @@ const App = () => {
       <>
         <Routes>
           <Route exact path="/" element={<Login />} />
-           <Route
+          <Route
             path="/dashboard/choriste/presence/allRepetitions"
             element={<ChoristeDashboard load="allRepetitions" />}
           />
 
-<Route
+          <Route
             path="/dashboard/choriste/presence/allConcerts"
             element={<ChoristeDashboard load="allConcerts" />}
           />
 
-
-           <Route
+          <Route
             path="/dashboard/choriste/home"
             element={<ChoristeDashboard load="home" />}
           />
@@ -57,6 +53,10 @@ const App = () => {
             element={<ChoristeDashboard load="demandeConge" />}
           />
 
+          <Route
+            path="/dashboard/choriste/conge"
+            element={<ChoristeDashboard load="conge Choriste" />}
+          />
 
           <Route
             exact
@@ -164,11 +164,7 @@ const App = () => {
             path="/dashboard/admin/concert"
             element={<AdminDashboard load="Concert" />}
           />
-          <Route
-            exact
-            path="  "
-            element={<AddConcert />}
-          />
+          <Route exact path="  " element={<AddConcert />} />
           <Route exact path="/concert" element={<Concert />} />
           <Route exact path="addConcert" element={<AddConcert />} />
           <Route exact path="/candidatureForm" element={<FormCandidature />} />
@@ -187,7 +183,11 @@ const App = () => {
           />
 
           <Route exact path="/concert" element={<Concert />} />
-          <Route exact path="addConcert" element={<AddConcert />} />
+          <Route
+            exact
+            path="/dashboard/admin/concert/addConcert"
+            element={<AddConcert />}
+          />
 
           <Route
             path="/dashboard/admin/repetition/liste-absence"
@@ -202,8 +202,10 @@ const App = () => {
             path="/dashboard/admin/AbsenceConcerts"
             element={<AdminDashboard load="AbsenceConcerts" />}
           />
-
-
+          <Route
+            path="/dashboard/admin/accounts/register"
+            element={<AdminDashboard load="AcountRegister" />}
+          />
         </Routes>
       </>
     </Router>

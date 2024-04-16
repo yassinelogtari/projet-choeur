@@ -13,20 +13,15 @@ import ListeCandidatesParPupitre from "./pages/candidates/ListeCandidatesParPupi
 import AdminAuditionInfo from "../admin/pages/auditions/AdminAddAuditionInfo";
 import AuditionUpdate from "../admin/pages/auditions/AuditionUpdate";
 import Concert from "../concert/Concert";
-
 import Archive from "./pages/saison/archive/Archive";
-
 import ListeOeuvres from "./pages/oeuvres/ListeOeuvres";
-
 import PlanningAudition from "./pages/auditions/GenererPlanning";
-
-import { io } from "socket.io-client";
 import AddOeuvre from "./pages/oeuvres/AddOeuvre";
 import ManageConcert from "../../components/concert/ManageConcert";
 import AbsenceRepetition from "./pages/absenceRepetition/AbsenceRepetitions";
 import CandidatesListV2 from "./pages/candidates/CandidatesListV2"
 import AbsenceConcerts from "../concert/AbsenceConcerts";
-
+import AcountRegister from "./pages/comptes/AcountRegister";
 const AdminDashboard = (props) => {
   return (
     <div>
@@ -41,7 +36,7 @@ const AdminDashboard = (props) => {
             </aside>
 
             <Navbar1 />
-
+            
             {props.load === "home" && <HomePage />}
             {props.load === "adminAudition" && <AdminAudition />}
             {props.load === "Concert" && <Concert />}
@@ -59,8 +54,14 @@ const AdminDashboard = (props) => {
             {props.load === "genererPlanning" && <PlanningAudition />}
             {props.load === "absenceRep" && <AbsenceRepetition />}
             {props.load === "candidatesListV2" && <CandidatesListV2 />}
+            {props.load === "AcountRegister" && <AcountRegister />}
           </div>
+          
           {props.load === "AbsenceConcerts" && <AbsenceConcerts />}
+          
+      
+         
+          
           <div className="layout-overlay layout-menu-toggle" />
         </div>
       </div>

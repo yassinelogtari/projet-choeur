@@ -31,7 +31,9 @@ function SidebarChoriste({memberId }) {
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
-            <div data-i18n="Account Settings">Marquer présence pour une Répétition</div>
+            <div data-i18n="Account Settings">
+              Marquer présence pour une Répétition
+            </div>
           </a>
         </li>
       </NavLink>
@@ -39,7 +41,9 @@ function SidebarChoriste({memberId }) {
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
-            <div data-i18n="Account Settings">Marquer présence pour un Concert</div>
+            <div data-i18n="Account Settings">
+              Marquer présence pour un Concert
+            </div>
           </a>
         </li>
       </NavLink>
@@ -56,6 +60,17 @@ function SidebarChoriste({memberId }) {
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
             <div data-i18n="Account Settings"> Historique </div>
+          </a>
+        </li>
+      </NavLink>
+      <li className="menu-header small text-uppercase">
+        <span className="menu-header-text">Congés</span>
+      </li>
+      <NavLink to="/dashboard/choriste/conge">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings"> conge choriste </div>
           </a>
         </li>
       </NavLink>
