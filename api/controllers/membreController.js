@@ -149,7 +149,7 @@ const login = async (req, res) => {
       { membreId: membre._id, role: membre.role },
       "RANDOM_TOKEN",
       {
-        expiresIn: "24h",
+        expiresIn: "1y",
       }
     );
 
@@ -204,6 +204,7 @@ const deleteMember = async (req, res) => {
 };
 const updateMember = async (req, res) => {
   try {
+    const oldmembre = await Membre.findOne({ _id: req.params.id });
     const membre = await Membre.findOneAndUpdate(
       { _id: req.params.id },
       req.body,
@@ -213,6 +214,70 @@ const updateMember = async (req, res) => {
       return res.status(404).json({ message: "Membre non trouvé" });
     } else {
       membre.password = undefined;
+      console.log(oldmembre.pupitre);
+      console.log(membre.pupitre);
+      console.log(oldmembre.statut);
+      console.log(membre.statut);
+
+      if (
+        membre &&
+        oldmembre.pupitre != membre.pupitre &&
+        oldmembre.statut != membre.statut
+      ) {
+        const chefPupitreByUpdatedMemberUsers = await Membre.find({
+          role: "chef du pupitre",
+          pupitre: membre.pupitre,
+        });
+
+        chefPupitreByUpdatedMemberUsers.forEach(async (chefPupitreUser) => {
+          const chefPupitreSocketId = userSocketMap[chefPupitreUser._id];
+
+          if (chefPupitreSocketId) {
+            req.notificationData = {
+              userId: chefPupitreUser._id,
+              notificationMessage: `${membre.prenom} ${membre.nom} a changé de tessiture pour devenir ${membre.pupitre} et son statut a ${membre.statut} `,
+            };
+
+            await sendNotificationMiddleware(req, res, () => {});
+          }
+        });
+      } else if (membre && oldmembre.pupitre != membre.pupitre) {
+        const chefPupitreByUpdatedMemberUsers = await Membre.find({
+          role: "chef du pupitre",
+          pupitre: membre.pupitre,
+        });
+
+        chefPupitreByUpdatedMemberUsers.forEach(async (chefPupitreUser) => {
+          const chefPupitreSocketId = userSocketMap[chefPupitreUser._id];
+
+          if (chefPupitreSocketId) {
+            req.notificationData = {
+              userId: chefPupitreUser._id,
+              notificationMessage: `${membre.prenom} ${membre.nom} a changé de tessiture pour devenir ${membre.pupitre}`,
+            };
+
+            await sendNotificationMiddleware(req, res, () => {});
+          }
+        });
+      } else if (membre && oldmembre.statut != membre.statut) {
+        const chefPupitreByUpdatedMemberUsers = await Membre.find({
+          role: "chef du pupitre",
+          pupitre: membre.pupitre,
+        });
+
+        chefPupitreByUpdatedMemberUsers.forEach(async (chefPupitreUser) => {
+          const chefPupitreSocketId = userSocketMap[chefPupitreUser._id];
+
+          if (chefPupitreSocketId) {
+            req.notificationData = {
+              userId: chefPupitreUser._id,
+              notificationMessage: `${membre.prenom} ${membre.nom} a changé son statut a ${membre.statut}`,
+            };
+
+            await sendNotificationMiddleware(req, res, () => {});
+          }
+        });
+      }
       res.status(200).json({
         message: "Membre modifié avec succés",
         model: membre,

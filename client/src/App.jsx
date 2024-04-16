@@ -215,6 +215,11 @@ const App = () => {
             path="/dashboard/admin/accounts/infos/edit/:id/"
             element={<AdminDashboard load="AcountInfosEdit" />}
           />
+          <Route
+            exact
+            path="/dashboard/admin/concerts/disponible-members/:idC/"
+            element={<AdminDashboard load="ConcertDisponibleMembers" />}
+          />
         </Routes>
       </>
     </Router>
