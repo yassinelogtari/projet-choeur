@@ -1,52 +1,71 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { TextField, Typography, Container, Grid, Card, CardContent, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { TextField, Typography, Container, Grid, Card, CardContent, Button,TableCell, Paper,TableContainer,TableBody,Table,TableHead ,TableRow, Dialog, DialogContent} from '@mui/material';
+import { FcBusinessContact, FcContacts, FcDiploma2, FcMusic } from "react-icons/fc";
 import { useParams } from 'react-router-dom';
-import { FcTodoList } from 'react-icons/fc';
+import { jwtDecode } from "jwt-decode";
 
-const HistoriqueActivite = ({ memberId }) => {
+const HistoriqueActivite = ({id}) => {
+  //const { id } = useParams();
   const [historique, setHistorique] = useState([]);
   const [filtre, setFiltre] = useState('');
   const [nbRepetitions, setNbRepetitions] = useState(0);
   const [nbConcerts, setNbConcerts] = useState(0);
   const [filteredHistorique, setFilteredHistorique] = useState([]);
-  const [notifications, setNotifications] = useState([]);
-  let { id } = useParams(); // Récupérer l'ID de l'URL
-
+  const [memberInfo, setMemberInfo] = useState({});
+  const [error, setError] = useState(null);
+  const [storedToken, setStoredToken] = useState();
+  const [qrCode, setQrCode] = useState('');
+  const [openPopup, setOpenPopup] = useState(false);
 
   useEffect(() => {
-    const fetchHistory = async () => {
-      try {
-        if (!memberId) return; // Check if memberId is defined
-        const response = await axios.get(`/api/history/${memberId}?oeuvre=${filtre}`);
-        const data = response.data;
-        setHistorique(data.concerts);
-        setNbRepetitions(data.number_of_repetition);
-        setNbConcerts(data.number_of_concerts);
-        setFilteredHistorique(data.concerts);
-      } catch (error) {
-        console.error('Erreur lors de la récupération de l\'historique :', error);
+    const storedTokenValue = localStorage.getItem("token");
+    if (storedTokenValue) {
+      setStoredToken(storedTokenValue);
+      console.log("stored token ",storedTokenValue)
+    }
+  }, []);
+
+  const getAuthenticatedUserId = () => {
+    if (storedToken) {
+      const decodedToken = jwtDecode(storedToken);
+      console.log("member id", decodedToken.membreId )
+
+      return decodedToken.membreId;
+    } else {
+      return null;
+    }
+  };
+
+  const fetchMemberId = async () => {
+    try {
+      const membreId = getAuthenticatedUserId();
+      if (!membreId) {
+        throw new Error("ID du membre non trouvé dans le token.");
       }
-    };
-
-    fetchHistory();
-  }, [memberId, filtre]);
-
-  // Simulated notification fetching
+      const response = await axios.get(`http://localhost:8000/api/profile/history/${membreId}`, {
+        headers: {
+          Authorization: `Bearer ${storedToken}`
+        }
+      });
+      const data = response.data;
+      console.log("Données récupérées depuis l'API :", data); // Ajout du console.log()
+      setMemberInfo(data.member_info);
+      setHistorique(data.concerts);
+      setNbRepetitions(data.number_of_repetition);
+      setNbConcerts(data.number_of_concerts);
+      setFilteredHistorique(data.concerts);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+  
   useEffect(() => {
-    // Fetch notifications here
-    const fetchNotifications = async () => {
-      try {
-        // Example: fetching notifications
-        const response = await axios.get('/api/notifications');
-        const data = response.data;
-        setNotifications(data.notifications);
-      } catch (error) {
-        console.error('Erreur lors de la récupération des notifications :', error);
-      }
-    };
+    fetchMemberId();
+  }, [storedToken]); 
 
-    fetchNotifications();
+  useEffect(() => {
+    fetchMemberId();
   }, []);
 
   const handleChangeFiltre = (event) => {
@@ -55,110 +74,140 @@ const HistoriqueActivite = ({ memberId }) => {
 
   const handleFilterClick = async () => {
     try {
-      const response = await axios.get(`/api/history/${memberId}?oeuvre=${filtre}`);
+      const response = await axios.get(`http://localhost:8000/api/profile/history/${id}?oeuvre=${filtre}`, {
+        headers: {
+          Authorization: `Bearer ${storedToken}`
+        }
+      });
       const data = response.data;
       setHistorique(data.concerts);
       setNbRepetitions(data.number_of_repetition);
       setNbConcerts(data.number_of_concerts);
       setFilteredHistorique(data.concerts);
     } catch (error) {
-      console.error('Erreur lors de la récupération de l\'historique :', error);
+      setError(error.message);
     }
+  };
+  const showQR = (qrCode) => {
+    
+    setQrCode(qrCode);
+    setOpenPopup(true); 
+  };
+  
+
+  const handleClosePopup = () => {
+    setOpenPopup(false);
   };
 
   return (
     <Container>
-      <Grid container spacing={2} >
-        <Grid item xs={12} md={8} >
+      <Grid container spacing={2}>
+        <Grid item xs={14}>
           <Typography variant="h4" gutterBottom>
             Historique de l'activité
           </Typography>
-          <Card variant="outlined" style={{borderRadius: '15px'}}>
+        </Grid>
+        <Grid item xs={12} md={3}>
+        <Card variant="outlined" sx={{ borderRadius: '15px' }}>
             <CardContent>
               <Typography variant="h6" gutterBottom>
+                <FcMusic />
                 Nombre de Répétitions
               </Typography>
               <Typography variant="h3" color="primary" sx={{ borderRadius: '10px', padding: '10px', backgroundColor: '#f0f0f0' }}>
-  {nbRepetitions}
-</Typography>
-              <Typography variant="h6" gutterBottom>
-                Nombre de Concerts
+                {nbRepetitions}
               </Typography>
-              <Typography variant="h3" color="primary" sx={{ borderRadius: '10px', padding: '10px', backgroundColor: '#f0f0f0' }}>
-  {nbConcerts}
-</Typography> 
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} md={4} style={{marginTop: "7%"}}>
-  <Card variant="outlined" sx={{ borderRadius: '10px', maxHeight: '300px', overflowY: 'auto' }}>
-    <CardContent>
-      <Typography variant="h6" gutterBottom>
-      <FcTodoList /> Notifications 
+        <Grid item xs={12} md={3}>
+        <Card variant="outlined" sx={{ borderRadius: '15px' }}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+              <FcMusic />
+                Nombre de Concerts
+              </Typography>
+              <Typography variant="h3" color="primary" sx={{ borderRadius: '10px', padding: '10px', backgroundColor: '#f0f0f0' }}>
+                {nbConcerts}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Card variant="outlined" sx={{ borderRadius: '15px' }}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Informations du membre
+              </Typography>
+              <Typography variant="body1" gutterBottom >
+              <FcBusinessContact style={iconStyle} />
+                <strong >Nom:</strong> {memberInfo.nom}
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+              <FcContacts style={iconStyle} />
+                <strong>Prénom:</strong> {memberInfo.prenom}
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+              <FcDiploma2 style={iconStyle} />
+                <strong>Historique du statut:</strong>
+              </Typography>
+              <ul>
+              
 
-      </Typography>
-      <ul>
-        {notifications.map((notification, index) => (
-          <li key={index}>
-            <Typography variant="body1">{notification.content}</Typography>
-          </li>
-        ))}
-      </ul>
-    </CardContent>
-  </Card>
-</Grid>
-        <Grid item xs={12}>
-          <TextField
-            label="Filtrer par nom d'œuvre"
-            variant="outlined"
-            fullWidth
-            value={filtre}
-            onChange={handleChangeFiltre}
-          />
-          <Button 
-            variant="contained"
-            onClick={handleFilterClick}
-            sx={{
-              borderRadius: '20px', 
-              backgroundColor: 'seagreen', 
-              '&:hover': {
-                backgroundColor: 'lightgreen',
-              },
-              marginTop: '10px'
-            }}
-          >
-            Filtrer
-          </Button>
+                {memberInfo.historiqueStatut && Array.isArray(memberInfo.historiqueStatut) && memberInfo.historiqueStatut.map((statut, index) => (
+                  <li key={index}>{statut}</li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
         </Grid>
         <Grid item xs={12}>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Nom de l'œuvre</TableCell>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Nom du concert</TableCell>
-                  <TableCell>Membres du concert</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredHistorique.map((concert, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{concert.oeuvre.nom}</TableCell>
-                    <TableCell>{concert.date}</TableCell>
-                    <TableCell>{concert.nom}</TableCell>
-                    <TableCell>
-                      <ul>
-                        {concert.listeMembres.map((membre, index) => (
-                          <li key={index}>{membre.nom}</li>
-                        ))}
-                      </ul>
-                    </TableCell>
+          <Typography variant="h4" gutterBottom>
+            Liste des concerts
+          </Typography>
+          <Paper style={{ maxHeight: '230px', overflow: 'auto' }}>
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Titre</TableCell>
+                    <TableCell>Date</TableCell>
+                    <TableCell>Lieu</TableCell>
+                    <TableCell>Affiche</TableCell>
+                    <TableCell>Programme</TableCell>
+                    <TableCell>QR Code</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                </TableHead>
+                <TableBody>
+                  {filteredHistorique.map((concert, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{concert.titre !== null ? concert.titre : "Titre indisponible"}</TableCell>
+                      <TableCell>{concert.date}</TableCell>
+                      <TableCell>{concert.lieu}</TableCell>
+                      <TableCell><img src={concert.affiche} alt="Affiche du concert" /></TableCell>
+                      <TableCell>
+                        {concert.programme.map((item, itemIndex) => (
+                          <div key={itemIndex}>
+                            <p><strong>Oeuvre:</strong> {item.oeuvre.titre}</p>
+                            <p><strong>Theme:</strong> {item.oeuvre.theme}</p>
+                          </div>
+                        ))}
+                      </TableCell>
+                      <TableCell>
+                      <Button onClick={() => showQR(concert.QrCode)}>Afficher QR Code</Button>
+
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+          <Dialog open={openPopup} onClose={handleClosePopup}>
+            <DialogContent>
+            <img src={qrCode} alt="QR Code" />
+            </DialogContent>
+          </Dialog>
         </Grid>
       </Grid>
     </Container>
@@ -166,3 +215,8 @@ const HistoriqueActivite = ({ memberId }) => {
 };
 
 export default HistoriqueActivite;
+
+const iconStyle = {
+  marginRight: '10px',
+  fontSize: "25px",
+};

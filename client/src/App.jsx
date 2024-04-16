@@ -45,9 +45,14 @@ const App = () => {
             element={<ChoristeDashboard load="home" />}
           />
           <Route
-            path="/dashboard/choriste/historique/:id"
+            path="/dashboard/choriste/historique"
             element={<ChoristeDashboard load="historique" />}
           />
+           <Route
+            path="/dashboard/choriste/demandeConge"
+            element={<ChoristeDashboard load="demandeConge" />}
+          />
+
           <Route
             path="/dashboard/choriste/conge"
             element={<ChoristeDashboard load="conge Choriste" />}

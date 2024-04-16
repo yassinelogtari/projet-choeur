@@ -6,10 +6,16 @@ import Home from "../chefPupitre/pages/Home";
 import PresenceRepetition from "../../routes/PresenceRepetititon";
 import AllRepetitionToMarquePresence from "./pages/presenceRepetition/AllRepetitionToMarquePresence";
 import AllConcertsToMarquePresence from "./pages/presenceConcert/AllConcertsToMarquePresence";
+<<<<<<< HEAD
+import Historique from "./pages/historique/Historique"; 
+import CongeForm from "../../components/congeChoriste/CongeForm";
+import DemandeConge from "./pages/demandeConge/DemandeConge";
+=======
 import Historique from "./pages/historique/Historique";
 import CongeChoristePage from "../admin/pages/conges/CongeChoristePage";
 import CongeChoriste from "../../components/conge/CongeChoriste";
 
+>>>>>>> b15a60c0139627346764d14f2e09fad4f37d2b1f
 const ChoristeDashboard = (props) => {
   return (
     <div>
@@ -27,12 +33,19 @@ const ChoristeDashboard = (props) => {
             </aside>
             <Navbar1 />
             {props.load === "home" && <Home />}
+<<<<<<< HEAD
+            {props.load==="allRepetitions" && <AllRepetitionToMarquePresence />}
+            {props.load==="allConcerts" && <AllConcertsToMarquePresence />}
+            {props.load==="demandeConge" && <DemandeConge />}
+            {props.load==="historique" && <Historique />}
+=======
             {props.load === "allRepetitions" && (
               <AllRepetitionToMarquePresence />
             )}
             {props.load === "allConcerts" && <AllConcertsToMarquePresence />}
             {props.load === "historique" && <Historique />}
             {props.load === "conge Choriste" && <CongeChoristePage />}
+>>>>>>> b15a60c0139627346764d14f2e09fad4f37d2b1f
           </div>
           {/* Overlay */}
           <div className="layout-overlay layout-menu-toggle" />
