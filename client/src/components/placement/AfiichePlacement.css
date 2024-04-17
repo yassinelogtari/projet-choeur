@@ -1,0 +1,65 @@
+.afficheContenu {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 20vh;
+    left: 25vw;
+    padding: 30px;
+}
+
+.selectPlacement {
+    border: solid;
+    border-width: 1px;
+    border-radius: 20px;
+    border-color: blueviolet;
+    padding-block: 10px;
+    padding-inline: 20px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+}
+
+th,
+td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: palevioletred;
+}
+
+/* Add borders between columns */
+th+th,
+td+td {
+    border-left: 1px solid black;
+}
+
+/* Add borders between rows */
+tr+tr {
+    border-top: 1px solid black;
+}
+.but{
+    text-align: center;
+    
+}
+.butin{
+    font-size:large;
+    background-color:#000080;
+    width: 5px;
+    padding-left: 3px;
+   
+}
+.butin:hover{
+    background-color: #8c1aff;
+    
+}
+.butinin{
+    text-align: center;
+    margin-left: 5px;
+   
+}

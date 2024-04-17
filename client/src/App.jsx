@@ -22,7 +22,7 @@ import Concert from "./pages/concert/Concert";
 import AddConcert from "./components/concert/AddConcert";
 import EmailVerification from "./components/verify/EmailVerification";
 import ChoristeDashboard from "./pages/choriste/ChoristeDashboard";
-import CongeChoriste from "./components/conge/CongeChoriste";
+import AffichePlacement from "./components/placement/AffichePlacement";
 
 const App = () => {
   return (
@@ -200,6 +200,14 @@ const App = () => {
           <Route
             path="/dashboard/admin/accounts/register"
             element={<AdminDashboard load="AcountRegister" />}
+          />
+          <Route
+            path="/dashboard/admin/placement"
+            element={<AdminDashboard load="placement" />}
+          />
+          <Route
+            path="/dashboard/admin/placement/affiche"
+            element={<AdminDashboard load="placement affiche" />}
           />
         </Routes>
       </>
