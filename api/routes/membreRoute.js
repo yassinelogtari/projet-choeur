@@ -26,6 +26,12 @@ router.get(
   middlewareDate.isAdmin,*/
   membreController.getAllMembers
 );
+router.post(
+  "/getMembersByPupitre",
+  /*middlewareDate.loggedMiddleware,
+  middlewareDate.isAdmin,*/
+  membreController.getMembersByPupitre
+);
 router.delete(
   "/deleteMember/:id",
   middlewareDate.loggedMiddleware,

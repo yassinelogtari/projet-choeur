@@ -5,6 +5,15 @@
     margin-bottom: 100px; 
 }
 
+.nomSaison{
+  font-size:70px;
+  font-weight:700;
+}
+
+.dateSaison{
+  font-size: xx-large;
+}
+
   
   .contenu {
     margin-bottom: 20px;

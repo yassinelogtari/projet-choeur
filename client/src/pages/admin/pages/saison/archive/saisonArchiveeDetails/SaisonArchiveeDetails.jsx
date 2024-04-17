@@ -7,6 +7,8 @@ import OeuvresTable from './tablesData/OeuvresTable';
 import "./saisonArchiveeDetails.css"
 import RepetitionsTable from './tablesData/RepetitionsTable';
 import {Button} from 'antd';
+import CandidatsTable from './tablesData/CandidatsTable';
+import AuditionsTable from './tablesData/AuditionsTable';
 
 function SaisonArchiveeDetails() {
   const [season, setSeason] = useState(null);
@@ -15,6 +17,8 @@ function SaisonArchiveeDetails() {
   const [concerts , setConcerts] = useState([]);
   const [oeuvres , setOeuvres] = useState([]);
   const [repetitions , setRepetitions] = useState([]);
+  const [candidats , setCandidats] = useState([]);
+  const [auditions , setAuditions] = useState([]);
   
   const params= useParams();
   const id_SA= params.idSA;
@@ -29,12 +33,17 @@ function SaisonArchiveeDetails() {
         setConcerts(response.data.saison.concerts);
         setOeuvres(response.data.saison.oeuvres);
         setRepetitions(response.data.saison.repetitions);
+        setCandidats(response.data.saison.candidats);
+        setAuditions(response.data.saison.auditions);
         setLoading(false);
-        console.log(response.data.saison)
+        console.log("je suis ici")
+        console.log("la saison archivéé :" , response.data.saison)
         console.log("Détails de membres :", response.data.saison.membres);
         console.log("Détails de concerts :", response.data.saison.concerts);
         console.log("Détails de oeuvres :", response.data.saison.oeuvres);
         console.log("Détails de repetitions :", response.data.saison.repetitions);
+        console.log("Détails de candidats :", response.data.saison.candidats);
+        console.log("Détails de auditions :", response.data.saison.auditions);
       } catch (error) {
         console.error("Erreur lors de la récupération de la saison archivée:", error);
       }
@@ -65,14 +74,14 @@ function SaisonArchiveeDetails() {
     <div className='contenu'>
       <div >
       <hr></hr>
-      <p className='tt'>Les membres de la {season.nom}</p>
+      <p className='tt'>Les Membres de la {season.nom}</p>
       <hr></hr>
       </div>
       <MembresTable membres={membres} />
 
       <div >
       <hr></hr>
-      <p className='tt'>Les concerts de la {season.nom}</p>
+      <p className='tt'>Les Concerts de la {season.nom}</p>
       <hr></hr>
       </div>
       <ConcertsTable concerts={concerts} />
@@ -80,25 +89,40 @@ function SaisonArchiveeDetails() {
 
       <div >
       <hr></hr>
-      <p className='tt'>Les oeuvres de la {season.nom}</p>
+      <p className='tt'>Les Oeuvres de la {season.nom}</p>
       <hr></hr>
       </div>
       <OeuvresTable oeuvres={oeuvres} />
 
       <div >
       <hr></hr>
-      <p className='tt'>Les repetitions de la {season.nom}</p>
+      <p className='tt'>Les Candidats de la {season.nom}</p>
+      <hr></hr>
+      </div>
+      <CandidatsTable candidats={candidats} />
+
+      <div >
+      <hr></hr>
+      <p className='tt'>Les Auditions de la {season.nom}</p>
+      <hr></hr>
+      </div>
+      <AuditionsTable auditions={auditions} />
+
+      <div >
+      <hr></hr>
+      <p className='tt'>Les Repetitions de la {season.nom}</p>
       <hr></hr>
       </div>
       <RepetitionsTable repetitions={repetitions} />
       </div>
+      
            <NavLink to={"/dashboard/admin/archive"} >
            <Button className='btn-return' type="primary">
             Retour
           </Button>
           </NavLink>
 
-    </div>
+  </div>
   );
 }
 

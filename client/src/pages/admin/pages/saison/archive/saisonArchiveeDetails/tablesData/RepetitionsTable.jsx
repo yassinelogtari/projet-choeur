@@ -116,7 +116,7 @@ const RepetitionsTable = ({ repetitions }) => {
 
  
 
-  console.log("emna zayani : " , repetitions)
+  console.log("repetitions : " , repetitions)
 return (
   <div style={{ maxWidth: '1200px' , margin: '0 auto' }}>
     <Table columns={columns} dataSource={repetitions} bordered  />

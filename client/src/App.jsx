@@ -13,7 +13,7 @@ import "./assets/vendor/css/core.css";
 import "./assets/vendor/css/theme-default.css";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ChefPupitreDashboard from "./pages/chefPupitre/ChefPupitreDashboard";
-import ManagerDashboard from "./pages/ManagerDashboard";
+import ManagerDashboard from "./pages/managerChoeur/ManagerDashboard";
 import FormCandidature from "./pages/FormCandidature";
 import SaisonArchiveeDetails from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/SaisonArchiveeDetails";
 import MembresTable from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/tablesData/MembresTable";
@@ -53,6 +53,16 @@ const App = () => {
             path="/dashboard/manager"
             element={<ManagerDashboard />}
           />
+           <Route
+            path="/dashboard/manager/home"
+            element={<ManagerDashboard  load="home"/>}
+          />
+
+          <Route
+            path="/dashboard/manager/désigniation-chefs-pupitres"
+            element={<ManagerDashboard  load="désigniation-chefs-pupitres"/>}
+          />
+
           <Route
             exact
             path="/dashboard/choriste"

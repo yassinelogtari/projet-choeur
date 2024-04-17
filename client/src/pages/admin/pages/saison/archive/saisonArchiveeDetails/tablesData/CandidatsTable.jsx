@@ -31,39 +31,40 @@ const columns = [
     width: 150, 
   },
   {
+    title: 'CIN',
+    dataIndex: 'CIN',
+    render: (text) => <a>{text}</a>,
+    width: 150, 
+  },
+  {
     title: 'E-mail',
     dataIndex: 'email',
     render: (text) => <a>{text}</a>,
     width: 150, 
   },
   {
-    title: 'Rôle ',
-    dataIndex: 'role',
-    render: (text) => <a>{text}</a>,
-    width: 150, 
-  },
-  {
-    title: 'Statut',
-    dataIndex: 'statut',
-    render: (text) => <a>{text}</a>,
-    width: 150, 
-  },
-  {
     title: 'Téléphone',
     dataIndex: 'telephone',
+    render: (text) => <a>{text}</a>,
+    width: 150, 
+  },
+  {
+    title: 'Connaisance Musical',
+    dataIndex: 'connaisanceMusical',
+    render: (text) => text ? 'Oui' : 'Non',
     width: 150, 
   },
 ];
 
 
-const MembresTable = ({ membres }) => {
+const CandidatsTable = ({ candidats }) => {
 
-    console.log("membres : " , membres)
+    console.log("candidats : " , candidats)
   return (
     <div style={{ maxWidth: '1200px' , margin: '0 auto' }}>
-      <Table columns={columns} dataSource={membres} bordered  />
+      <Table columns={columns} dataSource={candidats} bordered  />
     </div>
   );
 };
 
-export default MembresTable;
+export default CandidatsTable;

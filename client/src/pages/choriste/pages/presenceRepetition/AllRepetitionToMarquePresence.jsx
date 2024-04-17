@@ -35,21 +35,21 @@ function AllRepetitionToMarquePresence() {
       
       const membreId  = getAuthenticatedUserId()
 
-   useEffect(() => {
-    const fetchSeason = async () => {
-      try {
-        const response = await axios.get("http://localhost:8000/api/saison/getSaisonActuelle");
-        const saisonData = response.data.saison;
-        const filtered = filteredRepetitions(saisonData.repetitions, membreId);
-        setRepetitions(filtered);
-        setLoading(false);
-      } catch (error) {
-        console.error("Erreur lors de la récupération des données de la saison:", error);
-      }
-    };
+    useEffect(() => {
+      const fetchSeason = async () => {
+        try {
+          const response = await axios.get("http://localhost:8000/api/saison/getSaisonActuelle");
+          const saisonData = response.data.saison;
+          const filtered = filteredRepetitions(saisonData.repetitions, membreId);
+          setRepetitions(filtered);
+          setLoading(false);
+        } catch (error) {
+          console.error("Erreur lors de la récupération des données de la saison:", error);
+        }
+      };
 
-    fetchSeason();
-  }, [membreId]);
+      fetchSeason();
+    }, [membreId]);
 
 
 
