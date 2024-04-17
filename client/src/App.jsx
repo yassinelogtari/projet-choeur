@@ -221,8 +221,27 @@ const App = () => {
             element={<AdminDashboard load="placement" />}
           />
           <Route
+            path="/dashboard/admin/accounts/list"
+            element={<AdminDashboard load="AcountList" />}
+          />
+           <Route
             path="/dashboard/admin/placement/affiche"
             element={<AdminDashboard load="placement affiche" />}
+          />
+           <Route
+            exact
+            path="/dashboard/admin/accounts/infos/:id/"
+            element={<AdminDashboard load="AcountInfos" />}
+          />
+          <Route
+            exact
+            path="/dashboard/admin/accounts/infos/edit/:id/"
+            element={<AdminDashboard load="AcountInfosEdit" />}
+          />
+          <Route
+            exact
+            path="/dashboard/admin/concerts/disponible-members/:idC/"
+            element={<AdminDashboard load="ConcertDisponibleMembers" />}
           />
         </Routes>
       </>

@@ -23,6 +23,11 @@ import AbsenceConcerts from "../concert/AbsenceConcerts";
 import AcountRegister from "./pages/comptes/AcountRegister";
 import Placement from "../placement/Placement";
 import AffichePlacement from "../../components/placement/AffichePlacement";
+import AccountList from "./pages/comptes/AccountList";
+import AccountInfo from "./pages/comptes/AcountInfos";
+import AccountInfoEdit from "./pages/comptes/AcountInfosEdit"
+import ConcertDisponibleMembers from "./pages/concerts/ConcertDisponibleMembers";
+
 const AdminDashboard = (props) => {
   return (
     <div>
@@ -58,6 +63,11 @@ const AdminDashboard = (props) => {
             {props.load === "absenceRep" && <AbsenceRepetition />}
             {props.load === "candidatesListV2" && <CandidatesListV2 />}
             {props.load === "AcountRegister" && <AcountRegister />}
+            {props.load === "AcountList" && <AccountList />}
+            {props.load === "AcountInfos" && <AccountInfo />}
+            {props.load === "AcountInfosEdit" && <AccountInfoEdit />}
+            {props.load === "ConcertDisponibleMembers" && <ConcertDisponibleMembers />}
+            
           </div>
 
           {props.load === "AbsenceConcerts" && <AbsenceConcerts />}

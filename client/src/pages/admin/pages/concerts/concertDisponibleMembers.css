@@ -1,0 +1,53 @@
+.viewButtondash {
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: darkblue;
+    border: 1px dotted rgba(0, 0, 139, 0.596);
+    cursor: pointer;
+  }
+  
+  .deleteButtondash {
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: crimson;
+    border: 1px dotted rgba(220, 20, 60, 0.6);
+    cursor: pointer;
+  }
+  .updateButtondash {
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: green;
+    border: 1px dotted green;
+    cursor: pointer;
+  }
+  .addButtondash {
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: #3ca9ee;
+    border: 1px dotted #3ca9ee;
+    cursor: pointer;
+  }
+  
+  .MuiInputBase-root.MuiInputBase-colorPrimary.MuiTablePagination-input.css-16c50h-MuiInputBase-root-MuiTablePagination-select {
+    margin-top: -14px;
+  }
+  
+  .css-78c6dr-MuiToolbar-root-MuiTablePagination-toolbar
+    .MuiTablePagination-actions {
+    margin-top: -14px;
+  }
+  
+  .css-pdct74-MuiTablePagination-selectLabel {
+    display: none !important;
+  }
+  .MuiSelect-select.MuiTablePagination-select.MuiSelect-standard.MuiInputBase-input.css-194a1fa-MuiSelect-select-MuiInputBase-input {
+    display: none !important;
+  }
+  
+  .MuiTablePagination-spacer.css-1psng7p-MuiTablePagination-spacer {
+    display: none !important;
+  }
+  .MuiInputBase-root.MuiInputBase-colorPrimary.MuiTablePagination-input.css-16c50h-MuiInputBase-root-MuiTablePagination-select {
+    display: none !important;
+  }
+  

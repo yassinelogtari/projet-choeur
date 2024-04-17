@@ -1,36 +1,44 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Link } from "@mui/material";
-import "./candidatesList.css";
+import "./concertDisponibleMembers.css";
 import axios from "axios";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import { NavLink, useParams } from "react-router-dom";
 
-const CandidatesList = () => {
+const ConcertDisponibleMembers = () => {
   const [allCandidates, setAllCandidates] = useState();
   const [filterBy, setFilterBy] = useState("");
-  const [filterByValue, setFilterByValue] = useState("");
+  const [concertTitle, setConcertTitle] = useState("");
+  
+  const { idC } = useParams();
   const PF = "http://localhost:5000/images/";
 
-  function findCommonElements(arr1, arr2) {
-    const commonElements = [];
 
-    for (let i = 0; i < arr1.length; i++) {
-      if (arr2.includes(arr1[i])) {
-        commonElements.push(arr1[i]);
-      }
-    }
-    return commonElements;
-  }
 
   const fetchCandidates = async () => {
     try {
-      if (filterByValue == "") {
+        const conc = await axios
+          .get(`http://localhost:8000/api/concerts/${idC}`,{
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          })
+          if (conc) {
+            console.log(conc)
+            setConcertTitle(conc.data.titre)
+          }
+      if (filterBy == "" || !filterBy) {
         const data = await axios
-          .get("http://localhost:8000/api/saison/getSaisonActuelle")
+          .get(`http://localhost:8000/api/disponibility/cancert/disponibleMembers/${idC}`,{
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          })
           .then((res) => {
-            const modifiedRes = res.data.saison.candidats.map((obj, index) => {
+            const modifiedRes = res.data.map((obj, index) => {
               return { id: index + 1, ...obj };
             });
             console.log(modifiedRes);
@@ -39,9 +47,11 @@ const CandidatesList = () => {
           });
       } else {
         const data1 = await axios
-          .get(
-            `http://localhost:8000/api/candidats?${filterBy}=${filterByValue}`
-          )
+          .get(`http://localhost:8000/api/disponibility/cancert/disponibleMembers/${idC}?pupitre=${filterBy}`,{
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          })
           .then((res) => {
             const modifiedRes = res.data.map((obj, index) => {
               return { id: index + 1, ...obj };
@@ -58,112 +68,76 @@ const CandidatesList = () => {
 
   useEffect(() => {
     fetchCandidates();
-  }, [filterByValue]);
+  }, [filterBy]);
 
   useEffect(() => {
-    console.log(filterByValue);
-  });
+   console.log(filterBy)
+  }, [filterBy]);
+
 
   const userColumns = [
-    { field: "id", headerName: "ID", width: 70 },
     {
-      field: "nom",
-      headerName: "Nom",
-      width: 100,
-      //   renderCell: (params) => {
-      //     return (
-      //       <div className="cellWithImgdash">
-      //         <img
-      //           className="cellImgdash"
-      //           src={PF + params.row.profilePic}
-      //           alt="avatar"
-      //         />
-      //         {params.row.username}
-      //       </div>
-      //     );
-      //   },
-    },
-    {
-      field: "prenom",
-      headerName: "Prenom",
-      width: 100,
-    },
-
-    {
-      field: "email",
-      headerName: "Email",
-      width: 100,
-    },
-    {
-      field: "sexe",
-      headerName: "Sexe",
-      width: 80,
-    },
-    {
-      field: "CIN",
-      headerName: "CIN",
-      width: 100,
-    },
-    {
-      field: "taille",
-      headerName: "Taille",
-      width: 60,
-    },
-    {
-      field: "telephone",
-      headerName: "Tlph",
-      width: 100,
-    },
-    {
-      field: "nationalite",
-      headerName: "Nationalite",
-      width: 100,
-    },
-    {
-      field: "dateNaissance",
-      headerName: "DateN",
-      width: 100,
-    },
-    {
-      field: "activite",
-      headerName: "Activite",
-      type: "boolean",
-      width: 50,
-    },
-    {
-      field: "connaisanceMusical",
-      headerName: "ConnaisanceMusical",
-      type: "boolean",
-      width: 50,
-    },
-    {
-      field: "situationPerso",
-      headerName: "SituationPerso",
-      width: 50,
-    },
-    {
-      field: "confirm",
-      headerName: "Confirm",
-      type: "boolean",
-      width: 50,
-    },
+        field: "id",
+        headerName: "ID",
+        width: 50,
+      },
+      {
+        field: "nom",
+        headerName: "Nom",
+        width: 80,
+      },
+      {
+        field: "prenom",
+        headerName: "Prenom",
+        width: 80,
+      },
+      {
+        field: "email",
+        headerName: "Email",
+        width: 150,
+      },
+      {
+        field: "sexe",
+        headerName: "sexe",
+        width: 80,
+      },
+      {
+        field: "dateNaissance",
+        headerName: "DateN",
+        width: 100,
+      },
+      {
+        field: "nationalite",
+        headerName: "Nationalite",
+        width: 80,
+      },
+      {
+        field: "CIN",
+        headerName: "CIN",
+        width: 80,
+      },
+      {
+        field: "telephone",
+        headerName: "Tlph",
+        width: 80,
+      },
+      {
+        field: "role",
+        headerName: "Role",
+        width: 80,
+      },
+      {
+        field: "pupitre",
+        headerName: "Pupitre",
+        width: 80,
+      },
   ];
 
   const fileringArray = [
-    { title: "id" },
-    { title: "nom" },
-    { title: "prenom" },
-    { title: "email" },
-    { title: "sexe" },
-    { title: "CIN" },
-    { title: "taille" },
-    { title: "telephone" },
-    { title: "nationalite" },
-    { title: "dateNaissance" },
-    { title: "activite" },
-    { title: "connaisanceMusical" },
-    { title: "situationPerso" },
-    { title: "confirm" },
+    { title: "soprano" },
+    { title: "alto" },
+    { title: "ténor" },
+    { title: "basse" },
   ];
 
   const actionColumn = [
@@ -174,17 +148,16 @@ const CandidatesList = () => {
       renderCell: (params) => {
         return (
           <div className="cellActiondash" style={{ display: "flex" }}>
-            <Link
-              to={`/dashboard/profile/${params.row._id}`}
-              style={{ textDecoration: "none" }}
+            <NavLink
+              to={`http://localhost:3000/dashboard/admin/accounts/infos/${params.row._id}`}
             >
               <div
                 className="viewButtondash"
-                onClick={() => handleViewProfile(params.row._id)}
+                onClick={() => handleViewProfile(params.row)}
               >
                 View
               </div>
-            </Link>
+            </NavLink>
             {/* <div
               className="deleteButtondash "
               onClick={() => handleDeletepost(params.row._id)}
@@ -215,10 +188,10 @@ const CandidatesList = () => {
           flexDirection: "column",
           position: "absolute",
           top: "-50vh",
-          right: "-77vh",
+          right: "-66vh",
         }}
       >
-        <div style={{ marginBottom: "50px" }}>Liste des candidatures</div>
+        <div style={{ marginBottom: "50px" }}>Liste des membres disponibles pour le concert "{concertTitle}"</div>
         <div
           style={{
             display: "flex",
@@ -250,23 +223,11 @@ const CandidatesList = () => {
                 }
               }}
               renderInput={(params) => (
-                <TextField {...params} label="Filter by" />
+                <TextField {...params} label="Filter by Pupitre" />
               )}
             />
 
-            <TextField
-              style={{ marginLeft: "10px", background: "white" }}
-              id="outlined-basic"
-              label="Value"
-              variant="outlined"
-              value={filterByValue}
-              onChange={(event) => {
-                if (filterBy != "") {
-                  console.log(event.target.value);
-                  setFilterByValue(event.target.value);
-                }
-              }}
-            />
+          
           </div>
         </div>
         <DataGrid
@@ -289,4 +250,4 @@ const CandidatesList = () => {
   );
 };
 
-export default CandidatesList;
+export default ConcertDisponibleMembers;
