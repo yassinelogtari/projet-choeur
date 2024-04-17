@@ -17,11 +17,12 @@ import Archive from "./pages/saison/archive/Archive";
 import ListeOeuvres from "./pages/oeuvres/ListeOeuvres";
 import PlanningAudition from "./pages/auditions/GenererPlanning";
 import AddOeuvre from "./pages/oeuvres/AddOeuvre";
-import ManageConcert from "../../components/concert/ManageConcert";
 import AbsenceRepetition from "./pages/absenceRepetition/AbsenceRepetitions";
-import CandidatesListV2 from "./pages/candidates/CandidatesListV2"
+import CandidatesListV2 from "./pages/candidates/CandidatesListV2";
 import AbsenceConcerts from "../concert/AbsenceConcerts";
 import AcountRegister from "./pages/comptes/AcountRegister";
+import Placement from "../placement/Placement";
+import AffichePlacement from "../../components/placement/AffichePlacement";
 const AdminDashboard = (props) => {
   return (
     <div>
@@ -36,10 +37,12 @@ const AdminDashboard = (props) => {
             </aside>
 
             <Navbar1 />
-            
+
             {props.load === "home" && <HomePage />}
             {props.load === "adminAudition" && <AdminAudition />}
             {props.load === "Concert" && <Concert />}
+            {props.load === "placement" && <Placement />}
+            {props.load === "placement affiche" && <AffichePlacement />}
             {props.load === "nouvelleSaison" && <NouvelleSaison />}
             {props.load === "saisonActuelle" && <SaisonActuelle />}
             {props.load === "auditionAddInfo" && <AdminAuditionInfo />}
@@ -56,12 +59,9 @@ const AdminDashboard = (props) => {
             {props.load === "candidatesListV2" && <CandidatesListV2 />}
             {props.load === "AcountRegister" && <AcountRegister />}
           </div>
-          
+
           {props.load === "AbsenceConcerts" && <AbsenceConcerts />}
-          
-      
-         
-          
+
           <div className="layout-overlay layout-menu-toggle" />
         </div>
       </div>

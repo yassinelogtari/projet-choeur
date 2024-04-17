@@ -22,6 +22,7 @@ import Concert from "./pages/concert/Concert";
 import AddConcert from "./components/concert/AddConcert";
 import EmailVerification from "./components/verify/EmailVerification";
 import ChoristeDashboard from "./pages/choriste/ChoristeDashboard";
+import AffichePlacement from "./components/placement/AffichePlacement";
 
 const App = () => {
   return (
@@ -44,8 +45,17 @@ const App = () => {
             element={<ChoristeDashboard load="home" />}
           />
           <Route
-            path="/dashboard/choriste/historique/:id"
+            path="/dashboard/choriste/historique"
             element={<ChoristeDashboard load="historique" />}
+          />
+           <Route
+            path="/dashboard/choriste/demandeConge"
+            element={<ChoristeDashboard load="demandeConge" />}
+          />
+
+          <Route
+            path="/dashboard/choriste/conge"
+            element={<ChoristeDashboard load="conge Choriste" />}
           />
 
           <Route
@@ -183,7 +193,11 @@ const App = () => {
           />
 
           <Route exact path="/concert" element={<Concert />} />
-          <Route exact path="addConcert" element={<AddConcert />} />
+          <Route
+            exact
+            path="/dashboard/admin/concert/addConcert"
+            element={<AddConcert />}
+          />
 
           <Route
             path="/dashboard/admin/repetition/liste-absence"
@@ -201,6 +215,14 @@ const App = () => {
           <Route
             path="/dashboard/admin/accounts/register"
             element={<AdminDashboard load="AcountRegister" />}
+          />
+          <Route
+            path="/dashboard/admin/placement"
+            element={<AdminDashboard load="placement" />}
+          />
+          <Route
+            path="/dashboard/admin/placement/affiche"
+            element={<AdminDashboard load="placement affiche" />}
           />
         </Routes>
       </>

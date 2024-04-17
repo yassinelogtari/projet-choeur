@@ -104,6 +104,20 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
+
+      {/*placement */}
+
+      <li className="menu-header small text-uppercase">
+        <span className="menu-header-text">Placement</span>
+      </li>
+      <NavLink to="/dashboard/admin/placement" onClick={goup}>
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Gérer placement</div>
+          </a>
+        </li>
+      </NavLink>
       {/* auditions */}
       <li className="menu-header small text-uppercase">
         <span className="menu-header-text">Candidatures</span>
