@@ -66,12 +66,12 @@ function SaisonArchiveeDetails() {
 
   return (
     <div>
-       <div className='title'>
+       <div className='titleArchive'>
         <h4 className='nomSaison'>Archive {season.nom}</h4>
         <span className='dateSaison'>{formatDate(season.dateDebut)} / {formatDate(season.dateFin)}</span>
       </div>
       
-    <div className='contenu'>
+    <div className='contenuArchive'>
       <div >
       <hr></hr>
       <p className='tt'>Les Membres de la {season.nom}</p>

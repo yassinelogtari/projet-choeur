@@ -27,6 +27,7 @@ import AccountList from "./pages/comptes/AccountList";
 import AccountInfo from "./pages/comptes/AcountInfos";
 import AccountInfoEdit from "./pages/comptes/AcountInfosEdit"
 import ConcertDisponibleMembers from "./pages/concerts/ConcertDisponibleMembers";
+import ValidateConges from "./pages/validateConge/ValidateConges";
 
 const AdminDashboard = (props) => {
   return (
@@ -67,6 +68,7 @@ const AdminDashboard = (props) => {
             {props.load === "AcountInfos" && <AccountInfo />}
             {props.load === "AcountInfosEdit" && <AccountInfoEdit />}
             {props.load === "ConcertDisponibleMembers" && <ConcertDisponibleMembers />}
+            {props.load === "conges" && <ValidateConges />}
             
           </div>
 

@@ -212,6 +212,10 @@ const App = () => {
             path="/dashboard/admin/AbsenceConcerts"
             element={<AdminDashboard load="AbsenceConcerts" />}
           />
+           <Route
+            path="/dashboard/admin/conges"
+            element={<AdminDashboard load="conges" />}
+          />
           <Route
             path="/dashboard/admin/accounts/register"
             element={<AdminDashboard load="AcountRegister" />}
