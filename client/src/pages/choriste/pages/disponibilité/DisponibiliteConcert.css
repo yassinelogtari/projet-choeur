@@ -1,0 +1,56 @@
+/* Styles pour le formulaire */
+.form-container {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 100%; /* Prend toute la largeur disponible */
+    max-width: 500px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    background-color: white; /* Optionnel : ajoute un fond blanc pour le contraste */
+    box-sizing: border-box; /* Assure que le padding ne dépasse pas la largeur définie */
+  }
+  
+  /* Styles pour les éléments du formulaire */
+  .disponibility-form .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .disponibility-form .form-group label {
+    display: block;
+    font-weight: bold;
+  }
+  
+  .disponibility-form .form-group input[type="text"],
+.disponibility-form .form-group textarea {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.disponibility-form .checkbox input {
+  margin-left: 5px;
+}
+
+.submit-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+}
+
+.response-message {
+  color: green;
+  text-align: center;
+  margin-top: 10px;
+}
+.selector {
+  print-color-adjust: exact;
+}
