@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+const Membre = require("../models/membreModel")
+
 const { Schema } = mongoose;
 
 const concertSchema = new Schema({
@@ -71,6 +73,29 @@ concertSchema.path("listeMembres").validate(async function (value) {
   );
   return membresInvalides.length === 0;
 }, 'Tous les membres doivent avoir un rôle de "choriste" ou "chef du pupitre".');
+
+
+
+concertSchema.statics.membresValidesPourConcert = async function(concertId) {
+  try {
+    // Rechercher le concert par son ID
+    const concert = await this.findById(concertId);
+
+    if (!concert) {
+      throw new Error('Le concert spécifié n\'existe pas.');
+    }
+    const membresValides = concert.listeMembres.filter(membre => membre.valider === true);
+
+    const membresDetails = await Membre.find({
+      _id: { $in: membresValides.map(membre => membre.membre) }
+    });
+
+    return membresDetails;
+  } catch (error) {
+    throw new Error('Erreur lors de la récupération des membres validés pour le concert : ' + error.message);
+  }
+};
+
 
 const Concert = mongoose.model("Concert", concertSchema);
 

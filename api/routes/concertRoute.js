@@ -203,6 +203,9 @@ router.get(
   concertController.calculerTauxPresenceMembres
 );
 router.put("/:concertId/valider", concertController.validerConcert);
+
+
+router.get('/:concertId/membres-valides', concertController.getMembresValides);
 /**
  * @swagger
  * tags:
