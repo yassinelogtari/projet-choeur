@@ -159,6 +159,10 @@ const App = () => {
             path="/dashboard/admin/Audition/genererPlanning"
             element={<AdminDashboard load="genererPlanning" />}
           />
+          <Route
+            path="/dashboard/admin/statistiques"
+            element={<AdminDashboard load="genererStatistique" />}
+          />
 
           <Route
             exact
@@ -247,6 +251,7 @@ const App = () => {
             path="/dashboard/admin/concerts/disponible-members/:idC/"
             element={<AdminDashboard load="ConcertDisponibleMembers" />}
           />
+          
         </Routes>
       </>
     </Router>

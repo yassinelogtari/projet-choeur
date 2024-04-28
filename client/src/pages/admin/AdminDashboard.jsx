@@ -16,6 +16,7 @@ import Concert from "../concert/Concert";
 import Archive from "./pages/saison/archive/Archive";
 import ListeOeuvres from "./pages/oeuvres/ListeOeuvres";
 import PlanningAudition from "./pages/auditions/GenererPlanning";
+import GenererStatistique from "./pages/statistiques/genererStatistique";
 import AddOeuvre from "./pages/oeuvres/AddOeuvre";
 import AbsenceRepetition from "./pages/absenceRepetition/AbsenceRepetitions";
 import CandidatesListV2 from "./pages/candidates/CandidatesListV2";
@@ -61,6 +62,7 @@ const AdminDashboard = (props) => {
               <ListeCandidatesParPupitre />
             )}
             {props.load === "genererPlanning" && <PlanningAudition />}
+            {props.load === "genererStatistique" && <GenererStatistique />}
             {props.load === "absenceRep" && <AbsenceRepetition />}
             {props.load === "candidatesListV2" && <CandidatesListV2 />}
             {props.load === "AcountRegister" && <AcountRegister />}

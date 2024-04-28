@@ -193,6 +193,20 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
+      
+      {/* Statistiques */}
+      <li className="menu-header small text-uppercase">
+        <span className="menu-header-text">Statistiques</span>
+      </li>
+      <NavLink to="/dashboard/admin/statistiques">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Générer des Statistiques</div>
+          </a>
+        </li>
+      </NavLink>
+
       {/* gestion des compte */}
       <li className="menu-header small text-uppercase">
         <span className="menu-header-text">Comptes</span>
@@ -205,6 +219,7 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
+      
       <NavLink to="/dashboard/admin/accounts/list" onClick={goup}>
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
