@@ -22,10 +22,7 @@ const MyFormItem = ({ name, label, ...props }) => {
   return <Form.Item name={concatName} label={label} className='custom-label' {...props} />;
 };
 
-const ModifArchivForm = () => {
-  const [nom, setNom] = useState("");
-  const [dateDebut, setDateDebut] = useState("");
-  const [dateFin, setDateFin] = useState("");
+const ModifArchivForm = ({ nom, setNom, dateDebut, setDateDebut, dateFin, setDateFin }) => {
   const [idSaison, setIdSaison] = useState("");
   const [loading, setLoading] = useState(true);
   const [seasonAvailable, setSeasonAvailable] = useState(true);
@@ -108,10 +105,8 @@ const ModifArchivForm = () => {
 
   return (
     <>
-      <div className='title'>
-        <h4 className='nomSaison'>{nom}</h4>
-        <span className='dateSaison'>{dateDebut} / {dateFin}</span>
-      </div>
+     
+     
       <Form className="form" name="form_item_path" layout="vertical" onFinish={updateSaison}>
         <MyFormItemGroup prefix={['user']}>
           <MyFormItemGroup prefix={['name']}>

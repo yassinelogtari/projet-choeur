@@ -9,7 +9,7 @@ ul.menu-inner.py-1::-webkit-scrollbar {
 }
 
 ul.menu-inner.py-1::-webkit-scrollbar-thumb {
-  background-color: #696CFF; /* Color of the scrollbar handle */
+  background-color: #696cff; /* Color of the scrollbar handle */
   border-radius: 5px; /* Rounded corners for the scrollbar handle */
 }
 
@@ -19,4 +19,11 @@ ul.menu-inner.py-1::-webkit-scrollbar-thumb:hover {
 
 ul.menu-inner.py-1::-webkit-scrollbar-track {
   background: #f1f1f1; /* Color of the scrollbar track */
+}
+
+.MuiDataGrid-selectedRowCount.css-de9k3v-MuiDataGrid-selectedRowCount {
+  visibility: hidden;
+}
+.css-az8st9-MuiDataGrid-root .MuiDataGrid-row.Mui-selected {
+  background-color: transparent !important;
 }

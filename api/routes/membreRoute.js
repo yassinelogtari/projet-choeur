@@ -16,8 +16,8 @@ router.post(
 router.post("/login", membreController.login);
 router.get(
   "/getMembreById/:id",
-  middlewareDate.loggedMiddleware,
-  middlewareDate.isAdmin,
+ /* middlewareDate.loggedMiddleware,
+  middlewareDate.isAdmin,*/
   membreController.getMemberById
 );
 router.get(
@@ -25,6 +25,12 @@ router.get(
   /*middlewareDate.loggedMiddleware,
   middlewareDate.isAdmin,*/
   membreController.getAllMembers
+);
+router.post(
+  "/getMembersByPupitre",
+  /*middlewareDate.loggedMiddleware,
+  middlewareDate.isAdmin,*/
+  membreController.getMembersByPupitre
 );
 router.delete(
   "/deleteMember/:id",

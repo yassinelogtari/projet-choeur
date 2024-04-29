@@ -16,7 +16,7 @@
     padding-inline: 20px;
 }
 
-table {
+/*table {
     border-collapse: collapse;
     width: 100%;
     margin-top: 20px;
@@ -34,15 +34,15 @@ th {
 }
 
 /* Add borders between columns */
-th+th,
+/*th+th,
 td+td {
     border-left: 1px solid black;
 }
 
 /* Add borders between rows */
-tr+tr {
+/*tr+tr {
     border-top: 1px solid black;
-}
+}*/
 .but{
     text-align: center;
     

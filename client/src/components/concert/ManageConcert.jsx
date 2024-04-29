@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ManageConcert.css";
 import { MdDelete, MdEdit, MdSave } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import disponibleMembersIcon from "../../assets/img/avatars/authentication.svg";
 
 const ManageConcert = () => {
   const [concerts, setConcerts] = useState([]);
@@ -10,6 +11,7 @@ const ManageConcert = () => {
   const [editedDate, setEditedDate] = useState("");
   const [editedLocation, setEditedLocation] = useState("");
   const [excelFile, setExcelFile] = useState(null); // State for the uploaded Excel file
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchConcerts = async () => {
@@ -166,6 +168,19 @@ const ManageConcert = () => {
                   className="delete-btn"
                 >
                   <MdDelete />
+                </button>
+
+                <button
+                  onClick={() =>
+                    navigate(
+                      `/dashboard/admin/concerts/disponible-members/${concert._id}`
+                    )
+                  }
+                  className="delete-btn"
+                  style={{ width: "50%", padding: "10px 20px" }}
+                  title="Consulter la liste des choristes disponibles"
+                >
+                  <img src={disponibleMembersIcon} style={{ width: "100%" }} />
                 </button>
               </td>
             </tr>

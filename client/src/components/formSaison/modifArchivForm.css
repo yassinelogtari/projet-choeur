@@ -1,8 +1,6 @@
 .form  {
     border-radius: 5px;
     background-color: white;
-    padding: 40px;
-    margin-top: 50px;
     
 }
 
@@ -28,7 +26,6 @@ font-size:x-large;
 .btn-modification{
     width: 30%;
     height: auto;
-    margin-top: 20px;
     padding: 14px 20px;
     font-size: large;
     font-weight:500;
@@ -39,7 +36,6 @@ font-size:x-large;
 .btn-archivage{
     width: 30%;
     height: auto;
-    margin-top: 20px;
     padding: 14px 20px;
     font-size: large;
     font-weight:500;
@@ -49,17 +45,10 @@ font-size:x-large;
     
 }
 
-.title{
-    display: block;
-    margin-top: 100px;
-    text-align: center;
-    
-    
 
-}
 
 .nomSaison{
-    font-size: 60px;
+    font-size: 30px;
 }
 
 .dateSaison{
@@ -76,8 +65,7 @@ font-size:x-large;
 
 .archived-season{
     text-align: center;
-    font-size: xx-large;
-   
+    font-size: xx-large; 
     font-weight: bold;
 
 }
