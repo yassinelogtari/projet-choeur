@@ -6,6 +6,7 @@ const concertSchema = new Schema({
   titre: {
     type: String,
     required: true,
+    unique: true
   },
   date: {
     type: Date,

@@ -16,6 +16,7 @@ import Concert from "../concert/Concert";
 import Archive from "./pages/saison/archive/Archive";
 import ListeOeuvres from "./pages/oeuvres/ListeOeuvres";
 import PlanningAudition from "./pages/auditions/GenererPlanning";
+import GenererStatistique from "./pages/statistiques/genererStatistique";
 import AddOeuvre from "./pages/oeuvres/AddOeuvre";
 import AbsenceRepetition from "./pages/absenceRepetition/AbsenceRepetitions";
 import CandidatesListV2 from "./pages/candidates/CandidatesListV2";
@@ -24,6 +25,12 @@ import AcountRegister from "./pages/comptes/AcountRegister";
 import Placement from "../placement/Placement";
 import AffichePlacement from "../../components/placement/AffichePlacement";
 import Absence from "./pages/absences/Absence";
+import AccountList from "./pages/comptes/AccountList";
+import AccountInfo from "./pages/comptes/AcountInfos";
+import AccountInfoEdit from "./pages/comptes/AcountInfosEdit"
+import ConcertDisponibleMembers from "./pages/concerts/ConcertDisponibleMembers";
+import ValidateConges from "./pages/validateConge/ValidateConges";
+
 const AdminDashboard = (props) => {
   return (
     <div>
@@ -56,9 +63,16 @@ const AdminDashboard = (props) => {
               <ListeCandidatesParPupitre />
             )}
             {props.load === "genererPlanning" && <PlanningAudition />}
+            {props.load === "genererStatistique" && <GenererStatistique />}
             {props.load === "absenceRep" && <AbsenceRepetition />}
             {props.load === "candidatesListV2" && <CandidatesListV2 />}
             {props.load === "AcountRegister" && <AcountRegister />}
+            {props.load === "AcountList" && <AccountList />}
+            {props.load === "AcountInfos" && <AccountInfo />}
+            {props.load === "AcountInfosEdit" && <AccountInfoEdit />}
+            {props.load === "ConcertDisponibleMembers" && <ConcertDisponibleMembers />}
+            {props.load === "conges" && <ValidateConges />}
+            
           </div>
           {props.load === "absences" && <Absence />}
           {props.load === "AbsenceConcerts" && <AbsenceConcerts />}

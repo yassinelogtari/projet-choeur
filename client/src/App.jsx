@@ -13,7 +13,7 @@ import "./assets/vendor/css/core.css";
 import "./assets/vendor/css/theme-default.css";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ChefPupitreDashboard from "./pages/chefPupitre/ChefPupitreDashboard";
-import ManagerDashboard from "./pages/ManagerDashboard";
+import ManagerDashboard from "./pages/managerChoeur/ManagerDashboard";
 import FormCandidature from "./pages/FormCandidature";
 import SaisonArchiveeDetails from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/SaisonArchiveeDetails";
 import MembresTable from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/tablesData/MembresTable";
@@ -67,6 +67,16 @@ const App = () => {
             path="/dashboard/manager"
             element={<ManagerDashboard />}
           />
+           <Route
+            path="/dashboard/manager/home"
+            element={<ManagerDashboard  load="home"/>}
+          />
+
+          <Route
+            path="/dashboard/manager/désigniation-chefs-pupitres"
+            element={<ManagerDashboard  load="désigniation-chefs-pupitres"/>}
+          />
+
           <Route
             exact
             path="/dashboard/choriste"
@@ -153,6 +163,10 @@ const App = () => {
             path="/dashboard/admin/Audition/genererPlanning"
             element={<AdminDashboard load="genererPlanning" />}
           />
+          <Route
+            path="/dashboard/admin/statistiques"
+            element={<AdminDashboard load="genererStatistique" />}
+          />
 
           <Route
             exact
@@ -210,6 +224,10 @@ const App = () => {
             path="/dashboard/admin/AbsenceConcerts"
             element={<AdminDashboard load="AbsenceConcerts" />}
           />
+           <Route
+            path="/dashboard/admin/conges"
+            element={<AdminDashboard load="conges" />}
+          />
           <Route
             path="/dashboard/admin/accounts/register"
             element={<AdminDashboard load="AcountRegister" />}
@@ -219,9 +237,29 @@ const App = () => {
             element={<AdminDashboard load="placement" />}
           />
           <Route
+            path="/dashboard/admin/accounts/list"
+            element={<AdminDashboard load="AcountList" />}
+          />
+           <Route
             path="/dashboard/admin/placement/affiche"
             element={<AdminDashboard load="placement affiche" />}
           />
+           <Route
+            exact
+            path="/dashboard/admin/accounts/infos/:id/"
+            element={<AdminDashboard load="AcountInfos" />}
+          />
+          <Route
+            exact
+            path="/dashboard/admin/accounts/infos/edit/:id/"
+            element={<AdminDashboard load="AcountInfosEdit" />}
+          />
+          <Route
+            exact
+            path="/dashboard/admin/concerts/disponible-members/:idC/"
+            element={<AdminDashboard load="ConcertDisponibleMembers" />}
+          />
+          
         </Routes>
       </>
     </Router>

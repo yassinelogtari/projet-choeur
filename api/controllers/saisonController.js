@@ -72,9 +72,7 @@ const getSaisonCourante = async (req, res) => {
   try {
     const saisonCourante = await Saison.findOne({
       saisonCourante: true,
-    }).populate("membres repetitions oeuvres concerts candidats auditions")
-;
-
+    }).populate("membres repetitions oeuvres concerts candidats auditions");
     if (!saisonCourante) {
       return res.status(404).json({ erreur: "Aucune saison courante trouvée" });
     }
@@ -94,7 +92,7 @@ const getSaisonCourante = async (req, res) => {
 const getSaisonsArchivees = async (req, res) => {
   try {
     const saisonsArchivees = await Saison.find({ archivee: true }).populate(
-      "membres repetitions oeuvres concerts"
+      "membres repetitions oeuvres concerts candidats auditions"
     );
 
     if (!saisonsArchivees || saisonsArchivees.length === 0) {
@@ -154,7 +152,12 @@ const getSaisonByid = async (req, res) => {
           { path: "programme.oeuvre", model: "Oeuvre" },
         ],
       })
-      .populate("oeuvres");
+      .populate("oeuvres")
+      .populate({
+        path: "auditions",
+        populate: [{ path: "candidats", model: "candidat" }],
+      })
+      .populate("candidats");
 
     if (!saison) {
       return res.status(404).json({ erreur: "Saison non trouvée" });

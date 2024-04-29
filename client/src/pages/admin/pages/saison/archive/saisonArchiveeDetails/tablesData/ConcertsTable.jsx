@@ -56,12 +56,12 @@ const columns = [
           <span>
             {listeMembres.map((membre) => (
               <div key={membre._id}>
-                <p>{membre.membre}</p>
+                <p>{membre.membre.nom} {membre.membre.prenom}</p>
               </div>
             ))}
           </span>
         ),
-        width: 150,
+        width: 200,
       },
       {
         title: 'Présence',
@@ -79,7 +79,7 @@ const columns = [
       },
     ],
   },
-
+  
   {
     title: 'Programme',
     children: [
@@ -90,7 +90,7 @@ const columns = [
           <span>
             {programme.map((prog) => (
               <div key={prog._id}>
-                <p>{prog.oeuvre}</p>
+                <p>{prog.oeuvre.titre}</p>
               </div>
             ))}
           </span>
