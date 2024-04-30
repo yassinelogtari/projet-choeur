@@ -48,7 +48,7 @@ const App = () => {
             path="/dashboard/choriste/historique"
             element={<ChoristeDashboard load="historique" />}
           />
-           <Route
+          <Route
             path="/dashboard/choriste/demandeConge"
             element={<ChoristeDashboard load="demandeConge" />}
           />
@@ -61,20 +61,19 @@ const App = () => {
             element={<ChoristeDashboard load="conge Choriste" />}
           />
 
-
           <Route
             exact
             path="/dashboard/manager"
             element={<ManagerDashboard />}
           />
-           <Route
+          <Route
             path="/dashboard/manager/home"
-            element={<ManagerDashboard  load="home"/>}
+            element={<ManagerDashboard load="home" />}
           />
 
           <Route
             path="/dashboard/manager/désigniation-chefs-pupitres"
-            element={<ManagerDashboard  load="désigniation-chefs-pupitres"/>}
+            element={<ManagerDashboard load="désigniation-chefs-pupitres" />}
           />
 
           <Route
@@ -211,7 +210,7 @@ const App = () => {
             path="/dashboard/admin/repetition/liste-absence"
             element={<AdminDashboard load="absenceRep" />}
           />
-                    <Route
+          <Route
             path="/dashboard/admin/absences"
             element={<AdminDashboard load="absences" />}
           />
@@ -224,7 +223,7 @@ const App = () => {
             path="/dashboard/admin/AbsenceConcerts"
             element={<AdminDashboard load="AbsenceConcerts" />}
           />
-           <Route
+          <Route
             path="/dashboard/admin/conges"
             element={<AdminDashboard load="conges" />}
           />
@@ -240,11 +239,11 @@ const App = () => {
             path="/dashboard/admin/accounts/list"
             element={<AdminDashboard load="AcountList" />}
           />
-           <Route
+          <Route
             path="/dashboard/admin/placement/affiche"
             element={<AdminDashboard load="placement affiche" />}
           />
-           <Route
+          <Route
             exact
             path="/dashboard/admin/accounts/infos/:id/"
             element={<AdminDashboard load="AcountInfos" />}
@@ -259,7 +258,11 @@ const App = () => {
             path="/dashboard/admin/concerts/disponible-members/:idC/"
             element={<AdminDashboard load="ConcertDisponibleMembers" />}
           />
-          
+          <Route
+            exact
+            path="/dashboard/choriste/profile"
+            element={<ChoristeDashboard load="Profil" />}
+          />
         </Routes>
       </>
     </Router>

@@ -27,7 +27,7 @@ import AffichePlacement from "../../components/placement/AffichePlacement";
 import Absence from "./pages/absences/Absence";
 import AccountList from "./pages/comptes/AccountList";
 import AccountInfo from "./pages/comptes/AcountInfos";
-import AccountInfoEdit from "./pages/comptes/AcountInfosEdit"
+import AccountInfoEdit from "./pages/comptes/AcountInfosEdit";
 import ConcertDisponibleMembers from "./pages/concerts/ConcertDisponibleMembers";
 import ValidateConges from "./pages/validateConge/ValidateConges";
 
@@ -70,9 +70,10 @@ const AdminDashboard = (props) => {
             {props.load === "AcountList" && <AccountList />}
             {props.load === "AcountInfos" && <AccountInfo />}
             {props.load === "AcountInfosEdit" && <AccountInfoEdit />}
-            {props.load === "ConcertDisponibleMembers" && <ConcertDisponibleMembers />}
+            {props.load === "ConcertDisponibleMembers" && (
+              <ConcertDisponibleMembers />
+            )}
             {props.load === "conges" && <ValidateConges />}
-            
           </div>
           {props.load === "absences" && <Absence />}
           {props.load === "AbsenceConcerts" && <AbsenceConcerts />}
