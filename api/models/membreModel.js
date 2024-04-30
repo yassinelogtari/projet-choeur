@@ -63,16 +63,26 @@ const membreSchema = mongoose.Schema({
     type: String,
     enum: [
       "Inactif",
-      "Choriste Junior",
-      "Senior",
-      "Vétéran",
+      // "Choriste Junior",
+      // "Senior",
+      // "Vétéran",
       "En congé",
-      "Choriste",
+      // "Choriste",
    
     ],
     required: function () {
       return ["choriste"].includes(this.role);
     },
+  },
+ niveauExperience: {
+    type: String,
+    enum: [
+      "Choriste Junior",
+      "Senior",
+      "Vétéran",
+      "Choriste",
+   
+    ]
   },
   pupitre: {
     type: String,

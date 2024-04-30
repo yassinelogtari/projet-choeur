@@ -588,7 +588,7 @@ const consulterStatutMembre = async (req, res) => {
       memberId: membre._id,              
       nom: membre.nom,
       prenom: membre.prenom,
-      statut: membre.statut,             
+      niveauExperience: membre.niveauExperience,             
       
     });
   } catch (error) {
