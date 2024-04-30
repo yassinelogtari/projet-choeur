@@ -16,7 +16,7 @@
     padding-inline: 20px;
 }
 
-table {
+/*table {
     border-collapse: collapse;
     width: 100%;
     margin-top: 20px;
@@ -34,15 +34,15 @@ th {
 }
 
 /* Add borders between columns */
-th+th,
+/*th+th,
 td+td {
     border-left: 1px solid black;
 }
 
 /* Add borders between rows */
-tr+tr {
+/*tr+tr {
     border-top: 1px solid black;
-}
+}*/
 .but{
     text-align: center;
     
@@ -62,4 +62,78 @@ tr+tr {
     text-align: center;
     margin-left: 5px;
    
+}
+.graph-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.pupitre-column {
+    position: relative;
+    display: flex;
+    flex-direction: column-reverse;
+    /* Display members from bottom to top */
+    align-items: center;
+    margin: 0 10px;
+}
+
+.pupitre-line {
+    width: 2px;
+    height: 100%;
+    /* Extend the line to cover the entire height */
+    background-color: black;
+}
+
+.membre-container {
+    flex: 1;
+    /* Fill available vertical space */
+    display: flex;
+    flex-direction: column-reverse;
+    /* Display members from bottom to top */
+    align-items: center;
+    justify-content: flex-end;
+    /* Align members to the bottom */
+}
+
+.membre {
+    width: 20px;
+    height: 20px;
+    background-color: blue;
+    border: 1px solid black;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.membre-button{
+    width: 170px;
+}
+.member-info-container {
+    text-align: center;
+    margin-top: 20px;
+    /* Adjust as needed */
+}
+
+.member-info {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 400px;
+    /* Adjust as needed */
+    margin: 0 auto;
+    /* Center horizontally */
+}
+
+.member-info p {
+    margin: 10px 0;
+}
+
+.member-info p span {
+    font-weight: bold;
+    margin-right: 10px;
+}
+.seemore{
+    font-size: small;
+    color: #D6589F;
+    text-decoration: underline;
 }

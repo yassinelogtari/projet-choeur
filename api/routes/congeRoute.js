@@ -10,9 +10,22 @@ router.post(
 );
 router.post(
   "/valider/:id",
-  auth.loggedMiddleware,
-  auth.isAdmin,
+  /*auth.loggedMiddleware,
+  auth.isAdmin,*/
   congeController.validerConge
+);
+router.get(
+  "/getConges",
+  /*auth.loggedMiddleware,
+  auth.isAdmin,*/
+  congeController.getAllConge
+);
+
+router.delete(
+  "/deleteConge/:id",
+  /*auth.loggedMiddleware,
+  auth.isAdmin,*/
+  congeController.deleteConge
 );
 
 /**

@@ -63,12 +63,12 @@ const membreSchema = mongoose.Schema({
     type: String,
     enum: [
       "Inactif",
-      "Junior",
-      "Sénior",
+      "Choriste Junior",
+      "Senior",
       "Vétéran",
       "En congé",
       "Choriste",
-      "éliminé",
+   
     ],
     required: function () {
       return ["choriste"].includes(this.role);
@@ -83,12 +83,13 @@ const membreSchema = mongoose.Schema({
   },
   historiqueStatut: [
     {
-      saison: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Saison",
-      },
+      saison: 
+        Number
+        // type: mongoose.Schema.Types.ObjectId,
+        // ref: "Saison",
+      ,
       status: String,
     },
   ],
-});
+}, { timestamps: true });
 module.exports = mongoose.model("Membre", membreSchema);

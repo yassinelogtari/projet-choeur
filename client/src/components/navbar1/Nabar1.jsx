@@ -8,7 +8,7 @@ import { io } from "socket.io-client";
 import PermIdentityRoundedIcon from "@mui/icons-material/PermIdentityRounded";
 import PowerSettingsNewRoundedIcon from "@mui/icons-material/PowerSettingsNewRounded";
 import { Link } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 function Navbar1() {
   const [notifications, setNotifications] = useState([]);
@@ -103,7 +103,7 @@ function Navbar1() {
     setStoredToken(null);
     localStorage.removeItem("token");
     setNotifications([]);
-    navigate('/');
+    navigate("/");
     window.location.reload();
   };
 
