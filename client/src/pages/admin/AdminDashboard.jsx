@@ -30,6 +30,9 @@ import AccountInfo from "./pages/comptes/AcountInfos";
 import AccountInfoEdit from "./pages/comptes/AcountInfosEdit";
 import ConcertDisponibleMembers from "./pages/concerts/ConcertDisponibleMembers";
 import ValidateConges from "./pages/validateConge/ValidateConges";
+import ModifierTauxElimination from "./pages/eliminerraisondis/modifiertauxelimination";
+import EliminerDes from "./pages/eliminerraisondis/eliminerdis";
+import ExclureChoristeElimine from "./pages/eliminerraisondis/exlurechoristeelimine";
 
 const AdminDashboard = (props) => {
   return (
@@ -77,6 +80,11 @@ const AdminDashboard = (props) => {
           </div>
           {props.load === "absences" && <Absence />}
           {props.load === "AbsenceConcerts" && <AbsenceConcerts />}
+          {props.load === "exlurechoriste" && <ExclureChoristeElimine />}
+          {props.load === "modifiertauxelimination" && (
+            <ModifierTauxElimination />
+          )}
+          {props.load === "eliminerdiscipline" && <EliminerDes />}
 
           <div className="layout-overlay layout-menu-toggle" />
         </div>

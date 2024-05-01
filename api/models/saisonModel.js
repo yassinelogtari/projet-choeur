@@ -5,7 +5,6 @@ const Repetition = require("./repetitionModel");
 const Oeuvre = require("./oeuvreModel");
 const Concert = require("./concertModel");
 
-
 const saisonSchema = new mongoose.Schema({
   nom: {
     type: String,
@@ -50,13 +49,13 @@ const saisonSchema = new mongoose.Schema({
       ref: "Concert",
     },
   ],
-  
+
   auditions: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'audition',
+      ref: "audition",
     },
-  ],  
+  ],
   seuilnomination: {
     type: Number,
     default: 3,
@@ -96,6 +95,10 @@ const saisonSchema = new mongoose.Schema({
   archivee: {
     type: Boolean,
     default: false,
+  },
+  dureeOut: {
+    type: Number,
+    default: 365,
   },
 });
 

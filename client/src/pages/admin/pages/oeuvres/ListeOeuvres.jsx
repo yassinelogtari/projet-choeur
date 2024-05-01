@@ -23,6 +23,7 @@ import {
   Checkbox,
   FormControlLabel,
   InputAdornment,
+  CircularProgress,
 } from "@mui/material";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import SearchIcon from "@mui/icons-material/Search";
@@ -38,6 +39,7 @@ import "./listeoeuvres.css";
 
 const ListeOeuvres = () => {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(3);
   const [openAlert, setOpenAlert] = useState(false);
@@ -69,8 +71,10 @@ const ListeOeuvres = () => {
       );
       setData(response.data.data); // Assuming your response object has a "data" property containing the array
       console.log(data);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+      setLoading(false);
     }
   };
 
@@ -309,80 +313,66 @@ const ListeOeuvres = () => {
       </div>
 
       <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow className="headrowoeuvre">
-              <TableCell className="headrowoeuvre headrowtext">N°</TableCell>
-              <TableCell className="headrowoeuvre headrowtext">Titre</TableCell>
-              <TableCell className="headrowoeuvre headrowtext">
-                Compositeurs
-              </TableCell>
-              <TableCell className="headrowoeuvre headrowtext">
-                Arrangeurs
-              </TableCell>
-              <TableCell className="headrowoeuvre headrowtext">
-                Pupitre
-              </TableCell>
-              <TableCell className="headrowoeuvre headrowtext">
-                Année de la composition
-              </TableCell>
-              <TableCell className="headrowoeuvre headrowtext">Genre</TableCell>
-              <TableCell className="headrowoeuvre headrowtext">
-                Paroles
-              </TableCell>
-              <TableCell className="headrowoeuvre headrowtext">
-                Partition
-              </TableCell>
-              <TableCell className="headrowoeuvre headrowtext">
-                Présence Choeur
-              </TableCell>
-              <TableCell className="headrowoeuvre headrowtext">
-                Actions
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => (
-                <TableRow
-                  key={row.id}
-                  style={{ backgroundColor: getRowColor(index) }}
-                  className="taboeuvre"
-                >
-                  <TableCell className="taboeuvre id">
-                    {index + 1 + page * rowsPerPage}
-                  </TableCell>
-                  <TableCell className="taboeuvre titre">{row.titre}</TableCell>
-                  <TableCell>
-                    <ul>
-                      {row.compositeurs.map((compositeur, index) =>
-                        compositeur
-                          .split(",")
-                          .map((part, partIndex) => (
-                            <li key={`${index}-${partIndex}`}>{part.trim()}</li>
-                          ))
-                      )}
-                    </ul>
-                  </TableCell>
-
-                  <TableCell>
-                    <ul>
-                      {row.arrangeurs.map((arrangeur, index) =>
-                        arrangeur
-                          .split(",")
-                          .map((part, partIndex) => (
-                            <li key={`${index}-${partIndex}`}>{part.trim()}</li>
-                          ))
-                      )}
-                    </ul>
-                  </TableCell>
-
-                  {
+        {loading ? ( // Conditionally render loader while loading is true
+          <div className="loader-container">
+            <CircularProgress />
+          </div>
+        ) : (
+          <Table>
+            <TableHead>
+              <TableRow className="headrowoeuvre">
+                <TableCell className="headrowoeuvre headrowtext">N°</TableCell>
+                <TableCell className="headrowoeuvre headrowtext">
+                  Titre
+                </TableCell>
+                <TableCell className="headrowoeuvre headrowtext">
+                  Compositeurs
+                </TableCell>
+                <TableCell className="headrowoeuvre headrowtext">
+                  Arrangeurs
+                </TableCell>
+                <TableCell className="headrowoeuvre headrowtext">
+                  Pupitre
+                </TableCell>
+                <TableCell className="headrowoeuvre headrowtext">
+                  Année de la composition
+                </TableCell>
+                <TableCell className="headrowoeuvre headrowtext">
+                  Genre
+                </TableCell>
+                <TableCell className="headrowoeuvre headrowtext">
+                  Paroles
+                </TableCell>
+                <TableCell className="headrowoeuvre headrowtext">
+                  Partition
+                </TableCell>
+                <TableCell className="headrowoeuvre headrowtext">
+                  Présence Choeur
+                </TableCell>
+                <TableCell className="headrowoeuvre headrowtext">
+                  Actions
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => (
+                  <TableRow
+                    key={row.id}
+                    style={{ backgroundColor: getRowColor(index) }}
+                    className="taboeuvre"
+                  >
+                    <TableCell className="taboeuvre id">
+                      {index + 1 + page * rowsPerPage}
+                    </TableCell>
+                    <TableCell className="taboeuvre titre">
+                      {row.titre}
+                    </TableCell>
                     <TableCell>
                       <ul>
-                        {row.pupitre.map((unpupitre, index) =>
-                          unpupitre
+                        {row.compositeurs.map((compositeur, index) =>
+                          compositeur
                             .split(",")
                             .map((part, partIndex) => (
                               <li key={`${index}-${partIndex}`}>
@@ -392,52 +382,82 @@ const ListeOeuvres = () => {
                         )}
                       </ul>
                     </TableCell>
-                  }
 
-                  <TableCell>{row.anneeComposition}</TableCell>
-                  <TableCell>{row.genre}</TableCell>
-                  <TableCell
-                    style={{
-                      maxWidth: "170px",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {row.paroles}
-                  </TableCell>
-                  <TableCell>{row.partition}</TableCell>
-                  <TableCell>{row.presenceChoeur ? "✔️" : "❌"}</TableCell>
-                  <TableCell className="actions" align="center">
-                    <div style={{ display: "flex", gap: "8px" }}>
-                      <Tooltip title="Supprimer">
-                        <DeleteIcon
-                          className="actionicon"
-                          color="error"
-                          onClick={() => handleDelete(row._id)}
-                        />
-                      </Tooltip>
-                      <Tooltip title="Modifier">
-                        <EditIcon
-                          className="actionicon"
-                          color="primary"
-                          onClick={() => handleUpdate(row._id)}
-                        />
-                      </Tooltip>
+                    <TableCell>
+                      <ul>
+                        {row.arrangeurs.map((arrangeur, index) =>
+                          arrangeur
+                            .split(",")
+                            .map((part, partIndex) => (
+                              <li key={`${index}-${partIndex}`}>
+                                {part.trim()}
+                              </li>
+                            ))
+                        )}
+                      </ul>
+                    </TableCell>
 
-                      <Tooltip title="Consulter">
-                        <VisibilityIcon
-                          className="actionicon"
-                          color="action"
-                          onClick={() => handleConsult(row)}
-                        />
-                      </Tooltip>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
+                    {
+                      <TableCell>
+                        <ul>
+                          {row.pupitre.map((unpupitre, index) =>
+                            unpupitre
+                              .split(",")
+                              .map((part, partIndex) => (
+                                <li key={`${index}-${partIndex}`}>
+                                  {part.trim()}
+                                </li>
+                              ))
+                          )}
+                        </ul>
+                      </TableCell>
+                    }
+
+                    <TableCell>{row.anneeComposition}</TableCell>
+                    <TableCell>{row.genre}</TableCell>
+                    <TableCell
+                      style={{
+                        maxWidth: "170px",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {row.paroles}
+                    </TableCell>
+                    <TableCell>{row.partition}</TableCell>
+                    <TableCell>{row.presenceChoeur ? "✔️" : "❌"}</TableCell>
+                    <TableCell className="actions" align="center">
+                      <div style={{ display: "flex", gap: "8px" }}>
+                        <Tooltip title="Supprimer">
+                          <DeleteIcon
+                            className="actionicon"
+                            color="error"
+                            onClick={() => handleDelete(row._id)}
+                          />
+                        </Tooltip>
+                        <Tooltip title="Modifier">
+                          <EditIcon
+                            className="actionicon"
+                            color="primary"
+                            onClick={() => handleUpdate(row._id)}
+                          />
+                        </Tooltip>
+
+                        <Tooltip title="Consulter">
+                          <VisibilityIcon
+                            className="actionicon"
+                            color="action"
+                            onClick={() => handleConsult(row)}
+                          />
+                        </Tooltip>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        )}
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}

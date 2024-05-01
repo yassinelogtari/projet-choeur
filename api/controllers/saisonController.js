@@ -4,11 +4,12 @@ const Auditions = require("../models/auditionModel");
 const Saison = require("../models/saisonModel");
 
 const Membre = require("../models/membreModel");
-const Member = require('../models/membreModel'); 
+const Member = require("../models/membreModel");
 const Season = require("../models/saisonModel");
 const { userSocketMap } = require("../utils/socket");
-const {sendNotificationMiddleware} = require("../middlewares/sendNotificationMiddleware")
-
+const {
+  sendNotificationMiddleware,
+} = require("../middlewares/sendNotificationMiddleware");
 
 const archiveSeason = async (req, res) => {
   try {
@@ -300,7 +301,7 @@ const quitterChoeur = async (req, res) => {
         .json({ error: "Le membre ne fait pas partie de la saison courante" });
     }
 
-    membre.statut = "Inactif";
+    membre.niveauExperience = "Inactif";
     const updatedMembre = await membre.save();
 
     if (updatedMembre) {
@@ -381,7 +382,9 @@ const consulterHistoriqueStatutMembre = async (req, res) => {
     const membre = await Membre.findById(memberId);
 
     if (!membre) {
-      return res.status(404).json({ success: false, error: "Member not found" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Member not found" });
     }
 
     const dateIntegrationMember = new Date(membre.createdAt);
@@ -393,39 +396,45 @@ const consulterHistoriqueStatutMembre = async (req, res) => {
       year <= currentSeason.dateDebut.getFullYear();
       year++
     ) {
-      let statut = "Inactif";
+      let niveauExperience = "Inactif";
       const yearsSinceIntegration = year - dateIntegrationMember.getFullYear();
 
       if (yearsSinceIntegration === 0) {
-        statut = "Choriste Junior";
+        niveauExperience = "Choriste Junior";
       } else if (yearsSinceIntegration === 1) {
-        statut = "Choriste";
+        niveauExperience = "Choriste";
       } else if (yearsSinceIntegration >= 2) {
-        statut = "Senior";
+        niveauExperience = "Senior";
       }
 
-      if (dateIntegrationMember.getFullYear() === 2018 && yearsSinceIntegration >= 0) {
-        statut = "Vétéran";
+      if (
+        dateIntegrationMember.getFullYear() === 2018 &&
+        yearsSinceIntegration >= 0
+      ) {
+        niveauExperience = "Vétéran";
       }
 
       historicalStatus.push({
         saison: year,
-        statut: statut,
+        niveauExperience: niveauExperience,
       });
     }
 
-    const oldStatut = membre.statut;
-    membre.statut = historicalStatus[historicalStatus.length - 1].statut;
+    const oldStatut = membre.niveauExperience;
+    membre.niveauExperience =
+      historicalStatus[historicalStatus.length - 1].niveauExperience;
     membre.historiqueStatut = historicalStatus;
 
     await membre.save();
 
-    if (oldStatut !== membre.statut) {
-      console.log(`Status changed from ${oldStatut} to ${membre.statut} for member ${membre.prenom} ${membre.nom}`);
+    if (oldStatut !== membre.niveauExperience) {
+      console.log(
+        `Status changed from ${oldStatut} to ${membre.niveauExperience} for member ${membre.prenom} ${membre.nom}`
+      );
 
       req.notificationData = {
         userId: membre._id,
-        notificationMessage: `Votre statut a été changé en ${membre.statut}.`,
+        notificationMessage: `Votre statut a été changé en ${membre.niveauExperience}.`,
       };
       await sendNotification(req);
       const chefsPupitre = await Membre.find({
@@ -433,26 +442,40 @@ const consulterHistoriqueStatutMembre = async (req, res) => {
         pupitre: membre.pupitre,
       });
       chefsPupitre.forEach((chefPupitre) => {
-        console.log(`Checking notification for chef de pupitre: ${chefPupitre.prenom} ${chefPupitre.nom}`);
+        console.log(
+          `Checking notification for chef de pupitre: ${chefPupitre.prenom} ${chefPupitre.nom}`
+        );
         const chefPupitreSocketId = userSocketMap[chefPupitre._id];
         if (chefPupitreSocketId) {
-          console.log(`Sending notification to chef de pupitre with Socket ID: ${chefPupitreSocketId}`);
+          console.log(
+            `Sending notification to chef de pupitre with Socket ID: ${chefPupitreSocketId}`
+          );
           req.notificationData = {
             userId: chefPupitre._id,
-            notificationMessage: `${membre.prenom} ${membre.nom} a changé son statut à ${membre.statut}.`,
+            notificationMessage: `${membre.prenom} ${membre.nom} a changé son statut à ${membre.niveauExperience}.`,
           };
-          sendNotificationMiddleware(req, res, () => {
-            console.log(`Notification successfully sent to ${chefPupitre.prenom} ${chefPupitre.nom} about status change.`);
-          }, (err) => {
-            if (err) {
-              console.error(`Failed to send notification to ${chefPupitre.prenom} ${chefPupitre.nom}: ${err.message}`);
+          sendNotificationMiddleware(
+            req,
+            res,
+            () => {
+              console.log(
+                `Notification successfully sent to ${chefPupitre.prenom} ${chefPupitre.nom} about status change.`
+              );
+            },
+            (err) => {
+              if (err) {
+                console.error(
+                  `Failed to send notification to ${chefPupitre.prenom} ${chefPupitre.nom}: ${err.message}`
+                );
+              }
             }
-          });
+          );
         } else {
-          console.log(`No socket ID found for chef de pupitre: ${chefPupitre.prenom} ${chefPupitre.nom}`);
+          console.log(
+            `No socket ID found for chef de pupitre: ${chefPupitre.prenom} ${chefPupitre.nom}`
+          );
         }
       });
-      
     }
 
     res.status(200).json({
@@ -471,18 +494,88 @@ const consulterHistoriqueStatutMembre = async (req, res) => {
 
 async function sendNotification(req) {
   try {
-    
-    console.log(`Notification successfully sent to user ID ${req.notificationData.userId} about status change: ${req.notificationData.notificationMessage}`);
+    console.log(
+      `Notification successfully sent to user ID ${req.notificationData.userId} about status change: ${req.notificationData.notificationMessage}`
+    );
   } catch (err) {
-    console.error(`Failed to send notification to user ID ${req.notificationData.userId}: ${err.message}`);
+    console.error(
+      `Failed to send notification to user ID ${req.notificationData.userId}: ${err.message}`
+    );
   }
 }
 
+const consulterHistoriqueStatut2 = async (req, res) => {
+  try {
+    const membreId = req.params.id;
+    const membre = await Membre.findById(membreId);
 
+    if (!membre) {
+      return res
+        .status(404)
+        .json({ success: false, error: "Member not found" });
+    }
 
+    const dateIntegrationMember = new Date(membre.createdAt);
+    const currentSeason = await Season.findOne().sort({ dateDebut: -1 });
+    const historiqueStatut = [];
 
+    for (
+      let year = dateIntegrationMember.getFullYear();
+      year <= currentSeason.dateDebut.getFullYear();
+      year++
+    ) {
+      let niveauExperience = "Inactif";
+      const yearsSinceIntegration = year - dateIntegrationMember.getFullYear();
 
+      if (yearsSinceIntegration === 0) {
+        niveauExperience = "Choriste Junior";
+      } else if (yearsSinceIntegration === 1) {
+        niveauExperience = "Choriste";
+      } else if (yearsSinceIntegration >= 2) {
+        niveauExperience = "Senior";
+      }
 
+      if (
+        dateIntegrationMember.getFullYear() === 2018 &&
+        yearsSinceIntegration >= 0
+      ) {
+        niveauExperience = "Vétéran";
+      }
+
+      historiqueStatut.push({
+        saison: year,
+        status: niveauExperience,
+      });
+    }
+
+    const oldStatut = membre.niveauExperience;
+    membre.niveauExperience =
+      historiqueStatut[historiqueStatut.length - 1].status;
+    membre.historiqueStatut = historiqueStatut;
+
+    await membre.save();
+
+    if (oldStatut !== membre.niveauExperience) {
+      console.log(
+        `Statut changé de ${oldStatut} à ${membre.niveauExperience} pour le membre ${membre.prenom} ${membre.nom}`
+      );
+
+      // Vous pouvez inclure ici le code pour envoyer des notifications si nécessaire
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Historique du statut de : ${membre.nom} ${membre.prenom}`,
+      data: historiqueStatut,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      message: "Erreur lors de l'enregistrement de l'historique",
+    });
+  }
+};
 
 module.exports = {
   archiveSeason,
@@ -494,6 +587,7 @@ module.exports = {
   /*updateStatus*/
   designerChefsDePupitre,
   quitterChoeur,
-  updateSeuilForCurrentSeason,consulterHistoriqueStatutMembre
-
+  updateSeuilForCurrentSeason,
+  consulterHistoriqueStatutMembre,
+  consulterHistoriqueStatut2,
 };

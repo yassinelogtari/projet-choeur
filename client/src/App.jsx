@@ -34,12 +34,10 @@ const App = () => {
             path="/dashboard/choriste/presence/allRepetitions"
             element={<ChoristeDashboard load="allRepetitions" />}
           />
-
           <Route
             path="/dashboard/choriste/presence/allConcerts"
             element={<ChoristeDashboard load="allConcerts" />}
           />
-
           <Route
             path="/dashboard/choriste/home"
             element={<ChoristeDashboard load="home" />}
@@ -60,7 +58,6 @@ const App = () => {
             path="/dashboard/choriste/conge"
             element={<ChoristeDashboard load="conge Choriste" />}
           />
-
           <Route
             exact
             path="/dashboard/manager"
@@ -70,12 +67,10 @@ const App = () => {
             path="/dashboard/manager/home"
             element={<ManagerDashboard load="home" />}
           />
-
           <Route
             path="/dashboard/manager/désigniation-chefs-pupitres"
             element={<ManagerDashboard load="désigniation-chefs-pupitres" />}
           />
-
           <Route
             exact
             path="/dashboard/choriste"
@@ -90,7 +85,6 @@ const App = () => {
             path="/dashboard/chef-de-pupitre/presence-main-concert"
             element={<ChefPupitreDashboard load="presenceConcert" />}
           />
-
           <Route
             path="/dashboard/admin"
             element={<Navigate to="/dashboard/admin/home" />}
@@ -100,7 +94,6 @@ const App = () => {
             path="/dashboard/admin/home"
             element={<AdminDashboard load="home" />}
           />
-
           <Route
             path="/dashboard/admin/Audition/list"
             element={<AdminDashboard load="adminAudition" />}
@@ -126,13 +119,11 @@ const App = () => {
             path="/saison/archive/details-saisonArchivee/:idSA"
             element={<SaisonArchiveeDetails />}
           />
-
           <Route
             exact
             path="/saison/archive/details-saisonArchivee/table"
             element={<MembresTable />}
           />
-
           <Route
             path="/dashboard/admin/addAudition"
             element={<AdminDashboard load="auditionAddInfo" />}
@@ -145,7 +136,6 @@ const App = () => {
             path="/dashboard/admin/Candidature/listParpupitre"
             element={<AdminDashboard load="ListeCandidatesParPupitre" />}
           />
-
           <Route
             path="/dashboard/admin/updateAudition"
             element={<AdminDashboard load="updateAudition" />}
@@ -166,7 +156,6 @@ const App = () => {
             path="/dashboard/admin/statistiques"
             element={<AdminDashboard load="genererStatistique" />}
           />
-
           <Route
             exact
             path="/presence/cancert/:idC"
@@ -190,22 +179,18 @@ const App = () => {
             path="/candidats/:id/verify/:token"
             element={<FormCandidature />}
           />
-
           <Route exact path="/candidatsForm  " element={<FormCandidature />} />
-
           <Route
             exact
             path="/emailVerification"
             element={<EmailVerification />}
           />
-
           <Route exact path="/concert" element={<Concert />} />
           <Route
             exact
             path="/dashboard/admin/concert/addConcert"
             element={<AddConcert />}
           />
-
           <Route
             path="/dashboard/admin/repetition/liste-absence"
             element={<AdminDashboard load="absenceRep" />}
@@ -218,7 +203,6 @@ const App = () => {
             path="/dashboard/admin/Candidature/listV2"
             element={<AdminDashboard load="candidatesListV2" />}
           />
-
           <Route
             path="/dashboard/admin/AbsenceConcerts"
             element={<AdminDashboard load="AbsenceConcerts" />}
@@ -262,6 +246,26 @@ const App = () => {
             exact
             path="/dashboard/choriste/profile"
             element={<ChoristeDashboard load="Profil" />}
+          />
+          <Route
+            exact
+            path="/dashboard/choriste/updateprofil"
+            element={<ChoristeDashboard load="updateprofil" />}
+          />
+          <Route
+            exact
+            path="/dashboard/admin/exlurechoriste"
+            element={<AdminDashboard load="exlurechoriste" />}
+          />
+          <Route
+            exact
+            path="/dashboard/admin/modifiertauxelimination"
+            element={<AdminDashboard load="modifiertauxelimination" />}
+          />
+          <Route
+            exact
+            path="/dashboard/admin/eliminerdiscipline"
+            element={<AdminDashboard load="eliminerdiscipline" />}
           />
         </Routes>
       </>

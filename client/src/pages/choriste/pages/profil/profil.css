@@ -19,8 +19,6 @@
 .fullnameprofil{
     font-size: 27px;
         font-weight: bold;
-        margin-left: -25px;
-        margin-top: 70px;
 }
 .avatarprofil {
         width: 110px;
@@ -48,3 +46,8 @@ h5 {
     color: #666;
 }
 
+.title-button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

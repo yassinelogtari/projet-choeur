@@ -16,6 +16,7 @@ import HistoriqueActivite from "../../components/historiqueContent/HistoriqueAct
 import { genPreviewOperationsStyle } from "antd/es/image/style";
 import DisponibiliteConcert from "./pages/disponibilité/DisponibiliteConcert";
 import Profile from "../choriste/pages/profil/profil";
+import UpdateProfile from "./pages/profil/UpdateProfile";
 
 const ChoristeDashboard = (props) => {
   return (
@@ -43,6 +44,7 @@ const ChoristeDashboard = (props) => {
             {props.load === "conge Choriste" && <CongeChoristePage />}
             {props.load === "disponibilté concert" && <DisponibiliteConcert />}
             {props.load === "Profil" && <Profile />}
+            {props.load === "updateprofil" && <UpdateProfile />}
           </div>
           {/* Overlay */}
           <div className="layout-overlay layout-menu-toggle" />
