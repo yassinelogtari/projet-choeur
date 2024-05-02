@@ -8,7 +8,10 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Snackbar,
+  Alert,
 } from "@mui/material";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import axios from "axios";
 
 function EliminerDes() {
@@ -16,17 +19,15 @@ function EliminerDes() {
   const [raison, setRaison] = useState("");
   const [allUsers, setAllUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState("");
-  const [updatedUsersList, setUpdatedUsersList] = useState([]);
-  const [eliminatedMembers, setEliminatedMembers] = useState([]);
-  const [eliminatedIds, setEliminatedIds] = useState([]);
   const [openAlert, setOpenAlert] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState("success");
-  const [alertMessage, setAlertMessage] = useState("");
   const [message, setMessage] = useState("");
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
-
+  const handleAlertClose = () => {
+    setOpenAlert(false);
+  };
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
@@ -37,10 +38,22 @@ function EliminerDes() {
         `http://localhost:8000/api/profile/eliminateChoristepour-un-raison/${selectedUserId}`,
         { data: { reason: raison } }
       );
+
       console.log(response.data);
+      fetchUsers();
       handleCloseDialog();
+      setRaison("");
+      setSelectedUserId("");
+      setOpenAlert(true);
+      setAlertSeverity("success");
     } catch (error) {
       console.error(error);
+      setOpenAlert(true);
+      setAlertSeverity("error");
+      setMessage(
+        error?.response?.data?.message ||
+          "Une erreur s'est produite lors de l'élimination de ce choriste."
+      );
     }
   };
   const fetchUsers = async () => {
@@ -48,22 +61,29 @@ function EliminerDes() {
       const response = await axios.get(
         "http://localhost:8000/api/membre/getAllMembers"
       );
-      const allUsers = response.data.model;
+      const responce2 = await axios.get(
+        "http://localhost:8000/api/profile/listedeselimines"
+      );
 
-      console.log("All users from API:", allUsers);
-      //const filteredUsers = allUsers.filter((user) => user.role === "choriste");
+      if (response && responce2) {
+        console.log(response);
+        console.log(responce2);
+        const allUsers = response.data.model;
+        const eliminatedMembers = responce2.data.eliminatedMembers;
 
-      const filteredUsers = allUsers.filter((user) => {
-        const isEliminated = eliminatedIds.includes(user._id);
-        return user.role === "choriste" && !isEliminated;
-      });
+        const eliminatedIds = new Set(
+          eliminatedMembers.map((item) => item?.memberId?._id)
+        );
+        const choristeUsers = allUsers.filter(
+          (user) => user.role === "choriste"
+        );
 
-      console.log("Filtered users (choriste):", filteredUsers); // Log filtered users
-      const modifiedRes = filteredUsers.map((obj, index) => ({
-        id: index + 1,
-        ...obj,
-      }));
-      setAllUsers(modifiedRes);
+        const remainingUsers = choristeUsers.filter(
+          (item) => !eliminatedIds.has(item._id)
+        );
+
+        setAllUsers(remainingUsers);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -71,64 +91,30 @@ function EliminerDes() {
 
   useEffect(() => {
     fetchUsers();
-
-    fetchEliminatedMembers();
   }, []);
-  const fetchEliminatedMembers = async () => {
-    try {
-      const eliminatedResponse = await axios
-        .get("http://localhost:8000/api/profile/listedeselimines")
-        .then((res) => {
-          console.log("res", res.data);
 
-          const eliminatedList = res.data.eliminatedMembers;
-          const eliminatedIds = eliminatedList.map(
-            (eliminated) => eliminated.memberId?._id
-          );
-          setEliminatedIds(eliminatedIds);
-          //console.log(eliminatedIds);
-          console.log("eliminatedList", eliminatedList);
-          if (eliminatedList) {
-            setEliminatedMembers(eliminatedList);
-            console.log("eliminatedMembers", eliminatedMembers);
-          }
-        });
-    } catch (err) {
-      console.log(err);
-    }
+  useEffect(() => {
+    handleFiltering();
+  }, [allUsers]);
+
+  const handleFiltering = () => {
+    console.log(allUsers);
   };
-  {
-    /*
-    const fetchCandidates = async () => {
-      try {
-        const data = await axios
-          .get("http://localhost:8000/api/saison/getSaisonActuelle")
-          .then((res) => {
-            const modifiedRes = res.data.saison.candidats.map((obj, index) => {
-              const { _id, ...rest } = obj;
-              return { id: index + 1, ...rest };
-            });
-            console.log(modifiedRes);
-            setAllCandidates(modifiedRes);
-            console.log(res);
-          });
-      } catch (err) {
-        console.log(err);
-      }
-    };*/
-  }
-  return (
+
+  return allUsers ? (
     <div
       className={`position-absolute top-50 start-50 translate-middle eliminerdesdiv`}
     >
       <Paper className="paperEliminerdes">
         <div className="titreeliminerdis">
-          Eliminer un choriste pour une raison disciplinaire
+          <PersonRemoveIcon /> &nbsp; Eliminer un choriste pour une raison
+          disciplinaire
         </div>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <select
               className="form-select"
+              required
               aria-label="Sélectionner un utilisateur"
               value={selectedUserId}
               onChange={(e) => setSelectedUserId(e.target.value)}
@@ -145,13 +131,29 @@ function EliminerDes() {
           <Grid item xs={12}>
             <TextField
               fullWidth
+              required
               label="Raison"
               variant="outlined"
               value={raison}
               onChange={(e) => setRaison(e.target.value)}
+              multiline
+              maxRows={4}
+              sx={{
+                "& .MuiOutlinedInput-input": {
+                  padding: "20px",
+                  manHeight: "10px",
+                },
+                "& .MuiInputLabel-root": {
+                  fontSize: "1rem", // Optional: Adjust label font size
+                },
+              }}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid
+            item
+            xs={12}
+            style={{ paddingTop: "60px", marginLeft: "320px" }}
+          >
             <Button
               variant="contained"
               color="primary"
@@ -178,7 +180,21 @@ function EliminerDes() {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={6000}
+        onClose={handleAlertClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert severity={alertSeverity}>
+          {alertSeverity === "success"
+            ? "Ce choriste est bien éliminé!"
+            : message}
+        </Alert>
+      </Snackbar>
     </div>
+  ) : (
+    <div>loading</div>
   );
 }
 

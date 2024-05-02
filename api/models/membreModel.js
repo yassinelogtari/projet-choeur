@@ -100,6 +100,7 @@ const membreSchema = mongoose.Schema(
         status: String,
       },
     ],
+    isBanned: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

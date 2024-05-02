@@ -267,6 +267,26 @@ const App = () => {
             path="/dashboard/admin/eliminerdiscipline"
             element={<AdminDashboard load="eliminerdiscipline" />}
           />
+          <Route
+            exact
+            path="/dashboard/admin/profileadmin"
+            element={<AdminDashboard load="profileadmin" />}
+          />
+          <Route
+            exact
+            path="/dashboard/admin/updateprofileadmin"
+            element={<AdminDashboard load="updateprofileadmin" />}
+          />
+          <Route
+            exact
+            path="/dashboard/admin/elimineprofil"
+            element={<AdminDashboard load="elimineprofil" />}
+          />
+          <Route
+            exact
+            path="/dashboard/admin/nomineprofil"
+            element={<AdminDashboard load="nomineprofil" />}
+          />
         </Routes>
       </>
     </Router>

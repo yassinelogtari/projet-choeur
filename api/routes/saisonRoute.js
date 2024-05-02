@@ -68,7 +68,8 @@ router.post(
   "/member/historique_statut/:id",
   saisonController.consulterHistoriqueStatutMembre
 );
-
+router.put("/tauxOut", saisonController.updateTauxOut);
+router.get("/tauxOut", saisonController.getTauxOut);
 /**
  * @swagger
  * tags:

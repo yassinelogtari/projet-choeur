@@ -651,6 +651,35 @@ const consulterStatutMembre = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const banChoriste = async (req, res) => {
+  try {
+    const { memberId } = req.params;
+
+    // Vérifiez d'abord si le membre existe et est un choriste
+    const choriste = await Member.findById(memberId);
+
+    if (!choriste || choriste.role !== "choriste") {
+      return res
+        .status(404)
+        .json({ error: "Chorister not found or not a chorister" });
+    }
+
+    choriste.isBanned = true;
+
+    await choriste.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Choriste banni avec succès",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Error banning choriste",
+    });
+  }
+};
 
 module.exports = {
   fetchHistory,
@@ -666,4 +695,5 @@ module.exports = {
   consulterProfil,
   fetchAllAbsences,
   consulterStatutMembre,
+  banChoriste,
 };

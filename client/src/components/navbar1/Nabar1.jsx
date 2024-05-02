@@ -246,21 +246,37 @@ function Navbar1() {
                 <li>
                   <div className="dropdown-divider" />
                 </li>
-                <li>
-                  <Tooltip
-                    title="Consulter votre profil"
-                    placement="bottom-end"
-                  >
-                    <NavLink
-                      to="/dashboard/choriste/profile"
-                      className="dropdown-item"
+                {user?.role === "admin" ? (
+                  <li>
+                    <Tooltip
+                      title="Consulter votre profil"
+                      placement="bottom-end"
                     >
-                      <PermIdentityRoundedIcon className="bx bx-user me-2"></PermIdentityRoundedIcon>
-
-                      <span className="align-middle">Mon Profil</span>
-                    </NavLink>
-                  </Tooltip>
-                </li>
+                      <NavLink
+                        to="/dashboard/admin/profileadmin"
+                        className="dropdown-item"
+                      >
+                        <PermIdentityRoundedIcon className="bx bx-user me-2" />
+                        <span className="align-middle">Mon Profil</span>
+                      </NavLink>
+                    </Tooltip>
+                  </li>
+                ) : (
+                  <li>
+                    <Tooltip
+                      title="Consulter votre profil"
+                      placement="bottom-end"
+                    >
+                      <NavLink
+                        to="/dashboard/choriste/profile"
+                        className="dropdown-item"
+                      >
+                        <PermIdentityRoundedIcon className="bx bx-user me-2" />
+                        <span className="align-middle">Mon Profil</span>
+                      </NavLink>
+                    </Tooltip>
+                  </li>
+                )}
 
                 <li>
                   <div className="dropdown-divider" />

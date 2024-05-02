@@ -69,6 +69,7 @@ router.get(
 );
 router.get("/member/profile/:id", profileController.consulterProfil);
 router.get("/member/statut/:id", profileController.consulterStatutMembre);
+router.put("/banChoriste/:memberId", profileController.banChoriste);
 
 // router.get('/allabsences',profileController.fetchAllAbsences);
 

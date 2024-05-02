@@ -48,6 +48,7 @@ const ListeOeuvres = () => {
   const [selectedOeuvre, setSelectedOeuvre] = useState(null);
   const [updateId, setUpdateId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+
   const [editData, setEditData] = useState({
     titre: "",
     compositeurs: "",

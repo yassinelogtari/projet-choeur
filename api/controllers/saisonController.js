@@ -576,6 +576,41 @@ const consulterHistoriqueStatut2 = async (req, res) => {
     });
   }
 };
+const updateTauxOut = async (req, res) => {
+  try {
+    const saisonCourante = await Saison.findOne({ saisonCourante: true });
+
+    if (!saisonCourante) {
+      return res.status(404).json({ error: "Aucune saison courante trouvée" });
+    }
+
+    const { dureeOut } = req.body;
+    saisonCourante.dureeOut = dureeOut;
+
+    const updatedSaison = await saisonCourante.save();
+
+    return res
+      .status(200)
+      .json({ message: "TauxOut mis à jour", saison: updatedSaison });
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour du TauxOut:", error);
+    return res.status(500).json({ error: "Erreur interne du serveur" });
+  }
+};
+const getTauxOut = async (req, res) => {
+  try {
+    const saisonCourante = await Saison.findOne({ saisonCourante: true });
+
+    if (!saisonCourante) {
+      return res.status(404).json({ error: "Aucune saison courante trouvée" });
+    }
+
+    return res.status(200).json({ dureeOut: saisonCourante.dureeOut });
+  } catch (error) {
+    console.error("Erreur lors de la récupération du TauxOut:", error);
+    return res.status(500).json({ error: "Erreur interne du serveur" });
+  }
+};
 
 module.exports = {
   archiveSeason,
@@ -590,4 +625,6 @@ module.exports = {
   updateSeuilForCurrentSeason,
   consulterHistoriqueStatutMembre,
   consulterHistoriqueStatut2,
+  updateTauxOut,
+  getTauxOut,
 };

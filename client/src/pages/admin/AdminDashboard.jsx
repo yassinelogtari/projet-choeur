@@ -33,6 +33,10 @@ import ValidateConges from "./pages/validateConge/ValidateConges";
 import ModifierTauxElimination from "./pages/eliminerraisondis/modifiertauxelimination";
 import EliminerDes from "./pages/eliminerraisondis/eliminerdis";
 import ExclureChoristeElimine from "./pages/eliminerraisondis/exlurechoristeelimine";
+import UpdateProfileAdmin from "./pages/profiladmin/updateProdileAdmin";
+import ProfileAdmin from "./pages/profiladmin/profiladmin";
+import ElimineProfil from "./pages/profiladmin/elimineProfil";
+import NomineProfil from "./pages/profiladmin/nomineProfil";
 
 const AdminDashboard = (props) => {
   return (
@@ -85,6 +89,10 @@ const AdminDashboard = (props) => {
             <ModifierTauxElimination />
           )}
           {props.load === "eliminerdiscipline" && <EliminerDes />}
+          {props.load === "profileadmin" && <ProfileAdmin />}
+          {props.load === "updateprofileadmin" && <UpdateProfileAdmin />}
+          {props.load === "elimineprofil" && <ElimineProfil />}
+          {props.load === "nomineprofil" && <NomineProfil />}
 
           <div className="layout-overlay layout-menu-toggle" />
         </div>
