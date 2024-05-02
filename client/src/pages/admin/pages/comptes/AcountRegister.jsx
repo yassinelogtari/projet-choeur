@@ -88,7 +88,10 @@ const AccountRegister = () => {
       newErrors.role = false;
       newErrorsText.role = "";
     }
-    if (inputs.pupitre == "" && inputs.role == "chef du pupitre") {
+    if (
+      (inputs.pupitre == "" && inputs.role == "chef du pupitre") ||
+      (inputs.pupitre == "" && inputs.role == "choriste")
+    ) {
       newErrors.pupitre = true;
       newErrorsText.pupitre = "Ce champ est obligatoire";
     } else {
@@ -214,7 +217,7 @@ const AccountRegister = () => {
               //   helperText={formErrors.candidatsPerHour}
             />
           </div>
-          {inputs.role == "chef du pupitre" ? (
+          {inputs.role == "chef du pupitre" || inputs.role == "choriste" ? (
             <div
               style={{
                 width: "100%",
@@ -286,7 +289,7 @@ const AccountRegister = () => {
               }}
             >
               <Autocomplete
-                style={{ background: "white", width: "80%", marginLeft: "8%"  }}
+                style={{ background: "white", width: "80%", marginLeft: "8%" }}
                 options={roleArray}
                 getOptionLabel={(option) => option.title}
                 sx={{ width: 150 }}

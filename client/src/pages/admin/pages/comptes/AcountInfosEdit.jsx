@@ -132,7 +132,7 @@ const AcountInfosEdit = (props) => {
                   key !== "_id" &&
                   key !== "notifications" &&
                   key !== "historiqueStatut" &&
-                  key !== "__v"
+                  key !== "__v" &&  key !== "updatedAt"
               )
               .map(([key, value]) => (
                 <div
