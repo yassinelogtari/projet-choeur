@@ -5,9 +5,9 @@ const authMiddleware = require("../middlewares/auth");
 
 
 
-router.get("/concert",authMiddleware.loggedMiddleware,authMiddleware.isAdmin,StatisticsController.fetchStatisticsByConcert)
-router.get("/oeuvre",authMiddleware.loggedMiddleware,authMiddleware.isAdmin,StatisticsController.fetchStatisticsByOeuvre)
-router.get("/choriste",authMiddleware.loggedMiddleware,authMiddleware.isAdmin,StatisticsController.fetchStatisticsByChoriste)
+router.get("/concert",StatisticsController.fetchStatisticsByConcert)
+router.get("/oeuvre",StatisticsController.fetchStatisticsByOeuvre)
+router.get("/choriste",StatisticsController.fetchStatisticsByChoriste)
 
 
 /**

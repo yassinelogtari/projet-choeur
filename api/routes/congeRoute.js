@@ -3,14 +3,29 @@ const router = express.Router();
 const congeController = require("../controllers/congeController");
 const auth = require("../middlewares/auth");
 router.post(
-  "/",
+  "/" /*,auth.loggedMiddleware,auth.isChoriste*/,
   auth.loggedMiddleware,
   auth.isChoriste,
   congeController.insertConge
 );
 router.post(
   "/valider/:id",
-  /*auth.loggedMiddleware,auth.isAdmin*/ congeController.validerConge
+  /*auth.loggedMiddleware,
+  auth.isAdmin,*/
+  congeController.validerConge
+);
+router.get(
+  "/getConges",
+  /*auth.loggedMiddleware,
+  auth.isAdmin,*/
+  congeController.getAllConge
+);
+
+router.delete(
+  "/deleteConge/:id",
+  /*auth.loggedMiddleware,
+  auth.isAdmin,*/
+  congeController.deleteConge
 );
 
 /**

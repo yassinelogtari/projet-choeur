@@ -74,6 +74,17 @@ function SidebarChoriste({memberId }) {
           </a>
         </li>
       </NavLink>
+      <li className="menu-header small text-uppercase">
+        <span className="menu-header-text">Disponibilité</span>
+      </li>
+      <NavLink to="/dashboard/choriste/disponibilité">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings"> Disponibilité Concert </div>
+          </a>
+        </li>
+      </NavLink>
     </ul>
   );
 }

@@ -188,6 +188,37 @@ const getAllMembers = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+const getMembersByPupitre = async (req, res) => {
+  try {
+    const saisonCourante = await Saison.findOne({
+      saisonCourante: true,
+    }).populate("membres repetitions oeuvres concerts candidats auditions");
+
+    if (!saisonCourante) {
+      return res.status(404).json({ erreur: "Aucune saison courante trouvée" });
+    }
+    console.log("pupitre choisi : ", req.body.pupitre);
+    // Filtrer les membres de la saison courante en fonction de la tessiture vocale et du rôle de choriste
+    const PupitreMembers = saisonCourante.membres.filter((membre) => {
+      return membre.pupitre === req.body.pupitre && membre.role === "choriste";
+    });
+
+    if (PupitreMembers.length === 0) {
+      return res
+        .status(404)
+        .json({ erreur: "Aucun membre trouvé pour ce pupitre" });
+    }
+
+    return res.status(200).json({ membres: PupitreMembers });
+  } catch (error) {
+    console.error("Erreur lors de la récupération des choristes:", error);
+    return res
+      .status(500)
+      .json({ erreur: "Erreur lors de la récupération des choristes " });
+  }
+};
+
 const deleteMember = async (req, res) => {
   try {
     const membre = await Membre.findByIdAndDelete({ _id: req.params.id });
@@ -296,4 +327,5 @@ module.exports = {
   getAllMembers,
   deleteMember,
   updateMember,
+  getMembersByPupitre,
 };

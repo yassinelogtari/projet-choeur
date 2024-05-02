@@ -13,7 +13,7 @@ import "./assets/vendor/css/core.css";
 import "./assets/vendor/css/theme-default.css";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ChefPupitreDashboard from "./pages/chefPupitre/ChefPupitreDashboard";
-import ManagerDashboard from "./pages/ManagerDashboard";
+import ManagerDashboard from "./pages/managerChoeur/ManagerDashboard";
 import FormCandidature from "./pages/FormCandidature";
 import SaisonArchiveeDetails from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/SaisonArchiveeDetails";
 import MembresTable from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/tablesData/MembresTable";
@@ -22,7 +22,7 @@ import Concert from "./pages/concert/Concert";
 import AddConcert from "./components/concert/AddConcert";
 import EmailVerification from "./components/verify/EmailVerification";
 import ChoristeDashboard from "./pages/choriste/ChoristeDashboard";
-import CongeChoriste from "./components/conge/CongeChoriste";
+import AffichePlacement from "./components/placement/AffichePlacement";
 
 const App = () => {
   return (
@@ -52,17 +52,31 @@ const App = () => {
             path="/dashboard/choriste/demandeConge"
             element={<ChoristeDashboard load="demandeConge" />}
           />
-
+          <Route
+            path="/dashboard/choriste/disponibilité"
+            element={<ChoristeDashboard load="disponibilté concert" />}
+          />
           <Route
             path="/dashboard/choriste/conge"
             element={<ChoristeDashboard load="conge Choriste" />}
           />
+
 
           <Route
             exact
             path="/dashboard/manager"
             element={<ManagerDashboard />}
           />
+           <Route
+            path="/dashboard/manager/home"
+            element={<ManagerDashboard  load="home"/>}
+          />
+
+          <Route
+            path="/dashboard/manager/désigniation-chefs-pupitres"
+            element={<ManagerDashboard  load="désigniation-chefs-pupitres"/>}
+          />
+
           <Route
             exact
             path="/dashboard/choriste"
@@ -149,6 +163,10 @@ const App = () => {
             path="/dashboard/admin/Audition/genererPlanning"
             element={<AdminDashboard load="genererPlanning" />}
           />
+          <Route
+            path="/dashboard/admin/statistiques"
+            element={<AdminDashboard load="genererStatistique" />}
+          />
 
           <Route
             exact
@@ -193,6 +211,10 @@ const App = () => {
             path="/dashboard/admin/repetition/liste-absence"
             element={<AdminDashboard load="absenceRep" />}
           />
+                    <Route
+            path="/dashboard/admin/absences"
+            element={<AdminDashboard load="absences" />}
+          />
           <Route
             path="/dashboard/admin/Candidature/listV2"
             element={<AdminDashboard load="candidatesListV2" />}
@@ -202,13 +224,25 @@ const App = () => {
             path="/dashboard/admin/AbsenceConcerts"
             element={<AdminDashboard load="AbsenceConcerts" />}
           />
+           <Route
+            path="/dashboard/admin/conges"
+            element={<AdminDashboard load="conges" />}
+          />
           <Route
             path="/dashboard/admin/accounts/register"
             element={<AdminDashboard load="AcountRegister" />}
           />
           <Route
+            path="/dashboard/admin/placement"
+            element={<AdminDashboard load="placement" />}
+          />
+          <Route
             path="/dashboard/admin/accounts/list"
             element={<AdminDashboard load="AcountList" />}
+          />
+           <Route
+            path="/dashboard/admin/placement/affiche"
+            element={<AdminDashboard load="placement affiche" />}
           />
            <Route
             exact
@@ -225,6 +259,7 @@ const App = () => {
             path="/dashboard/admin/concerts/disponible-members/:idC/"
             element={<AdminDashboard load="ConcertDisponibleMembers" />}
           />
+          
         </Routes>
       </>
     </Router>

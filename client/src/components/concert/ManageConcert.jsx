@@ -20,6 +20,7 @@ const ManageConcert = () => {
           "http://localhost:8000/api/concerts/get-concerts"
         );
         setConcerts(response.data);
+        console.log("donees", response.data);
       } catch (error) {
         console.error("Error fetching concerts:", error);
       }
