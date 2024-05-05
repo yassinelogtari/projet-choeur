@@ -13,6 +13,8 @@ import DemandeConge from "./pages/demandeConge/DemandeConge";
 
 import CongeChoristePage from "../admin/pages/conges/CongeChoristePage";
 import HistoriqueActivite from "../../components/historiqueContent/HistoriqueActivite";
+import { genPreviewOperationsStyle } from "antd/es/image/style";
+import DisponibiliteConcert from "./pages/disponibilité/DisponibiliteConcert";
 
 const ChoristeDashboard = (props) => {
   return (
@@ -38,6 +40,7 @@ const ChoristeDashboard = (props) => {
             {props.load === "demandeConge" && <DemandeConge />}
             {props.load === "historique" && <HistoriqueActivite />}
             {props.load === "conge Choriste" && <CongeChoristePage />}
+            {props.load ==="disponibilté concert" && <DisponibiliteConcert />}
           </div>
           {/* Overlay */}
           <div className="layout-overlay layout-menu-toggle" />

@@ -52,11 +52,15 @@ const App = () => {
             path="/dashboard/choriste/demandeConge"
             element={<ChoristeDashboard load="demandeConge" />}
           />
-
+          <Route
+            path="/dashboard/choriste/disponibilité"
+            element={<ChoristeDashboard load="disponibilté concert" />}
+          />
           <Route
             path="/dashboard/choriste/conge"
             element={<ChoristeDashboard load="conge Choriste" />}
           />
+
 
           <Route
             exact
@@ -159,6 +163,10 @@ const App = () => {
             path="/dashboard/admin/Audition/genererPlanning"
             element={<AdminDashboard load="genererPlanning" />}
           />
+          <Route
+            path="/dashboard/admin/statistiques"
+            element={<AdminDashboard load="genererStatistique" />}
+          />
 
           <Route
             exact
@@ -202,6 +210,10 @@ const App = () => {
           <Route
             path="/dashboard/admin/repetition/liste-absence"
             element={<AdminDashboard load="absenceRep" />}
+          />
+                    <Route
+            path="/dashboard/admin/absences"
+            element={<AdminDashboard load="absences" />}
           />
           <Route
             path="/dashboard/admin/Candidature/listV2"
@@ -247,6 +259,7 @@ const App = () => {
             path="/dashboard/admin/concerts/disponible-members/:idC/"
             element={<AdminDashboard load="ConcertDisponibleMembers" />}
           />
+          
         </Routes>
       </>
     </Router>

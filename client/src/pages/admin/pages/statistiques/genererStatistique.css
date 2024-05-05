@@ -1,0 +1,35 @@
+.Card-white-stat{
+    position: absolute;
+    margin-top: 170px;
+    margin-left: -1200px;
+    width: 1170px;
+
+}
+.stat-title{
+    position: absolute;
+    margin-top: 110px;
+    margin-left: -1150px;
+}
+.titre-card {
+    color: #566a7f;
+}
+
+.selectForm{
+    height: 45px;
+    margin-top: 10px;
+}
+.formSelect{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+
+
+
+
+
+  

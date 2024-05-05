@@ -63,16 +63,26 @@ const membreSchema = mongoose.Schema({
     type: String,
     enum: [
       "Inactif",
-      "Junior",
-      "Sénior",
-      "Vétéran",
+      // "Choriste Junior",
+      // "Senior",
+      // "Vétéran",
       "En congé",
-      "Choriste",
-      "éliminé",
+      // "Choriste",
+   
     ],
     required: function () {
       return ["choriste"].includes(this.role);
     },
+  },
+ niveauExperience: {
+    type: String,
+    enum: [
+      "Choriste Junior",
+      "Senior",
+      "Vétéran",
+      "Choriste",
+   
+    ]
   },
   pupitre: {
     type: String,
@@ -83,12 +93,13 @@ const membreSchema = mongoose.Schema({
   },
   historiqueStatut: [
     {
-      saison: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Saison",
-      },
+      saison: 
+        Number
+        // type: mongoose.Schema.Types.ObjectId,
+        // ref: "Saison",
+      ,
       status: String,
     },
   ],
-});
+}, { timestamps: true });
 module.exports = mongoose.model("Membre", membreSchema);

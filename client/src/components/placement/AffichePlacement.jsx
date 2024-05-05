@@ -15,13 +15,34 @@ function AffichePlacement() {
   const [editedRow, setEditedRow] = useState(null);
   const [editedColumn, setEditedColumn] = useState(null);
   const [editedMemberId, setEditedMemberId] = useState(null);
+  const [selectedMemberInfo, setSelectedMemberInfo] = useState(null);
+  const [memberTailles, setMemberTailles] = useState({});
+
   const [editedData, setEditedData] = useState({
     row: null,
     column: null,
     memberId: null,
   });
   const [editingMemberId, setEditingMemberId] = useState(null);
+  const [showGraph, setShowGraph] = useState(false);
+  const [memberPupitres, setMemberPupitres] = useState({});
 
+  const fetchMemberPupitre = async (memberId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/membre/getMembreById/${memberId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data.model.pupitre;
+    } catch (error) {
+      console.error("Error fetching member pupitre:", error);
+      return "Unknown";
+    }
+  };
   useEffect(() => {
     // Initialize editedRow, editedColumn, and editedMemberId
     if (selectedPlacement && selectedPlacement.place.length > 0) {
@@ -53,6 +74,7 @@ function AffichePlacement() {
             },
           }
         );
+
         setPlacements(response.data.placements);
         setLoading(false);
       } catch (error) {
@@ -116,6 +138,25 @@ function AffichePlacement() {
       return "Unknown";
     }
   };
+  const handleMemberClick = async (memberId) => {
+    try {
+      // Fetch member information from the server using memberId
+      const response = await axios.get(
+        `http://localhost:8000/api/membre/getMembreById/${memberId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // Update the selected member information
+      setSelectedMemberInfo(response.data.model);
+      console.log("Selected member information:", response.data.model);
+    } catch (error) {
+      console.error("Error fetching member information:", error);
+    }
+  };
 
   useEffect(() => {
     const updateMemberEmails = async () => {
@@ -170,6 +211,42 @@ function AffichePlacement() {
       updateMemberFirstNames();
     }
   }, [placements, token]);
+
+  const fetchMemberTaille = async (memberId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/membre/getMembreById/${memberId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data.model.taille;
+    } catch (error) {
+      console.error("Error fetching member taille:", error);
+      return "Unknown";
+    }
+  };
+  useEffect(() => {
+    const fetchMemberTailles = async () => {
+      const tailles = {};
+      for (const placement of placements) {
+        for (const place of placement.place) {
+          if (place.membre) {
+            // Fetch and set member taille here
+            const taille = await fetchMemberTaille(place.membre);
+            tailles[place.membre] = taille;
+          }
+        }
+      }
+      setMemberTailles(tailles);
+    };
+
+    if (placements.length > 0) {
+      fetchMemberTailles();
+    }
+  }, [placements]);
 
   const handlePlacementSelect = (event) => {
     const selectedPlacementId = event.target.value;
@@ -322,6 +399,41 @@ function AffichePlacement() {
     return <div>No placements found</div>;
   }
 
+  const toggleGraphVisibility = async () => {
+    setShowGraph(!showGraph);
+
+    // If the "Show Graph" button is clicked, fetch member pupitres
+    if (!showGraph) {
+      try {
+        const pupitres = {};
+        // Loop through all placements to fetch member pupitres
+        for (const placement of placements) {
+          for (const place of placement.place) {
+            if (place.membre) {
+              const pupitre = await fetchMemberPupitre(place.membre);
+              pupitres[place.membre] = pupitre;
+            }
+          }
+        }
+        // Update the memberPupitres state with fetched pupitres
+        setMemberPupitres(pupitres);
+      } catch (error) {
+        console.error("Error fetching member pupitres:", error);
+      }
+    }
+  };
+  const maxSizes = {};
+
+  for (const placement of placements) {
+    for (const place of placement.place) {
+      if (place.membre) {
+        if (!maxSizes[place.column] || place.row > maxSizes[place.column]) {
+          maxSizes[place.column] = place.row;
+        }
+      }
+    }
+  }
+
   return (
     <div className="afficheContenu">
       <div>
@@ -408,10 +520,109 @@ function AffichePlacement() {
               ))}
             </tbody>
           </table>
+          <div className="graph-toggle-button">
+            <button onClick={toggleGraphVisibility}>
+              {showGraph ? "Hide Graph" : "Show Graph"}
+            </button>
+          </div>
+          {showGraph && (
+            <div>
+              <br />
+              <h3> Representation</h3>
+              <div className="graph-container">
+                {/* Rendering buttons for each pupitre in a vertical line */}
+                {["basse", "alto", "soprano", "ténor"].map((pupitre) => (
+                  <div key={pupitre} className="pupitre-column">
+                    <div className="pupitre-line"></div>
+                    <div className="membre-container">
+                      {/* Filter and sort members by pupitre and taille */}
+                      {selectedPlacement.place
+                        .filter(
+                          (place) => memberPupitres[place.membre] === pupitre
+                        )
+                        .sort(
+                          (a, b) =>
+                            memberTailles[a.membre] - memberTailles[b.membre]
+                        )
+                        .map((place, index) => {
+                          const memberName =
+                            memberNames[place.membre] || "Unknown";
+                          const pupitreColor =
+                            memberPupitres[place.membre] === pupitre
+                              ? (() => {
+                                  switch (pupitre) {
+                                    case "soprano":
+                                      return "#10439F";
+                                    case "alto":
+                                      return "#874CCC";
+                                    case "ténor":
+                                      return "#C65BCF";
+                                    case "basse":
+                                      return "#F27BBD";
+                                    default:
+                                      return "black";
+                                  }
+                                })()
+                              : "black";
+                          const memberTaille =
+                            memberTailles[place.membre] || "Unknown";
+                          console.log(
+                            `Taille of ${memberName}: ${memberTaille}`
+                          );
+                          const marginRight = (index + 1) * 20; // Adjust the multiplier as needed
+
+                          if (memberName !== "Unknown") {
+                            return (
+                              <button
+                                key={place._id}
+                                className="membre-button"
+                                style={{
+                                  backgroundColor: pupitreColor,
+                                  marginRight: `${marginRight}px`,
+                                }}
+                                onClick={() => handleMemberClick(place.membre)}
+                              >
+                                {memberName}
+                              </button>
+                            );
+                          }
+                          return null;
+                        })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {showGraph && selectedMemberInfo && (
+            <div className="member-info-container">
+              <div className="member-info">
+                <h3 className="seemore">Member Information</h3>
+                <p>
+                  <span>Name:</span> {selectedMemberInfo.nom}
+                </p>
+                <p>
+                  <span>Prenom:</span> {selectedMemberInfo.prenom}
+                </p>
+                <p>
+                  <span>Email:</span> {selectedMemberInfo.email}
+                </p>
+                <p>
+                  <span>Role:</span> {selectedMemberInfo.role}
+                </p>
+                <p>
+                  <span>Pupitre:</span> {selectedMemberInfo.pupitre}
+                </p>
+                <p>
+                  <span>Taille:</span> {selectedMemberInfo.taille}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
   );
 }
-
 export default AffichePlacement;

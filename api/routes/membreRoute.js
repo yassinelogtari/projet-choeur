@@ -16,8 +16,8 @@ router.post(
 router.post("/login", membreController.login);
 router.get(
   "/getMembreById/:id",
-  middlewareDate.loggedMiddleware,
-  middlewareDate.isAdmin,
+ /* middlewareDate.loggedMiddleware,
+  middlewareDate.isAdmin,*/
   membreController.getMemberById
 );
 router.get(
