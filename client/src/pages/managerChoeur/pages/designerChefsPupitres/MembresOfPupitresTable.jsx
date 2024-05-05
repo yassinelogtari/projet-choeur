@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Divider, Table, Button } from 'antd';
+import { Divider, Table, Button, message } from 'antd';
+import axios from 'axios';
 
 const columns = [
   {
@@ -18,8 +19,8 @@ const columns = [
     render: (text) => <a>{text}</a>,
   },
   {
-    title: 'Statut',
-    dataIndex: 'statut',
+    title: 'Rôle',
+    dataIndex: 'role',
     render: (text) => <a>{text}</a>,
   },
   {
@@ -37,21 +38,49 @@ const columns = [
 const MembresOfPupitresTable = ({ choristes }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
-  const onSelectChange = (record, selected) => {
-    const newSelectedRowKeys = selected ? [...selectedRowKeys, record.key] : selectedRowKeys.filter(key => key !== record.key);
-    setSelectedRowKeys(newSelectedRowKeys);
+  const onSelectChange = (selectedRowKey) => {
+    if (selectedRowKeys.includes(selectedRowKey)) {
+      setSelectedRowKeys(selectedRowKeys.filter(key => key !== selectedRowKey));
+    } else if (selectedRowKeys.length < 2) {
+      setSelectedRowKeys([...selectedRowKeys, selectedRowKey]);
+    } else {
+      message.error("Vous ne pouvez sélectionner que deux choristes");
+    }
+  };
+
+  const handleDesignation = async () => {
+    const selectedMembers = choristes.filter(member => selectedRowKeys.includes(member._id));
+    if (selectedMembers.length === 2) {
+      try {
+        const response = await axios.post('http://localhost:8000/api/saison/designerChefsdePupitre', {
+          pupitre: selectedMembers[0].pupitre,
+          membre1Id: selectedMembers[0]._id,
+          membre2Id: selectedMembers[1]._id
+        });
+        if (response.status === 200) {
+          message.success("Chefs de pupitre désignés avec succès !");
+          // Réinitialiser la sélection après la désignation
+          setSelectedRowKeys([]);
+        } else {
+          message.error("Erreur lors de la désignation des chefs de pupitre.");
+        }
+      } catch (error) {
+        console.error("Erreur lors de la désignation des chefs de pupitre :", error);
+        message.error("Erreur lors de la désignation des chefs de pupitre. Veuillez réessayer.");
+      }
+    } else {
+      message.error("Veuillez sélectionner exactement deux choristes pour désigner les chefs de pupitre.");
+    }
   };
 
   const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    onSelect: (record, selected, selectedRows) => {
+      onSelectChange(record._id);
     },
-    getCheckboxProps: (record) => ({
-      disabled: record.name === 'Disabled User',
-      // Column configuration not to be checked
-      name: record.name,
-    }),
-    onSelect: (record, selected) => onSelectChange(record, selected),
+    onSelectAll: (selected, selectedRows, changeRows) => {
+      const selectedRowKeys = changeRows.map(row => row._id);
+      setSelectedRowKeys(selectedRowKeys);
+    },
     selectedRowKeys,
   };
 
@@ -61,9 +90,9 @@ const MembresOfPupitresTable = ({ choristes }) => {
       <Table
         rowSelection={rowSelection}
         columns={columns}
-        dataSource={choristes}
+        dataSource={choristes.map(item => ({ ...item, key: item._id }))}
       />
-      <Button type="primary" ghost>
+      <Button type="primary" ghost onClick={handleDesignation}>
         Désigner
       </Button>
     </div>

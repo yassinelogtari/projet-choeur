@@ -41,8 +41,8 @@ router.post(
 );
 router.post(
   "/designerChefsdePupitre",
-  middlewareSaison.loggedMiddleware,
-  middlewareSaison.isManager,
+  /* middlewareSaison.loggedMiddleware,
+  middlewareSaison.isManager,*/
   saisonController.designerChefsDePupitre
 );
 router.post(
