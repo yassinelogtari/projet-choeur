@@ -27,8 +27,11 @@ import { useState } from "react";
 import { jwtDecode } from "jwt-decode";
 
 const App = () => {
-  const storedTokenValue = localStorage.getItem("token");
-  const decodedToken = jwtDecode(storedTokenValue);
+  let decodedToken;
+  let storedTokenValue = localStorage.getItem("token");
+  if (storedTokenValue) {
+    decodedToken = jwtDecode(storedTokenValue);
+  }
 
   return (
     <Router>
