@@ -6,19 +6,19 @@ import axios from "axios";
 
 const CandidatesList = () => {
   const [allCandidates, setAllCandidates] = useState();
-  
+
   const PF = "http://localhost:5000/images/";
 
   const fetchCandidates = async () => {
     try {
       const data = await axios
-        .get( "http://localhost:8000/api/saison/getSaisonActuelle")
+        .get("http://localhost:8000/api/saison/getSaisonActuelle")
         .then((res) => {
-          const modifiedRes = res.data.saison.candidats.map((obj,index) => {
+          const modifiedRes = res.data.saison.candidats.map((obj, index) => {
             const { _id, ...rest } = obj;
             return { id: index + 1, ...rest };
           });
-          console.log(modifiedRes)
+          console.log(modifiedRes);
           setAllCandidates(modifiedRes);
           console.log(res);
         });
@@ -26,8 +26,6 @@ const CandidatesList = () => {
       console.log(err);
     }
   };
-
- 
 
   useEffect(() => {
     fetchCandidates();
@@ -173,7 +171,7 @@ const CandidatesList = () => {
         <div style={{ marginBottom: "50px" }}>Liste des candidatures</div>
 
         <DataGrid
-          style={{background:"white"}}
+          style={{ background: "white" }}
           className="datagrid"
           rows={allCandidates}
           columns={userColumns.concat(actionColumn)}

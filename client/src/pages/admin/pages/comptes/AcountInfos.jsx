@@ -44,19 +44,33 @@ const AcountInfos = (props) => {
         </div>
         <div className="content-columns">
           {Object.entries(candidateinfos)
-            .filter(([key]) => key !== "_id" && key !== "notifications" && key !=="historiqueStatut" && key !== "__v")
+            .filter(
+              ([key]) =>
+                key !== "_id" &&
+                key !== "notifications" &&
+                key !== "historiqueStatut" &&
+                key !== "__v" &&
+                key !== "isBanned" &&
+                key !== "updatedAt"
+            )
             .map(([key, value]) => (
-              <div key={key} className="content-item" style={{marginTop:"2%"}}>
+              <div
+                key={key}
+                className="content-item"
+                style={{ marginTop: "2%" }}
+              >
                 <span style={{ color: "#696CFF" }}>{key}: </span>
-                
+
                 {typeof value === "boolean" ? (
                   value ? (
-                    <CheckIcon style={{ color: "green" }} />
+                    <CheckIcon style={{ color: "green",marginTop:"6px",marginLeft:"6px" }} />
                   ) : (
                     <CloseIcon style={{ color: "red" }} />
                   )
                 ) : (
-                  <span style={{ color: "black", marginLeft: "2%",width:"20%" }}>
+                  <span
+                    style={{ color: "black", marginLeft: "2%" }}
+                  >
                     {value}
                   </span>
                 )}
