@@ -70,6 +70,8 @@ router.get(
 router.get("/member/profile/:id", profileController.consulterProfil);
 router.get("/member/statut/:id", profileController.consulterStatutMembre);
 router.put("/banChoriste/:memberId", profileController.banChoriste);
+router.put("/unbanChoriste/:memberId", profileController.unbanChoriste);
+router.get("/isBanned/:memberId", profileController.isBanned);
 
 // router.get('/allabsences',profileController.fetchAllAbsences);
 

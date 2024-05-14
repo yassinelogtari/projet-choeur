@@ -680,7 +680,53 @@ const banChoriste = async (req, res) => {
     });
   }
 };
+const unbanChoriste = async (req, res) => {
+  try {
+    const { memberId } = req.params;
 
+    // Vérifiez d'abord si le membre existe et est un choriste
+    const choriste = await Member.findById(memberId);
+
+    if (!choriste || choriste.role !== "choriste") {
+      return res
+        .status(404)
+        .json({ error: "Chorister not found or not a chorister" });
+    }
+
+    choriste.isBanned = false;
+
+    await choriste.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Choriste débanni avec succès",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Error banning choriste",
+    });
+  }
+};
+const isBanned = async (req, res) => {
+  try {
+    const { memberId } = req.params;
+
+    const choriste = await Member.findById(memberId);
+
+    if (!choriste || choriste.role !== "choriste") {
+      return res
+        .status(404)
+        .json({ error: "Chorister not found or not a chorister" });
+    }
+    res.status(200).json({
+      isBanned: choriste.isBanned,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 module.exports = {
   fetchHistory,
   getUser,
@@ -696,4 +742,6 @@ module.exports = {
   fetchAllAbsences,
   consulterStatutMembre,
   banChoriste,
+  unbanChoriste,
+  isBanned,
 };
