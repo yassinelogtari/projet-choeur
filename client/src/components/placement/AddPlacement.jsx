@@ -61,7 +61,7 @@ const AddPlacement = () => {
 
   return (
     <>
-      <div className="contenu">
+      <div className="contenuPlacement">
         <h2>Placement Form</h2>
         <form onSubmit={handleSubmit} className="form">
           <label>

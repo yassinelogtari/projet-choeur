@@ -51,6 +51,10 @@ const AddConcert = () => {
     listeMembres.forEach((member, index) => {
       formData.append(`listeMembres[${index}][membre]`, member.membre);
       formData.append(`listeMembres[${index}][presence]`, member.presence);
+      formData.append(
+        `listeMembres[${index}][disponibility][isAvailable]`,
+        true
+      );
     });
     try {
       const response = await axios.post(
