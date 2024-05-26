@@ -36,8 +36,20 @@ const CongeChoriste = () => {
 
     // Check if authToken is available
     if (!storedToken) {
-      console.log("authToken", storedToken);
       setError("Please sign in first");
+      return;
+    }
+
+    // Get today's date
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset hours, minutes, seconds, milliseconds
+
+    // Parse start date
+    const startDateObj = new Date(startDate);
+
+    // Check if start date is in the past
+    if (startDateObj.getTime() < today.getTime()) {
+      setError("Start date cannot be in the past");
       return;
     }
 
@@ -53,13 +65,12 @@ const CongeChoriste = () => {
       .post("http://localhost:8000/api/conge/", formData)
       .then((response) => {
         setError("le congé a été ajouté avec succès ");
-
         console.log("Congé saved successfully:", response.data);
       })
       .catch((error) => {
         // Handle error
-        console.log("error", storedToken);
         setError("le conge deja existe ");
+        console.log("error", storedToken);
       });
   };
 

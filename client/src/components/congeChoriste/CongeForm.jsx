@@ -1,31 +1,31 @@
-import React, { useState,useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 const CongeForm = () => {
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [reason, setReason] = useState('');
-  const [error, setError] = useState('');
-  const [raison, setRaison] = useState('');
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [reason, setReason] = useState("");
+  const [error, setError] = useState("");
+  const [raison, setRaison] = useState("");
   const [memberInfo, setMemberInfo] = useState({});
   const [storedToken, setStoredToken] = useState();
-  const [successMessage, setSuccessMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     const storedTokenValue = localStorage.getItem("token");
     if (storedTokenValue) {
       setStoredToken(storedTokenValue);
-      console.log("stored token ",storedTokenValue)
+      console.log("stored token ", storedTokenValue);
     }
   }, []);
 
   const getAuthenticatedUserId = () => {
     if (storedToken) {
       const decodedToken = jwtDecode(storedToken);
-      console.log("member id", decodedToken.membreId )
+      console.log("member id", decodedToken.membreId);
 
       return decodedToken.membreId;
     } else {
@@ -41,32 +41,30 @@ const CongeForm = () => {
       }
       const response = await axios.post(`http://localhost:8000/api/conge`, {
         headers: {
-          Authorization: `Bearer ${storedToken}`
-        }
+          Authorization: `Bearer ${storedToken}`,
+        },
       });
       const data = response.data;
       console.log("Données récupérées depuis l'API :", data); // Ajout du console.log()
       setMemberInfo(data.member_info);
-    
     } catch (error) {
       setError(error.message);
     }
   };
 
-
   const handleStartDateChange = (event) => {
     setStartDate(event.target.value);
-    setError('');
+    setError("");
   };
 
   const handleEndDateChange = (event) => {
     setEndDate(event.target.value);
-    setError('');
+    setError("");
   };
 
   const handleReasonChange = (event) => {
     setReason(event.target.value);
-    setError('');
+    setError("");
   };
 
   const handleSubmit = async (event) => {
@@ -76,21 +74,28 @@ const CongeForm = () => {
     const startDateObj = new Date(startDate);
     const endDateObj = new Date(endDate);
 
-    if (startDate === '' || endDate === '' || reason === '') {
-      setError('Veuillez remplir tous les champs.');
-    } else if (startDateObj <= today) {
+    // Set hours, minutes, seconds, and milliseconds to 0 for accurate comparison
+    today.setHours(0, 0, 0, 0);
+    startDateObj.setHours(0, 0, 0, 0);
+
+    console.log("Today:", today);
+    console.log("Start Date:", startDateObj);
+
+    if (startDate === "" || endDate === "" || reason === "") {
+      setError("Veuillez remplir tous les champs.");
+    } else if (startDateObj.getTime() <= today.getTime()) {
       setError("La date de début doit être après aujourd'hui.");
-    } else if (endDateObj <= startDateObj) {
-      setError('La date de fin doit être après la date de début.');
+    } else if (endDateObj.getTime() <= startDateObj.getTime()) {
+      setError("La date de fin doit être après la date de début.");
     } else {
       try {
         const membreId = getAuthenticatedUserId();
         if (!membreId) {
-          throw new Error('ID du membre non trouvé dans le token.');
+          throw new Error("ID du membre non trouvé dans le token.");
         }
 
         const response = await axios.post(
-          'http://localhost:8000/api/conge',
+          "http://localhost:8000/api/conge",
           {
             dateDebut: startDate,
             dateFin: endDate,
@@ -103,26 +108,26 @@ const CongeForm = () => {
           }
         );
 
-        console.log('Réponse du serveur:', response.data);
+        console.log("Réponse du serveur:", response.data);
         setSuccessMessage(response.data.message); // Définir le message de succès
 
-        setStartDate('');
-        setEndDate('');
-        setReason('');
-        setError('');
-        
+        setStartDate("");
+        setEndDate("");
+        setReason("");
+        setError("");
       } catch (error) {
-        console.error("Erreur lors de l'envoi de la demande de congé:", error.response.data.error);
+        console.error(
+          "Erreur lors de l'envoi de la demande de congé:",
+          error.response.data.error
+        );
         setError(error.response.data.error);
       }
     }
   };
 
-
   return (
     <div className="conge-container">
-      
-       <style>
+      <style>
         {`
           .conge-container {
             border: 2px solid #ccc;
@@ -196,11 +201,15 @@ const CongeForm = () => {
       </style>
 
       <h2>Demande de congé</h2>
-     
+
       <form onSubmit={handleSubmit}>
         <div className="input-group">
           <label>Date de début :</label>
-          <input type="date" value={startDate} onChange={handleStartDateChange} />
+          <input
+            type="date"
+            value={startDate}
+            onChange={handleStartDateChange}
+          />
         </div>
         <div className="input-group">
           <label>Date de fin :</label>
@@ -215,11 +224,11 @@ const CongeForm = () => {
       {error && <p className="error-msg">{error}</p>}
       {successMessage && (
         <Alert severity="success">
-        <AlertTitle>Success</AlertTitle>
-        Votre demande de congé est envoyée avec succès. Veuillez attendre la validation ! 
-      </Alert>
+          <AlertTitle>Success</AlertTitle>
+          Votre demande de congé est envoyée avec succès. Veuillez attendre la
+          validation !
+        </Alert>
       )}
-      
     </div>
   );
 };
