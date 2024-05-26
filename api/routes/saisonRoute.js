@@ -33,16 +33,16 @@ router.get(
   middlewareSaison.isAdmin,*/
   saisonController.getSaisonsArchivees
 );
-router.post(
-  "/updatestatus",
-  middlewareSaison.loggedMiddleware,
-  middlewareSaison.isAdmin,
-  saisonController.updateStatus
-);
+// router.post(
+//   "/updatestatus",
+//   middlewareSaison.loggedMiddleware,
+//   middlewareSaison.isAdmin,
+//   saisonController.updateStatus
+// );
 router.post(
   "/designerChefsdePupitre",
-  middlewareSaison.loggedMiddleware,
-  middlewareSaison.isManager,
+  /* middlewareSaison.loggedMiddleware,
+  middlewareSaison.isManager,*/
   saisonController.designerChefsDePupitre
 );
 router.post(
@@ -64,7 +64,7 @@ router.patch(
   middlewareSaison.isAdmin,*/
   saisonController.updateSaison
 );
-
+router.post('/member/historique_statut/:id',saisonController.consulterHistoriqueStatutMembre);
 /**
  * @swagger
  * tags:

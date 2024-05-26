@@ -5,8 +5,10 @@ const authMiddleware = require("../middlewares/auth");
 
 
 
-router.put("/add", authMiddleware.loggedMiddleware, authMiddleware.isChoriste, disponibilityToCancertController.addDisponibility);
+router.put("/add",/*authMiddleware.loggedMiddleware, authMiddleware.isChoriste*/ disponibilityToCancertController.addDisponibility);
 router.get("/disponibleMembers/:idC",authMiddleware.loggedMiddleware, authMiddleware.isAdmin,disponibilityToCancertController.FetchDisponibleMembers);
+
+
 
 /**
  * @swagger

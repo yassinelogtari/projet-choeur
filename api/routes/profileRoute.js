@@ -4,12 +4,22 @@ const authMiddleware = require("../middlewares/auth");
 
 const profileController = require("../controllers/profileController");
 const { fetchAbsences} = require('../controllers/profileController');
-router.get("/liste-des-nomines",authMiddleware.loggedMiddleware,authMiddleware.isAdmin,profileController.fetchNominatedMembers)
-router.get("/liste-des-elimines",authMiddleware.loggedMiddleware,authMiddleware.isAdmin,profileController.fetchEliminatedMembers)
+const { fetchAllAbsences} = require('../controllers/profileController');
+router.get("/allabsences", async (req, res) => {
+  try {
+    const result = await fetchAllAbsences();
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching all absences: ', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+// router.get("/liste-des-nomines",authMiddleware.loggedMiddleware,authMiddleware.isAdmin,profileController.fetchNominatedMembers)
+// router.get("/liste-des-elimines",authMiddleware.loggedMiddleware,authMiddleware.isAdmin,profileController.fetchEliminatedMembers)
 router.get("/history/:id",authMiddleware.loggedMiddleware,authMiddleware.isChoriste,  profileController.fetchHistory);
 router.get("/getUser/:id", profileController.getUser);
 router.put("/notification/:id", profileController.updateNotificationField);
-router.get('/absences/:id',authMiddleware.loggedMiddleware,authMiddleware.isAdmin, async (req, res) => {
+router.get('/absences/:id',/*authMiddleware.loggedMiddleware,authMiddleware.isAdmin,*/ async (req, res) => {
     const memberId = req.params.id;
   
     try {
@@ -22,6 +32,14 @@ router.get('/absences/:id',authMiddleware.loggedMiddleware,authMiddleware.isAdmi
   });
 router.get("/historique-status/:id",authMiddleware.loggedMiddleware,authMiddleware.isChoriste,profileController.fetchHistoriqueStatus)
 router.post('/eliminateChoristepour-un-raison/:memberId',authMiddleware.loggedMiddleware,authMiddleware.isAdmin,profileController.eliminateChoristeForReason);
+router.post('/nominateChoriste/:memberId',/*authMiddleware.loggedMiddleware,authMiddleware.isAdmin*/profileController.nominateMemberById);
+router.post('/eliminateChoriste/:memberId',/*authMiddleware.loggedMiddleware,authMiddleware.isAdmin*/profileController.eliminateMemberById);
+router.get("/listedesnomines",/*authMiddleware.loggedMiddleware,authMiddleware.isAdmin,*/profileController.listNominatedMembers)
+router.get("/listedeselimines",/*authMiddleware.loggedMiddleware,authMiddleware.isAdmin,*/profileController.listEliminatedMembers)
+router.get('/member/profile/:id',profileController.consulterProfil);
+router.get('/member/statut/:id', profileController.consulterStatutMembre);
+
+// router.get('/allabsences',profileController.fetchAllAbsences);
 
 /**
  * @swagger

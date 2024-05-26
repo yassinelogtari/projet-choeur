@@ -1,0 +1,84 @@
+.viewButtondash {
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: darkblue;
+    border: 1px dotted rgba(0, 0, 139, 0.596);
+    cursor: pointer;
+  }
+  
+  .deleteButtondash {
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: crimson;
+    border: 1px dotted rgba(220, 20, 60, 0.6);
+    cursor: pointer;
+  }
+  
+  .MuiInputBase-root.MuiInputBase-colorPrimary.MuiTablePagination-input.css-16c50h-MuiInputBase-root-MuiTablePagination-select {
+    margin-top: -14px;
+  }
+  
+  .css-78c6dr-MuiToolbar-root-MuiTablePagination-toolbar
+    .MuiTablePagination-actions {
+    margin-top: -14px;
+  }
+  
+  .css-pdct74-MuiTablePagination-selectLabel {
+    display: none !important;
+  }
+  .MuiSelect-select.MuiTablePagination-select.MuiSelect-standard.MuiInputBase-input.css-194a1fa-MuiSelect-select-MuiInputBase-input {
+    display: none !important;
+  }
+  
+  .MuiTablePagination-spacer.css-1psng7p-MuiTablePagination-spacer {
+    display: none !important;
+  }
+  .MuiInputBase-root.MuiInputBase-colorPrimary.MuiTablePagination-input.css-16c50h-MuiInputBase-root-MuiTablePagination-select
+  {
+      display: none !important;
+  }
+  .pupitre-select {
+    padding: 10px;
+    border: 1px solid #c4c4c4; 
+    border-radius: 4px; 
+    background-color: white;
+    font-size: 16px; 
+    color: #333;
+    outline: none; 
+    margin-bottom: 20px; 
+    cursor: pointer; 
+  }
+  
+  .pupitre-select:hover {
+    border-color: #a0a0a0; 
+  }
+  
+  .pupitre-select:focus {
+    border-color: #3f51b5; 
+  }
+ 
+.boxContainer {
+  height: 650px; 
+  width: '100%';
+  display: flex;
+  flex-direction: column;
+  gap: 20px; 
+  padding: 20px; 
+}
+
+.dataGridContainer {
+  flex-grow: 1; 
+  border: 1px solid #e0e0e0; 
+}
+
+.formControl {
+  min-width: 120px;
+}
+
+
+.selectPupitre {
+  background-color: #ffffff;
+  border-radius: 4px;
+  padding: 10px 15px;
+  box-shadow: 0px 2px 4px rgba(0,0,0,0.1);
+}
