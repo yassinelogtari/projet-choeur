@@ -22,11 +22,34 @@ function Navbar1() {
   const [storedToken, setStoredToken] = useState();
   const [user, setUser] = useState();
   const [candidates, setCandidates] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
   const [hideDropDownMenu, sethideDropDownMenu] = useState(
     "dropdown-menu dropdown-menu-end"
   );
   const navigate = useNavigate();
   const socket = io.connect("http://localhost:5000/");
+  const handleSearchInputChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/reset/search?q=${searchQuery}`
+        );
+
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching search results:", error);
+      }
+    };
+
+    if (searchQuery) {
+      fetchSearchResults();
+    }
+  }, [searchQuery]);
 
   useEffect(() => {
     if (socket && user) {
@@ -170,7 +193,18 @@ function Navbar1() {
                 className="form-control border-0 shadow-none"
                 placeholder="Search..."
                 aria-label="Search..."
+                value={searchQuery}
+                onChange={handleSearchInputChange}
               />
+              {searchResults.length > 0 && (
+                <div className="autocomplete-dropdown">
+                  {searchResults.map((result) => (
+                    <div key={result.id} className="autocomplete-item">
+                      {result.name}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
           {/* /Search */}
