@@ -25,11 +25,16 @@
     margin-bottom: 20px;
 }
 
-.Eliminer:hover, .Nominer:hover {
+.Eliminer:hover {
     color: white;
     background-color: crimson; /* Red for Eliminer on hover */
 }
 
 .Nominer:hover {
+    color: white;
     background-color: green; /* Green for Nominer on hover */
 }
+.Nominer:active {
+    background-color: lightgreen; /* Couleur de fond lors du clic sur le bouton Nominer */
+}
+

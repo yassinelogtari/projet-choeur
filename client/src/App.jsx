@@ -216,6 +216,14 @@ const App = () => {
             element={<AdminDashboard load="absences" />}
           />
           <Route
+            path="/dashboard/admin/nomination/list"
+            element={<AdminDashboard load="Nomination" />}
+          />
+                    <Route
+            path="/dashboard/admin/elimination/list"
+            element={<AdminDashboard load="Elimination" />}
+          />
+          <Route
             path="/dashboard/admin/Candidature/listV2"
             element={<AdminDashboard load="candidatesListV2" />}
           />
@@ -223,6 +231,11 @@ const App = () => {
           <Route
             path="/dashboard/admin/AbsenceConcerts"
             element={<AdminDashboard load="AbsenceConcerts" />}
+          />
+          
+          <Route
+            path="/dashboard/admin/repetition/ListePresenceRepetition"
+            element={<AdminDashboard load="ListePresenceRepetition" />}
           />
            <Route
             path="/dashboard/admin/conges"

@@ -176,7 +176,15 @@ function Sidebar() {
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
-            <div data-i18n="Account Settings">absences repetions</div>
+            <div data-i18n="Account Settings">absences repetitions</div>
+          </a>
+        </li>
+      </NavLink>
+      <NavLink to="/dashboard/admin/repetition/ListePresenceRepetition">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">precences repetitions</div>
           </a>
         </li>
       </NavLink>
@@ -206,7 +214,42 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-
+      {/* Absences */}
+      <li className="menu-header small text-uppercase">
+        <span className="menu-header-text">Absences</span>
+      </li>
+      <NavLink to="/dashboard/admin/absences">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Liste des absences</div>
+          </a>
+        </li>
+      </NavLink>
+            {/* Nomination */}
+            <li className="menu-header small text-uppercase">
+        <span className="menu-header-text">Nomination</span>
+      </li>
+      <NavLink to="/dashboard/admin/nomination/list">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Liste des nominés</div>
+          </a>
+        </li>
+      </NavLink>
+                  {/* Elimination*/}
+                  <li className="menu-header small text-uppercase">
+        <span className="menu-header-text">Elimination</span>
+      </li>
+      <NavLink to="/dashboard/admin/elimination/list">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Liste des éliminés</div>
+          </a>
+        </li>
+      </NavLink>
       {/* gestion des compte */}
       <li className="menu-header small text-uppercase">
         <span className="menu-header-text">Comptes</span>

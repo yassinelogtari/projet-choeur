@@ -22,9 +22,9 @@ router.get(
   repetitionController.getRepetitionById
 );
 router.get(
-  "/getAllRepetition",
+  "/getAllRepetition"/*,
   middlewareRepetition.loggedMiddleware,
-  middlewareRepetition.isAdmin,
+  middlewareRepetition.isAdmin*/,
   repetitionController.getAllRepetition
 );
 router.patch(
