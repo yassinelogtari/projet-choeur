@@ -64,7 +64,20 @@ const ManageConcert = () => {
       if (response.status === 200) {
         const updatedConcerts = concerts.map((concert) => {
           if (concert._id === id) {
-            return { ...concert, date: editedDate, lieu: editedLocation };
+            // Iterate over the listeMembres array to set the disponibility attribute for each member
+            const updatedListeMembres = concert.listeMembres.map((member) => {
+              return {
+                ...member,
+                disponibility: { isAvailable: true }, // Set the disponibility attribute
+              };
+            });
+
+            return {
+              ...concert,
+              date: editedDate,
+              lieu: editedLocation,
+              listeMembres: updatedListeMembres, // Update the listeMembres array with updated disponibility attribute
+            };
           }
           return concert;
         });
@@ -132,8 +145,9 @@ const ManageConcert = () => {
                 <ul>
                   {concert.listeMembres.map((member) => (
                     <li key={member._id}>
-                      Member: {member.membre.nom}, Presence:{" "}
-                      {member.presence ? "Present" : "Absent"}
+                      Member: {member && member.membre && member.membre.nom},
+                      Presence:{" "}
+                      {member && member.presence ? "Present" : "Absent"}
                     </li>
                   ))}
                 </ul>
