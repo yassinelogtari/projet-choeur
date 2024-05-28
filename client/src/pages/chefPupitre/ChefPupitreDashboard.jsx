@@ -3,6 +3,7 @@ import Navbar1 from "../../components/navbar1/Nabar1";
 import SidebarChefPupitre from "../../components/sidebarChefPupitre/SidebarChefPupitre";
 import PresenceMainConcert from "../chefPupitre/pages/presenceMain/PresenceMainConcert";
 import Home from "./pages/Home";
+import PresenceMainRepetition from "./pages/presenceMain/PresenceMainRepetition";
 
 const ChefPupitreDashboard = (props) => {
   return (
@@ -20,6 +21,7 @@ const ChefPupitreDashboard = (props) => {
             <Navbar1 />
             {props.load === "home" && <Home />}
             {props.load === "presenceConcert" && <PresenceMainConcert />}
+            {props.load === "presenceRepetition" && <PresenceMainRepetition/>}
            
           </div>
           <div className="layout-overlay layout-menu-toggle" />

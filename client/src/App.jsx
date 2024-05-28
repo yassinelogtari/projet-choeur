@@ -87,6 +87,10 @@ const App = () => {
             path="/dashboard/chef-de-pupitre/presence-main-concert"
             element={<ChefPupitreDashboard load="presenceConcert" />}
           />
+          <Route
+            path="/dashboard/chef-de-pupitre/presence-main-repetition"
+            element={<ChefPupitreDashboard load="presenceRepetition" />}
+          />
 
           <Route
             path="/dashboard/admin"

@@ -23,8 +23,6 @@ router.get(
 );
 router.get(
   "/getAllRepetition",
-  middlewareRepetition.loggedMiddleware,
-  middlewareRepetition.isAdmin,
   repetitionController.getAllRepetition
 );
 router.patch(
@@ -35,8 +33,6 @@ router.patch(
 );
 router.get(
   "/:repetitionId/presence",
-  middlewareRepetition.loggedMiddleware,
-  middlewareRepetition.isChefPupitre,
   repetitionController.listPresenceByPupitre
 );
 

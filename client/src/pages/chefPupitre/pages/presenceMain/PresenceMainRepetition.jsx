@@ -4,30 +4,30 @@ import axios from "axios";
 import "./presenceMainConcert.css";
 import DialogComponent from "../../../../components/dialog/Dialog";
 
-const PresenceMainConcert = () => {
-  const [concerts, setConcerts] = useState([]);
-  const [selectedConcertId, setSelectedConcertId] = useState("");
+const PresenceMainRepetition = () => {
+  const [repetitions, setRepetitions] = useState([]);
+  const [selectedRepetitionId, setSelectedRepetitionId] = useState("");
   const [selectedMemberId, setSelectedMemberId] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
 
   useEffect(() => {
-    const fetchConcerts = async () => {
+    const fetchRepetitions = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/concerts/get-concerts"
+          "http://localhost:8000/api/repetition/getAllRepetition"
         );
-        setConcerts(response.data);
-        console.log(response.data);
+        setRepetitions(response.data.model);
+        console.log(response.data.model[0]);
       } catch (error) {
-        console.error("Error fetching concerts:", error);
+        console.error("Error fetching repetitions:", error);
       }
     };
 
-    fetchConcerts();
+    fetchRepetitions();
   }, []);
 
-  const handleConcertChange = (event) => {
-    setSelectedConcertId(event.target.value);
+  const handleRepetitionChange = (event) => {
+    setSelectedRepetitionId(event.target.value);
     setSelectedMemberId("");
   };
 
@@ -37,10 +37,13 @@ const PresenceMainConcert = () => {
 
   const handlePresenceMarking = async () => {
     try {
-      await axios.put("http://localhost:8000/api/presence/manually/cancert", {
-        idCancert: selectedConcertId,
-        idMember: selectedMemberId,
-      });
+      await axios.put(
+        "http://localhost:8000/api/presence/manually/repetition",
+        {
+          idRepetition: selectedRepetitionId,
+          idMember: selectedMemberId,
+        }
+      );
       console.log("Presence marked successfully");
       setOpenDialog(true);
       setSelectedMemberId("");
@@ -56,19 +59,19 @@ const PresenceMainConcert = () => {
   return (
     <div>
       <div className="position-absolute top-50 start-50 translate concertPresenceManuallyForm">
-        <h3>Concerts Presence</h3>
+        <h3>Repetitions Presence</h3>
         <TextField
           select
-          label="Select Concert"
-          value={selectedConcertId}
-          onChange={handleConcertChange}
+          label="Select Repetition"
+          value={selectedRepetitionId}
+          onChange={handleRepetitionChange}
           variant="outlined"
           fullWidth
           className="concertFieldMain"
         >
-          {concerts.map((concert) => (
-            <MenuItem key={concert._id} value={concert._id}>
-              {concert.titre}
+          {repetitions.map((rep) => (
+            <MenuItem key={rep._id} value={rep._id}>
+              {rep.DateRep}
             </MenuItem>
           ))}
         </TextField>
@@ -79,23 +82,28 @@ const PresenceMainConcert = () => {
           onChange={handleMemberChange}
           variant="outlined"
           fullWidth
-          disabled={!selectedConcertId}
+          disabled={!selectedRepetitionId}
         >
-          {selectedConcertId &&
-            concerts
-              .find((concert) => concert._id === selectedConcertId)
-              ?.listeMembres.map((member) => (
-                <MenuItem key={member.membre._id} value={member.membre._id}>
-                  {member.membre.nom}
-                </MenuItem>
-              ))}
+          {selectedRepetitionId &&
+            Object.keys(
+              repetitions.find((rep) => rep._id === selectedRepetitionId)
+                ?.membres || []
+            ).map((sectionName) =>
+              repetitions
+                .find((rep) => rep._id === selectedRepetitionId)
+                ?.membres[sectionName].map((member) => (
+                  <MenuItem key={member._id} value={member._id}>
+                    {member.nom} {member.prenom}
+                  </MenuItem>
+                ))
+            )}
         </TextField>
         <button onClick={handlePresenceMarking}>Mark Presence</button>
         <div>
           <DialogComponent
             open={openDialog}
             handleClose={handleCloseDialog}
-            successMessage="Presence marked successfully !"
+            successMessage="Presence marked successfully!"
           />
         </div>
       </div>
@@ -103,4 +111,4 @@ const PresenceMainConcert = () => {
   );
 };
 
-export default PresenceMainConcert;
+export default PresenceMainRepetition;
