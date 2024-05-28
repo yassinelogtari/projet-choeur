@@ -307,11 +307,6 @@ const App = () => {
             path="/dashboard/chef-de-pupitre/home"
             element={<ChefPupitreDashboard load="home" />}
           />
-                    <Route
-            path="/dashboard/chef-de-pupitre/repetition/ListePresenceRepetition"
-            element={<ChefPupitreDashboard load="ListePresenceRepetition" />}
-          />
-          
           <Route
             path="/dashboard/chef-de-pupitre/presence-main-concert"
             element={<ChefPupitreDashboard load="presenceConcert" />}
