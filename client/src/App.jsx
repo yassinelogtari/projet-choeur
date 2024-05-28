@@ -1,30 +1,29 @@
+import {
+  Navigate,
+  Route,
+  BrowserRouter as Router,
+  Routes,
+} from "react-router-dom";
 import Login from "./pages/login/Login";
 import PresenceConcert from "./routes/PresenceConcert";
 import PresenceRepetition from "./routes/PresenceRepetititon";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
 
+import { jwtDecode } from "jwt-decode";
+import "./app.css";
 import "./assets/css/demo.css";
 import "./assets/vendor/css/core.css";
 import "./assets/vendor/css/theme-default.css";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import ChefPupitreDashboard from "./pages/chefPupitre/ChefPupitreDashboard";
-import ManagerDashboard from "./pages/managerChoeur/ManagerDashboard";
-import FormCandidature from "./pages/FormCandidature";
-import SaisonArchiveeDetails from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/SaisonArchiveeDetails";
-import MembresTable from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/tablesData/MembresTable";
-import "./app.css";
-import Concert from "./pages/concert/Concert";
 import AddConcert from "./components/concert/AddConcert";
 import EmailVerification from "./components/verify/EmailVerification";
-import ChoristeDashboard from "./pages/choriste/ChoristeDashboard";
 import NotFoundPage from "./pages/404page/NotFoundPage";
-import { useState } from "react";
-import { jwtDecode } from "jwt-decode";
+import FormCandidature from "./pages/FormCandidature";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import SaisonArchiveeDetails from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/SaisonArchiveeDetails";
+import MembresTable from "./pages/admin/pages/saison/archive/saisonArchiveeDetails/tablesData/MembresTable";
+import ChefPupitreDashboard from "./pages/chefPupitre/ChefPupitreDashboard";
+import ChoristeDashboard from "./pages/choriste/ChoristeDashboard";
+import Concert from "./pages/concert/Concert";
+import ManagerDashboard from "./pages/managerChoeur/ManagerDashboard";
 
 const App = () => {
   let decodedToken;
@@ -362,96 +361,6 @@ const App = () => {
             path="/saison/archive/details-saisonArchivee/table"
             element={<MembresTable />}
           />
-<<<<<<< HEAD
-          {decodedToken && decodedToken.role == "admin" ? (
-            <Route
-              path="/dashboard/admin/addAudition"
-              element={<AdminDashboard load="auditionAddInfo" />}
-            />
-          ) : (
-            <Route
-              path="/dashboard/admin/addAudition"
-              element={<Navigate to="/404" />}
-            />
-          )}
-          {decodedToken && decodedToken.role == "admin" ? (
-            <Route
-              path="/dashboard/admin/Candidature/list"
-              element={<AdminDashboard load="candidatesList" />}
-            />
-          ) : (
-            <Route
-              path="/dashboard/admin/Candidature/list"
-              element={<Navigate to="/404" />}
-            />
-          )}
-          {decodedToken && decodedToken.role == "admin" ? (
-            <Route
-              path="/dashboard/admin/Candidature/listParpupitre"
-              element={<AdminDashboard load="ListeCandidatesParPupitre" />}
-            />
-          ) : (
-            <Route
-              path="/dashboard/admin/Candidature/listParpupitre"
-              element={<Navigate to="/404" />}
-            />
-          )}
-          {decodedToken && decodedToken.role == "admin" ? (
-            <Route
-              path="/dashboard/admin/updateAudition"
-              element={<AdminDashboard load="updateAudition" />}
-            />
-          ) : (
-            <Route
-              path="/dashboard/admin/updateAudition"
-              element={<Navigate to="/404" />}
-            />
-          )}
-          {decodedToken && decodedToken.role == "admin" ? (
-            <Route
-              path="/dashboard/admin/oeuvres/liste"
-              element={<AdminDashboard load="ListeOeuvres" />}
-            />
-          ) : (
-            <Route
-              path="/dashboard/admin/oeuvres/liste"
-              element={<Navigate to="/404" />}
-            />
-          )}
-          {decodedToken && decodedToken.role == "admin" ? (
-            <Route
-              path="/dashboard/admin/oeuvres/addoeuvre"
-              element={<AdminDashboard load="AddOeuvre" />}
-            />
-          ) : (
-            <Route
-              path="/dashboard/admin/oeuvres/addoeuvre"
-              element={<Navigate to="/404" />}
-            />
-          )}
-          {decodedToken && decodedToken.role == "admin" ? (
-            <Route
-              path="/dashboard/admin/Audition/genererPlanning"
-              element={<AdminDashboard load="genererPlanning" />}
-            />
-          ) : (
-            <Route
-              path="/dashboard/admin/Audition/genererPlanning"
-              element={<Navigate to="/404" />}
-            />
-          )}
-          {decodedToken && decodedToken.role == "admin" ? (
-            <Route
-              path="/dashboard/admin/statistiques"
-              element={<AdminDashboard load="genererStatistique" />}
-            />
-          ) : (
-            <Route
-              path="/dashboard/admin/statistiques"
-              element={<Navigate to="/404" />}
-            />
-          )}
-=======
 
           <Route
             path="/dashboard/admin/addAudition"
@@ -496,7 +405,6 @@ const App = () => {
             path="/dashboard/admin/repetition/liste-repetition"
             element={<AdminDashboard load="listeRepetition" />}
           />
->>>>>>> 918ad54e9dcd4ba05cb08aee76e891ca87416c56
           <Route
             exact
             path="/presence/cancert/:idC"
