@@ -2,7 +2,14 @@ import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import { PieChart } from "@mui/x-charts/PieChart";
-import { TextField, Button, MenuItem } from "@mui/material"; // Import des composants Material-UI
+import {
+  TextField,
+  Button,
+  MenuItem,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
 import "./absenceConcert.css";
 import DialogComponent from "../../components/dialog/Dialog";
 
@@ -10,12 +17,15 @@ function AbsenceConcerts() {
   const [concerts, setConcerts] = useState([]);
   const [selectedConcertId, setSelectedConcertId] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [showPopup1, setShowPopup1] = useState(false);
   const [absenceData, setAbsenceData] = useState([]);
   const [saisonCourante, setSaisonCourante] = useState(null);
-  const [seuil, setSeuil] = useState(0); 
+  const [seuil, setSeuil] = useState(0);
+  const [seuilError, setSeuilError] = useState(false);
   const [selectedConcert, setSelectedConcert] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
-  
+  const [membresValides, setMembresValides] = useState([]);
+
   useEffect(() => {
     const fetchConcerts = async () => {
       try {
@@ -74,7 +84,16 @@ function AbsenceConcerts() {
   };
 
   const handleSeuilChange = (event) => {
-    setSeuil(event.target.value);
+    const newValue = event.target.value;
+
+    // Check if the new value is within the allowed range (0 to 100)
+    if (newValue >= 0 && newValue <= 100) {
+      setSeuil(newValue);
+      setSeuilError(false); // Reset error state if within range
+    } else {
+      // If the value exceeds the limit, set error state to true
+      setSeuilError(true);
+    }
   };
 
   const handleConcertSelectChange = (event) => {
@@ -97,6 +116,24 @@ function AbsenceConcerts() {
       });
   };
 
+  const handleViewListeClick = (concertId) => {
+    axios
+      .get(`http://localhost:8000/api/concerts/${concertId}/membres-valides`)
+      .then((response) => {
+        console.log(response.data.membres);
+        // Assuming response.data.membres is an array of strings
+        setMembresValides(response.data.membres);
+        setShowPopup1(true);
+      })
+      .catch((error) => {
+        console.error("Error fetching members:", error);
+      });
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
   const columns = [
     { field: "autoIncrementedId", headerName: "ID", width: 100 },
     { field: "titre", headerName: "Titre", width: 170 },
@@ -104,22 +141,35 @@ function AbsenceConcerts() {
     { field: "date", headerName: "Date", width: 115 },
     {
       field: "Action",
-      headerName: "Action",
+      headerName: "Absence",
+      width: 120,
+      renderCell: (params) => (
+        <div className="buttonContainerStyle">
+          <div
+            className="viewButtondash"
+            onClick={() => handleViewClick(params.row._id)}
+          >
+            View
+          </div>
+        </div>
+      ),
+    },
+    {
+      field: "Action2",
+      headerName: "Liste validé",
       width: 150,
       renderCell: (params) => (
-        <div
-          className="viewButtondash"
-          onClick={() => handleViewClick(params.row._id)}
-        >
-          View
+        <div className="buttonContainerStyle">
+          <div
+            className="viewButtondash"
+            onClick={() => handleViewListeClick(params.row._id)}
+          >
+            View Liste
+          </div>
         </div>
       ),
     },
   ];
-
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-  };
 
   return (
     <div>
@@ -148,18 +198,21 @@ function AbsenceConcerts() {
                 pageSize={5}
                 rowsPerPageOptions={[5]}
                 getRowId={(row) => row.autoIncrementedId}
-                onRowClick={(row) => {
-                  handleViewClick(row.row._id);
-                }}
               />
             </div>
             <div style={{ marginTop: "40px" }}>
-              <h3 className="ValidateConcertTitle">validate concert</h3>
+              <h3 className="ValidateConcertTitle">valider les membres</h3>
               <TextField
                 label="Seuil"
                 type="number"
                 value={seuil}
                 onChange={handleSeuilChange}
+                error={seuilError} // Set error prop based on the error state
+                helperText={
+                  seuilError
+                    ? "La valeur doit être comprise entre 0 et 100."
+                    : ""
+                }
               />
               <TextField
                 select
@@ -193,7 +246,7 @@ function AbsenceConcerts() {
               <DialogComponent
                 open={openDialog}
                 handleClose={handleCloseDialog}
-                successMessage="Your Concert has been successfully validate!"
+                successMessage="Your Concert list has been successfully validate!"
               />
               <div></div>
             </div>
@@ -227,6 +280,29 @@ function AbsenceConcerts() {
                     ]}
                   />
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {showPopup1 && (
+        <div className="popup-overlay-concertAbsence">
+          <div className="popup">
+            <div className="popup-container">
+              <div className="popup-content">
+                <span className="close" onClick={() => setShowPopup1(false)}>
+                  &times;
+                </span>
+                <h2>Liste des membres validés</h2>
+                <List>
+                  {membresValides.map((membre, index) => (
+                    <ListItem key={index}>
+                      <ListItem key={index}>
+                        {membre.nom} {membre.prenom} - {membre.pupitre}
+                      </ListItem>
+                    </ListItem>
+                  ))}
+                </List>
               </div>
             </div>
           </div>

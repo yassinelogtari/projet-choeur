@@ -518,6 +518,26 @@ const validerConcert = async (req, res) => {
     res.status(500).json({ message: "Erreur serveur" });
   }
 };
+
+const getMembresValides = async (req, res, next) => {
+  try {
+    const { concertId } = req.params; 
+    const membres = await Concert.membresValidesPourConcert(concertId);
+
+    res.status(200).json({
+      success: true,
+      membres: membres
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Erreur lors de la récupération des membres validés pour le concert : ' + error.message
+    });
+  }
+};
+
+
+
 const ExcelJS = require("exceljs"); // Import ExcelJS library
 
 async function extractAndSaveConcert(filePath) {
@@ -583,5 +603,6 @@ module.exports = {
   updateConcert,
   calculerTauxPresenceMembres,
   validerConcert,
+  getMembresValides,
   extractAndSaveConcert,
 };

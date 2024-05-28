@@ -22,9 +22,13 @@ router.get(
   repetitionController.getRepetitionById
 );
 router.get(
+<<<<<<< HEAD
   "/getAllRepetition"/*,
   middlewareRepetition.loggedMiddleware,
   middlewareRepetition.isAdmin*/,
+=======
+  "/getAllRepetition",
+>>>>>>> 7d3f83907e6ef48990507389b378e9518b279b11
   repetitionController.getAllRepetition
 );
 router.patch(
@@ -35,9 +39,13 @@ router.patch(
 );
 router.get(
   "/:repetitionId/presence",
+<<<<<<< HEAD
   // middlewareRepetition.loggedMiddleware,
   // middlewareRepetition.isChefPupitre,
  repetitionController.listPresenceByPupitre
+=======
+  repetitionController.listPresenceByPupitre
+>>>>>>> 7d3f83907e6ef48990507389b378e9518b279b11
 );
 
 /**
