@@ -484,11 +484,6 @@ const ListeOeuvres = () => {
         </DialogTitle>
         <DialogContent>
           <Typography>
-            <b className="attributselectednumero"> N° : </b>
-
-            {data.indexOf(selectedOeuvre) + 1 + page * rowsPerPage}
-          </Typography>
-          <Typography>
             <b className="attributselected"> Compositeurs : </b>
             {selectedOeuvre?.compositeurs.join(", ")}
           </Typography>

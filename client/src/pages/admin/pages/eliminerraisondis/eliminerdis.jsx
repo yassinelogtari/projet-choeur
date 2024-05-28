@@ -10,10 +10,13 @@ import {
   DialogActions,
   Snackbar,
   Alert,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import EditIcon from "@mui/icons-material/Edit";
 import axios from "axios";
-
+import { NavLink } from "react-router-dom";
 function EliminerDes() {
   const [openDialog, setOpenDialog] = useState(false);
   const [raison, setRaison] = useState("");
@@ -109,6 +112,21 @@ function EliminerDes() {
         <div className="titreeliminerdis">
           <PersonRemoveIcon /> &nbsp; Eliminer un choriste pour une raison
           disciplinaire
+          <Tooltip title="Modifier le taux d'élimination">
+            <Button
+              variant="contained"
+              startIcon={<EditIcon />}
+              component={NavLink}
+              to="/dashboard/admin/modifiertauxelimination"
+              style={{
+                marginLeft: "55px",
+                backgroundColor: "blueviolet",
+                color: "white",
+              }}
+            >
+              Modifier le taux
+            </Button>
+          </Tooltip>
         </div>
         <Grid container spacing={2}>
           <Grid item xs={12}>

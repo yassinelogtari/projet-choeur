@@ -18,6 +18,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate, NavLink } from "react-router-dom";
 import { io } from "socket.io-client";
+import RotateRightIcon from "@mui/icons-material/RotateRight";
 
 import manIcon from "../../../../assets/img/avatars/man.png";
 import womanIcon from "../../../../assets/img/avatars/woman.png";
@@ -30,6 +31,8 @@ function Profile() {
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
   const [historiqueStatut, setHistoriqueStatut] = useState([]);
+  const [historiqueStatut2, setHistoriqueStatut2] = useState([]);
+  const [historiqueLoading, setHistoriqueLoading] = useState(true);
 
   const handleExpand = () => {
     setExpanded((prevExpanded) => !prevExpanded);
@@ -76,6 +79,19 @@ function Profile() {
       }
     }
   };
+  const fetchHistoriqueStatut = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/api/saison/member/historique_statut/${user._id}`
+      );
+      setHistoriqueStatut(response.data.data);
+      console.log(response.data.data);
+      setHistoriqueLoading(false);
+    } catch (error) {
+      setHistoriqueLoading(false);
+      console.error("Error fetching historical status:", error);
+    }
+  };
   useEffect(() => {
     const fetchHistoriqueStatut = async () => {
       try {
@@ -84,7 +100,9 @@ function Profile() {
         );
         setHistoriqueStatut(response.data.data);
         console.log(response.data.data);
+        setHistoriqueLoading(false);
       } catch (error) {
+        setHistoriqueLoading(false);
         console.error("Error fetching historical status:", error);
       }
     };
@@ -119,6 +137,18 @@ function Profile() {
     if (!user?.createdAt) return "";
     const date = new Date(user?.createdAt);
     return date.toLocaleDateString(); // Format date as per locale
+  };
+  const handleUpdateClick = async (season) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/api/saison/member/historique_statut/${user._id}`
+      );
+      setHistoriqueStatut2(response.data.data);
+      fetchHistoriqueStatut();
+      console.log(`Status updated for season: ${season}`);
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
   };
   return (
     <div
@@ -227,6 +257,9 @@ function Profile() {
                       >
                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                           <Typography variant="body1" className="lesinfos">
+                            <RotateRightIcon
+                              onClick={() => handleUpdateClick()}
+                            />
                             <b>L'historique du statut :</b>
                           </Typography>
                         </AccordionSummary>
@@ -297,6 +330,7 @@ function Profile() {
                     >
                       <b>Statut :</b> {user?.statut}
                     </Typography>
+
                     <Typography
                       variant="body1"
                       className="lesinfos"
