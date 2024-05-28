@@ -8,4 +8,29 @@
    position: absolute;
       left: 40vw;
       top: 8vw;
+}.success-message {
+  color: green;
+  background-color: #d4edda;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.error-message {
+  color: red;
+  background-color: #f8d7da;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.form{
+  margin-top: 20px;
+}
+.message-container {
+  position: absolute;
+  top: -50px;
+  width: 100%;
 }

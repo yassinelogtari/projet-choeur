@@ -6,18 +6,16 @@ const CongeChoriste = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [reason, setReason] = useState("");
-  const [error, setError] = useState("");
+  const [message, setMessage] = useState({ text: "", type: "" });
   const [storedToken, setStoredToken] = useState("");
+
   useEffect(() => {
     const storedTokenValue = String(localStorage.getItem("token"));
 
-    if (storedTokenValue && storedTokenValue != "null") {
+    if (storedTokenValue && storedTokenValue !== "null") {
       setStoredToken(storedTokenValue);
-      if (storedToken) {
-        console.log(storedToken);
-      }
     }
-  }, [storedToken]); // Run once on component mount
+  }, []);
 
   const handleStartDateChange = (e) => {
     setStartDate(e.target.value);
@@ -34,22 +32,18 @@ const CongeChoriste = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Check if authToken is available
     if (!storedToken) {
-      setError("Please sign in first");
+      setMessage({ text: "Please sign in first", type: "error" });
       return;
     }
 
-    // Get today's date
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Reset hours, minutes, seconds, milliseconds
+    today.setHours(0, 0, 0, 0);
 
-    // Parse start date
     const startDateObj = new Date(startDate);
 
-    // Check if start date is in the past
     if (startDateObj.getTime() < today.getTime()) {
-      setError("Start date cannot be in the past");
+      setMessage({ text: "Start date cannot be in the past", type: "error" });
       return;
     }
 
@@ -64,13 +58,15 @@ const CongeChoriste = () => {
     axios
       .post("http://localhost:8000/api/conge/", formData)
       .then((response) => {
-        setError("le congé a été ajouté avec succès ");
+        setMessage({
+          text: "le congé a été ajouté avec succès",
+          type: "success",
+        });
         console.log("Congé saved successfully:", response.data);
       })
       .catch((error) => {
-        // Handle error
-        setError("le conge deja existe ");
-        console.log("error", storedToken);
+        setMessage({ text: "le conge deja existe", type: "error" });
+        console.log("error", error);
       });
   };
 
@@ -78,7 +74,18 @@ const CongeChoriste = () => {
     <>
       <h2 className="title">Congé Choriste</h2>
       <div className="content">
-        <form onSubmit={handleSubmit}>
+        <div className="message-container">
+          {message.text && (
+            <p
+              className={
+                message.type === "error" ? "error-message" : "success-message"
+              }
+            >
+              {message.text}
+            </p>
+          )}
+        </div>
+        <form onSubmit={handleSubmit} className="form">
           <div>
             <label htmlFor="startDate">Start Date:</label>
             <input
@@ -111,7 +118,6 @@ const CongeChoriste = () => {
           </div>
           <button type="submit">Submit</button>
         </form>
-        {error && <p>{error}</p>}
       </div>
     </>
   );
