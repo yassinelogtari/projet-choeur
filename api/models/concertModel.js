@@ -51,6 +51,12 @@ const concertSchema = new Schema({
           type: String,
         },
       },
+      absence: {
+        raison: {
+          type: String,
+          default:""
+        },
+      },
       valider:{
         type: Boolean,
         default:false

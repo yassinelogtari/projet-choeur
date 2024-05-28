@@ -30,7 +30,8 @@ import AccountInfo from "./pages/comptes/AcountInfos";
 import AccountInfoEdit from "./pages/comptes/AcountInfosEdit"
 import ConcertDisponibleMembers from "./pages/concerts/ConcertDisponibleMembers";
 import ValidateConges from "./pages/validateConge/ValidateConges";
-
+import ListeRepetition from "./pages/repetition/ListeRepetition";
+import AddRepetition from "./pages/repetition/AddRepetition";
 const AdminDashboard = (props) => {
   return (
     <div>
@@ -64,6 +65,10 @@ const AdminDashboard = (props) => {
             )}
             {props.load === "genererPlanning" && <PlanningAudition />}
             {props.load === "genererStatistique" && <GenererStatistique />}
+            
+            {props.load === "listeRepetition" && <ListeRepetition />}
+            
+            {props.load === "addRepetition" && <AddRepetition />}
             {props.load === "absenceRep" && <AbsenceRepetition />}
             {props.load === "candidatesListV2" && <CandidatesListV2 />}
             {props.load === "AcountRegister" && <AcountRegister />}

@@ -176,9 +176,19 @@ function Sidebar() {
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
-            <div data-i18n="Account Settings">absences repetions</div>
+            <div data-i18n="Account Settings">Absences répétitions</div>
           </a>
         </li>
+        
+      </NavLink>
+      <NavLink to="/dashboard/admin/repetition/liste-repetition">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Gérer les répétitions</div>
+          </a>
+        </li>
+        
       </NavLink>
 
        {/* Conges */}

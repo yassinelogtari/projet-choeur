@@ -9,6 +9,7 @@ const auditionRoute = require("./routes/auditionRoute");
 const congeRoute = require("./routes/congeRoute");
 const saisonRoute = require("./routes/saisonRoute");
 const oeuvreRoute = require("./routes/ouevreRoute");
+const besoinRoute = require("./routes/besoinRoute");
 const cron = require("node-cron");
 const Candidat = require("./models/candidatModel");
 const Repetition = require("./models/repetitionModel");
@@ -30,6 +31,7 @@ const statisticsRoute = require("./routes/statistiqueRoute");
 const placementRoute = require("./routes/placementRoute");
 const cors = require("cors");
 const resetRoute = require("./routes/resetRoute");
+
 
 dotenv.config();
 
@@ -174,11 +176,13 @@ app.use("/api/presence", presenceRoute);
 app.use("/api/concerts", concertRoute);
 app.use("/api/disponibility/cancert", disponibilityToCancertRoute);
 app.use("/api/profile", ProfileRoute);
+//app.use("/api/absenceConcert",concertRoute);
 app.use("/api/membre", membreRoute);
 app.use("/api/absence", absenceRoute);
 app.use("/api/statistics", statisticsRoute);
 app.use("/api/placement", placementRoute);
 app.use("/api/reset", resetRoute);
+//app.use("/api/besoin",besoinRoute);
 
 module.exports = app;
 

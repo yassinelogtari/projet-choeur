@@ -11,8 +11,8 @@ router.post(
 );
 router.delete(
   "/annuler/:id",
-  middlewareRepetition.loggedMiddleware,
-  middlewareRepetition.isAdmin,
+  /*middlewareRepetition.loggedMiddleware,
+  middlewareRepetition.isAdmin,*/
   repetitionController.deleteRepetition
 );
 router.get(
@@ -23,14 +23,14 @@ router.get(
 );
 router.get(
   "/getAllRepetition",
-  middlewareRepetition.loggedMiddleware,
-  middlewareRepetition.isAdmin,
+  /*middlewareRepetition.loggedMiddleware,
+  middlewareRepetition.isAdmin,*/
   repetitionController.getAllRepetition
 );
 router.patch(
   "/update/:id",
-  middlewareRepetition.loggedMiddleware,
-  middlewareRepetition.isAdmin,
+  /*middlewareRepetition.loggedMiddleware,
+  middlewareRepetition.isAdmin,*/
   repetitionController.updateRepetition
 );
 router.get(
@@ -38,6 +38,9 @@ router.get(
   // middlewareRepetition.loggedMiddleware,
   // middlewareRepetition.isChefPupitre,
  repetitionController.listPresenceByPupitre
+);
+router.post(
+  "/addAbsence",middlewareRepetition.loggedMiddleware,repetitionController.absenceRepetition
 );
 
 /**

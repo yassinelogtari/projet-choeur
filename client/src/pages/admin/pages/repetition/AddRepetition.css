@@ -1,0 +1,33 @@
+.rep-title-add{
+    position: absolute;
+    margin-top: 110px;
+    margin-left: -1150px;
+}
+.white-card-rep-add{
+    position: absolute;
+    margin-top: 170px;
+    margin-left: -1030px;
+    width: 800px;
+}
+.formConteneurAddRep{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+}
+.two-inputs-row {
+    display: flex;
+    gap: 20px;
+  }
+.half-width-input {
+    flex: 1;
+}
+.btnCreate{
+    height: 42px;
+
+}
+.pop-upRepetition{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ }

@@ -202,6 +202,7 @@ router.get(
   "/tauxPresence/members",
   concertController.calculerTauxPresenceMembres
 );
+router.post("/addAbsence",middlewareConcert.loggedMiddleware,concertController.absenceConcert);
 router.put("/:concertId/valider", concertController.validerConcert);
 /**
  * @swagger

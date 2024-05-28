@@ -167,7 +167,16 @@ const App = () => {
             path="/dashboard/admin/statistiques"
             element={<AdminDashboard load="genererStatistique" />}
           />
-
+          
+          <Route
+            path="/dashboard/admin/addRepetition"
+            element={<AdminDashboard load="addRepetition" />}
+          />
+          
+          <Route
+            path="/dashboard/admin/repetition/liste-repetition"
+            element={<AdminDashboard load="listeRepetition" />}
+          />
           <Route
             exact
             path="/presence/cancert/:idC"
