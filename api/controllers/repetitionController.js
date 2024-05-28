@@ -186,7 +186,7 @@ const getAllRepetition = async (req, res) => {
 
 const updateRepetition=async(req,res)=>{
   try{
-    const repetition=await Repetition.findOneAndUpdate({_id:req.params.id},req.body,{new:true})
+    const repetition=await Repetition.findOneAndUpdate({_id:req.params.id},req.body,{new:true}).populate("concert")
     if(!repetition){
       return res.status(404).json({message:"Répétition non trouvée"})
     }
