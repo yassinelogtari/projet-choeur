@@ -32,7 +32,7 @@ import ConcertDisponibleMembers from "./pages/concerts/ConcertDisponibleMembers"
 import ValidateConges from "./pages/validateConge/ValidateConges";
 import Nomination from "./pages/nomination/Nomination";
 import Elimination from "./pages/elimination/Elimination";
-import ListePresenceRepetition from "./pages/repetition/ListePresenceRepetition";
+//import ListePresenceRepetition from "./pages/repetition/ListePresenceRepetition";
 
 const AdminDashboard = (props) => {
   return (
@@ -81,7 +81,7 @@ const AdminDashboard = (props) => {
           {props.load === "AbsenceConcerts" && <AbsenceConcerts />}
           {props.load === "Nomination" && <Nomination />}
           {props.load === "Elimination" && <Elimination />}
-          {props.load === "ListePresenceRepetition" && < ListePresenceRepetition/>}
+         {/* {props.load === "ListePresenceRepetition" && < ListePresenceRepetition/>} */}
           
 
           <div className="layout-overlay layout-menu-toggle" />

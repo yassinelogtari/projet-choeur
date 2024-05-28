@@ -180,14 +180,14 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-      <NavLink to="/dashboard/admin/repetition/ListePresenceRepetition">
+      {/* <NavLink to="/dashboard/admin/repetition/ListePresenceRepetition">
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
             <div data-i18n="Account Settings">precences repetitions</div>
           </a>
         </li>
-      </NavLink>
+      </NavLink> */}
 
        {/* Conges */}
        <li className="menu-header small text-uppercase">
