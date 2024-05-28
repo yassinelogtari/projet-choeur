@@ -220,8 +220,12 @@ const CandidatesList = () => {
             className="datagrid"
             rows={allCandidates}
             columns={userColumns.concat(actionColumn)}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
+            initialState={{
+              ...allCandidates.initialState,
+              pagination: { paginationModel: { pageSize: 7 } },
+            }}
+           
+            
           />
         </div>
         {showModal && (

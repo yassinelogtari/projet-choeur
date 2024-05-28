@@ -1,15 +1,14 @@
 import React from "react";
-import Sidebar from "../../components/sidebarAdmin/Sidebar";
 import Navbar1 from "../../components/navbar1/Nabar1";
 import SidebarChoriste from "../../components/sidebarChoriste/SidebarChoriste";
 import Home from "../chefPupitre/pages/Home";
-import PresenceRepetition from "../../routes/PresenceRepetititon";
-import AllRepetitionToMarquePresence from "./pages/presenceRepetition/AllRepetitionToMarquePresence";
-import AllConcertsToMarquePresence from "./pages/presenceConcert/AllConcertsToMarquePresence";
 import DemandeConge from "./pages/demandeConge/DemandeConge";
 import Historique from "./pages/historique/Historique";
+import AllConcertsToMarquePresence from "./pages/presenceConcert/AllConcertsToMarquePresence";
+import AllRepetitionToMarquePresence from "./pages/presenceRepetition/AllRepetitionToMarquePresence";
+
 import CongeChoristePage from "../admin/pages/conges/CongeChoristePage";
-import CongeChoriste from "../../components/conge/CongeChoriste";
+import DisponibiliteConcert from "./pages/disponibilité/DisponibiliteConcert";
 
 const ChoristeDashboard = (props) => {
   return (
@@ -28,13 +27,20 @@ const ChoristeDashboard = (props) => {
             </aside>
             <Navbar1 />
             {props.load === "home" && <Home />}
-            {props.load==="allRepetitions" && <AllRepetitionToMarquePresence />}
             {props.load==="allConcerts" && <AllConcertsToMarquePresence />}
             {props.load==="demandeConge" && <DemandeConge />}
             {props.load==="historique" && <Historique />}
             {props.load === "allRepetitions" && ( <AllRepetitionToMarquePresence />
             )}
             {props.load === "conge Choriste" && <CongeChoristePage />}
+            {props.load === "allRepetitions" && (
+              <AllRepetitionToMarquePresence />
+            )}
+            {props.load === "allConcerts" && <AllConcertsToMarquePresence />}
+            {props.load === "demandeConge" && <DemandeConge />}
+            {/*props.load === "historique" && <HistoriqueActivite />*/}
+            {props.load === "conge Choriste" && <CongeChoristePage />}
+            {props.load ==="disponibilté concert" && <DisponibiliteConcert />}
           </div>
           {/* Overlay */}
           <div className="layout-overlay layout-menu-toggle" />

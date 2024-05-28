@@ -126,7 +126,7 @@ const addEmailCandidat = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    const url = `${process.env.BASE_URL}/api/candidats/${condidat.id}/verify/${token}`;
+    const url = `${process.env.FRONTEND_URL}/candidats/${condidat.id}/verify/${token}`;
     await sendEmail(condidat.email, "Verify Email", url);
 
     res

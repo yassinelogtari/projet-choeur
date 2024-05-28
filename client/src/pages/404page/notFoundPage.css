@@ -1,0 +1,409 @@
+
+.dgSVFG {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  font-family: var(
+    --font-family,
+    CircularSpTitle,
+    CircularSpTitle-Tall,
+    CircularSp-Arab,
+    CircularSp-Hebr,
+    CircularSp-Cyrl,
+    CircularSp-Grek,
+    CircularSp-Deva,
+    var(--fallback-fonts, sans-serif)
+  );
+  color: inherit;
+} /*!sc*/
+@media (min-width: 768px) {
+  .dgSVFG {
+    font-size: 1.5rem;
+  }
+} /*!sc*/
+.bGcjcI {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: var(
+    --font-family,
+    CircularSp,
+    CircularSp-Arab,
+    CircularSp-Hebr,
+    CircularSp-Cyrl,
+    CircularSp-Grek,
+    CircularSp-Deva,
+    var(--fallback-fonts, sans-serif)
+  );
+  color: inherit;
+} /*!sc*/
+data-styled.g7[id="Type__TypeElement-sc-goli3j-0"] {
+  content: "dgSVFG,bGcjcI,";
+} /*!sc*/
+.jCpPQi {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  background-color: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  line-height: 1;
+  -webkit-letter-spacing: inherit;
+  -moz-letter-spacing: inherit;
+  -ms-letter-spacing: inherit;
+  letter-spacing: inherit;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+} /*!sc*/
+.jCpPQi:focus {
+  outline: none;
+} /*!sc*/
+.jCpPQi:focus {
+  box-shadow: 0 3px 0 0;
+  -webkit-transition: box-shadow 200ms ease-in;
+  transition: box-shadow 200ms ease-in;
+} /*!sc*/
+.jCpPQi:focus.Link-sc-k8gsk-0:focus {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+} /*!sc*/
+.jCpPQi[href],
+.jCpPQi:hover:not([disabled]) {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+} /*!sc*/
+.jCpPQi[href]:hover {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+  color: var(--text-bright-accent, #117a37);
+} /*!sc*/
+.jCpPQi[href]:focus {
+  outline: none;
+  box-shadow: 0 3px 0 0;
+  -webkit-transition: box-shadow 200ms ease-in;
+  transition: box-shadow 200ms ease-in;
+} /*!sc*/
+.jCpPQi[href]:focus.Link-sc-k8gsk-0[href]:focus {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+} /*!sc*/
+.jCpPQi[href]:active {
+  color: var(--text-bright-accent, #117a37);
+} /*!sc*/
+.jCpPQi[disabled],
+.jCpPQi[href][disabled],
+.jCpPQi[aria-disabled="true"] {
+  color: var(--text-subdued, #6a6a6a);
+  opacity: 0.3;
+  cursor: not-allowed;
+} /*!sc*/
+data-styled.g27[id="Link-sc-k8gsk-0"] {
+  content: "jCpPQi,";
+} /*!sc*/
+* {
+  box-sizing: border-box;
+} /*!sc*/
+*::before,
+*::after {
+  box-sizing: border-box;
+} /*!sc*/
+body {
+  margin: 0;
+} /*!sc*/
+body,
+input,
+textarea,
+button {
+  font-family: var(
+      --font-family,
+      CircularSp,
+      CircularSp-Arab,
+      CircularSp-Hebr,
+      CircularSp-Cyrl,
+      CircularSp-Grek,
+      CircularSp-Deva,
+      var(--fallback-fonts, sans-serif)
+    ),
+    Helvetica, Arial, sans-serif;
+} /*!sc*/
+html,
+body {
+  height: 100%;
+} /*!sc*/
+data-styled.g149[id="sc-global-hcvfxN1"] {
+  content: "sc-global-hcvfxN1,";
+} /*!sc*/
+.hhQXpH {
+  position: relative;
+  margin: 0 auto;
+  width: 270px;
+} /*!sc*/
+@media (min-width: 768px) {
+  .hhQXpH {
+    width: 345px;
+  }
+} /*!sc*/
+@media (min-width: 992px) {
+  .hhQXpH {
+    width: 455px;
+  }
+} /*!sc*/
+@media (min-width: 1200px) {
+  .hhQXpH {
+    width: 555px;
+  }
+} /*!sc*/
+data-styled.g242[id="Record__StyledRecord-sc-1hjxgh6-0"] {
+  content: "hhQXpH,";
+} /*!sc*/
+.djLfPW {
+  -webkit-animation: Opxis 5s;
+  animation: Opxis 5s;
+  -webkit-transform: rotate(240deg);
+  -ms-transform: rotate(240deg);
+  transform: rotate(240deg);
+  padding: 0 15px;
+  height: 270px;
+  width: 270px;
+} /*!sc*/
+@media (min-width: 768px) {
+  .djLfPW {
+    height: 345px;
+    width: 345px;
+  }
+} /*!sc*/
+@media (min-width: 992px) {
+  .djLfPW {
+    height: 455px;
+    width: 455px;
+  }
+} /*!sc*/
+@media (min-width: 1200px) {
+  .djLfPW {
+    height: 555px;
+    width: 555px;
+  }
+} /*!sc*/
+data-styled.g243[id="Record__StyledRecordContainer-sc-1hjxgh6-1"] {
+  content: "djLfPW,";
+} /*!sc*/
+.fLkopB {
+  position: absolute;
+  top: 20px;
+  right: 15px;
+  height: 241.783px;
+  width: 135px;
+} /*!sc*/
+@media (min-width: 768px) {
+  .fLkopB {
+    height: 302.233px;
+    width: 168.75px;
+  }
+} /*!sc*/
+@media (min-width: 992px) {
+  .fLkopB {
+    height: 390.9px;
+    width: 218.25px;
+  }
+} /*!sc*/
+@media (min-width: 1200px) {
+  .fLkopB {
+    height: 471.5px;
+    width: 263.25px;
+  }
+} /*!sc*/
+data-styled.g244[id="Record__StyledArmContainer-sc-1hjxgh6-2"] {
+  content: "fLkopB,";
+} /*!sc*/
+.ktPnjR {
+  min-height: 100vh;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+} /*!sc*/
+data-styled.g245[id="Scaffold__StyledScaffold-sc-k02mjn-0"] {
+  content: "ktPnjR,";
+} /*!sc*/
+.gztPHb {
+  padding-top: 32px;
+  padding-bottom: 32px;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+} /*!sc*/
+@media (min-width: 768px) {
+  .gztPHb {
+    padding-top: 64px;
+    padding-bottom: 80px;
+  }
+} /*!sc*/
+@media (min-width: 992px) {
+  .gztPHb {
+    padding-top: 100px;
+    padding-bottom: 160px;
+  }
+} /*!sc*/
+data-styled.g246[id="ErrorPage__StyledErrorPage-sc-fn7n5x-0"] {
+  content: "gztPHb,";
+} /*!sc*/
+.gOpyJD {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  margin: 0 auto;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 0 15px;
+} /*!sc*/
+@media (min-width: 992px) {
+  .gOpyJD {
+    width: 970px;
+    -webkit-flex-direction: row-reverse;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+  }
+} /*!sc*/
+@media (min-width: 1200px) {
+  .gOpyJD {
+    width: 1170px;
+  }
+} /*!sc*/
+data-styled.g247[id="ErrorPage__StyledContainer-sc-fn7n5x-1"] {
+  content: "gOpyJD,";
+} /*!sc*/
+.soUms {
+  width: 100%;
+  margin-bottom: 24px;
+} /*!sc*/
+@media (min-width: 768px) {
+  .soUms {
+    width: 66.66666667%;
+  }
+} /*!sc*/
+@media (min-width: 992px) {
+  .soUms {
+    width: 33%;
+    padding-right: 40px;
+  }
+} /*!sc*/
+@media (min-width: 1200px) {
+  .soUms {
+    width: 25%;
+  }
+} /*!sc*/
+.soUms a[href]:not([class]):hover,
+.soUms a[href]:not([class]):focus {
+  color: #535353;
+} /*!sc*/
+.soUms a[href]:not([class]) {
+  color: #000000;
+} /*!sc*/
+data-styled.g248[id="ErrorPage__StyledErrorSection-sc-fn7n5x-2"] {
+  content: "soUms,";
+} /*!sc*/
+.kqgARg {
+  margin-bottom: 24px;
+  width: 270px;
+} /*!sc*/
+@media (min-width: 768px) {
+  .kqgARg {
+    width: 50%;
+  }
+} /*!sc*/
+@media (min-width: 1200px) {
+  .kqgARg {
+    margin-left: 8.33333333%;
+  }
+} /*!sc*/
+data-styled.g249[id="ErrorPage__StyledImagerySection-sc-fn7n5x-3"] {
+  content: "kqgARg,";
+} /*!sc*/
+.coniEC {
+  text-transform: uppercase;
+  color: #181818;
+  font-weight: bold;
+} /*!sc*/
+data-styled.g250[id="ErrorPage__StyledTextLink-sc-fn7n5x-4"] {
+  content: "coniEC,";
+} /*!sc*/
+
+data-styled.g251[id="sc-global-htVoeb1"] {
+  content: "sc-global-htVoeb1,";
+} /*!sc*/
+@-webkit-keyframes Opxis {
+  0% {
+    border-radius: 0 0 0 0;
+    -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    border-radius: 0 0 0 0;
+    -webkit-transform: rotate(240deg);
+    -ms-transform: rotate(240deg);
+    transform: rotate(240deg);
+  }
+} /*!sc*/
+@keyframes Opxis {
+  0% {
+    border-radius: 0 0 0 0;
+    -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    border-radius: 0 0 0 0;
+    -webkit-transform: rotate(240deg);
+    -ms-transform: rotate(240deg);
+    transform: rotate(240deg);
+  }
+} /*!sc*/
+data-styled.g259[id="sc-keyframes-Opxis"] {
+  content: "Opxis,";
+} /*!sc*/
+
+
+#__next{
+background-color: #ffcdd2;
+height: 100vh;
+overflow: hidden;
+}
+
+#goBackButtonNotFound:hover
+{
+background-color: transparent;
+margin-top: 0;
+}
+#goBackButtonNotFound
+{
+margin-top: 0;
+}

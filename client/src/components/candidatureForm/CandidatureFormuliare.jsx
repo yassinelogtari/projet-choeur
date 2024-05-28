@@ -1,13 +1,13 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect, useState } from 'react';
-import { GiPerson } from 'react-icons/gi';
-import { Transition } from 'react-transition-group';
-import { FcBusinessContact, FcApproval, FcCallback, FcCalendar, FcRuler, FcContacts, FcAddressBook, FcGlobe, FcReadingEbook, FcPrevious, FcDisplay, FcMusic } from "react-icons/fc";
-import note from "../../img/note.png"
-import confirm from "../../img/valide.png"
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { BiSolidWinkSmile } from 'react-icons/bi';
+import { FcAddressBook, FcBusinessContact, FcCalendar, FcCallback, FcContacts, FcDisplay, FcGlobe, FcMusic, FcPrevious, FcReadingEbook, FcRuler } from "react-icons/fc";
+import { GiPerson } from 'react-icons/gi';
 import { useParams } from 'react-router-dom';
-import {BiSolidWinkSmile } from 'react-icons/bi'
+import { Transition } from 'react-transition-group';
+import note from "../../img/note.png";
+import confirm from "../../img/valide.png";
 
 
 const CandidatureFormulaire = () => {
@@ -77,8 +77,8 @@ const CandidatureFormulaire = () => {
     telephone: formData2.telephone,
     nationalite: formData2.nationalite,
     dateNaissance: formData2.dateNaissance/*.toISOString()*/,
-    activite: formData2.activite,
-    connaisanceMusical: formData2.connaisanceMusical, // Assurez-vous de récupérer la valeur correcte
+    activite: formData2.activite === 'true', // Convertit la chaîne en booléen
+    connaisanceMusical: formData2.connaisanceMusical === 'true', // Assurez-vous de récupérer la valeur correcte
     situationPerso: formData2.situationPerso // Assurez-vous de récupérer la valeur correcte
   };
 
@@ -171,11 +171,18 @@ const CandidatureFormulaire = () => {
     } else if (!regexNationalite.test(formData2.nationalite)) {
       errors.nationalite = "Nationalité invalide.";
     }
-    if (!formData2.activite) {
-      errors.activite = "Veuillez saisir votre activité";
-    } else if (!regexNationalite.test(formData2.activite)) {
+    if (formData2.activite === '') {
+      errors.activite = "Veuillez sélectionner votre activité";
+    } else if (formData2.activite !== 'true' && formData2.activite !== 'false') {
       errors.activite = "Activité invalide.";
     }
+  
+    if (formData2.connaisanceMusical === '') {
+      errors.connaisanceMusical = "Veuillez sélectionner votre connaissance musicale";
+    } else if (formData2.connaisanceMusical !== 'true' && formData2.connaisanceMusical !== 'false') {
+      errors.connaisanceMusical = "Connaissance musicale invalide.";
+    }
+    
     if (!formData2.situationPerso) {
       errors.situationPerso = "Veuillez choisir votre situation.";
     }
@@ -191,10 +198,15 @@ const CandidatureFormulaire = () => {
   const handleChange2 = (e) => {
     const { name, value, type, checked } = e.target;
     const val = type === 'checkbox' ? checked : value;
+  
+    // Si le type est "radio", assurez-vous que la valeur est un booléen
+    const boolVal = type === 'radio' ? (value === 'true') : val;
+  
     setFormData2({
       ...formData2,
-      [name]: val
+      [name]: boolVal
     });
+  
     setErrors(prevErrors => ({
       ...prevErrors,
       [name]: ''
@@ -402,7 +414,7 @@ const CandidatureFormulaire = () => {
                           />
                         </div>
                         {errors.nationalite && <span style={errorStyle}>{errors.nationalite}</span>}
-                        <div style={inputContainerStyle}>
+                        <div style={radioContainer }>
                           <FcCalendar style={iconStyle} />
                           <input
                             style={inputStyle}
@@ -415,43 +427,66 @@ const CandidatureFormulaire = () => {
                           />
                         </div>
                         {errors.dateNaissance && <span style={errorStyle}>{errors.dateNaissance}</span>}
-
                         <div style={inputContainerStyle}>
-                          <FcReadingEbook style={iconStyle} />
-                          
+  <FcReadingEbook style={iconStyle} />
+  <div className="labelStyle">Activité :</div>
+  <div style={radioContainer}>
+    <input
+      type="radio"
+      id="activite-oui"
+      name="activite"
+      value={true}
+      style={inputStyle}
+      checked={formData2.activite === true}
+      onChange={handleChange2}
+    />
+    <label htmlFor="activite-oui" style={radioLabel}>Oui</label>
 
-                          <input
-                            style={inputStyle}
-                            type="text"
-                            id="activite"
-                            name="activite"
-                            placeholder="Acivité (true or false)"
-                            checked={formData2.activite}
-                            onChange={handleChange2}
-                          />
-                        </div>
-                        {errors.activite && <span style={errorStyle}>{errors.activite}</span>}
+    <input
+      type="radio"
+      id="activite-non"
+      name="activite"
+      value={false}
+      style={inputStyle}
+      checked={formData2.activite === false}
+      onChange={handleChange2}
+    />
+    <label htmlFor="activite-non" style={radioLabel}>Non</label>
+  </div>
+</div>
+{errors.activite && <span style={errorStyle}>{errors.activite}</span>}
 
-                        <div style={inputContainerStyle}>
-                          <FcMusic style={iconStyle} />
+<div style={inputContainerStyle}>
+  <FcMusic style={iconStyle} />
+  <div className="labelStyle">Connaissance Musicale :</div>
+  <div style={radioContainer}>
+    <input
+      type="radio"
+      id="connaisanceMusical-oui"
+      name="connaisanceMusical"
+      value={true}
+      style={inputStyle}
+      checked={formData2.connaisanceMusical === true}
+      onChange={handleChange2}
+    />
+    <label htmlFor="connaisanceMusical-oui" style={radioLabel}>Oui</label>
 
-                          
-                            <input
-                              style={inputStyle}
-                              name="connaisanceMusical"
-                              type="text"
-                              id="connaisanceMusical"
-                              placeholder="Connaissance musicale (true or false)"
-                              value={formData2.connaisanceMusical}
-                              onChange={handleChange2}
-                            />
-                              
-                            
-                          
+    <input
+      type="radio"
+      id="connaisanceMusical-non"
+      name="connaisanceMusical"
+      value={false}
+      style={inputStyle}
+      checked={formData2.connaisanceMusical === false}
+      onChange={handleChange2}
+    />
+    <label htmlFor="connaisanceMusical-non" style={radioLabel}>Non</label>
+  </div>
+</div>
+{errors.connaisanceMusical && <span style={errorStyle}>{errors.connaisanceMusical}</span>}
 
-    
-                        </div>
-                        {errors.connaisanceMusical && <span style={errorStyle}>{errors.connaisanceMusical}</span>}
+
+
 
                         <div style={inputContainerStyle}>
                           <GiPerson style={iconStyle} />
@@ -631,6 +666,16 @@ const transitionStyles = {
   entered: { opacity: 1 },
   exiting: { opacity: 0 },
   exited: { opacity: 0 },
+};
+const radioContainer = {
+  display: 'flex',
+  alignItems:' center',
+  marginTop:"10px"
+}
+const radioLabel = {
+  marginRight: "20px",
+  //fontFamily: "Arial, sans-serif",
+  fontSize: "12px" // Définir la taille de la police à 12px, vous pouvez ajuster selon vos besoins
 };
 
 export default CandidatureFormulaire;

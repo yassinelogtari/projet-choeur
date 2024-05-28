@@ -9,6 +9,7 @@ const {
 } = require("../middlewares/sendNotificationMiddleware");
 
 const addQrCodeToConcert = require("../middlewares/createQrCodeMiddleware");
+
 const insertConge = async (req, res) => {
   try {
     const memberId = req.auth.membreId;
@@ -135,7 +136,41 @@ const validerConge = async (req, res) => {
   }
 };
 
+const getAllConge = async (req, res) => {
+  try {
+    const congesNonValides = await Conge.find({ valide: false }).populate(
+      "membre"
+    );
+    res.status(200).json({ success: true, conges: congesNonValides });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: "Erreur lors de la récupération des congés non valides.",
+    });
+  }
+};
+
+const deleteConge = async (req, res) => {
+  try {
+    const { id: congeId } = req.params;
+
+    const deletedConge = await Conge.findByIdAndDelete(congeId);
+
+    if (!deletedConge) {
+      return res.status(404).json({ message: "Congé non trouvé" });
+    }
+
+    res.status(200).json({ message: "Congé supprimé avec succès" });
+  } catch (error) {
+    console.error("Erreur lors de la suppression du congé : ", error);
+    res.status(500).json({ error: "Erreur lors de la suppression du congé" });
+  }
+};
+
 module.exports = {
   insertConge,
   validerConge,
+  getAllConge,
+  deleteConge,
 };
