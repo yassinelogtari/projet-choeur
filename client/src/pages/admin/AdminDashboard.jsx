@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import Sidebar from "../../components/sidebarAdmin/Sidebar";
+import React from "react";
 import Navbar1 from "../../components/navbar1/Nabar1";
+import Sidebar from "../../components/sidebarAdmin/Sidebar";
 
 import "../admin/adminDashboard.css";
 import HomePage from "./pages/HomePage";
@@ -8,44 +8,41 @@ import AdminAudition from "./pages/auditions/AdminAudition";
 import NouvelleSaison from "./pages/saison/NouvelleSaison";
 import SaisonActuelle from "./pages/saison/SaisonActuelle";
 
-import CandidatesList from "./pages/candidates/CandidatesList";
-import ListeCandidatesParPupitre from "./pages/candidates/ListeCandidatesParPupitre";
+import AffichePlacement from "../../components/placement/AffichePlacement";
 import AdminAuditionInfo from "../admin/pages/auditions/AdminAddAuditionInfo";
 import AuditionUpdate from "../admin/pages/auditions/AuditionUpdate";
-import Concert from "../concert/Concert";
-import Archive from "./pages/saison/archive/Archive";
-import ListeOeuvres from "./pages/oeuvres/ListeOeuvres";
-import PlanningAudition from "./pages/auditions/GenererPlanning";
-import GenererStatistique from "./pages/statistiques/genererStatistique";
-import AddOeuvre from "./pages/oeuvres/AddOeuvre";
-import AbsenceRepetition from "./pages/absenceRepetition/AbsenceRepetitions";
-import CandidatesListV2 from "./pages/candidates/CandidatesListV2";
 import AbsenceConcerts from "../concert/AbsenceConcerts";
-import AcountRegister from "./pages/comptes/AcountRegister";
+import Concert from "../concert/Concert";
 import Placement from "../placement/Placement";
-import AffichePlacement from "../../components/placement/AffichePlacement";
+import AbsenceRepetition from "./pages/absenceRepetition/AbsenceRepetitions";
 import Absence from "./pages/absences/Absence";
+import PlanningAudition from "./pages/auditions/GenererPlanning";
+import CandidatesList from "./pages/candidates/CandidatesList";
+import CandidatesListV2 from "./pages/candidates/CandidatesListV2";
+import ListeCandidatesParPupitre from "./pages/candidates/ListeCandidatesParPupitre";
 import AccountList from "./pages/comptes/AccountList";
 import AccountInfo from "./pages/comptes/AcountInfos";
 import AccountInfoEdit from "./pages/comptes/AcountInfosEdit";
+import AcountRegister from "./pages/comptes/AcountRegister";
 import ConcertDisponibleMembers from "./pages/concerts/ConcertDisponibleMembers";
-import ValidateConges from "./pages/validateConge/ValidateConges";
-<<<<<<< HEAD
-import Nomination from "./pages/nomination/Nomination";
 import Elimination from "./pages/elimination/Elimination";
+import Nomination from "./pages/nomination/Nomination";
+import AddOeuvre from "./pages/oeuvres/AddOeuvre";
+import ListeOeuvres from "./pages/oeuvres/ListeOeuvres";
+import Archive from "./pages/saison/archive/Archive";
+import GenererStatistique from "./pages/statistiques/genererStatistique";
+import ValidateConges from "./pages/validateConge/ValidateConges";
 //import ListePresenceRepetition from "./pages/repetition/ListePresenceRepetition";
-import ModifierTauxElimination from "./pages/eliminerraisondis/modifiertauxelimination";
 import EliminerDes from "./pages/eliminerraisondis/eliminerdis";
 import ExclureChoristeElimine from "./pages/eliminerraisondis/exlurechoristeelimine";
-import UpdateProfileAdmin from "./pages/profiladmin/updateProdileAdmin";
-import ProfileAdmin from "./pages/profiladmin/profiladmin";
+import ModifierTauxElimination from "./pages/eliminerraisondis/modifiertauxelimination";
 import ElimineProfil from "./pages/profiladmin/elimineProfil";
 import NomineProfil from "./pages/profiladmin/nomineProfil";
+import ProfileAdmin from "./pages/profiladmin/profiladmin";
+import UpdateProfileAdmin from "./pages/profiladmin/updateProdileAdmin";
 
-=======
-import ListeRepetition from "./pages/repetition/ListeRepetition";
 import AddRepetition from "./pages/repetition/AddRepetition";
->>>>>>> 918ad54e9dcd4ba05cb08aee76e891ca87416c56
+import ListeRepetition from "./pages/repetition/ListeRepetition";
 const AdminDashboard = (props) => {
   return (
     <div>

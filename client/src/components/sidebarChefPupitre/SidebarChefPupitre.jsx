@@ -1,4 +1,3 @@
-import { Link } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
 function SidebarChefPupitre() {
@@ -31,19 +30,19 @@ function SidebarChefPupitre() {
           </a>
         </li>
       </NavLink>
-<<<<<<< HEAD
       <NavLink to="/dashboard/chef-de-pupitre/repetition/ListePresenceRepetition">
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
-            <div data-i18n="Account Settings">precences repetitions</div>
-=======
+            <div data-i18n="Account Settings">Liste présences repetitions</div>
+            </a>
+        </li>
+      </NavLink>
       <NavLink to="/dashboard/chef-de-pupitre/presence-main-repetition">
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
             <div data-i18n="Account Settings">presence Repetition</div>
->>>>>>> 7d3f83907e6ef48990507389b378e9518b279b11
           </a>
         </li>
       </NavLink>

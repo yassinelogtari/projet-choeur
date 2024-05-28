@@ -1,15 +1,7 @@
-<<<<<<< HEAD
-import React, { useState } from 'react';
-import { Table, Button, Modal, Input, notification } from 'antd';
 import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-=======
-import React, { useState } from "react";
-import { Table, Button, Modal } from "antd";
-import {
-  CheckCircleOutlined,
-  ExclamationCircleOutlined,
-} from "@ant-design/icons";
->>>>>>> e0b0e9696e9b39a8e0c64013b0a81bd208b41847
+import { Button, Input, Modal, Table, notification } from 'antd';
+import React, { useState } from 'react';
+
 
 const formatDate = (date) => {
   const d = new Date(date);
@@ -28,7 +20,6 @@ const formatHour = (dateString) => {
 };
 
 const RepetitionsChoristeTable = ({ repetitions }) => {
-<<<<<<< HEAD
     const [visible, setVisible] = useState(false);
     const [selectedQRCode, setSelectedQRCode] = useState('');
     const [presenceConfirmed, setPresenceConfirmed] = useState(false);
@@ -37,13 +28,6 @@ const RepetitionsChoristeTable = ({ repetitions }) => {
     const [absenceVisible, setAbsenceVisible] = useState(false);
     const [absenceReason, setAbsenceReason] = useState('');
     const [selectedRepetition, setSelectedRepetition] = useState(null);
-=======
-  const [visible, setVisible] = useState(false);
-  const [selectedQRCode, setSelectedQRCode] = useState("");
-  const [presenceConfirmed, setPresenceConfirmed] = useState(false);
-  const [missedRepetition, setMissedRepetition] = useState(false);
-  const [waitForRehearsal, setWaitForRehearsal] = useState(false);
->>>>>>> e0b0e9696e9b39a8e0c64013b0a81bd208b41847
 
   const handleShowQRCode = (record) => {
     const isPresent = record.membres.some((membre) => membre.presence === true);
@@ -99,7 +83,6 @@ const RepetitionsChoristeTable = ({ repetitions }) => {
     setWaitForRehearsal(false);
   };
 
-<<<<<<< HEAD
     const handleMarkAbsence = (record) => {
         setSelectedRepetition(record);
         setAbsenceVisible(true);
@@ -215,8 +198,7 @@ const RepetitionsChoristeTable = ({ repetitions }) => {
             width: 50,
         },
     ];
-=======
-  const columns = [
+  /*const columns = [
     {
       title: "Num° ligne",
       dataIndex: "key",
@@ -270,8 +252,7 @@ const RepetitionsChoristeTable = ({ repetitions }) => {
       ),
       width: 50,
     },
-  ];
->>>>>>> e0b0e9696e9b39a8e0c64013b0a81bd208b41847
+  ];*/
 
   return (
     <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
@@ -326,7 +307,6 @@ const RepetitionsChoristeTable = ({ repetitions }) => {
               alt="QR Code"
               style={{ width: "100%", height: "auto" }}
             />
-<<<<<<< HEAD
             <Modal visible={visible} footer={null} onCancel={handleCancel}>
                 {presenceConfirmed ? (
                     <div style={{ marginTop: '50px', textAlign: 'center' }}>
@@ -362,15 +342,12 @@ const RepetitionsChoristeTable = ({ repetitions }) => {
                     onChange={(e) => setAbsenceReason(e.target.value)}
                 />
             </Modal>
-        </div>
-    );
-=======
+      
           </div>
         )}
       </Modal>
     </div>
   );
->>>>>>> e0b0e9696e9b39a8e0c64013b0a81bd208b41847
 };
 
 export default RepetitionsChoristeTable;

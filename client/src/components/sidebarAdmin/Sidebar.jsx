@@ -1,4 +1,3 @@
-import { Link } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
 function Sidebar() {
@@ -176,11 +175,7 @@ function Sidebar() {
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
-<<<<<<< HEAD
-            <div data-i18n="Account Settings">absences repetitions</div>
-=======
             <div data-i18n="Account Settings">Absences répétitions</div>
->>>>>>> 918ad54e9dcd4ba05cb08aee76e891ca87416c56
           </a>
         </li>
         
