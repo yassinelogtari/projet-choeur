@@ -62,11 +62,11 @@ const MembresOfPupitresTable = ({ choristes }) => {
           // Réinitialiser la sélection après la désignation
           setSelectedRowKeys([]);
         } else {
-          message.error("Erreur lors de la désignation des chefs de pupitre.");
+          message.error("Les chefs de ce pupitre est déja désigné.");
         }
       } catch (error) {
         console.error("Erreur lors de la désignation des chefs de pupitre :", error);
-        message.error("Erreur lors de la désignation des chefs de pupitre. Veuillez réessayer.");
+        message.error("Les chefs de ce pupitre sont déjà désigné.");
       }
     } else {
       message.error("Veuillez sélectionner exactement deux choristes pour désigner les chefs de pupitre.");

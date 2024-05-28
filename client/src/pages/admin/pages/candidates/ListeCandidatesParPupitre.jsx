@@ -22,7 +22,7 @@ const ListeCandidatesParPupitre = () => {
   };
 
   const columns = [
-    { field: '_id', headerName: 'ID', width: 90 },
+    
     { field: 'nom', headerName: 'Nom', width: 80 },
     { field: 'prenom', headerName: 'Prénom', width: 70 },
     { field: 'email', headerName: 'Email', width: 80 },

@@ -69,6 +69,7 @@ const insertConge = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 const validerConge = async (req, res) => {
   try {
     const { id: congeId } = req.params;
@@ -86,7 +87,7 @@ const validerConge = async (req, res) => {
     const { membre, dateDebut, dateFin } = conge;
 
     const currentDate = new Date();
-    if (currentDate >= dateDebut && currentDate <= dateFin) {
+    if (currentDate <= dateDebut && currentDate <= dateFin) {
       const updatedMembre = await Membre.findOneAndUpdate(
         { _id: membre, statut: { $ne: "En congé" } },
         { statut: "En congé" },
@@ -102,13 +103,13 @@ const validerConge = async (req, res) => {
 
       if (updatedMembre) {
         const membreSocketId = userSocketMap[updatedMembre._id];
-        if (membreSocketId) {
-          req.notificationData = {
-            userId: updatedMembre._id,
-            notificationMessage: `Votre statut a été changé en "En congé".`,
-          };
-          sendNotificationMiddlewareConge(req, res, () => {});
-        }
+
+        req.notificationData = {
+          userId: updatedMembre._id,
+          notificationMessage: `Votre statut a été changé en "En congé".`,
+        };
+        sendNotificationMiddlewareConge(req, res, () => {});
+
         updatedMembre.statut = "En congé";
         const chefPupitreByUpdatedMemberUsers = await Membre.find({
           role: "chef du pupitre",

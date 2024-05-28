@@ -1,16 +1,17 @@
-.contenu
+.contenuPlacement
 {
     position: absolute;
     top: 20vh;
-    left: 40vw;
+    left: 30vw;
+    width: 50vw;
     
 }
-/*.form{
+.form{
     display: flex;
     flex-direction: column;
     border: solid black;
     border-width: 1px;
-}*/
+}
 .inputet {
     border-radius: 5px;
     border: solid black;

@@ -452,7 +452,7 @@ function AffichePlacement() {
       {selectedPlacement && (
         <div>
           <h3> Détail de placement</h3>
-          <table>
+          <table className="tablePlacement">
             <thead>
               <tr>
                 <th>Row</th>

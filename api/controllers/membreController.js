@@ -144,7 +144,12 @@ const login = async (req, res) => {
         .status(401)
         .json({ message: "Email ou mot de passe incorrectes" });
     }
-
+    if (membre.isBanned) {
+      return res.status(403).json({
+        message:
+          "Vous êtes banni. Contactez l'administrateur pour plus d'informations.",
+      });
+    }
     const token = jwt.sign(
       { membreId: membre._id, role: membre.role },
       "RANDOM_TOKEN",
@@ -158,6 +163,13 @@ const login = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+
+
+
+
+
 const getMemberById = async (req, res) => {
   try {
     const membre = await Membre.findOne({ _id: req.params.id });

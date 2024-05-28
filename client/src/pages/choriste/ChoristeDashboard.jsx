@@ -8,7 +8,9 @@ import AllConcertsToMarquePresence from "./pages/presenceConcert/AllConcertsToMa
 import AllRepetitionToMarquePresence from "./pages/presenceRepetition/AllRepetitionToMarquePresence";
 
 import CongeChoristePage from "../admin/pages/conges/CongeChoristePage";
+import Profile from "../choriste/pages/profil/profil";
 import DisponibiliteConcert from "./pages/disponibilité/DisponibiliteConcert";
+import UpdateProfile from "./pages/profil/UpdateProfile";
 
 const ChoristeDashboard = (props) => {
   return (
@@ -40,7 +42,9 @@ const ChoristeDashboard = (props) => {
             {props.load === "demandeConge" && <DemandeConge />}
             {/*props.load === "historique" && <HistoriqueActivite />*/}
             {props.load === "conge Choriste" && <CongeChoristePage />}
-            {props.load ==="disponibilté concert" && <DisponibiliteConcert />}
+            {props.load === "disponibilté concert" && <DisponibiliteConcert />}
+            {props.load === "Profil" && <Profile />}
+            {props.load === "updateprofil" && <UpdateProfile />}
           </div>
           {/* Overlay */}
           <div className="layout-overlay layout-menu-toggle" />

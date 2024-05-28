@@ -16,9 +16,9 @@
     padding-inline: 20px;
 }
 
-/*table {
+.tablePlacement {
     border-collapse: collapse;
-    width: 100%;
+    width: 80%;
     margin-top: 20px;
 }
 
@@ -27,22 +27,14 @@ td {
     border: 1px solid black;
     padding: 8px;
     text-align: left;
+    color:#000080;
 }
 
 th {
     background-color: palevioletred;
 }
 
-/* Add borders between columns */
-/*th+th,
-td+td {
-    border-left: 1px solid black;
-}
 
-/* Add borders between rows */
-/*tr+tr {
-    border-top: 1px solid black;
-}*/
 .but{
     text-align: center;
     

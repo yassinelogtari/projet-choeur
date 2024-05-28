@@ -57,7 +57,7 @@ const DisponibiliteConcert = () => {
                         onChange={e => setIdCancert(e.target.value)} 
                         required
                     >
-                        <option value="">Select a concert</option>
+                        <option value="">Selectionner le Concert</option>
                         {concerts.map((concert) => (
                             <option key={concert._id} value={concert._id}>
                                 {concert.titre}
@@ -66,14 +66,14 @@ const DisponibiliteConcert = () => {
                     </select>
                 </div>
                 <div className="form-group checkbox">
-                    <label>Available:</label>
+                    <label>Disponibilité:</label>
                     <input type="checkbox" checked={isAvailable} onChange={e => setIsAvailable(e.target.checked)} />
                 </div>
                 <div className="form-group">
-                    <label>Reason (if not available):</label>
+                    <label>Raison (Si vous êtes  pas disponible!):</label>
                     <textarea value={reason} onChange={e => setReason(e.target.value)} />
                 </div>
-                <button type="submit" className="submit-button">Submit</button>
+                <button type="submit" className="submit-button">Envoyer</button>
             </form>
             {message && <p className="response-message">{message}</p>}
         </div>

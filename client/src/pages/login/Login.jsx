@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 import AdminDashboard from "../admin/AdminDashboard";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+} from "@mui/material";
 import Navbar from "../../components/navbar/Navbar";
 import { io } from "socket.io-client";
 import { posts } from "../../data"; // Import your data.js file
@@ -17,14 +25,22 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState("password");
   const [wrongCredentials, setWrongCredentials] = useState(false);
+  const [banned, setBanned] = useState(false);
   const [candidates, setCandidates] = useState([]);
   const [storedToken, setStoredToken] = useState();
   const [decodedToken, setDecodedToken] = useState();
+  const [openDialog, setOpenDialog] = useState(false);
+
   const [errors, setErrors] = useState({
     email: false,
     password: false,
   });
-
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
   // Declare socket outside of useEffect
   const socket = io.connect("http://localhost:5000/");
 
@@ -89,6 +105,10 @@ const Login = () => {
         if (e.response.status == 401) {
           setWrongCredentials(true);
         }
+        if (e.response.status == 403) {
+          setBanned(true);
+          handleOpenDialog();
+        }
       }
     }
   };
@@ -99,7 +119,7 @@ const Login = () => {
     // If a value is found, set the state with that value
     if (storedTokenValue) {
       setStoredToken(storedTokenValue);
-      console.log(decodedToken);  
+      console.log(decodedToken);
       setDecodedToken(jwtDecode(storedTokenValue));
     }
   }, []);
@@ -224,6 +244,20 @@ const Login = () => {
                   here{" "}
                 </Link>
               </p>
+              <Dialog open={openDialog} onClose={handleCloseDialog}>
+                <DialogTitle>Bannissement</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Vous êtes banni. Contactez l'administrateur pour plus
+                    d'informations.
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleCloseDialog} color="primary">
+                    OK
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </form>
           </div>
         </div>

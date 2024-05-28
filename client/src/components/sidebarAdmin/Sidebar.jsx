@@ -176,13 +176,21 @@ function Sidebar() {
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
-            <div data-i18n="Account Settings">absences repetions</div>
+            <div data-i18n="Account Settings">absences repetitions</div>
           </a>
         </li>
       </NavLink>
+      {/* <NavLink to="/dashboard/admin/repetition/ListePresenceRepetition">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">precences repetitions</div>
+          </a>
+        </li>
+      </NavLink> */}
 
-       {/* Conges */}
-       <li className="menu-header small text-uppercase">
+      {/* Conges */}
+      <li className="menu-header small text-uppercase">
         <span className="menu-header-text">Congés</span>
       </li>
       <NavLink to="/dashboard/admin/conges">
@@ -193,7 +201,7 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-      
+
       {/* Statistiques */}
       <li className="menu-header small text-uppercase">
         <span className="menu-header-text">Statistiques</span>
@@ -203,6 +211,78 @@ function Sidebar() {
           <a href="javascript:void(0);" className="menu-link menu-toggle">
             <i className="menu-icon tf-icons bx bx-dock-top" />
             <div data-i18n="Account Settings">Générer des Statistiques</div>
+          </a>
+        </li>
+      </NavLink>
+      {/* Absences */}
+      <li className="menu-header small text-uppercase">
+        <span className="menu-header-text">Absences</span>
+      </li>
+      <NavLink to="/dashboard/admin/absences">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Liste des absences</div>
+          </a>
+        </li>
+      </NavLink>
+            {/* Nomination */}
+            <li className="menu-header small text-uppercase">
+        <span className="menu-header-text">Nomination</span>
+      </li>
+      <NavLink to="/dashboard/admin/nomination/list">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Liste des nominés</div>
+          </a>
+        </li>
+      </NavLink>
+                  {/* Elimination*/}
+                  <li className="menu-header small text-uppercase">
+        <span className="menu-header-text">Elimination</span>
+      </li>
+      <NavLink to="/dashboard/admin/elimination/list">
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">Liste des éliminés</div>
+          </a>
+        </li>
+      </NavLink>
+      {/* Les eliminations */}
+      <li className="menu-header small text-uppercase">
+        <span className="menu-header-text">
+          Les éliminations disciplinaires
+        </span>
+      </li>
+      <NavLink to="/dashboard/admin/eliminerdiscipline" onClick={goup}>
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">
+              Eliminer un choriste pour une raison disciplinaire
+            </div>
+          </a>
+        </li>
+      </NavLink>
+      <NavLink to="/dashboard/admin/exlurechoriste" onClick={goup}>
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">
+              Exlure définitivement un choriste éliminé
+            </div>
+          </a>
+        </li>
+      </NavLink>
+      <NavLink to="/dashboard/admin/modifiertauxelimination" onClick={goup}>
+        <li className="menu-item">
+          <a href="javascript:void(0);" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-dock-top" />
+            <div data-i18n="Account Settings">
+              Modifier le taux d'élimination
+            </div>
           </a>
         </li>
       </NavLink>
@@ -219,7 +299,7 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-      
+
       <NavLink to="/dashboard/admin/accounts/list" onClick={goup}>
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">

@@ -42,13 +42,8 @@ const TableOfConges = () => {
                 await axios.post(`http://localhost:8000/api/conge/valider/${id}`);
                 message.success('Congé validé avec succès');
                 // Rafraîchir la liste des congés après validation
-                const updatedConges = conges.map(conge => {
-                    if (conge._id === id) {
-                        return { ...conge, valide: true };
-                    }
-                    return conge;
-                });
-                setConges(updatedConges);
+                const updatedConges = conges.filter(conge => conge._id !== id);
+                setConges(updatedConges);            
             } catch (error) {
                 console.error('Erreur lors de la validation du congé : ', error);
                 message.error('Erreur lors de la validation du congé');

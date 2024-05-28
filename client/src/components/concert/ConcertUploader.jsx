@@ -7,7 +7,7 @@ const ConcertUploader = () => {
 
   // Function to handle file selection
   const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]); // Set the selected file to the state
+    setSelectedFile(event.target.files[0]);
   };
 
   // Function to handle file upload
@@ -19,9 +19,7 @@ const ConcertUploader = () => {
 
     try {
       const formData = new FormData();
-      formData.append("excelFilePath", selectedFile); // Append the selected file to the FormData
-
-      // Send a POST request to the server with the FormData containing the file
+      formData.append("excelFilePath", selectedFile);
       const response = await axios.post(
         "http://localhost:8000/api/concerts/concert",
         formData,
@@ -32,6 +30,18 @@ const ConcertUploader = () => {
         }
       );
 
+      if (response.data && response.data.success) {
+        const updatedMembers = response.data.data.listeMembres.map(
+          (member) => ({
+            ...member,
+            disponibility: { isAvailable: true },
+          })
+        );
+
+        console.log("Updated Members:", updatedMembers);
+
+        response.data.data.listeMembres = updatedMembers;
+      }
       console.log("Upload response:", response.data);
       setUploadStatus("Concert data uploaded successfully.");
     } catch (error) {
