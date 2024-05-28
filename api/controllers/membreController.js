@@ -158,6 +158,13 @@ const login = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+
+
+
+
+
 const getMemberById = async (req, res) => {
   try {
     const membre = await Membre.findOne({ _id: req.params.id });

@@ -258,6 +258,101 @@ const App = () => {
           )}
 
           <Route
+<<<<<<< HEAD
+=======
+            path="/dashboard/choriste/presence/allConcerts"
+            element={<ChoristeDashboard load="allConcerts" />}
+          />
+
+          <Route
+            path="/dashboard/choriste/home"
+            element={<ChoristeDashboard load="home" />}
+          />
+          <Route
+            path="/dashboard/choriste/historique"
+            element={<ChoristeDashboard load="historique" />}
+          />
+           <Route
+            path="/dashboard/choriste/demandeConge"
+            element={<ChoristeDashboard load="demandeConge" />}
+          />
+          <Route
+            path="/dashboard/choriste/disponibilité"
+            element={<ChoristeDashboard load="disponibilté concert" />}
+          />
+          <Route
+            path="/dashboard/choriste/conge"
+            element={<ChoristeDashboard load="conge Choriste" />}
+          />
+
+
+          <Route
+            exact
+            path="/dashboard/manager"
+            element={<ManagerDashboard />}
+          />
+           <Route
+            path="/dashboard/manager/home"
+            element={<ManagerDashboard  load="home"/>}
+          />
+
+          <Route
+            path="/dashboard/manager/désigniation-chefs-pupitres"
+            element={<ManagerDashboard  load="désigniation-chefs-pupitres"/>}
+          />
+
+          <Route
+            exact
+            path="/dashboard/choriste"
+            element={<ChoristeDashboard />}
+          />
+          <Route
+            exact
+            path="/dashboard/chef-de-pupitre/home"
+            element={<ChefPupitreDashboard load="home" />}
+          />
+                    <Route
+            path="/dashboard/chef-de-pupitre/repetition/ListePresenceRepetition"
+            element={<ChefPupitreDashboard load="ListePresenceRepetition" />}
+          />
+          
+          <Route
+            path="/dashboard/chef-de-pupitre/presence-main-concert"
+            element={<ChefPupitreDashboard load="presenceConcert" />}
+          />
+
+          <Route
+            path="/dashboard/admin"
+            element={<Navigate to="/dashboard/admin/home" />}
+          />
+          <Route
+            exact
+            path="/dashboard/admin/home"
+            element={<AdminDashboard load="home" />}
+          />
+
+          <Route
+            path="/dashboard/admin/Audition/list"
+            element={<AdminDashboard load="adminAudition" />}
+          />
+          <Route
+            path="/dashboard/admin/archive"
+            element={<AdminDashboard load="archives" />}
+          />
+          <Route
+            path="/dashboard/admin/nouvelleSaison"
+            element={<AdminDashboard load="nouvelleSaison" />}
+          />
+          <Route
+            path="/dashboard/admin/saisonActuelle"
+            element={<AdminDashboard load="saisonActuelle" />}
+          />
+          <Route
+            path="/dashboard/admin/archive"
+            element={<AdminDashboard load="archives" />}
+          />
+          <Route
+>>>>>>> d255e65ba4ab8341b3df0bb617d1ee793ddad30d
             exact
             path="/saison/archive/details-saisonArchivee/:idSA"
             element={<SaisonArchiveeDetails />}
@@ -400,6 +495,7 @@ const App = () => {
           />
 
           <Route exact path="/concert" element={<Concert />} />
+<<<<<<< HEAD
           {decodedToken && decodedToken.role == "admin" ? (
             <Route
               exact
@@ -549,6 +645,80 @@ const App = () => {
           )}
           <Route exact path="/404" element={<NotFoundPage />} />
           <Route path="*" element={<Navigate to="/404" />} />
+=======
+          <Route
+            exact
+            path="/dashboard/admin/concert/addConcert"
+            element={<AddConcert />}
+          />
+
+          <Route
+            path="/dashboard/admin/repetition/liste-absence"
+            element={<AdminDashboard load="absenceRep" />}
+          />
+                    <Route
+            path="/dashboard/admin/absences"
+            element={<AdminDashboard load="absences" />}
+          />
+          <Route
+            path="/dashboard/admin/nomination/list"
+            element={<AdminDashboard load="Nomination" />}
+          />
+                    <Route
+            path="/dashboard/admin/elimination/list"
+            element={<AdminDashboard load="Elimination" />}
+          />
+          <Route
+            path="/dashboard/admin/Candidature/listV2"
+            element={<AdminDashboard load="candidatesListV2" />}
+          />
+
+          <Route
+            path="/dashboard/admin/AbsenceConcerts"
+            element={<AdminDashboard load="AbsenceConcerts" />}
+          />
+          
+          <Route
+            path="/dashboard/admin/repetition/ListePresenceRepetition"
+            element={<AdminDashboard load="ListePresenceRepetition" />}
+          />
+           <Route
+            path="/dashboard/admin/conges"
+            element={<AdminDashboard load="conges" />}
+          />
+          <Route
+            path="/dashboard/admin/accounts/register"
+            element={<AdminDashboard load="AcountRegister" />}
+          />
+          <Route
+            path="/dashboard/admin/placement"
+            element={<AdminDashboard load="placement" />}
+          />
+          <Route
+            path="/dashboard/admin/accounts/list"
+            element={<AdminDashboard load="AcountList" />}
+          />
+           <Route
+            path="/dashboard/admin/placement/affiche"
+            element={<AdminDashboard load="placement affiche" />}
+          />
+           <Route
+            exact
+            path="/dashboard/admin/accounts/infos/:id/"
+            element={<AdminDashboard load="AcountInfos" />}
+          />
+          <Route
+            exact
+            path="/dashboard/admin/accounts/infos/edit/:id/"
+            element={<AdminDashboard load="AcountInfosEdit" />}
+          />
+          <Route
+            exact
+            path="/dashboard/admin/concerts/disponible-members/:idC/"
+            element={<AdminDashboard load="ConcertDisponibleMembers" />}
+          />
+          
+>>>>>>> d255e65ba4ab8341b3df0bb617d1ee793ddad30d
         </Routes>
       </>
     </Router>
