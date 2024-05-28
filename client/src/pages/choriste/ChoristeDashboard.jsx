@@ -7,7 +7,7 @@ import PresenceRepetition from "../../routes/PresenceRepetititon";
 import AllRepetitionToMarquePresence from "./pages/presenceRepetition/AllRepetitionToMarquePresence";
 import AllConcertsToMarquePresence from "./pages/presenceConcert/AllConcertsToMarquePresence";
 //import Historique from "./pages/historique/Historique";
-import Historique from "./pages/historique/Historique"; 
+import Historique from "./pages/historique/Historique";
 import CongeForm from "../../components/congeChoriste/CongeForm";
 import DemandeConge from "./pages/demandeConge/DemandeConge";
 
@@ -15,6 +15,8 @@ import CongeChoristePage from "../admin/pages/conges/CongeChoristePage";
 import HistoriqueActivite from "../../components/historiqueContent/HistoriqueActivite";
 import { genPreviewOperationsStyle } from "antd/es/image/style";
 import DisponibiliteConcert from "./pages/disponibilité/DisponibiliteConcert";
+import Profile from "../choriste/pages/profil/profil";
+import UpdateProfile from "./pages/profil/UpdateProfile";
 
 const ChoristeDashboard = (props) => {
   return (
@@ -40,7 +42,9 @@ const ChoristeDashboard = (props) => {
             {props.load === "demandeConge" && <DemandeConge />}
             {props.load === "historique" && <HistoriqueActivite />}
             {props.load === "conge Choriste" && <CongeChoristePage />}
-            {props.load ==="disponibilté concert" && <DisponibiliteConcert />}
+            {props.load === "disponibilté concert" && <DisponibiliteConcert />}
+            {props.load === "Profil" && <Profile />}
+            {props.load === "updateprofil" && <UpdateProfile />}
           </div>
           {/* Overlay */}
           <div className="layout-overlay layout-menu-toggle" />

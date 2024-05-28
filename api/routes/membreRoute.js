@@ -16,7 +16,7 @@ router.post(
 router.post("/login", membreController.login);
 router.get(
   "/getMembreById/:id",
- /* middlewareDate.loggedMiddleware,
+  /* middlewareDate.loggedMiddleware,
   middlewareDate.isAdmin,*/
   membreController.getMemberById
 );
@@ -40,8 +40,8 @@ router.delete(
 );
 router.patch(
   "/updateMember/:id",
-  middlewareDate.loggedMiddleware,
-  middlewareDate.isAdmin,
+  //middlewareDate.loggedMiddleware,
+  //middlewareDate.isAdmin,
   membreController.updateMember
 );
 

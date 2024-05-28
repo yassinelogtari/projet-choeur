@@ -64,7 +64,12 @@ router.patch(
   middlewareSaison.isAdmin,*/
   saisonController.updateSaison
 );
-router.post('/member/historique_statut/:id',saisonController.consulterHistoriqueStatutMembre);
+router.post(
+  "/member/historique_statut/:id",
+  saisonController.consulterHistoriqueStatutMembre
+);
+router.put("/tauxOut", saisonController.updateTauxOut);
+router.get("/tauxOut", saisonController.getTauxOut);
 /**
  * @swagger
  * tags:

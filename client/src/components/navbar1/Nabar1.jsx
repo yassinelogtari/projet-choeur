@@ -4,11 +4,16 @@ import { jwtDecode } from "jwt-decode";
 import Table from "../table/Table";
 import Notification from "../../img/notification.svg";
 import adminIcon from "../../assets/img/avatars/admin-icon.png";
+import womanIcon from "../../assets/img/avatars/woman.png";
+import manIcon from "../../assets/img/avatars/man.png";
+import parametresIcon from "../../assets/img/avatars/adjust (1).png";
+
 import { io } from "socket.io-client";
 import PermIdentityRoundedIcon from "@mui/icons-material/PermIdentityRounded";
 import PowerSettingsNewRoundedIcon from "@mui/icons-material/PowerSettingsNewRounded";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import Tooltip from "@mui/material/Tooltip";
 
 function Navbar1() {
   const [notifications, setNotifications] = useState([]);
@@ -17,11 +22,34 @@ function Navbar1() {
   const [storedToken, setStoredToken] = useState();
   const [user, setUser] = useState();
   const [candidates, setCandidates] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
   const [hideDropDownMenu, sethideDropDownMenu] = useState(
     "dropdown-menu dropdown-menu-end"
   );
   const navigate = useNavigate();
   const socket = io.connect("http://localhost:5000/");
+  const handleSearchInputChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/reset/search?q=${searchQuery}`
+        );
+
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching search results:", error);
+      }
+    };
+
+    if (searchQuery) {
+      fetchSearchResults();
+    }
+  }, [searchQuery]);
 
   useEffect(() => {
     if (socket && user) {
@@ -66,6 +94,8 @@ function Navbar1() {
       if (res) {
         setUser(res.data);
         console.log(res.data.notifications);
+        //console.log("hh", user.role);
+
         setNotifications(res.data.notifications);
         let count = 0;
         for (let i = 0; i < res.data.notifications.length; i++) {
@@ -112,7 +142,29 @@ function Navbar1() {
       ? sethideDropDownMenu("dropdown-menu dropdown-menu-end show")
       : sethideDropDownMenu("dropdown-menu dropdown-menu-end");
   };
-
+  const capitalizeFirstLetter = (string) => {
+    if (!string) return "";
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+  const renderUserAvatar = () => {
+    if (!user?.sexe) {
+      return (
+        <img src={manIcon} alt="" className="w-px-40 h-auto rounded-circle" />
+      );
+    } else if (user?.sexe === "Homme") {
+      return (
+        <img src={manIcon} alt="" className="w-px-40 h-auto rounded-circle" />
+      );
+    } else if (user?.sexe === "Femme") {
+      return (
+        <img src={womanIcon} alt="" className="w-px-40 h-auto rounded-circle" />
+      );
+    } else {
+      return (
+        <img src={manIcon} alt="" className="w-px-40 h-auto rounded-circle" />
+      );
+    }
+  };
   return (
     <div className="layout-page position-relative">
       {/* Navbar */}
@@ -141,17 +193,30 @@ function Navbar1() {
                 className="form-control border-0 shadow-none"
                 placeholder="Search..."
                 aria-label="Search..."
+                value={searchQuery}
+                onChange={handleSearchInputChange}
               />
+              {searchResults.length > 0 && (
+                <div className="autocomplete-dropdown">
+                  {searchResults.map((result) => (
+                    <div key={result.id} className="autocomplete-item">
+                      {result.name}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
           {/* /Search */}
           <ul className="navbar-nav flex-row align-items-center ms-auto">
             {/* Place this tag where you want the button to render. */}
             <li className="nav-item lh-1 me-3">
-              <div className="icon" onClick={() => setOpen(!open)}>
-                <img src={Notification} className="iconImg" alt="" />
-                {couter > 0 && <div className="counter">{couter}</div>}
-              </div>
+              <Tooltip title="Consulter les notifications">
+                <div className="icon" onClick={() => setOpen(!open)}>
+                  <img src={Notification} className="iconImg" alt="" />
+                  {couter > 0 && <div className="counter">{couter}</div>}
+                </div>
+              </Tooltip>{" "}
               {open && (
                 <div className="notifications">
                   {notifications
@@ -181,13 +246,14 @@ function Navbar1() {
                 href="javascript:void(0);"
                 data-bs-toggle="dropdown"
               >
-                <div className="avatar avatar-online">
-                  <img
-                    src={adminIcon}
-                    alt
-                    className="w-px-40 h-auto rounded-circle"
-                  />
-                </div>
+                <Tooltip title="Paramètres de profil">
+                  <div className="avatar2">
+                    <img
+                      src={parametresIcon}
+                      style={{ width: "27px", height: "27px" }}
+                    />
+                  </div>
+                </Tooltip>
               </a>
               <ul className={hideDropDownMenu} style={{ right: "0" }}>
                 <li>
@@ -195,16 +261,18 @@ function Navbar1() {
                     <div className="d-flex">
                       <div className="flex-shrink-0 me-3">
                         <div className="avatar avatar-online">
-                          <img
-                            src={adminIcon}
-                            alt
-                            className="w-px-40 h-auto rounded-circle"
-                          />
+                          {renderUserAvatar()}
                         </div>
                       </div>
                       <div className="flex-grow-1">
-                        <span className="fw-semibold d-block">John Doe</span>
-                        <small className="text-muted">Admin</small>
+                        <span className="fw-semibold d-block">
+                          {capitalizeFirstLetter(user?.prenom)}
+                          &nbsp;
+                          {user?.nom?.toUpperCase()}
+                        </span>
+                        <small className="text-muted">
+                          {capitalizeFirstLetter(user?.role)}{" "}
+                        </small>
                       </div>
                     </div>
                   </a>
@@ -212,12 +280,37 @@ function Navbar1() {
                 <li>
                   <div className="dropdown-divider" />
                 </li>
-                <li>
-                  <Link className="dropdown-item">
-                    <PermIdentityRoundedIcon className="bx bx-user me-2"></PermIdentityRoundedIcon>
-                    <span className="align-middle">My Profile</span>
-                  </Link>
-                </li>
+                {user?.role === "admin" ? (
+                  <li>
+                    <Tooltip
+                      title="Consulter votre profil"
+                      placement="bottom-end"
+                    >
+                      <NavLink
+                        to="/dashboard/admin/profileadmin"
+                        className="dropdown-item"
+                      >
+                        <PermIdentityRoundedIcon className="bx bx-user me-2" />
+                        <span className="align-middle">Mon Profil</span>
+                      </NavLink>
+                    </Tooltip>
+                  </li>
+                ) : (
+                  <li>
+                    <Tooltip
+                      title="Consulter votre profil"
+                      placement="bottom-end"
+                    >
+                      <NavLink
+                        to="/dashboard/choriste/profile"
+                        className="dropdown-item"
+                      >
+                        <PermIdentityRoundedIcon className="bx bx-user me-2" />
+                        <span className="align-middle">Mon Profil</span>
+                      </NavLink>
+                    </Tooltip>
+                  </li>
+                )}
 
                 <li>
                   <div className="dropdown-divider" />
@@ -225,7 +318,7 @@ function Navbar1() {
                 <li>
                   <Link className="dropdown-item" onClick={handleLogout}>
                     <PowerSettingsNewRoundedIcon className="bx bx-power-off me-2"></PowerSettingsNewRoundedIcon>
-                    <span className="align-middle">Log Out</span>
+                    <span className="align-middle">Déconnexion</span>
                   </Link>
                 </li>
               </ul>

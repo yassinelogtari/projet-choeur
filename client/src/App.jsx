@@ -256,7 +256,6 @@ const App = () => {
               element={<Navigate to="/404" />}
             />
           )}
-
           <Route
 <<<<<<< HEAD
 =======
@@ -357,13 +356,11 @@ const App = () => {
             path="/saison/archive/details-saisonArchivee/:idSA"
             element={<SaisonArchiveeDetails />}
           />
-
           <Route
             exact
             path="/saison/archive/details-saisonArchivee/table"
             element={<MembresTable />}
           />
-
           {decodedToken && decodedToken.role == "admin" ? (
             <Route
               path="/dashboard/admin/addAudition"
@@ -452,19 +449,16 @@ const App = () => {
               element={<Navigate to="/404" />}
             />
           )}
-
           <Route
             exact
             path="/presence/cancert/:idC"
             element={<PresenceConcert />}
           />
-
           <Route
             exact
             path="/presence/repetition/:idR"
             element={<PresenceRepetition />}
           />
-
           {decodedToken && decodedToken.role == "admin" ? (
             <Route
               path="/dashboard/admin/concert"
@@ -485,15 +479,12 @@ const App = () => {
             path="/candidats/:id/verify/:token"
             element={<FormCandidature />}
           />
-
           <Route exact path="/candidatsForm  " element={<FormCandidature />} />
-
           <Route
             exact
             path="/emailVerification"
             element={<EmailVerification />}
           />
-
           <Route exact path="/concert" element={<Concert />} />
 <<<<<<< HEAD
           {decodedToken && decodedToken.role == "admin" ? (
@@ -643,6 +634,115 @@ const App = () => {
               element={<Navigate to="/404" />}
             />
           )}
+          {decodedToken && decodedToken.role == "admin" ? (
+            <Route
+              exact
+              path="/dashboard/admin/exlurechoriste"
+              element={<AdminDashboard load="exlurechoriste" />}
+            />
+          ) : (
+            <Route
+              path="/dashboard/admin/exlurechoriste"
+              element={<Navigate to="/404" />}
+            />
+          )}
+          {decodedToken && decodedToken.role == "admin" ? (
+            <Route
+              exact
+              path="/dashboard/admin/modifiertauxelimination"
+              element={<AdminDashboard load="modifiertauxelimination" />}
+            />
+          ) : (
+            <Route
+              path="/dashboard/admin/modifiertauxelimination"
+              element={<Navigate to="/404" />}
+            />
+          )}
+          {decodedToken && decodedToken.role == "admin" ? (
+            <Route
+              exact
+              path="/dashboard/admin/eliminerdiscipline"
+              element={<AdminDashboard load="eliminerdiscipline" />}
+            />
+          ) : (
+            <Route
+              path="/dashboard/admin/eliminerdiscipline"
+              element={<Navigate to="/404" />}
+            />
+          )}
+          {decodedToken && decodedToken.role == "admin" ? (
+            <Route
+              exact
+              path="/dashboard/admin/profileadmin"
+              element={<AdminDashboard load="profileadmin" />}
+            />
+          ) : (
+            <Route
+              path="/dashboard/admin/profileadmin"
+              element={<Navigate to="/404" />}
+            />
+          )}
+          {decodedToken && decodedToken.role == "admin" ? (
+            <Route
+              exact
+              path="/dashboard/admin/updateprofileadmin"
+              element={<AdminDashboard load="updateprofileadmin" />}
+            />
+          ) : (
+            <Route
+              path="/dashboard/admin/updateprofileadmin"
+              element={<Navigate to="/404" />}
+            />
+          )}
+          {decodedToken && decodedToken.role == "admin" ? (
+            <Route
+              exact
+              path="/dashboard/admin/elimineprofil"
+              element={<AdminDashboard load="elimineprofil" />}
+            />
+          ) : (
+            <Route
+              path="/dashboard/admin/elimineprofil"
+              element={<Navigate to="/404" />}
+            />
+          )}
+          {decodedToken && decodedToken.role == "admin" ? (
+            <Route
+              exact
+              path="/dashboard/admin/nomineprofil"
+              element={<AdminDashboard load="nomineprofil" />}
+            />
+          ) : (
+            <Route
+              path="/dashboard/admin/nomineprofil"
+              element={<Navigate to="/404" />}
+            />
+          )}
+          {decodedToken && decodedToken.role == "choriste" ? (
+            <Route
+              exact
+              path="/dashboard/choriste/profile"
+              element={<ChoristeDashboard load="Profil" />}
+            />
+          ) : (
+            <Route
+              path="/dashboard/choriste/profile"
+              element={<Navigate to="/404" />}
+            />
+          )}
+          {decodedToken && decodedToken.role == "choriste" ? (
+            <Route
+              exact
+              path="/dashboard/choriste/updateprofil"
+              element={<ChoristeDashboard load="updateprofil" />}
+            />
+          ) : (
+            <Route
+              path="/dashboard/choriste/updateprofil"
+              element={<Navigate to="/404" />}
+            />
+          )}
+
           <Route exact path="/404" element={<NotFoundPage />} />
           <Route path="*" element={<Navigate to="/404" />} />
 =======
