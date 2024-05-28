@@ -8,7 +8,7 @@ const {sendNotificationMiddleware} = require("../middlewares/sendNotificationMid
 const { userSocketMap } = require("../utils/socket");
 
 const genererListeMembres=async(pupitre,pourcentage)=>{
-  const membresPupitre=await Membre.find({pupitre,role:{$in:['choriste']},statut:{$ne:'En congé'}})
+  const membresPupitre=await Membre.find({pupitre,statut:{$ne:'En congé'}}).or([{ role: 'choriste' }, { role: 'chef du pupitre' }]);
   if (pourcentage > 0 && pourcentage <= 100 && membresPupitre.length > 0) {
   const nombreMembres=Math.ceil((pourcentage/100)*membresPupitre.length)
   const listeAleatoire=[]
@@ -27,9 +27,9 @@ else{
 const createRepetition = async (req, res) => {
   try {
     
-    const {concert,lieu,DateRep,HeureDeb,HeureFin,pourcentages,chefsPupitres}=req.body
+    const {concert,lieu,DateRep,HeureDeb,HeureFin,pourcentages}=req.body
 
-    const chefsSoprano=await Membre.findOne({_id:chefsPupitres.soprano,role:"chef du pupitre"})
+    /*const chefsSoprano=await Membre.findOne({_id:chefsPupitres.soprano,role:"chef du pupitre"})
     const chefsAlto=await Membre.findOne({_id:chefsPupitres.alto,role:"chef du pupitre"})
     const chefsTenor=await Membre.findOne({_id:chefsPupitres.tenor,role:"chef du pupitre"})
     const chefsBasse=await Membre.findOne({_id:chefsPupitres.basse,role:"chef du pupitre"})
@@ -37,15 +37,15 @@ const createRepetition = async (req, res) => {
     if(!chefsSoprano || !chefsAlto ||!chefsTenor || !chefsBasse){
       return res.status(400).json({message:"Certains membres spécifiés ne sont pas des chefs du pupitre"})
     }
-    else{
+    else{*/
     const membresSoprano=await genererListeMembres("soprano",pourcentages.soprano)
     const membresAlto=await genererListeMembres("alto",pourcentages.alto)
     const membresTenor=await genererListeMembres("ténor",pourcentages.tenor)
     const membresBasse=await genererListeMembres("basse",pourcentages.basse)
-    if (pourcentages.soprano > 0 && membresSoprano.length != 0 ) membresSoprano.push({ member: chefsPupitres.soprano, role: "chef du pupitre" });
+    /*if (pourcentages.soprano > 0 && membresSoprano.length != 0 ) membresSoprano.push({ member: chefsPupitres.soprano, role: "chef du pupitre" });
     if (pourcentages.alto > 0 && membresAlto.length != 0) membresAlto.push({ member: chefsPupitres.alto, role: "chef du pupitre" });
     if (pourcentages.tenor > 0 && membresTenor.length != 0) membresTenor.push({ member: chefsPupitres.tenor, role: "chef du pupitre" });
-    if (pourcentages.basse > 0 && membresBasse.length != 0) membresBasse.push({ member: chefsPupitres.basse, role: "chef du pupitre" });
+    if (pourcentages.basse > 0 && membresBasse.length != 0) membresBasse.push({ member: chefsPupitres.basse, role: "chef du pupitre" });*/
     const repetition=new Repetition({
       concert,
       lieu,
@@ -64,10 +64,10 @@ const createRepetition = async (req, res) => {
       await currentSaison.save();
     }
     await repetition.save()
-
+    
     req.repetitionId = repetition._id;
     await addQrCodeToRepetition.addQrCodeToRepetition(req, res, () => {});
-  }
+  
   } catch (error) {
     return res.status(500).json({ error: error.message })
   }
@@ -186,7 +186,7 @@ const getAllRepetition = async (req, res) => {
 
 const updateRepetition=async(req,res)=>{
   try{
-    const repetition=await Repetition.findOneAndUpdate({_id:req.params.id},req.body,{new:true})
+    const repetition=await Repetition.findOneAndUpdate({_id:req.params.id},req.body,{new:true}).populate("concert")
     if(!repetition){
       return res.status(404).json({message:"Répétition non trouvée"})
     }
@@ -248,5 +248,39 @@ const listPresenceByPupitre = async (req, res) => {
     res.status(500).json({ error:error });
   }
 };
+const absenceRepetition = async (req, res) => {
+  const { repetitionId, raison } = req.body;
+  const memberId = req.auth.membreId;
 
-module.exports = {createRepetition,listPresenceByPupitre,deleteRepetition,getRepetitionById,getAllRepetition,updateRepetition};
+  try {
+  
+    const repetition = await Repetition.findById(repetitionId);
+
+    if (!repetition) {
+      return res.status(404).json({ error: 'Répétition non trouvé' });
+    }
+
+    const memberIndex = repetition.membres.findIndex(
+      (m) => m.member.toString() === memberId
+    );
+
+    if (memberIndex === -1) {
+      return res.status(404).json({ error: 'Membre non trouvé dans cette répétition' });
+    }
+    if (repetition.membres[memberIndex].presence == false) {
+      return res.status(400).json({ error: 'Vous avez déjà marqué votre absence pour cette répétition.' });
+  }
+
+    repetition.membres[memberIndex].absence = { raison };
+    repetition.membres[memberIndex].presence = false; 
+    
+    await repetition.save();
+
+    res.json({ message: 'Votre absence a été bien enregistré' });
+  } catch (error) {
+    console.error('Erreur:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+module.exports = {createRepetition,listPresenceByPupitre,deleteRepetition,getRepetitionById,getAllRepetition,updateRepetition,absenceRepetition};

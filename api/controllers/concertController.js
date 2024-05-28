@@ -594,6 +594,41 @@ async function extractAndSaveConcert(filePath) {
     throw error; // Propagate the error to the caller
   }
 }
+const absenceConcert = async (req, res) => {
+  const { concertId, raison } = req.body;
+  const memberId = req.auth.membreId;
+
+  try {
+  
+    const concert = await Concert.findById(concertId);
+
+    if (!concert) {
+      return res.status(404).json({ error: 'Concert non trouvé' });
+    }
+
+    const memberIndex = concert.listeMembres.findIndex(
+      (m) => m.membre.toString() === memberId
+    );
+
+    if (memberIndex === -1) {
+      return res.status(404).json({ error: 'Membre non trouvé dans ce concert' });
+    }
+    if (concert.listeMembres[memberIndex].presence == false) {
+      return res.status(400).json({ error: 'Vous avez déjà marqué votre absence pour ce concert.' });
+  }
+
+    concert.listeMembres[memberIndex].absence = { raison };
+    concert.listeMembres[memberIndex].presence = false; 
+
+    await concert.save();
+
+    res.json({ message: 'Votre absence a été bien enregistré' });
+  } catch (error) {
+    console.error('Erreur:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 module.exports = {
   createConcert,
   getListeParticipantsParPupitre,
@@ -605,4 +640,5 @@ module.exports = {
   validerConcert,
   getMembresValides,
   extractAndSaveConcert,
+  absenceConcert
 };

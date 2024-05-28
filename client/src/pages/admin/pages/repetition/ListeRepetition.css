@@ -1,0 +1,38 @@
+.repetition-title{
+    position: absolute;
+    margin-top: 110px;
+    margin-left: -1150px;
+}
+.Card-white-rep{
+    position: absolute;
+    margin-top: 170px;
+    margin-left: -1130px;
+    width: 1000px;
+}
+.textFieldRep{
+    width: 230px !important;
+    border-color: #1565C0 !important;
+}
+.textFieldRep label {
+    color: #1565C0 !important;
+}
+.textFieldRep .MuiOutlinedInput-notchedOutline {
+    border-color: #1565C0 !important;
+}
+.button-container-rep{
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+.confirmDelete{
+    color:#5A6E82!important ;
+}
+.detailRep{
+    width: 350px !important;
+}
+
+
+
+
+

@@ -331,6 +331,8 @@ const updateMember = async (req, res) => {
   }
 };
 
+
+
 module.exports = {
   modifierTessiture,
   register,
@@ -340,4 +342,5 @@ module.exports = {
   deleteMember,
   updateMember,
   getMembersByPupitre,
+  
 };

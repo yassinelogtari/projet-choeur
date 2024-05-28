@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Button, Modal } from 'antd';
+import { Table, Button, Modal, Input, notification } from 'antd';
 import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
 const formatDate = (date) => {
@@ -21,6 +21,9 @@ const RepetitionsChoristeTable = ({ repetitions }) => {
     const [presenceConfirmed, setPresenceConfirmed] = useState(false);
     const [missedRepetition, setMissedRepetition] = useState(false);
     const [waitForRehearsal, setWaitForRehearsal] = useState(false);
+    const [absenceVisible, setAbsenceVisible] = useState(false);
+    const [absenceReason, setAbsenceReason] = useState('');
+    const [selectedRepetition, setSelectedRepetition] = useState(null);
 
     const handleShowQRCode = (record) => {
         const isPresent = record.membres.some((membre) => membre.presence === true);
@@ -73,6 +76,60 @@ const RepetitionsChoristeTable = ({ repetitions }) => {
         setWaitForRehearsal(false);
     };
 
+    const handleMarkAbsence = (record) => {
+        setSelectedRepetition(record);
+        setAbsenceVisible(true);
+    };
+    const handleAbsenceOk = async () => {
+        if (!absenceReason) {
+            notification.error({
+                message: 'Erreur',
+                description: 'Veuillez fournir une raison pour votre absence.',
+            });
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:8000/api/repetition/addAbsence', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify({
+                    repetitionId: selectedRepetition._id,
+                    raison: absenceReason,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                notification.success({
+                    message: 'Succès',
+                    description: data.message,
+                });
+                setAbsenceVisible(false);
+                setAbsenceReason('');
+            } else {
+                notification.error({
+                    message: 'Erreur',
+                    description: data.error,
+                });
+            }
+        } catch (error) {
+            console.error('Erreur:', error);
+            notification.error({
+                message: 'Erreur',
+                description: 'Erreur lors de la tentative de marquer votre absence.',
+            });
+        }
+    };
+    const handleAbsenceCancel = () => {
+        setAbsenceVisible(false);
+        setAbsenceReason('');
+    };
+
     const columns = [
         {
             title: 'Num° ligne',
@@ -119,6 +176,20 @@ const RepetitionsChoristeTable = ({ repetitions }) => {
             ),
             width: 50,
         },
+        {
+            title: 'Absence',
+            key: 'action',
+            render: (record) => (
+                <Button
+                    type="primary"
+                    style={{ width: '100%', height: 'auto', padding: '14px 20px', fontSize: 'medium', fontWeight: '500', marginBottom: '20px', backgroundColor: '#00b27a' }}
+                    onClick={() => handleMarkAbsence(record)}
+                >
+                    Marquer Absence
+                </Button>
+            ),
+            width: 50,
+        },
     ];
 
     return (
@@ -150,6 +221,18 @@ const RepetitionsChoristeTable = ({ repetitions }) => {
                         <img src={selectedQRCode} alt="QR Code" style={{ width: '100%', height: 'auto' }} />
                     </div>
                 )}
+            </Modal>
+            <Modal
+                visible={absenceVisible}
+                onOk={handleAbsenceOk}
+                onCancel={handleAbsenceCancel}
+                closable={false} 
+            >
+                <Input
+                    placeholder="Raison"
+                    value={absenceReason}
+                    onChange={(e) => setAbsenceReason(e.target.value)}
+                />
             </Modal>
         </div>
     );

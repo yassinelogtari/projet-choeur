@@ -17,7 +17,7 @@ const addQrCodeToRepetition = async (req, res, next) => {
       "membres._id": 0,
     });
     return res.status(201).json({
-      message: "Repetition created successfully",
+      message: "Répétition crée avec succées",
       repetition: updatedRepetition,
     });
   } catch (error) {

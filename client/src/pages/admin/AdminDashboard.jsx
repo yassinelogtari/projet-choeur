@@ -30,6 +30,7 @@ import AccountInfo from "./pages/comptes/AcountInfos";
 import AccountInfoEdit from "./pages/comptes/AcountInfosEdit";
 import ConcertDisponibleMembers from "./pages/concerts/ConcertDisponibleMembers";
 import ValidateConges from "./pages/validateConge/ValidateConges";
+<<<<<<< HEAD
 import Nomination from "./pages/nomination/Nomination";
 import Elimination from "./pages/elimination/Elimination";
 //import ListePresenceRepetition from "./pages/repetition/ListePresenceRepetition";
@@ -41,6 +42,10 @@ import ProfileAdmin from "./pages/profiladmin/profiladmin";
 import ElimineProfil from "./pages/profiladmin/elimineProfil";
 import NomineProfil from "./pages/profiladmin/nomineProfil";
 
+=======
+import ListeRepetition from "./pages/repetition/ListeRepetition";
+import AddRepetition from "./pages/repetition/AddRepetition";
+>>>>>>> 918ad54e9dcd4ba05cb08aee76e891ca87416c56
 const AdminDashboard = (props) => {
   return (
     <div>
@@ -74,6 +79,10 @@ const AdminDashboard = (props) => {
             )}
             {props.load === "genererPlanning" && <PlanningAudition />}
             {props.load === "genererStatistique" && <GenererStatistique />}
+            
+            {props.load === "listeRepetition" && <ListeRepetition />}
+            
+            {props.load === "addRepetition" && <AddRepetition />}
             {props.load === "absenceRep" && <AbsenceRepetition />}
             {props.load === "candidatesListV2" && <CandidatesListV2 />}
             {props.load === "AcountRegister" && <AcountRegister />}

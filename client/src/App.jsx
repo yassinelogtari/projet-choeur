@@ -362,6 +362,7 @@ const App = () => {
             path="/saison/archive/details-saisonArchivee/table"
             element={<MembresTable />}
           />
+<<<<<<< HEAD
           {decodedToken && decodedToken.role == "admin" ? (
             <Route
               path="/dashboard/admin/addAudition"
@@ -450,6 +451,52 @@ const App = () => {
               element={<Navigate to="/404" />}
             />
           )}
+=======
+
+          <Route
+            path="/dashboard/admin/addAudition"
+            element={<AdminDashboard load="auditionAddInfo" />}
+          />
+          <Route
+            path="/dashboard/admin/Candidature/list"
+            element={<AdminDashboard load="candidatesList" />}
+          />
+          <Route
+            path="/dashboard/admin/Candidature/listParpupitre"
+            element={<AdminDashboard load="ListeCandidatesParPupitre" />}
+          />
+
+          <Route
+            path="/dashboard/admin/updateAudition"
+            element={<AdminDashboard load="updateAudition" />}
+          />
+          <Route
+            path="/dashboard/admin/oeuvres/liste"
+            element={<AdminDashboard load="ListeOeuvres" />}
+          />
+          <Route
+            path="/dashboard/admin/oeuvres/addoeuvre"
+            element={<AdminDashboard load="AddOeuvre" />}
+          />
+          <Route
+            path="/dashboard/admin/Audition/genererPlanning"
+            element={<AdminDashboard load="genererPlanning" />}
+          />
+          <Route
+            path="/dashboard/admin/statistiques"
+            element={<AdminDashboard load="genererStatistique" />}
+          />
+          
+          <Route
+            path="/dashboard/admin/addRepetition"
+            element={<AdminDashboard load="addRepetition" />}
+          />
+          
+          <Route
+            path="/dashboard/admin/repetition/liste-repetition"
+            element={<AdminDashboard load="listeRepetition" />}
+          />
+>>>>>>> 918ad54e9dcd4ba05cb08aee76e891ca87416c56
           <Route
             exact
             path="/presence/cancert/:idC"
