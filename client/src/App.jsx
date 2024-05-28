@@ -257,8 +257,6 @@ const App = () => {
             />
           )}
           <Route
-<<<<<<< HEAD
-=======
             path="/dashboard/choriste/presence/allConcerts"
             element={<ChoristeDashboard load="allConcerts" />}
           />
@@ -351,7 +349,6 @@ const App = () => {
             element={<AdminDashboard load="archives" />}
           />
           <Route
->>>>>>> d255e65ba4ab8341b3df0bb617d1ee793ddad30d
             exact
             path="/saison/archive/details-saisonArchivee/:idSA"
             element={<SaisonArchiveeDetails />}
@@ -486,7 +483,6 @@ const App = () => {
             element={<EmailVerification />}
           />
           <Route exact path="/concert" element={<Concert />} />
-<<<<<<< HEAD
           {decodedToken && decodedToken.role == "admin" ? (
             <Route
               exact
@@ -745,7 +741,6 @@ const App = () => {
 
           <Route exact path="/404" element={<NotFoundPage />} />
           <Route path="*" element={<Navigate to="/404" />} />
-=======
           <Route
             exact
             path="/dashboard/admin/concert/addConcert"
@@ -818,7 +813,6 @@ const App = () => {
             element={<AdminDashboard load="ConcertDisponibleMembers" />}
           />
           
->>>>>>> d255e65ba4ab8341b3df0bb617d1ee793ddad30d
         </Routes>
       </>
     </Router>

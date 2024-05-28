@@ -214,7 +214,6 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-<<<<<<< HEAD
       {/* Absences */}
       <li className="menu-header small text-uppercase">
         <span className="menu-header-text">Absences</span>
@@ -251,7 +250,6 @@ function Sidebar() {
           </a>
         </li>
       </NavLink>
-=======
       {/* Les eliminations */}
       <li className="menu-header small text-uppercase">
         <span className="menu-header-text">
@@ -289,7 +287,6 @@ function Sidebar() {
         </li>
       </NavLink>
 
->>>>>>> ebd9a97518a5b0b9225ca3419157dfaa63bd0fe0
       {/* gestion des compte */}
       <li className="menu-header small text-uppercase">
         <span className="menu-header-text">Comptes</span>

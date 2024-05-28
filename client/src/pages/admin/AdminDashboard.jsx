@@ -30,11 +30,9 @@ import AccountInfo from "./pages/comptes/AcountInfos";
 import AccountInfoEdit from "./pages/comptes/AcountInfosEdit";
 import ConcertDisponibleMembers from "./pages/concerts/ConcertDisponibleMembers";
 import ValidateConges from "./pages/validateConge/ValidateConges";
-<<<<<<< HEAD
 import Nomination from "./pages/nomination/Nomination";
 import Elimination from "./pages/elimination/Elimination";
 //import ListePresenceRepetition from "./pages/repetition/ListePresenceRepetition";
-=======
 import ModifierTauxElimination from "./pages/eliminerraisondis/modifiertauxelimination";
 import EliminerDes from "./pages/eliminerraisondis/eliminerdis";
 import ExclureChoristeElimine from "./pages/eliminerraisondis/exlurechoristeelimine";
@@ -42,7 +40,6 @@ import UpdateProfileAdmin from "./pages/profiladmin/updateProdileAdmin";
 import ProfileAdmin from "./pages/profiladmin/profiladmin";
 import ElimineProfil from "./pages/profiladmin/elimineProfil";
 import NomineProfil from "./pages/profiladmin/nomineProfil";
->>>>>>> ebd9a97518a5b0b9225ca3419157dfaa63bd0fe0
 
 const AdminDashboard = (props) => {
   return (
@@ -90,12 +87,10 @@ const AdminDashboard = (props) => {
           </div>
           {props.load === "absences" && <Absence />}
           {props.load === "AbsenceConcerts" && <AbsenceConcerts />}
-<<<<<<< HEAD
           {props.load === "Nomination" && <Nomination />}
           {props.load === "Elimination" && <Elimination />}
          {/* {props.load === "ListePresenceRepetition" && < ListePresenceRepetition/>} */}
           
-=======
           {props.load === "exlurechoriste" && <ExclureChoristeElimine />}
           {props.load === "modifiertauxelimination" && (
             <ModifierTauxElimination />
@@ -105,7 +100,6 @@ const AdminDashboard = (props) => {
           {props.load === "updateprofileadmin" && <UpdateProfileAdmin />}
           {props.load === "elimineprofil" && <ElimineProfil />}
           {props.load === "nomineprofil" && <NomineProfil />}
->>>>>>> ebd9a97518a5b0b9225ca3419157dfaa63bd0fe0
 
           <div className="layout-overlay layout-menu-toggle" />
         </div>

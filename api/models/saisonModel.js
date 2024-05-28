@@ -96,18 +96,10 @@ const saisonSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-<<<<<<< HEAD
-  dureeOut :{
-    type: Number,
-    default:365,
-  },
-
-=======
   dureeOut: {
     type: Number,
     default: 365,
   },
->>>>>>> ebd9a97518a5b0b9225ca3419157dfaa63bd0fe0
 });
 
 const Saison = mongoose.model("Saison", saisonSchema);
