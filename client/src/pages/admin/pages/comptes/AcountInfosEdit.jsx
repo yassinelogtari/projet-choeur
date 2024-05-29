@@ -1,8 +1,3 @@
-import React, { useEffect, useState } from "react";
-import adminIcon from "../../../../assets/img/avatars/admin-icon.png";
-import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
-import "./accountInfo.css";
 import {
   Autocomplete,
   Box,
@@ -11,11 +6,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import adminIcon from "../../../../assets/img/avatars/admin-icon.png";
+import "./accountInfo.css";
 
 const AcountInfosEdit = (props) => {
   const [inputs, setInputs] = useState({});
@@ -130,6 +129,7 @@ const AcountInfosEdit = (props) => {
               .filter(
                 ([key]) =>
                   key !== "_id" &&
+                  key !== "isBanned" &&
                   key !== "notifications" &&
                   key !== "historiqueStatut" &&
                   key !== "__v" &&  key !== "updatedAt"

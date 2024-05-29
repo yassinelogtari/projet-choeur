@@ -1,9 +1,8 @@
-import "./adminAudition.css";
-import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Link } from "@mui/material";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import "./adminAudition.css";
 
 const CandidatesList = () => {
   const [allCandidates, setAllCandidates] = useState();

@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { Button, Card, CardContent, Container, Dialog, DialogContent, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import axios from 'axios';
-import { TextField, Typography, Container, Grid, Card, CardContent, Button,TableCell, Paper,TableContainer,TableBody,Table,TableHead ,TableRow, Dialog, DialogContent} from '@mui/material';
-import { FcBusinessContact, FcContacts, FcDiploma2, FcMusic } from "react-icons/fc";
-import { useParams } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
+import React, { useEffect, useState } from 'react';
+import { FcBusinessContact, FcContacts, FcDiploma2, FcMusic } from "react-icons/fc";
 
 const HistoriqueActivite = ({id}) => {
   //const { id } = useParams();
@@ -149,15 +148,9 @@ const HistoriqueActivite = ({id}) => {
               </Typography>
               <Typography variant="body1" gutterBottom>
               <FcDiploma2 style={iconStyle} />
-                <strong>Historique du statut:</strong>
+                <strong>Historique du statut:</strong> {memberInfo.statut}
               </Typography>
-              <ul>
               
-
-                {memberInfo.historiqueStatut && Array.isArray(memberInfo.historiqueStatut) && memberInfo.historiqueStatut.map((statut, index) => (
-                  <li key={index}>{statut}</li>
-                ))}
-              </ul>
             </CardContent>
           </Card>
         </Grid>

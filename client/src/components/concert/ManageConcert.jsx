@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./ManageConcert.css";
+import React, { useEffect, useState } from "react";
 import { MdDelete, MdEdit, MdSave } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import disponibleMembersIcon from "../../assets/img/avatars/authentication.svg";
+import "./ManageConcert.css";
 
 const ManageConcert = () => {
   const [concerts, setConcerts] = useState([]);
   const [editConcertId, setEditConcertId] = useState(null);
+  const [editedTitle, setEditedTitle] = useState("");
   const [editedDate, setEditedDate] = useState("");
   const [editedLocation, setEditedLocation] = useState("");
   const [excelFile, setExcelFile] = useState(null); // State for the uploaded Excel file
+  const [message, setMessage] = useState(""); // State for messages
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,7 +22,6 @@ const ManageConcert = () => {
           "http://localhost:8000/api/concerts/get-concerts"
         );
         setConcerts(response.data);
-        console.log("donees", response.data);
       } catch (error) {
         console.error("Error fetching concerts:", error);
       }
@@ -33,13 +34,18 @@ const ManageConcert = () => {
     try {
       await axios.delete(`http://localhost:8000/api/concerts/${id}`);
       setConcerts(concerts.filter((concert) => concert._id !== id));
+      setMessage("Concert deleted successfully.");
+      setTimeout(() => setMessage(""), 3000); // Clear message after 3 seconds
     } catch (error) {
       console.error("Error deleting concert:", error);
+      setMessage("Failed to delete concert.");
+      setTimeout(() => setMessage(""), 3000);
     }
   };
 
-  const handleEdit = (id, date, location) => {
+  const handleEdit = (id, title, date, location) => {
     setEditConcertId(id);
+    setEditedTitle(title);
     setEditedDate(date);
     setEditedLocation(location);
   };
@@ -47,12 +53,13 @@ const ManageConcert = () => {
   const handleSave = async (id) => {
     try {
       const formData = new FormData();
+      formData.append("titre", editedTitle);
       formData.append("date", editedDate);
       formData.append("lieu", editedLocation);
       formData.append("excelFile", excelFile); // Append the uploaded Excel file to the form data
 
       const response = await axios.patch(
-        `http://localhost:8000/api/concerts/${id}`,
+       ` http://localhost:8000/api/concerts/${id}`,
         formData,
         {
           headers: {
@@ -64,36 +71,34 @@ const ManageConcert = () => {
       if (response.status === 200) {
         const updatedConcerts = concerts.map((concert) => {
           if (concert._id === id) {
-            // Iterate over the listeMembres array to set the disponibility attribute for each member
-            const updatedListeMembres = concert.listeMembres.map((member) => {
-              return {
-                ...member,
-                disponibility: { isAvailable: true }, // Set the disponibility attribute
-              };
-            });
-
             return {
               ...concert,
+              titre: editedTitle,
               date: editedDate,
               lieu: editedLocation,
-              listeMembres: updatedListeMembres, // Update the listeMembres array with updated disponibility attribute
             };
           }
           return concert;
         });
         setConcerts(updatedConcerts);
         setEditConcertId(null);
+        setMessage("Concert updated successfully.");
+        setTimeout(() => setMessage(""), 3000);
       } else {
-        console.error("Failed to update concert");
+        setMessage("Failed to update concert.");
+        setTimeout(() => setMessage(""), 3000);
       }
     } catch (error) {
       console.error("Error updating concert:", error);
+      setMessage("Error updating concert.");
+      setTimeout(() => setMessage(""), 3000);
     }
   };
 
   return (
     <div className="concert-list">
       <h1>Concert List</h1>
+      {message && <div className="message">{message}</div>}
       <table>
         <thead>
           <tr>
@@ -109,7 +114,17 @@ const ManageConcert = () => {
         <tbody>
           {concerts.map((concert) => (
             <tr key={concert._id}>
-              <td>{concert.titre}</td>
+              <td>
+                {editConcertId === concert._id ? (
+                  <input
+                    type="text"
+                    value={editedTitle}
+                    onChange={(e) => setEditedTitle(e.target.value)}
+                  />
+                ) : (
+                  concert.titre
+                )}
+              </td>
               <td>
                 {editConcertId === concert._id ? (
                   <input
@@ -170,7 +185,12 @@ const ManageConcert = () => {
                 ) : (
                   <button
                     onClick={() =>
-                      handleEdit(concert._id, concert.date, concert.lieu)
+                      handleEdit(
+                        concert._id,
+                        concert.titre,
+                        concert.date,
+                        concert.lieu
+                      )
                     }
                     className="edit-btn"
                   >
@@ -187,7 +207,7 @@ const ManageConcert = () => {
                 <button
                   onClick={() =>
                     navigate(
-                      `/dashboard/admin/concerts/disponible-members/${concert._id}`
+                     `/dashboard/admin/concerts/disponible-members/${concert._id}`
                     )
                   }
                   className="delete-btn"

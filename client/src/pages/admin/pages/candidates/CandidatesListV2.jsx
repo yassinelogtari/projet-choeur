@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import { Link } from "@mui/material";
-import "./candidatesList.css";
-import axios from "axios";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import { DataGrid } from "@mui/x-data-grid";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import "./candidatesList.css";
 
 const CandidatesList = () => {
   const [allCandidates, setAllCandidates] = useState();
@@ -167,34 +166,7 @@ const CandidatesList = () => {
   ];
 
   const actionColumn = [
-    {
-      field: "action",
-      headerName: "Actions",
-      width: 70,
-      renderCell: (params) => {
-        return (
-          <div className="cellActiondash" style={{ display: "flex" }}>
-            <Link
-              to={`/dashboard/profile/${params.row._id}`}
-              style={{ textDecoration: "none" }}
-            >
-              <div
-                className="viewButtondash"
-                onClick={() => handleViewProfile(params.row._id)}
-              >
-                View
-              </div>
-            </Link>
-            {/* <div
-              className="deleteButtondash "
-              onClick={() => handleDeletepost(params.row._id)}
-            >
-              Delete
-            </div> */}
-          </div>
-        );
-      },
-    },
+    
   ];
 
   const handleViewProfile = (id) => {

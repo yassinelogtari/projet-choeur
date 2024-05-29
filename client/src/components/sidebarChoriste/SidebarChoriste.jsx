@@ -1,4 +1,3 @@
-import { Link } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
 function SidebarChoriste({memberId }) {
@@ -47,14 +46,7 @@ function SidebarChoriste({memberId }) {
           </a>
         </li>
       </NavLink>
-      <NavLink to="/dashboard/choriste/demandeConge">
-        <li className="menu-item">
-          <a href="javascript:void(0);" className="menu-link menu-toggle">
-            <i className="menu-icon tf-icons bx bx-dock-top" />
-            <div data-i18n="Account Settings">Demande congé</div>
-          </a>
-        </li>
-      </NavLink>
+      
       <NavLink  to={`/dashboard/choriste/historique`}>
         <li className="menu-item">
           <a href="javascript:void(0);" className="menu-link menu-toggle">
