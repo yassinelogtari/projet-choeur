@@ -1,0 +1,69 @@
+/* Styles généraux pour le formulaire */
+.form-container {
+  position: absolute;
+  left: 40vw;
+  top: 10vw;
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+/* Styles pour le titre du formulaire */
+.title {
+  position: absolute;
+  left: 40vw;
+  top: 8vw;
+  font-size: 1.5em;
+  color: #333;
+}
+
+/* Styles pour les éléments du formulaire */
+.disponibility-form .form-group {
+  margin-bottom: 20px;
+}
+
+.disponibility-form .form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #666;
+}
+
+.disponibility-form .form-group input[type="text"],
+.disponibility-form .form-group input[type="date"],
+.disponibility-form .form-group textarea,
+.disponibility-form .form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.disponibility-form .checkbox input {
+  margin-right: 5px;
+}
+
+/* Styles pour le bouton de soumission */
+.submit-button {
+  background-color: rgb(3, 72, 141);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  border-radius: 4px;
+}
+
+/* Styles pour les messages de réponse */
+.response-message {
+  color: green;
+  text-align: center;
+  margin-top: 10px;
+}

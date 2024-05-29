@@ -38,6 +38,12 @@ const repetitionSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
       },
+      absence: {
+        raison: {
+          type: String,
+          default:""
+        },
+      },
     },
   ],
   QrCode: {

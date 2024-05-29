@@ -174,7 +174,7 @@ const GenererPlanning = () => {
       </h4>
       <Card className="white-card">
         <CardContent>
-          <form onSubmit={handleSubmit} className="form-container">
+          <form onSubmit={handleSubmit} className="formConteneur">
             <TextField
               label="Date de début"
               type="date"
@@ -283,7 +283,7 @@ const GenererPlanning = () => {
         </CardContent>
       </Card>
       <Modal
-        className="pop-up"
+        className="pop-upPlanning"
         open={openModal}
         onClose={() => setOpenModal(false)}
         aria-labelledby="modal-title"

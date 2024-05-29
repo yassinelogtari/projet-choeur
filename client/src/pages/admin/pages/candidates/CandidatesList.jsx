@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Link } from "@mui/material";
-import "./candidatesList.css";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import "./candidatesList.css";
 
 const CandidatesList = () => {
   const [allCandidates, setAllCandidates] = useState();
+
   const PF = "http://localhost:5000/images/";
 
   const fetchCandidates = async () => {
     try {
       const data = await axios
-        .get("http://localhost:8000/api/candidats")
+        .get("http://localhost:8000/api/saison/getSaisonActuelle")
         .then((res) => {
-          const modifiedRes = res.data.map(obj => {
-            const { _id, ...rest } = obj; 
-            return { id: _id, ...rest }; 
+          const modifiedRes = res.data.saison.candidats.map((obj, index) => {
+            const { _id, ...rest } = obj;
+            return { id: index + 1, ...rest };
           });
-          console.log(modifiedRes)
+          console.log(modifiedRes);
           setAllCandidates(modifiedRes);
           console.log(res);
         });
@@ -116,34 +116,7 @@ const CandidatesList = () => {
   ];
 
   const actionColumn = [
-    {
-      field: "action",
-      headerName: "Actions",
-      width: 70,
-      renderCell: (params) => {
-        return (
-          <div className="cellActiondash" style={{ display: "flex" }}>
-            <Link
-              to={`/dashboard/profile/${params.row._id}`}
-              style={{ textDecoration: "none" }}
-            >
-              <div
-                className="viewButtondash"
-                onClick={() => handleViewProfile(params.row._id)}
-              >
-                View
-              </div>
-            </Link>
-            {/* <div
-              className="deleteButtondash "
-              onClick={() => handleDeletepost(params.row._id)}
-            >
-              Delete
-            </div> */}
-          </div>
-        );
-      },
-    },
+   
   ];
 
   const handleViewProfile = (id) => {
@@ -162,18 +135,22 @@ const CandidatesList = () => {
           display: "flex",
           alignItems: "center",
           flexDirection: "column",
-          marginTop: "-350px",
+          position: "absolute",
+          top: "-50vh",
+          right: "-77vh",
         }}
       >
         <div style={{ marginBottom: "50px" }}>Liste des candidatures</div>
 
         <DataGrid
-          style={{background:"white"}}
+          style={{ background: "white" }}
           className="datagrid"
           rows={allCandidates}
           columns={userColumns.concat(actionColumn)}
-          pageSize={9}
-          rowsPerPageOptions={[9]}
+          initialState={{
+            ...allCandidates.initialState,
+            pagination: { paginationModel: { pageSize: 7 } },
+          }}
           checkboxSelection={false}
           disableSelection={true}
           disableRowSelectionOnClick

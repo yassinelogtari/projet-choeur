@@ -31,6 +31,12 @@ const columns = [
     width: 150, 
   },
   {
+    title: 'E-mail',
+    dataIndex: 'email',
+    render: (text) => <a>{text}</a>,
+    width: 150, 
+  },
+  {
     title: 'Rôle ',
     dataIndex: 'role',
     render: (text) => <a>{text}</a>,

@@ -27,7 +27,7 @@ const columns = [
     rowScope: 'row',
     width: 100, 
   },
- {
+ /*{
     title: 'Concert',
     dataIndex: 'concert',
     render: (concert) => (
@@ -36,7 +36,7 @@ const columns = [
       </div>
     ),
     width: 150,
-  },
+  },*/
   {
     title: 'Lieu',
     dataIndex: 'lieu',
@@ -116,7 +116,7 @@ const RepetitionsTable = ({ repetitions }) => {
 
  
 
-  console.log("emna zayani : " , repetitions)
+  console.log("repetitions : " , repetitions)
 return (
   <div style={{ maxWidth: '1200px' , margin: '0 auto' }}>
     <Table columns={columns} dataSource={repetitions} bordered  />

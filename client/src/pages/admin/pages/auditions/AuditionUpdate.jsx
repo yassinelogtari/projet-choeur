@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import axios from "axios";
 import {
   Box,
-  TextField,
   Button,
+  FormControl,
+  InputLabel,
   MenuItem,
   Select,
-  InputLabel,
-  FormControl,
+  TextField,
 } from "@mui/material";
-import "./auditionUpdate.css";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import DialogComponent from "../../../../components/dialog/Dialog";
+import "./auditionUpdate.css";
 
 const AuditionUpdate = () => {
   const location = useLocation();
@@ -19,6 +19,8 @@ const AuditionUpdate = () => {
   const [tessiture, setTessiture] = useState("");
   const [evaluation, setEvaluation] = useState("");
   const [decision, setDecision] = useState("");
+  const [extraitChante, setExtraitChante] = useState("");
+  const [remarque, setRemarque] = useState("");
   const [candidatInfoId, setCandidatInfoId] = useState("");
   const [candidateOptions, setCandidateOptions] = useState([]);
   const [formErrors, setFormErrors] = useState({});
@@ -39,6 +41,7 @@ const AuditionUpdate = () => {
       const candidatesForAudition = response.data.audition.candidatsInfo.map(
         (candidate) => ({
           _id: candidate._id,
+          ...candidate, // Include all candidate details
         })
       );
       setCandidateOptions(candidatesForAudition);
@@ -59,8 +62,27 @@ const AuditionUpdate = () => {
     setDecision(event.target.value);
   };
 
+  const handleExtraitChanteChange = (event) => {
+    setExtraitChante(event.target.value);
+  };
+
+  const handleRemarqueChange = (event) => {
+    setRemarque(event.target.value);
+  };
+
   const handleCandidatInfoId = (event) => {
-    setCandidatInfoId(event.target.value);
+    const candidateId = event.target.value;
+    setCandidatInfoId(candidateId);
+    
+    // Find the selected candidate from candidateOptions and set the details
+    const selectedCandidate = candidateOptions.find(candidate => candidate._id === candidateId);
+    if (selectedCandidate) {
+      setTessiture(selectedCandidate.tessiture || "");
+      setEvaluation(selectedCandidate.evaluation || "");
+      setDecision(selectedCandidate.decision || "");
+      setExtraitChante(selectedCandidate.extraitChante || "");
+      setRemarque(selectedCandidate.remarque || "");
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -70,7 +92,7 @@ const AuditionUpdate = () => {
     let hasErrors = false;
 
     if (!candidatInfoId) {
-      errors.candidatInfoId = "Veuillez sélectionner une tessiture.";
+      errors.candidatInfoId = "Veuillez sélectionner un candidat.";
       hasErrors = true;
     }
 
@@ -87,12 +109,10 @@ const AuditionUpdate = () => {
       hasErrors = true;
     }
 
-    const extraitChante = event.target.extraitChante.value.trim();
     if (!extraitChante) {
       errors.extraitChante = "Veuillez saisir un extrait chanté.";
       hasErrors = true;
     }
-    const remarque = event.target.remarque.value.trim();
     if (!remarque) {
       errors.remarque = "Veuillez saisir une remarque.";
       hasErrors = true;
@@ -106,11 +126,11 @@ const AuditionUpdate = () => {
       const requestBody = {
         candidatInfoId,
         updateFields: {
-          extraitChante: event.target.extraitChante.value,
+          extraitChante,
           tessiture,
           evaluation,
           decision,
-          remarque: event.target.remarque.value,
+          remarque,
         },
       };
 
@@ -123,8 +143,9 @@ const AuditionUpdate = () => {
       setTessiture("");
       setEvaluation("");
       setDecision("");
+      setExtraitChante("");
+      setRemarque("");
       setFormErrors({});
-      event.target.reset();
     } catch (error) {
       console.error("Error updating audition info:", error);
     }
@@ -176,6 +197,8 @@ const AuditionUpdate = () => {
                     label="Extrait chanté"
                     variant="outlined"
                     className="auditionField selectExtraitChante"
+                    value={extraitChante}
+                    onChange={handleExtraitChanteChange}
                     error={!!formErrors.extraitChante}
                   />
                   {formErrors.extraitChante && (
@@ -252,6 +275,8 @@ const AuditionUpdate = () => {
                   multiline
                   rows={4}
                   className="RemarqueAudition"
+                  value={remarque}
+                  onChange={handleRemarqueChange}
                   error={!!formErrors.remarque}
                 />
                 {formErrors.remarque && (

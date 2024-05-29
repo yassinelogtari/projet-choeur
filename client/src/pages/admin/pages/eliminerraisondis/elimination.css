@@ -1,0 +1,44 @@
+.eliminerdesdiv {
+    margin-top: 30px;
+}   
+.exlurechordiv {
+    margin-top: 30px;
+}.modifiertauxeliminationdiv {
+    margin-top: 30px;
+}
+.paperEliminerdes{
+        padding: 20px;
+            width: 860px;
+            height: 470px;
+            margin-left: 280px;
+}
+.titreModifierTauxElimination{
+        padding-bottom: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            margin-left: 300px;
+}
+.paperModifierTauxElimination{
+        padding: 20px;
+            width: 700px;
+            height: 350px;
+            margin-left: 280px;
+}
+.titreeliminerdis{
+        padding-bottom: 60px;
+            font-size: 21px;
+            font-weight: bold;
+            margin-left: 18px;
+}.paperExclureChoristeElimine {
+    padding: 20px;
+    width: 1100px;
+    height: 470px;
+    margin-left: 280px;
+}
+
+.titreExclureChoristeElimine {
+    padding-bottom: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    margin-left: 300px;
+}

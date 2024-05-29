@@ -10,6 +10,12 @@ import {
   Alert,
   Snackbar,
   Typography,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Tooltip,
+  TextareaAutosize,
 } from "@mui/material";
 import axios from "axios";
 
@@ -18,7 +24,7 @@ const AddOeuvre = () => {
     titre: "",
     compositeurs: "",
     arrangeurs: "",
-    pupitre: "",
+    pupitre: [],
     anneeComposition: "",
     genre: "",
     paroles: "",
@@ -32,7 +38,13 @@ const AddOeuvre = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (
+    if (name === "pupitre") {
+      const selectedPupitre = Array.isArray(value) ? value : [value];
+      setOeuvreData((prevData) => ({
+        ...prevData,
+        [name]: selectedPupitre,
+      }));
+    } else if (
       ["compositeurs", "arrangeurs", "pupitre"].includes(name) &&
       value.includes(",")
     ) {
@@ -71,7 +83,7 @@ const AddOeuvre = () => {
         titre: "",
         compositeurs: "",
         arrangeurs: "",
-        pupitre: "",
+        pupitre: [],
         anneeComposition: "",
         genre: "",
         paroles: "",
@@ -81,10 +93,11 @@ const AddOeuvre = () => {
     } catch (error) {
       setOpenAlert(true);
       setAlertSeverity("error");
-      console.error("Error adding oeuvre:", error.response.data);
+      console.error("Error adding oeuvre:", error.response?.data);
 
       setMessage(
-        error?.response?.data?.message || error?.response?.data?.error
+        error?.response?.data?.message ||
+          "Une erreur s'est produite lors de l'ajout de l'oeuvre."
       );
     }
   };
@@ -92,7 +105,55 @@ const AddOeuvre = () => {
   const handleAlertClose = () => {
     setOpenAlert(false);
   };
+  const years = [];
+  const startYear = 1900;
+  const endYear = new Date().getFullYear();
 
+  for (let year = startYear; year <= endYear; year++) {
+    years.push(year.toString());
+  }
+  const genres = [
+    "Classique",
+    "Jazz",
+    "Blues",
+    "Pop",
+    "Rock",
+    "Metal",
+    "Folk",
+    "Country",
+    "Rap",
+    "Hip-Hop",
+    "Reggae",
+    "Electronique",
+    "Techno",
+    "House",
+    "Ambient",
+    "Soul",
+    "Funk",
+    "Disco",
+    "Gospel",
+    "Alternative",
+    "Indie",
+    "Punk",
+    "Ska",
+    "R&B",
+    "Latin",
+    "World",
+    "Experimental",
+    "Ambient",
+    "Chill",
+    "Trap",
+    "Dubstep",
+    "Dance",
+    "Acoustic",
+    "Instrumental",
+    "Opera",
+    "Musique de film",
+    "Musique de jeu vidéo",
+    "Musique folklorique",
+    "Musique spirituelle",
+    "Musique traditionnelle",
+  ];
   return (
     <>
       <div
@@ -132,7 +193,7 @@ const AddOeuvre = () => {
                     value={oeuvreData.compositeurs}
                     onChange={handleChange}
                     fullWidth
-                    helperText="Separate multiple composers with a comma"
+                    helperText="Séparez les compositeurs multiples par une virgule."
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -143,48 +204,111 @@ const AddOeuvre = () => {
                     value={oeuvreData.arrangeurs}
                     onChange={handleChange}
                     fullWidth
-                    helperText="Separate multiple arrangers with a comma"
+                    helperText="Séparez les arrangeurs multiples par une virgule."
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Pupitre"
-                    name="pupitre"
-                    value={oeuvreData.pupitre}
-                    onChange={handleChange}
-                    fullWidth
-                    helperText="Separate multiple sections with a comma"
-                    disabled={!oeuvreData.presenceChoeur}
-                  />
+                  <FormControl variant="outlined" fullWidth>
+                    <InputLabel id="pupitre-label">Pupitre</InputLabel>
+                    <Select
+                      labelId="pupitre-label"
+                      id="pupitre"
+                      name="pupitre"
+                      multiple
+                      value={oeuvreData.pupitre}
+                      onChange={handleChange}
+                      label="Pupitre"
+                      fullWidth
+                      disabled={!oeuvreData.presenceChoeur}
+                    >
+                      {["alto", "soprano", "basse", "ténor"].map((pupitre) => (
+                        <MenuItem key={pupitre} value={pupitre}>
+                          {pupitre}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                {/*
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Pupitre"
+                      name="pupitre"
+                      value={oeuvreData.pupitre}
+                      onChange={handleChange}
+                      fullWidth
+                      helperText="Separate multiple sections with a comma"
+                      disabled={!oeuvreData.presenceChoeur}
+                    />
+                  </Grid>*/}
+                <Grid item xs={12} sm={6}>
+                  <FormControl style={{ width: "427px" }}>
+                    <InputLabel id="annee-composition-label">
+                      Année de la composition
+                    </InputLabel>
+                    <Select
+                      labelId="annee-composition-label"
+                      id="annee-composition-select"
+                      name="anneeComposition"
+                      value={oeuvreData.anneeComposition}
+                      onChange={handleChange}
+                      label="Année de la composition"
+                    >
+                      {years.map((year) => (
+                        <MenuItem key={year} value={year}>
+                          {year}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  {/*
+                    <TextField
+                      label="Année de composition"
+                      name="anneeComposition"
+                      required="true"
+                      value={oeuvreData.anneeComposition}
+                      onChange={handleChange}
+                      fullWidth
+                    />*/}
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Année de composition"
-                    name="anneeComposition"
-                    required="true"
-                    value={oeuvreData.anneeComposition}
-                    onChange={handleChange}
-                    fullWidth
-                  />
+                  <FormControl style={{ width: "223px" }}>
+                    <InputLabel variant="outlined" id="genre">
+                      Genre
+                    </InputLabel>
+                    <Select
+                      displayEmpty
+                      id="genre"
+                      name="genre"
+                      required
+                      value={oeuvreData.genre}
+                      onChange={handleChange}
+                      fullWidth
+                      style={{ width: "427px" }}
+                    >
+                      {genres.map((genre) => (
+                        <MenuItem key={genre} value={genre}>
+                          {genre}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Genre"
-                    name="genre"
-                    required="true"
-                    value={oeuvreData.genre}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Paroles"
-                    name="paroles"
-                    value={oeuvreData.paroles}
-                    onChange={handleChange}
-                    fullWidth
-                  />
+                  <Tooltip title="Paroles">
+                    <TextareaAutosize
+                      minRows={2}
+                      maxRows={2}
+                      aria-label="empty textarea"
+                      placeholder="Paroles.."
+                      name="paroles"
+                      value={oeuvreData.paroles}
+                      onChange={handleChange}
+                      style={{ width: "427px", height: "40px" }}
+                      variant="outlined"
+                      label="Genre"
+                    />
+                  </Tooltip>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <TextField

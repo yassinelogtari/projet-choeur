@@ -5,15 +5,11 @@ const authMiddleware = require("../middlewares/auth");
 
 router.get(
   "/repetition/",
-  authMiddleware.loggedMiddleware,
-  authMiddleware.isAdmin,
   absenceController.fetchAllRepetitionAbsence
 );
 
 router.get(
   "/repetition/pupitre",
-  authMiddleware.loggedMiddleware,
-  authMiddleware.isAdmin,
   absenceController.fetchAllRepetitionAbsenceByPupitre
 );
 

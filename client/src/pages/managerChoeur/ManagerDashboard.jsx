@@ -1,8 +1,10 @@
 import React from "react";
-import Sidebar from "../components/sidebar/Sidebar";
-import Navbar1 from "../components/navbar1/Nabar1";
+import Navbar1 from "../../components/navbar1/Nabar1";
+import SidebarManagerChoeur from "../../components/sidebarManagerChoeur/SidebarManagerChoeur";
+import Home from "../chefPupitre/pages/Home";
+import DesigneChefsPupitres from "./pages/designerChefsPupitres/DesigneChefsPupitres";
 
-const AdminDashboard = () => {
+const AdminDashboard = (props) => {
   return (
     <div>
       <div>
@@ -15,10 +17,11 @@ const AdminDashboard = () => {
               className="layout-menu menu-vertical menu bg-menu-theme"
             >
               <div className="menu-inner-shadow" />
-              <Sidebar />
+              <SidebarManagerChoeur />
             </aside>
             <Navbar1 />
-            {/* / Layout page */}
+            {props.load === "home" && <Home />}
+            {props.load==="désigniation-chefs-pupitres" && <DesigneChefsPupitres />}
           </div>
           {/* Overlay */}
           <div className="layout-overlay layout-menu-toggle" />

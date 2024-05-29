@@ -38,7 +38,7 @@ mongoose
   .then(console.log("connected to mongodb"))
   .catch((err) => console.log(err));
 
-cron.schedule("14 8 * * *", async (req, res) => {
+cron.schedule("21 22 * * *", async (req, res) => {
   try {
     const adminUsers = await User.find({ role: "admin" });
 
@@ -84,8 +84,7 @@ cron.schedule("14 8 * * *", async (req, res) => {
   }
 });
 
-
-cron.schedule("09 18 * * *", async (req, res) => {
+cron.schedule("47 22 * * *", async (req, res) => {
   try {
     const now = new Date();
     console.log("Current Date:", now);
@@ -138,7 +137,7 @@ cron.schedule("09 18 * * *", async (req, res) => {
 
 io.listen(5000);
 const app = express();
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: "http://localhost:3000" }));
 app.use(express.json());
 //app.use(upload.array());
 app.use(cors());
@@ -155,8 +154,8 @@ const options = {
 
 const swaggerSpec = swaggerJsdoc(options);
 app.get("/", (req, res) => {
-    res.json("Welcome to the Backend");
-})
+  res.json("Welcome to the Backend");
+});
 app.use("/api/choeur", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/api/candidats", candidatRoute);
@@ -177,9 +176,6 @@ app.use("/api/reset", resetRoute);
 
 module.exports = app;
 
-
-
-
-app.listen(8000,()=>{
-    console.log("Listening on 8000")
-})
+app.listen(8000, () => {
+  console.log("Listening on 8000");
+});

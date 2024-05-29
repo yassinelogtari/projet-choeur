@@ -1,0 +1,40 @@
+.Eliminer {
+    padding: 7px 20px;
+    font-size: 12px;
+    font-weight: bold;
+    color: crimson;
+    background-color: transparent;
+    border: 2px dashed  crimson;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+    margin-bottom: 20px;
+}
+
+.Nominer {
+    padding: 7px 20px;
+    font-size: 12px;
+    font-weight: bold;
+    color: green;
+    background-color: transparent;
+    border: 2px dashed green;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.Eliminer:hover {
+    color: white;
+    background-color: crimson; /* Red for Eliminer on hover */
+}
+
+.Nominer:hover {
+    color: white;
+    background-color: green; /* Green for Nominer on hover */
+}
+.Nominer:active {
+    background-color: lightgreen; /* Couleur de fond lors du clic sur le bouton Nominer */
+}
+

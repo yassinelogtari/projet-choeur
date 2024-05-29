@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import axios from "axios";
 import "./modifArchivForm.css";
+import { NavLink } from 'react-router-dom';
 
 const MyFormItemContext = React.createContext([]);
 
@@ -21,10 +22,7 @@ const MyFormItem = ({ name, label, ...props }) => {
   return <Form.Item name={concatName} label={label} className='custom-label' {...props} />;
 };
 
-const ModifArchivForm = () => {
-  const [nom, setNom] = useState("");
-  const [dateDebut, setDateDebut] = useState("");
-  const [dateFin, setDateFin] = useState("");
+const ModifArchivForm = ({ nom, setNom, dateDebut, setDateDebut, dateFin, setDateFin }) => {
   const [idSaison, setIdSaison] = useState("");
   const [loading, setLoading] = useState(true);
   const [seasonAvailable, setSeasonAvailable] = useState(true);
@@ -99,30 +97,28 @@ const ModifArchivForm = () => {
   if (seasonArchived) { 
     return (
       <div className='archived-season'>
-        <p>La saison a été archivée avec succès.</p>
-        <a href="/nouvelle-saison">Créer une nouvelle saison</a>
+        <p>La saison a été archivée avec succès, Aucune saison n'est disponible actuellement. </p>
+        <NavLink to="/dashboard/admin/nouvelleSaison">Créer une nouvelle saison</NavLink>
       </div>
     );
   }
 
   return (
     <>
-      <div className='title'>
-        <h4 className='nomSaison'>{nom}</h4>
-        <span className='dateSaison'>{dateDebut} / {dateFin}</span>
-      </div>
+     
+     
       <Form className="form" name="form_item_path" layout="vertical" onFinish={updateSaison}>
         <MyFormItemGroup prefix={['user']}>
           <MyFormItemGroup prefix={['name']}>
             <MyFormItem name="nom" label="Nom de la saison" >
-              <Input className='input' defaultValue={nom} onChange={(e) => setNom(e.target.value)} />
+              <Input className='inp' defaultValue={nom} onChange={(e) => setNom(e.target.value)} />
             </MyFormItem>
             <MyFormItem name="date debut" label="Date Début" >
-              <Input className='input' type='date' defaultValue={dateDebut} onChange={(e) => setDateDebut(e.target.value)} />
+              <Input className='inp' type='date' defaultValue={dateDebut} onChange={(e) => setDateDebut(e.target.value)} />
             </MyFormItem>
           </MyFormItemGroup>
           <MyFormItem name="date fin" label="Date Fin" >
-            <Input className='input' type='date' defaultValue={dateFin} onChange={(e) => setDateFin(e.target.value)} />
+            <Input className='inp' type='date' defaultValue={dateFin} onChange={(e) => setDateFin(e.target.value)} />
           </MyFormItem>
         </MyFormItemGroup>
         <div className='btns'>

@@ -1,12 +1,21 @@
-.title{
+.titleArchive{
     display: block;
     margin-top: 70px;
     text-align: center;
     margin-bottom: 100px; 
 }
 
+.nomSaison{
+  font-size:70px;
+  font-weight:700;
+}
+
+.dateSaison{
+  font-size: xx-large;
+}
+
   
-  .contenu {
+  .contenuArchive {
     margin-bottom: 20px;
   }
 
@@ -16,7 +25,7 @@
 
 
 .tt{
-    font-size: large;
+    font-size: x-large;
     text-align: center;
     font-weight:bold;
     color: #9999ff;

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "./AddConcert.css";
 import { Link } from "react-router-dom";
+import ConcertUploader from "./ConcertUploader";
 
 const AddConcert = () => {
   const [titre, setTitre] = useState("");
@@ -10,11 +11,15 @@ const AddConcert = () => {
   const [programme, setProgramme] = useState([{ oeuvre: "", theme: "" }]);
   const [displayOeuvre, setDisplayOeuvre] = useState([]);
   const [affiche, setAffiche] = useState([]);
-  const [excelFile, setExcelFile] = useState(null);
   const [listeMembres, setlisteMembres] = useState([
     { membre: "", presence: false },
   ]);
   const [displayMembers, setDisplayMembers] = useState([]);
+
+  //errors
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [failMessage, setFailMessage] = useState("");
 
   const handleOeuvreChange = (index, value) => {
     const updatedProgramme = [...programme];
@@ -31,6 +36,10 @@ const AddConcert = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setErrorMessage("");
+    setSuccessMessage("");
+    setFailMessage("");
+
     const formData = new FormData();
     formData.append("titre", titre);
     formData.append("date", date);
@@ -42,6 +51,10 @@ const AddConcert = () => {
     listeMembres.forEach((member, index) => {
       formData.append(`listeMembres[${index}][membre]`, member.membre);
       formData.append(`listeMembres[${index}][presence]`, member.presence);
+      formData.append(
+        `listeMembres[${index}][disponibility][isAvailable]`,
+        true
+      );
     });
     try {
       const response = await axios.post(
@@ -58,8 +71,10 @@ const AddConcert = () => {
       console.log("programme", programme);
       console.log("listeMembres", listeMembres);
       console.log("Display Oeuvre:", response.data.data);
+      setSuccessMessage("Concert added successfully!");
     } catch (error) {
       console.error("Error sending request to the server:", error);
+      setFailMessage("Failed to add concert. Please try again.");
     }
   };
 
@@ -91,8 +106,10 @@ const AddConcert = () => {
 
     fetchMembers();
   }, []);
-  const handleExcelFileChange = (e) => {
-    setExcelFile(e.target.files[0]);
+  const [showUploader, setShowUploader] = useState(false); // State to toggle between components
+
+  const toggleUploader = () => {
+    setShowUploader(!showUploader);
   };
 
   return (
@@ -109,156 +126,167 @@ const AddConcert = () => {
           <div />
         </div>
       </div>
-      <div className="formConcert">
-        <div className="formBorder">
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label className="label">Titre:</label>
-              <input
-                type="text"
-                name="titre"
-                className="input"
-                value={titre}
-                onChange={(e) => setTitre(e.target.value)}
-              />
-            </div>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {successMessage && <p className="success-message">{successMessage}</p>}
+      {failMessage && <p className="fail-message">{failMessage}</p>}
 
-            <div className="form-group">
-              <label className="label">Date:</label>
-              <input
-                type="date"
-                name="date"
-                className="input"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                min="1000-01-01"
-              />
-            </div>
+      {showUploader ? (
+        <ConcertUploader />
+      ) : (
+        <div className="formConcert">
+          <div className="formBorder">
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label className="label">Titre:</label>
+                <input
+                  type="text"
+                  name="titre"
+                  className="input"
+                  value={titre}
+                  onChange={(e) => setTitre(e.target.value)}
+                />
+              </div>
 
-            <div className="form-group">
-              <label className="label">Lieu:</label>
-              <input
-                type="text"
-                name="lieu"
-                className="input"
-                value={lieu}
-                onChange={(e) => setLieu(e.target.value)}
-              />
-            </div>
+              <div className="form-group">
+                <label className="label">Date:</label>
+                <input
+                  type="date"
+                  name="date"
+                  className="input"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  min="1000-01-01"
+                />
+              </div>
 
-            <label className="labelFile">
-              Affiche
-              <input
-                type="file"
-                name="affiche"
-                onChange={(e) => setAffiche(e.target.files[0])}
-              />
-              <span>{affiche ? affiche.name : "No file selected"}</span>
-            </label>
-            <label className="labelFile">
-              Excel File:
-              <input
-                type="file"
-                name="excelFile"
-                onChange={handleExcelFileChange}
-              />
-              <span>{excelFile ? excelFile.name : "No file selected"}</span>
-            </label>
+              <div className="form-group">
+                <label className="label">Lieu:</label>
+                <input
+                  type="text"
+                  name="lieu"
+                  className="input"
+                  value={lieu}
+                  onChange={(e) => setLieu(e.target.value)}
+                />
+              </div>
 
-            <div className="form-group">
-              <label className="label">Programme:</label>
-              {programme.map((item, index) => (
-                <div key={index} className="programme-item">
-                  <select
-                    value={item.oeuvre}
-                    onChange={(e) => handleOeuvreChange(index, e.target.value)}
-                  >
-                    <option value="">Select Oeuvre</option>
-                    {displayOeuvre.map((oeuvre) => (
-                      <option key={oeuvre._id} value={oeuvre._id}>
-                        {oeuvre.titre}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    type="text"
-                    value={item.theme}
-                    onChange={(e) => handleThemeChange(index, e.target.value)}
-                  />
-                  {index === programme.length - 1 && (
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setProgramme([...programme, { oeuvre: "", theme: "" }])
+              <label className="labelFile">
+                Affiche
+                <input
+                  type="file"
+                  name="affiche"
+                  onChange={(e) => setAffiche(e.target.files[0])}
+                />
+                <span>{affiche ? affiche.name : "No file selected"}</span>
+              </label>
+
+              <div className="form-group">
+                <label className="label">Programme:</label>
+                {programme.map((item, index) => (
+                  <div key={index} className="programme-item">
+                    <select
+                      value={item.oeuvre}
+                      onChange={(e) =>
+                        handleOeuvreChange(index, e.target.value)
                       }
                     >
-                      Add More
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            <div className="form-group">
-              <label className="label">Liste des Membres:</label>
-              {listeMembres.map((member, index) => (
-                <div key={index} className="member-item">
-                  <select
-                    value={member.membre}
-                    onChange={(e) => {
-                      const updatedlisteMembres = [...listeMembres];
-                      updatedlisteMembres[index] = {
-                        ...updatedlisteMembres[index],
-                        membre: e.target.value,
-                      };
-                      setlisteMembres(updatedlisteMembres);
-                    }}
-                  >
-                    <option value="">Select membre</option>
-                    {displayMembers.map((member) => (
-                      <option key={member._id} value={member._id}>
-                        {member.nom}
-                      </option>
-                    ))}
-                  </select>
-                  <label>
-                    Présence:
+                      <option value="">Select Oeuvre</option>
+                      {displayOeuvre.map((oeuvre) => (
+                        <option key={oeuvre._id} value={oeuvre._id}>
+                          {oeuvre.titre}
+                        </option>
+                      ))}
+                    </select>
                     <input
-                      type="checkbox"
-                      checked={member.presence}
+                      type="text"
+                      value={item.theme}
+                      onChange={(e) => handleThemeChange(index, e.target.value)}
+                    />
+                    {index === programme.length - 1 && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setProgramme([
+                            ...programme,
+                            { oeuvre: "", theme: "" },
+                          ])
+                        }
+                      >
+                        Add More
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <div className="form-group">
+                <label className="label">Liste des Membres:</label>
+                {listeMembres.map((member, index) => (
+                  <div key={index} className="member-item">
+                    <select
+                      value={member.membre}
                       onChange={(e) => {
                         const updatedlisteMembres = [...listeMembres];
                         updatedlisteMembres[index] = {
                           ...updatedlisteMembres[index],
-                          presence: e.target.checked,
+                          membre: e.target.value,
                         };
                         setlisteMembres(updatedlisteMembres);
                       }}
-                    />
-                  </label>
-                  {index === listeMembres.length - 1 && (
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setlisteMembres([
-                          ...listeMembres,
-                          { membre: "", presence: false },
-                        ])
-                      }
                     >
-                      Add More
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-            <div className="buttonCounter">
-              <button type="submit" className="button">
-                Ajouter le Concert
-              </button>
-            </div>
-          </form>
+                      <option value="">Select membre</option>
+                      {displayMembers.map((member) => (
+                        <option key={member._id} value={member._id}>
+                          {member.nom}
+                        </option>
+                      ))}
+                    </select>
+                    <label>
+                      Présence:
+                      <input
+                        type="checkbox"
+                        checked={member.presence}
+                        onChange={(e) => {
+                          const updatedlisteMembres = [...listeMembres];
+                          updatedlisteMembres[index] = {
+                            ...updatedlisteMembres[index],
+                            presence: e.target.checked,
+                          };
+                          setlisteMembres(updatedlisteMembres);
+                        }}
+                      />
+                    </label>
+                    {index === listeMembres.length - 1 && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setlisteMembres([
+                            ...listeMembres,
+                            { membre: "", presence: false },
+                          ])
+                        }
+                      >
+                        Add More
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <div className="buttonCounter">
+                <button type="submit" className="button">
+                  Ajouter le Concert
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
+      )}
+      {/* Button to toggle between the components */}
+      <div className="toggleButtonContainer">
+        <button onClick={toggleUploader}>
+          {showUploader ? "Retourner au formulaire" : "Uploader un Concert"}
+        </button>
       </div>
     </>
   );

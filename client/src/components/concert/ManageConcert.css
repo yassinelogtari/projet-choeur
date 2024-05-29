@@ -3,7 +3,12 @@
     top:20vh;
     left:25vw;
 }
-
+.concert-list th,
+.concert-list td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    /* Add border to table cells */
+}
 table {
     width: 100%;
     border-collapse: collapse;

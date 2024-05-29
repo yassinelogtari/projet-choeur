@@ -1,0 +1,56 @@
+.contenuPlacement
+{
+    position: absolute;
+    top: 20vh;
+    left: 30vw;
+    width: 50vw;
+    
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    border: solid black;
+    border-width: 1px;
+}
+.inputet {
+    border-radius: 5px;
+    border: solid black;
+    border-width: 1px;
+}
+.inputet1 {
+    border-radius: 5px;
+    border: solid black;
+    border-width: 1px;
+    margin-left: 5.5vw;
+}
+.inputet3 {
+    border-radius: 5px;
+    border: solid black;
+    border-width: 1px;
+    margin-left: 5.6vw;
+}
+.item
+{
+    color: darkblue;
+    
+}
+.message
+{
+    color:blueviolet;
+    border: solid;
+    border-color: cornflowerblue;
+    border-radius: 20px;
+    border-width: 1px;
+    position: absolute;
+        top: 35vw;
+        left: 30vw;
+        padding: 12px;
+    
+}
+.bouton-affiche
+{
+    position: absolute;
+    top: 36vw;
+    left: 65vw;
+
+}

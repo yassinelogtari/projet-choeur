@@ -1,0 +1,34 @@
+
+input[type="file"] {
+    
+    display: none;
+}
+
+
+.custom-file-input {
+    
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
+.file-name {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #666;
+}
+.content
+{
+    display: flex ;
+    justify-content: center;
+}
+.titre1
+{
+    font-weight: 300;
+    color: darkorchid;
+    text-decoration: underline;
+}

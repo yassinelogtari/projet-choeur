@@ -40,10 +40,10 @@ const addDisponibility = async (req, res) => {
 
       await cancert.save();
 
-      res.json({ success: true, message: "disponibily is saved succesfuly" });
+      res.json({ success: true, message: "La disponibilité est enregistrée avec succés" });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Member not found in the Cancert" });
+      res.status(500).json({ error: "vous n'existez pas dans ce concert" });
     }
   } else {
     try {
@@ -110,7 +110,7 @@ const addDisponibility = async (req, res) => {
         res.json({
           success: true,
           message:
-            "disponibily is saved succesfuly and email sent to the 'chef du pupitre' ",
+            "La disponibilité est enregistrée avec succés et mail envoyer au 'chef du pupitre' ",
         });
       }
     } catch (error) {

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
 import axios from 'axios';
-import { Transition } from 'react-transition-group';
-import confirm from "../../img/confirm.png"
+import React, { useState } from 'react';
 import { FcPrevious } from 'react-icons/fc';
+import { Transition } from 'react-transition-group';
+import confirm from "../../img/confirm.png";
 
 function EmailVerification() {
   const [email, setEmail] = useState('');
@@ -47,9 +47,14 @@ function EmailVerification() {
   const formStyles = {
     container: {
       display: 'flex',
+      flexDirection: 'column', // Align elements in column
       justifyContent: 'center',
       alignItems: 'center',
       minHeight: '100vh',
+    },
+    title: {
+      textAlign: 'center',
+      marginBottom: '20px', // Space between title and form container
     },
     formContainer: {
       textAlign: 'center',
@@ -105,30 +110,31 @@ function EmailVerification() {
 
   return (
     <>
-    <div style={formStyles.container}>
-      <div style={{ ...formStyles.formContainer, display: emailValidated ? 'none' : 'block' }}>
-        <h2>Email Verification</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            placeholder="Enter your email"
-            id="email"
-            name="email"
-            value={email}
-            onChange={handleEmailChange}
-            style={formStyles.input}
-          />
-          <button type="submit" style={formStyles.button}>Verify Email</button>
-        </form>
-        {errorMessage && <p style={formStyles.error}>{errorMessage}</p>}
-      </div>
-      </div>
+      {!emailValidated && (
+        <div style={formStyles.container}>
+          <h1 style={formStyles.title}>Bienvenue au Symphony de Carthage</h1>
+          <div style={formStyles.formContainer}>
+            <h2>Email Verification</h2>
+            <form onSubmit={handleSubmit}>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                id="email"
+                name="email"
+                value={email}
+                onChange={handleEmailChange}
+                style={formStyles.input}
+              />
+              <button type="submit" style={formStyles.button}>Verify Email</button>
+            </form>
+            {errorMessage && <p style={formStyles.error}>{errorMessage}</p>}
+          </div>
+        </div>
+      )}
       <Transition in={emailValidated} timeout={500}>
-      {state => (
+        {state => (
           <div>
-
             <a href="/candidatsForm"><FcPrevious style={{ width: '30px', cursor: "pointer" }} /></a>
-
             <div style={{
               position: 'fixed',
               top: '50%',
@@ -139,9 +145,7 @@ function EmailVerification() {
               textAlign: 'center',
             }}>
               {successMessage && (
-
                 <>
-
                   <img src={confirm}
                     style={{ maxWidth: '60%', height: 'auto', display: 'block', margin: '0 auto' }} />
                   <div style={{
@@ -157,17 +161,12 @@ function EmailVerification() {
                       {`. Please check it and grab the link there.`}
                     </p>
                   </div>
-
                 </>
-
               )}
             </div>
-
           </div>
-
         )}
       </Transition>
-    
     </>
   );
 }

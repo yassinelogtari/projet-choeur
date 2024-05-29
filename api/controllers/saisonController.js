@@ -4,6 +4,12 @@ const Auditions = require("../models/auditionModel");
 const Saison = require("../models/saisonModel");
 
 const Membre = require("../models/membreModel");
+const Member = require("../models/membreModel");
+const Season = require("../models/saisonModel");
+const { userSocketMap } = require("../utils/socket");
+const {
+  sendNotificationMiddleware,
+} = require("../middlewares/sendNotificationMiddleware");
 
 const archiveSeason = async (req, res) => {
   try {
@@ -30,20 +36,20 @@ const createSaison = async (req, res) => {
   try {
     const { nom, dateDebut, dateFin } = req.body;
     const saisonPrecedente = await Saison.findOne({ saisonCourante: true });
-    if (saisonPrecedente) {
-      const membresSaisonPrecedente = await Membre.find({
-        _id: { $in: saisonPrecedente.membres },
-      });
+    // if (saisonPrecedente) {
+    //   const membresSaisonPrecedente = await Membre.find({
+    //     _id: { $in: saisonPrecedente.membres },
+    //   });
 
-      for (const membrePrecedent of membresSaisonPrecedente) {
-        membrePrecedent.historiqueStatut.push({
-          saison: saisonPrecedente._id,
-          status: membrePrecedent.statut,
-        });
+    //   for (const membrePrecedent of membresSaisonPrecedente) {
+    //     membrePrecedent.historiqueStatut.push({
+    //       saison: saisonPrecedente._id,
+    //       status: membrePrecedent.statut,
+    //     });
 
-        await membrePrecedent.save();
-      }
-    }
+    //     await membrePrecedent.save();
+    //   }
+    // }
     await Saison.updateMany({}, { saisonCourante: false });
 
     const nouvelleSaison = new Saison({
@@ -67,8 +73,7 @@ const getSaisonCourante = async (req, res) => {
   try {
     const saisonCourante = await Saison.findOne({
       saisonCourante: true,
-    }).populate("membres repetitions oeuvres concerts");
-
+    }).populate("membres repetitions oeuvres concerts candidats auditions");
     if (!saisonCourante) {
       return res.status(404).json({ erreur: "Aucune saison courante trouvée" });
     }
@@ -88,7 +93,7 @@ const getSaisonCourante = async (req, res) => {
 const getSaisonsArchivees = async (req, res) => {
   try {
     const saisonsArchivees = await Saison.find({ archivee: true }).populate(
-      "membres repetitions oeuvres concerts"
+      "membres repetitions oeuvres concerts candidats auditions"
     );
 
     if (!saisonsArchivees || saisonsArchivees.length === 0) {
@@ -148,7 +153,12 @@ const getSaisonByid = async (req, res) => {
           { path: "programme.oeuvre", model: "Oeuvre" },
         ],
       })
-      .populate("oeuvres");
+      .populate("oeuvres")
+      .populate({
+        path: "auditions",
+        populate: [{ path: "candidats", model: "candidat" }],
+      })
+      .populate("candidats");
 
     if (!saison) {
       return res.status(404).json({ erreur: "Saison non trouvée" });
@@ -161,72 +171,72 @@ const getSaisonByid = async (req, res) => {
       .json({ erreur: "Erreur lors de la récupération de la saison" });
   }
 };
-const updateStatus = async (req, res) => {
-  try {
-    const saisonCourante = await Saison.findOne({ saisonCourante: true });
+// const updateStatus = async (req, res) => {
+//   try {
+//     const saisonCourante = await Saison.findOne({ saisonCourante: true });
 
-    if (!saisonCourante) {
-      console.error("No current season found");
-      return res.status(404).json({ error: "No current season found" });
-    }
+//     if (!saisonCourante) {
+//       console.error("No current season found");
+//       return res.status(404).json({ error: "No current season found" });
+//     }
 
-    const membres = await Membre.find({ _id: { $in: saisonCourante.membres } });
+//     const membres = await Membre.find({ _id: { $in: saisonCourante.membres } });
 
-    for (const membre of membres) {
-      const isMemberInSaison2018 = saisonCourante.membres.some((saisonMembre) =>
-        saisonMembre.equals(membre._id)
-      );
+//     for (const membre of membres) {
+//       const isMemberInSaison2018 = saisonCourante.membres.some((saisonMembre) =>
+//         saisonMembre.equals(membre._id)
+//       );
 
-      if (isMemberInSaison2018) {
-        membre.statut = "Vétéran";
-      }
-      const totalSeasons = membre.historiqueStatut.length;
+//       if (isMemberInSaison2018) {
+//         membre.statut = "Vétéran";
+//       }
+//       const totalSeasons = membre.historiqueStatut.length;
 
-      if (totalSeasons === 0) {
-        membre.statut = "Junior";
-      } else if (totalSeasons === 1) {
-        membre.statut = "Choriste";
-      } else if (totalSeasons === 2) {
-        membre.statut = "Sénior";
-      }
+//       if (totalSeasons === 0) {
+//         membre.statut = "Junior";
+//       } else if (totalSeasons === 1) {
+//         membre.statut = "Choriste";
+//       } else if (totalSeasons === 2) {
+//         membre.statut = "Sénior";
+//       }
 
-      const updatedMembre = await membre.save();
-      if (updatedMembre) {
-        const membreSocketId = userSocketMap[updatedMembre._id];
-        if (membreSocketId) {
-          req.notificationData = {
-            userId: updatedMembre._id,
-            notificationMessage: `Votre statut a été changé en ${updatedMembre.statut}.`,
-          };
-          sendNotificationMiddleware(req, res, () => {});
-        }
-        const chefPupitreByUpdatedMemberUsers = await Membre.find({
-          role: "chef du pupitre",
-          pupitre: updatedMembre.pupitre,
-        });
+//       const updatedMembre = await membre.save();
+//       if (updatedMembre) {
+//         const membreSocketId = userSocketMap[updatedMembre._id];
+//         if (membreSocketId) {
+//           req.notificationData = {
+//             userId: updatedMembre._id,
+//             notificationMessage: `Votre statut a été changé en ${updatedMembre.statut}.`,
+//           };
+//           sendNotificationMiddleware(req, res, () => {});
+//         }
+//         const chefPupitreByUpdatedMemberUsers = await Membre.find({
+//           role: "chef du pupitre",
+//           pupitre: updatedMembre.pupitre,
+//         });
 
-        chefPupitreByUpdatedMemberUsers.forEach(async (chefPupitreUser) => {
-          const chefPupitreSocketId = userSocketMap[chefPupitreUser._id];
+//         chefPupitreByUpdatedMemberUsers.forEach(async (chefPupitreUser) => {
+//           const chefPupitreSocketId = userSocketMap[chefPupitreUser._id];
 
-          if (chefPupitreSocketId) {
-            req.notificationData = {
-              userId: chefPupitreUser._id,
-              notificationMessage: `${updatedMembre.prenom} ${updatedMembre.nom} a changé son statut a ${updatedMembre.statut}.`,
-            };
+//           if (chefPupitreSocketId) {
+//             req.notificationData = {
+//               userId: chefPupitreUser._id,
+//               notificationMessage: `${updatedMembre.prenom} ${updatedMembre.nom} a changé son statut a ${updatedMembre.statut}.`,
+//             };
 
-            sendNotificationMiddleware(req, res, () => {});
-          }
-        });
-      }
-    }
+//             sendNotificationMiddleware(req, res, () => {});
+//           }
+//         });
+//       }
+//     }
 
-    console.log("Status updated successfully");
-    return res.status(200).json({ message: "Status updated successfully" });
-  } catch (error) {
-    console.error("Error updating status:", error);
-    return res.status(500).json({ error: "Internal server error" });
-  }
-};
+//     console.log("Status updated successfully");
+//     return res.status(200).json({ message: "Status updated successfully" });
+//   } catch (error) {
+//     console.error("Error updating status:", error);
+//     return res.status(500).json({ error: "Internal server error" });
+//   }
+// };
 
 const designerChefsDePupitre = async (req, res) => {
   try {
@@ -291,7 +301,7 @@ const quitterChoeur = async (req, res) => {
         .json({ error: "Le membre ne fait pas partie de la saison courante" });
     }
 
-    membre.statut = "Inactif";
+    membre.niveauExperience = "Inactif";
     const updatedMembre = await membre.save();
 
     if (updatedMembre) {
@@ -366,6 +376,241 @@ const updateSeuilForCurrentSeason = async (req, res) => {
     });
   }
 };
+const consulterHistoriqueStatutMembre = async (req, res) => {
+  try {
+    const memberId = req.params.id;
+    const membre = await Membre.findById(memberId);
+
+    if (!membre) {
+      return res
+        .status(404)
+        .json({ success: false, error: "Member not found" });
+    }
+
+    const dateIntegrationMember = new Date(membre.createdAt);
+    const currentSeason = await Season.findOne().sort({ dateDebut: -1 });
+    const historicalStatus = [];
+
+    for (
+      let year = dateIntegrationMember.getFullYear();
+      year <= currentSeason.dateDebut.getFullYear();
+      year++
+    ) {
+      let niveauExperience = "Inactif";
+      const yearsSinceIntegration = year - dateIntegrationMember.getFullYear();
+
+      if (yearsSinceIntegration === 0) {
+        niveauExperience = "Choriste Junior";
+      } else if (yearsSinceIntegration === 1) {
+        niveauExperience = "Choriste";
+      } else if (yearsSinceIntegration >= 2) {
+        niveauExperience = "Senior";
+      }
+
+      if (
+        dateIntegrationMember.getFullYear() === 2018 &&
+        yearsSinceIntegration >= 0
+      ) {
+        niveauExperience = "Vétéran";
+      }
+
+      historicalStatus.push({
+        saison: year,
+        niveauExperience: niveauExperience,
+      });
+    }
+
+    const oldStatut = membre.niveauExperience;
+    membre.niveauExperience =
+      historicalStatus[historicalStatus.length - 1].niveauExperience;
+    membre.historiqueStatut = historicalStatus;
+
+    await membre.save();
+
+    if (oldStatut !== membre.niveauExperience) {
+      console.log(
+        `Status changed from ${oldStatut} to ${membre.niveauExperience} for member ${membre.prenom} ${membre.nom}`
+      );
+
+      req.notificationData = {
+        userId: membre._id,
+        notificationMessage: `Votre statut a été changé en ${membre.niveauExperience}.`,
+      };
+      await sendNotification(req);
+      const chefsPupitre = await Membre.find({
+        role: "chef du pupitre",
+        pupitre: membre.pupitre,
+      });
+      chefsPupitre.forEach((chefPupitre) => {
+        console.log(
+          `Checking notification for chef de pupitre: ${chefPupitre.prenom} ${chefPupitre.nom}`
+        );
+        const chefPupitreSocketId = userSocketMap[chefPupitre._id];
+        if (chefPupitreSocketId) {
+          console.log(
+            `Sending notification to chef de pupitre with Socket ID: ${chefPupitreSocketId}`
+          );
+          req.notificationData = {
+            userId: chefPupitre._id,
+            notificationMessage: `${membre.prenom} ${membre.nom} a changé son statut à ${membre.niveauExperience}.`,
+          };
+          sendNotificationMiddleware(
+            req,
+            res,
+            () => {
+              console.log(
+                `Notification successfully sent to ${chefPupitre.prenom} ${chefPupitre.nom} about status change.`
+              );
+            },
+            (err) => {
+              if (err) {
+                console.error(
+                  `Failed to send notification to ${chefPupitre.prenom} ${chefPupitre.nom}: ${err.message}`
+                );
+              }
+            }
+          );
+        } else {
+          console.log(
+            `No socket ID found for chef de pupitre: ${chefPupitre.prenom} ${chefPupitre.nom}`
+          );
+        }
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Historique - Statut de : ${membre.nom} ${membre.prenom}`,
+      data: historicalStatus,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      message: "Erreur lors de l'enregistrement de l'historique",
+    });
+  }
+};
+
+async function sendNotification(req) {
+  try {
+    console.log(
+      `Notification successfully sent to user ID ${req.notificationData.userId} about status change: ${req.notificationData.notificationMessage}`
+    );
+  } catch (err) {
+    console.error(
+      `Failed to send notification to user ID ${req.notificationData.userId}: ${err.message}`
+    );
+  }
+}
+
+const consulterHistoriqueStatut2 = async (req, res) => {
+  try {
+    const membreId = req.params.id;
+    const membre = await Membre.findById(membreId);
+
+    if (!membre) {
+      return res
+        .status(404)
+        .json({ success: false, error: "Member not found" });
+    }
+
+    const dateIntegrationMember = new Date(membre.createdAt);
+    const currentSeason = await Season.findOne().sort({ dateDebut: -1 });
+    const historiqueStatut = [];
+
+    for (
+      let year = dateIntegrationMember.getFullYear();
+      year <= currentSeason.dateDebut.getFullYear();
+      year++
+    ) {
+      let niveauExperience = "Inactif";
+      const yearsSinceIntegration = year - dateIntegrationMember.getFullYear();
+
+      if (yearsSinceIntegration === 0) {
+        niveauExperience = "Choriste Junior";
+      } else if (yearsSinceIntegration === 1) {
+        niveauExperience = "Choriste";
+      } else if (yearsSinceIntegration >= 2) {
+        niveauExperience = "Senior";
+      }
+
+      if (
+        dateIntegrationMember.getFullYear() === 2018 &&
+        yearsSinceIntegration >= 0
+      ) {
+        niveauExperience = "Vétéran";
+      }
+
+      historiqueStatut.push({
+        saison: year,
+        status: niveauExperience,
+      });
+    }
+
+    const oldStatut = membre.niveauExperience;
+    membre.niveauExperience =
+      historiqueStatut[historiqueStatut.length - 1].status;
+    membre.historiqueStatut = historiqueStatut;
+
+    await membre.save();
+
+    if (oldStatut !== membre.niveauExperience) {
+      console.log(
+        `Statut changé de ${oldStatut} à ${membre.niveauExperience} pour le membre ${membre.prenom} ${membre.nom}`
+      );
+
+      // Vous pouvez inclure ici le code pour envoyer des notifications si nécessaire
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Historique du statut de : ${membre.nom} ${membre.prenom}`,
+      data: historiqueStatut,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      message: "Erreur lors de l'enregistrement de l'historique",
+    });
+  }
+};
+const updateTauxOut = async (req, res) => {
+  try {
+    const saisonCourante = await Saison.findOne({ saisonCourante: true });
+
+    if (!saisonCourante) {
+      return res.status(404).json({ error: "Aucune saison courante trouvée" });
+    }
+
+    const { dureeOut } = req.body;
+    saisonCourante.dureeOut = dureeOut;
+
+    const updatedSaison = await saisonCourante.save();
+
+    return res
+      .status(200)
+      .json({ message: "TauxOut mis à jour", saison: updatedSaison });
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour du TauxOut:", error);
+    return res.status(500).json({ error: "Erreur interne du serveur" });
+  }
+};
+const getTauxOut = async (req, res) => {
+  try {
+    const saisonCourante = await Saison.findOne({ saisonCourante: true });
+
+    if (!saisonCourante) {
+      return res.status(404).json({ error: "Aucune saison courante trouvée" });
+    }
+
+    return res.status(200).json({ dureeOut: saisonCourante.dureeOut });
+  } catch (error) {
+    console.error("Erreur lors de la récupération du TauxOut:", error);
+    return res.status(500).json({ error: "Erreur interne du serveur" });
+  }
+};
 
 module.exports = {
   archiveSeason,
@@ -374,8 +619,12 @@ module.exports = {
   getSaisonsArchivees,
   getSaisonCourante,
   updateSaison,
-  updateStatus,
+  /*updateStatus*/
   designerChefsDePupitre,
   quitterChoeur,
   updateSeuilForCurrentSeason,
+  consulterHistoriqueStatutMembre,
+  consulterHistoriqueStatut2,
+  updateTauxOut,
+  getTauxOut,
 };
